@@ -9,6 +9,8 @@ import '../../../models/question.dart';
 import '../../../presentation/providers/exam_history_provider.dart';
 import '../../../presentation/providers/exam_provider.dart';
 import '../../../state/data_state.dart';
+import '../../../utils/back_guard.dart';
+import '../../../utils/text_formatters.dart';
 
 class ExamFlowScreen extends ConsumerStatefulWidget {
   const ExamFlowScreen({super.key});
@@ -50,7 +52,7 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
           return _ExamIntro(
             onStart: (count, minutes, strictMode) =>
                 controller.start(
-                  questions.take(count).toList(),
+                  (_randomSubset(questions, count)),
                   minutes: minutes,
                   strictMode: strictMode,
                 ),
@@ -61,14 +63,27 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
         final questionText = _questionText(current, locale);
         final options = _options(current, locale);
         final selected = exam.answers[current.id];
+        final inProgress = exam.questions.isNotEmpty && !exam.isCompleted;
         return PopScope(
-          canPop: !(exam.strictMode && !exam.isCompleted),
+          canPop: !inProgress,
+          onPopInvokedWithResult: (didPop, _) async {
+            if (didPop) return;
+            if (!inProgress) {
+              Navigator.of(context).pop();
+              return;
+            }
+            final shouldExit = await confirmExitExam(context);
+            if (shouldExit && context.mounted) {
+              Navigator.of(context).pop();
+            }
+          },
           child: Scaffold(
             appBar: AppBar(
               title: Text('exam.title'.tr()),
               actions: [
                 IconButton(
                   onPressed: controller.toggleFlag,
+                  tooltip: 'exam.flag'.tr(),
                   icon: Icon(
                     exam.flagged.contains(current.id) ? Icons.flag : Icons.outlined_flag,
                   ),
@@ -82,7 +97,30 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
               children: [
                 _TimerBanner(timeLeftSeconds: exam.timeLeftSeconds),
                 const SizedBox(height: 12),
-                Text('exam.progressCount'.tr(args: [(exam.currentIndex + 1).toString(), exam.questions.length.toString()])),
+                Semantics(
+                  label: formatQuestionOf(
+                    context,
+                    exam.currentIndex + 1,
+                    exam.questions.length,
+                  ),
+                  child: Text(
+                    formatProgress(
+                      context,
+                      exam.currentIndex + 1,
+                      exam.questions.length,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: LinearProgressIndicator(
+                    value: (exam.currentIndex + 1) / exam.questions.length,
+                    backgroundColor: Theme.of(context).colorScheme.outline,
+                    color: AppColors.primary,
+                    minHeight: 8,
+                  ),
+                ),
                 const SizedBox(height: 12),
                 AnimatedSwitcher(
                   duration: const Duration(milliseconds: 250),
@@ -109,10 +147,14 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
                                 : Colors.transparent,
                           ),
                           color: selected == idx
-                              ? AppColors.accent.withOpacity(0.12)
+                              ? AppColors.accent.withValues(alpha: 0.12)
                               : Theme.of(context).cardColor,
                         ),
                         child: ListTile(
+                          leading: _OptionBadge(
+                            label: String.fromCharCode(65 + idx),
+                            active: selected == idx,
+                          ),
                           title: Text(optionText),
                           onTap: () => controller.selectAnswer(idx),
                         ),
@@ -228,8 +270,8 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
             final answered = exam.answers.containsKey(question.id);
             final flagged = exam.flagged.contains(question.id);
             Color color = Theme.of(context).cardColor;
-            if (flagged) color = AppColors.secondary.withOpacity(0.4);
-            if (answered) color = AppColors.success.withOpacity(0.3);
+            if (flagged) color = AppColors.secondary.withValues(alpha: 0.4);
+            if (answered) color = AppColors.success.withValues(alpha: 0.3);
             return InkWell(
               onTap: () {
                 controller.goTo(index);
@@ -249,6 +291,12 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
       },
     );
   }
+}
+
+List<Question> _randomSubset(List<Question> questions, int count) {
+  final items = List<Question>.from(questions)..shuffle();
+  final safeCount = count > items.length ? items.length : count;
+  return items.take(safeCount).toList();
 }
 
 String _questionText(Question question, String locale) {
@@ -281,7 +329,7 @@ class _ExamIntro extends StatefulWidget {
 }
 
 class _ExamIntroState extends State<_ExamIntro> {
-  bool _strictMode = true;
+  final bool _strictMode = true;
 
   @override
   Widget build(BuildContext context) {
@@ -296,32 +344,48 @@ class _ExamIntroState extends State<_ExamIntro> {
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  AppColors.primary.withOpacity(0.9),
-                  AppColors.secondary.withOpacity(0.9),
+                  AppColors.primary.withValues(alpha: 0.95),
+                  AppColors.secondary.withValues(alpha: 0.85),
                 ],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
+                begin: AlignmentDirectional.topStart,
+                end: AlignmentDirectional.bottomEnd,
               ),
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(24),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Container(
+                  padding: const EdgeInsetsDirectional.fromSTEB(10, 6, 10, 6),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.18),
+                    borderRadius: BorderRadius.circular(999),
+                  ),
+                  child: Text(
+                    'exam.title'.tr(),
+                    style: theme.textTheme.bodySmall?.copyWith(color: Colors.white),
+                  ),
+                ),
+                const SizedBox(height: 10),
                 Text(
                   'exam.title'.tr(),
-                  style: theme.textTheme.titleLarge?.copyWith(color: Colors.white),
+                  style:
+                      theme.textTheme.displaySmall?.copyWith(color: Colors.white),
                 ),
                 const SizedBox(height: 6),
                 Text(
                   'exam.description'.tr(),
-                  style: theme.textTheme.bodySmall?.copyWith(color: Colors.white70),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: theme.textTheme.bodyMedium
+                      ?.copyWith(color: Colors.white70),
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 18),
                 Row(
                   children: [
                     _StatChip(
                       label: 'exam.duration'.tr(),
-                      value: '40 ${'exam.minutes'.tr()}',
+                      value: '30 ${'exam.minutes'.tr()}',
                     ),
                     const SizedBox(width: 8),
                     _StatChip(
@@ -339,57 +403,94 @@ class _ExamIntroState extends State<_ExamIntro> {
             ),
           ),
           const SizedBox(height: 16),
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: theme.colorScheme.surface,
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: theme.dividerColor.withOpacity(0.2)),
-            ),
-            child: Row(
+          const SizedBox(height: 20),
+          _ModeCard(
+            title: 'exam.modes.quick'.tr(),
+            description:
+                '20 ${'exam.questions'.tr()} • 15 ${'exam.minutes'.tr()}',
+            icon: Icons.bolt_outlined,
+            onTap: () => _confirmStart(context, 20, 15),
+          ),
+          const SizedBox(height: 12),
+          _ModeCard(
+            title: 'exam.modes.standard'.tr(),
+            description:
+                '30 ${'exam.questions'.tr()} • 20 ${'exam.minutes'.tr()}',
+            icon: Icons.dashboard_outlined,
+            onTap: () => _confirmStart(context, 30, 20),
+          ),
+          const SizedBox(height: 12),
+          _ModeCard(
+            title: 'exam.modes.full'.tr(),
+            description:
+                '40 ${'exam.questions'.tr()} • 30 ${'exam.minutes'.tr()}',
+            icon: Icons.workspace_premium_outlined,
+            onTap: () => _confirmStart(context, 40, 30),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _confirmStart(BuildContext context, int count, int minutes) async {
+    final shouldStart = await showDialog<bool>(
+      context: context,
+      builder: (context) {
+        final theme = Theme.of(context);
+        final scheme = theme.colorScheme;
+        return AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          contentPadding: const EdgeInsetsDirectional.fromSTEB(20, 20, 20, 8),
+          actionsPadding: const EdgeInsetsDirectional.fromSTEB(16, 0, 16, 16),
+          title: Row(
+            children: [
+              Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: scheme.primary.withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Icon(Icons.quiz_outlined, color: scheme.primary),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  'exam.title'.tr(),
+                  style: theme.textTheme.titleMedium,
+                ),
+              ),
+            ],
+          ),
+          content: Text(
+            'exam.disclaimer'.tr(),
+            style: theme.textTheme.bodyMedium,
+          ),
+          actions: [
+            Row(
               children: [
-                const Icon(Icons.info_outline),
-                const SizedBox(width: 10),
                 Expanded(
-                  child: Text(
-                    'exam.disclaimer'.tr(),
-                    style: theme.textTheme.bodySmall,
+                  child: OutlinedButton(
+                    onPressed: () => Navigator.pop(context, false),
+                    child: Text('common.cancel'.tr()),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () => Navigator.pop(context, true),
+                    child: Text('exam.startExam'.tr()),
                   ),
                 ),
               ],
             ),
-          ),
-          const SizedBox(height: 20),
-          Text('exam.selectMode'.tr(), style: theme.textTheme.titleMedium),
-          const SizedBox(height: 12),
-            SwitchListTile(
-              value: _strictMode,
-              onChanged: (value) => setState(() => _strictMode = value),
-              title: Text('exam.strictMode'.tr()),
-              subtitle: Text('exam.strictModeDesc'.tr()),
-            ),
-            const SizedBox(height: 12),
-            _ModeCard(
-              title: 'exam.modes.quick'.tr(),
-              description: '20 ${'exam.questions'.tr()} • 20 ${'exam.minutes'.tr()}',
-              icon: Icons.bolt_outlined,
-              onTap: () => widget.onStart(20, 20, _strictMode),
-            ),
-            _ModeCard(
-              title: 'exam.modes.standard'.tr(),
-              description: '30 ${'exam.questions'.tr()} • 30 ${'exam.minutes'.tr()}',
-              icon: Icons.dashboard_outlined,
-              onTap: () => widget.onStart(30, 30, _strictMode),
-            ),
-            _ModeCard(
-              title: 'exam.modes.full'.tr(),
-              description: '40 ${'exam.questions'.tr()} • 40 ${'exam.minutes'.tr()}',
-              icon: Icons.workspace_premium_outlined,
-              onTap: () => widget.onStart(40, 40, _strictMode),
-            ),
-        ],
-      ),
+          ],
+        );
+      },
     );
+    if (shouldStart == true) {
+      widget.onStart(count, minutes, _strictMode);
+    }
   }
 }
 
@@ -408,21 +509,94 @@ class _ModeCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: ListTile(
-        leading: Container(
-          width: 40,
-          height: 40,
-          decoration: BoxDecoration(
-            color: AppColors.primary.withOpacity(0.12),
-            borderRadius: BorderRadius.circular(12),
+    final scheme = Theme.of(context).colorScheme;
+    final parts = description.split('•').map((s) => s.trim()).toList();
+    final highlight = title.toLowerCase().contains('standard');
+    return Semantics(
+      button: true,
+      label: '$title. $description',
+      child: Card(
+        child: InkWell(
+          borderRadius: BorderRadius.circular(18),
+          onTap: onTap,
+          child: Padding(
+            padding: const EdgeInsetsDirectional.fromSTEB(16, 16, 16, 16),
+            child: Row(
+              children: [
+                Container(
+                  width: 52,
+                  height: 52,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        AppColors.primary.withValues(alpha: highlight ? 0.3 : 0.2),
+                        AppColors.secondary.withValues(alpha: highlight ? 0.22 : 0.16),
+                      ],
+                      begin: AlignmentDirectional.topStart,
+                      end: AlignmentDirectional.bottomEnd,
+                    ),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Icon(icon, color: AppColors.primary, size: 24),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                              fontWeight: FontWeight.w800,
+                            ),
+                      ),
+                      const SizedBox(height: 8),
+                      Wrap(
+                        spacing: 8,
+                        runSpacing: 6,
+                        children: parts.map((item) {
+                          return Container(
+                            padding: const EdgeInsetsDirectional.fromSTEB(
+                                10, 6, 10, 6),
+                            decoration: BoxDecoration(
+                              color: scheme.primary.withValues(alpha: highlight ? 0.12 : 0.08),
+                              borderRadius: BorderRadius.circular(999),
+                              border: Border.all(
+                                color: scheme.outline.withValues(alpha: 0.6),
+                              ),
+                            ),
+                            child: Text(
+                              item,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodySmall
+                                  ?.copyWith(color: scheme.onSurface),
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Container(
+                  width: 42,
+                  height: 42,
+                  decoration: BoxDecoration(
+                    color: scheme.primary.withValues(alpha: highlight ? 0.18 : 0.12),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: scheme.outline.withValues(alpha: 0.6),
+                    ),
+                  ),
+                  child: Icon(Icons.arrow_forward, color: scheme.primary),
+                ),
+              ],
+            ),
           ),
-          child: Icon(icon, color: AppColors.primary),
         ),
-        title: Text(title),
-        subtitle: Text(description),
-        trailing: const Icon(Icons.arrow_forward),
-        onTap: onTap,
       ),
     );
   }
@@ -439,7 +613,7 @@ class _StatChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.18),
+        color: Colors.white.withValues(alpha: 0.18),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
@@ -460,27 +634,6 @@ class _StatChip extends StatelessWidget {
   }
 }
 
-class _InfoRow extends StatelessWidget {
-  const _InfoRow({required this.label, required this.value});
-
-  final String label;
-  final String value;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(label, style: Theme.of(context).textTheme.bodySmall),
-          Text(value, style: Theme.of(context).textTheme.titleMedium),
-        ],
-      ),
-    );
-  }
-}
-
 class _TimerBanner extends StatelessWidget {
   const _TimerBanner({required this.timeLeftSeconds});
 
@@ -490,18 +643,63 @@ class _TimerBanner extends StatelessWidget {
   Widget build(BuildContext context) {
     final minutes = (timeLeftSeconds ~/ 60).toString().padLeft(2, '0');
     final seconds = (timeLeftSeconds % 60).toString().padLeft(2, '0');
+    final totalSeconds = timeLeftSeconds;
+    Color color = AppColors.success;
+    if (totalSeconds <= 60) {
+      color = AppColors.error;
+    } else if (totalSeconds <= 300) {
+      color = AppColors.warning;
+    }
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        color: AppColors.secondary.withOpacity(0.2),
-        borderRadius: BorderRadius.circular(12),
+        color: color,
+        borderRadius: BorderRadius.circular(18),
       ),
       child: Row(
         children: [
-          const Icon(Icons.timer_outlined),
+          const Icon(Icons.timer_outlined, color: Colors.white, size: 18),
           const SizedBox(width: 8),
-          Text('$minutes:$seconds', style: Theme.of(context).textTheme.titleMedium),
+          Text(
+            '$minutes:$seconds',
+            style: Theme.of(context)
+                .textTheme
+                .titleMedium
+                ?.copyWith(color: Colors.white),
+          ),
         ],
+      ),
+    );
+  }
+}
+
+class _OptionBadge extends StatelessWidget {
+  const _OptionBadge({required this.label, required this.active});
+
+  final String label;
+  final bool active;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final borderColor = active ? AppColors.primary : scheme.outline;
+    final fillColor = active ? AppColors.primary.withValues(alpha: 0.12) : Colors.transparent;
+    final textColor = active ? AppColors.primary : scheme.onSurface;
+    return Container(
+      width: 34,
+      height: 34,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        color: fillColor,
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: borderColor),
+      ),
+      child: Text(
+        label,
+        style: Theme.of(context)
+            .textTheme
+            .bodyMedium
+            ?.copyWith(color: textColor, fontWeight: FontWeight.w600),
       ),
     );
   }

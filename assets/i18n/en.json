@@ -39,18 +39,18 @@
         "practice": "Practice quiz",
         "exam": "Exam session"
       },
-      "continueLine": "Continue: {{name}} • {{value}}%",
-      "continueLineSimple": "Continue: {{name}}",
+      "continueLine": "Continue: {name} • {value}%",
+      "continueLineSimple": "Continue: {name}",
       "continueCta": "Continue"
     },
     "primaryAction": {
       "continueTitle": "Continue your learning",
-      "continueSubtitle": "Lesson: {{lesson}}",
+      "continueSubtitle": "Lesson: {lesson}",
       "continueCta": "Continue",
       "startTitle": "Start your driving theory preparation",
       "startSubtitle": "Learn rules • Practice questions • Pass confidently",
       "startCta": "Start Learning",
-      "progressLabel": "Progress: {{value}}%"
+      "progressLabel": "Progress: {value}%"
     },
     "greeting": "Ready to Learn?",
     "subtitle": "Practice anytime, anywhere - no internet needed",
@@ -58,9 +58,9 @@
     "learnSignsDesc": "Learn all traffic signs",
     "learnRules": "Rules & Regulations",
     "learnRulesDesc": "Road rules and safety",
-    "practice": "Practice Quiz",
+    "practice": "Quick Practice",
     "practiceDesc": "Test your knowledge",
-    "mockExam": "Practice Test",
+    "mockExam": "Mock Exam",
     "mockExamDesc": "Full theory practice",
     "practiceByCategory": "Practice by Category",
     "practiceByCategoryDesc": "Learn topic by topic",
@@ -82,15 +82,15 @@
     },
     "continueLearning": {
       "title": "Continue Learning",
-      "lessonLabel": "Lesson: {{lesson}}",
-      "progressLabel": "Progress: {{value}}%",
+      "lessonLabel": "Lesson: {lesson}",
+      "progressLabel": "Progress: {value}%",
       "cta": "Continue"
     },
     "continueTest": {
       "title": "Continue Test",
       "practiceLabel": "Resume practice quiz",
       "examLabel": "Resume exam session",
-      "progress": "Question {{current}} of {{total}}",
+      "progress": "Question {current} of {total}",
       "cta": "Continue"
     },
     "focus": {
@@ -145,9 +145,9 @@
       }
     },
     "xpStrip": {
-      "xpLabel": "{{xp}} XP",
-      "streakLabel_one": "Streak: {{value}} day",
-      "streakLabel_other": "Streak: {{value}} days"
+      "xpLabel": "{xp} XP",
+      "streakLabel_one": "Streak: {value} day",
+      "streakLabel_other": "Streak: {value} days"
     }
   },
   "signs": {
@@ -160,9 +160,9 @@
       "mandatory": "Mandatory",
       "guide": "Guide"
     },
-    "showing": "Showing {{from}}-{{to}} of {{total}} signs",
+    "showing": "Showing {from}-{to} of {total} signs",
     "practiceCategory": "Practice this category",
-    "page": "Page {{current}} / {{total}}",
+    "page": "Page {current} / {total}",
     "mastery": {
       "new": "New",
       "learning": "Learning",
@@ -977,17 +977,17 @@
     "tryAgain": "Try Again",
     "backToResults": "Back",
     "explanation": "Explanation",
-    "modeTitle": "{{mode}} {{exam}}",
-    "questionsCount_one": "{{value}} question",
-    "questionsCount_other": "{{value}} questions",
-    "minutesCount_one": "{{value}} minute",
-    "minutesCount_other": "{{value}} minutes",
-    "passThresholdLabel": "Target: {{value}}",
-    "progressCount": "{{current}} / {{total}}",
-    "scoreSummary": "{{correct}} / {{total}} correct answers",
+    "modeTitle": "{mode} {exam}",
+    "questionsCount_one": "{value} question",
+    "questionsCount_other": "{value} questions",
+    "minutesCount_one": "{value} minute",
+    "minutesCount_other": "{value} minutes",
+    "passThresholdLabel": "Target: {value}",
+    "progressCount": "{current} / {total}",
+    "scoreSummary": "{correct} / {total} correct answers",
     "topicBreakdown": "Topic Breakdown",
-    "categoryBreakdownRow": "{{correct}}/{{total}} ({{accuracy}})",
-    "reviewProgress": "Review: {{current}} / {{total}}",
+    "categoryBreakdownRow": "{correct}/{total} ({accuracy})",
+    "reviewProgress": "Review: {current} / {total}",
     "strictMode": "Strict exam mode",
     "strictModeDesc": "No back navigation and answers are locked"
   },
@@ -1022,13 +1022,13 @@
     "startDaily": "Start Daily",
     "reviewMistakes": "Review Mistakes",
     "startQuick": "Start Quick",
-    "startDailyCount": "Start Daily ({{value}})",
-    "startQuickCount": "Start Quick ({{value}})",
-    "allCount": "All questions ({{value}})",
-    "accuracyLabel": "Accuracy: {{value}} (based on your attempts)",
-    "mistakesDetail": "Questions you answered wrong: {{value}}",
+    "startDailyCount": "Start Daily ({value})",
+    "startQuickCount": "Start Quick ({value})",
+    "allCount": "All questions ({value})",
+    "accuracyLabel": "Accuracy: {value} (based on your attempts)",
+    "mistakesDetail": "Questions you answered wrong: {value}",
     "unlockStats": "Practice to unlock stats",
-    "progressCount": "{{current}} / {{total}}"
+    "progressCount": "{current} / {total}"
   },
   "results": {
     "title": "Results",
@@ -1042,9 +1042,9 @@
     "tryAgain": "Try Again",
     "reviewAnswers": "Review Answers",
     "backHome": "Back to Home",
-    "scoreSummary": "{{correct}} / {{total}} correct",
+    "scoreSummary": "{correct} / {total} correct",
     "topicBreakdown": "Topic Breakdown",
-    "categoryBreakdownRow": "{{correct}}/{{total}} ({{accuracy}})"
+    "categoryBreakdownRow": "{correct}/{total} ({accuracy})"
   },
   "review": {
     "title": "Answer Review",
@@ -1070,20 +1070,20 @@
       "prohibited": "Prohibited",
       "required": "Required"
     },
-      "lessonExamSituation": "Exam situation",
-      "lessonRemember": "Remember",
-      "lessonPenaltyTitle": "If you break this rule",
-      "lessonPenaltyPoints": "penalty points",
-      "lessonPenaltyRecord": "These points are added to your driving record",
-      "lessonPrevRule": "← Previous rule",
+    "lessonExamSituation": "Exam situation",
+    "lessonRemember": "Remember",
+    "lessonPenaltyTitle": "If you break this rule",
+    "lessonPenaltyPoints": "penalty points",
+    "lessonPenaltyRecord": "These points are added to your driving record",
+    "lessonPrevRule": "← Previous rule",
     "lessonNextRule": "Next rule →",
     "lessonBackToList": "Back to learning list",
     "lessonPointsUnit": "penalty points",
     "relatedLearningTitle": "Related learning",
     "relatedCards": {
       "violationTitle": "Violation Points",
-      "pointsLabel": "{{value}} Points",
-      "violationLine": "{{violation}} adds points to your record. Stay within the limits.",
+      "pointsLabel": "{value} Points",
+      "violationLine": "{violation} adds points to your record. Stay within the limits.",
       "viewDetails": "View details",
       "signsTitle": "Traffic Signs",
       "viewSigns": "View signs",
@@ -1092,7 +1092,7 @@
     },
     "viewSimilarSignsLink": "View similar signs →",
     "commonViolationsTitle": "Common violations & points",
-    "pointsBadge": "{{value}} Points",
+    "pointsBadge": "{value} Points",
     "viewViolationSystemLink": "View full point system →",
     "learnMoreTitle": "Learn more",
     "viewRelatedSignsLink": "View related traffic signs →",
@@ -1104,10 +1104,10 @@
       "minor": "Minor"
     },
     "noResults": "No lessons found",
-    "lessonsCount_one": "{{value}} lesson",
-    "lessonsCount_other": "{{value}} lessons",
-    "categoriesCount_one": "{{value}} category",
-    "categoriesCount_other": "{{value}} categories",
+    "lessonsCount_one": "{value} lesson",
+    "lessonsCount_other": "{value} lessons",
+    "categoriesCount_one": "{value} category",
+    "categoriesCount_other": "{value} categories",
     "studyPlan": {
       "title": "Study Plan",
       "items": {
@@ -1135,10 +1135,10 @@
     "emptyDesc": "Save questions and signs to review later",
     "questions": "Questions",
     "signs": "Signs",
-    "questionsCount_one": "{{value}} question",
-    "questionsCount_other": "{{value}} questions",
-    "signsCount_one": "{{value}} sign",
-    "signsCount_other": "{{value}} signs"
+    "questionsCount_one": "{value} question",
+    "questionsCount_other": "{value} questions",
+    "signsCount_one": "{value} sign",
+    "signsCount_other": "{value} signs"
   },
   "stats": {
     "title": "Your Statistics",
@@ -1146,8 +1146,8 @@
     "bestScore": "Best Score",
     "accuracy": "Average Accuracy",
     "streak": "Current Streak",
-    "streakCount_one": "{{value}} day",
-    "streakCount_other": "{{value}} days",
+    "streakCount_one": "{value} day",
+    "streakCount_other": "{value} days",
     "days": "days",
     "noStats": "No statistics yet",
     "noStatsDesc": "Complete quizzes to see your progress"
@@ -1159,7 +1159,7 @@
     "feedback": "Feedback",
     "soundDesc": "Play sounds for correct/incorrect answers",
     "vibrationDesc": "Haptic feedback on answers",
-    "versionLabel": "Version {{version}}",
+    "versionLabel": "Version {version}",
     "aboutDesc": "Educational app for learning driving theory. All content works offline.",
     "offlineNote": "100% Offline: no internet connection is required.",
     "disclaimer": "Disclaimer: This app is not affiliated with any government entity and is intended for educational practice only.",
@@ -1279,7 +1279,7 @@
     },
     "empty": "No achievements in this category",
     "dailyGoal": "Daily Goal",
-    "dailyGoalDesc": "Answer {{count}} questions today",
+    "dailyGoalDesc": "Answer {count} questions today",
     "dailyGoalComplete": "Daily Goal Complete!",
     "categories": {
       "all": "All",
@@ -1343,13 +1343,13 @@
     "severeTitle": "Severe Violations (12–24 Violation Points)",
     "majorTitle": "Major Violations (6–8 Violation Points)",
     "minorTitle": "Minor Violations (2–4 Violation Points)",
-    "pointsLabel": "{{value}} Violation Points",
-    "fullSentence": "{{violation}} will result in {{value}} violation points ({{severity}})",
+    "pointsLabel": "{value} Violation Points",
+    "fullSentence": "{violation} will result in {value} violation points ({severity})",
     "explainLine": "This violation reduces reaction time and increases risk on the road.",
     "whyDangerousLine": "Why it’s dangerous: it increases collision risk for drivers and pedestrians.",
     "tipBody": "Exam tip: follow road signs and keep a safe speed at all times.",
     "educationalNote": "Knowing point values helps you avoid serious penalties and drive safely.",
-    "previewDescription": "{{violation}} can add violation points to your record."
+    "previewDescription": "{violation} can add violation points to your record."
   },
   "violations": {
     "v01": "Driving a vehicle under the influence (Alcohol/Drugs)",
@@ -1440,7 +1440,7 @@
     "pagination": "Pagination",
     "carousel": "Carousel",
     "xp": "XP",
-    "xpValue": "{{value}} XP",
+    "xpValue": "{value} XP",
     "pressBackAgainToExit": "Press back again to exit",
     "answerRequired": "Please answer the question first",
     "empty": "No items yet"
@@ -1451,7 +1451,7 @@
     "filterAll": "All",
     "filterInProgress": "In Progress",
     "filterCompleted": "Completed",
-    "totalQuestions": "{{value}} questions",
+    "totalQuestions": "{value} questions",
     "empty": "No questions available in this category yet",
     "signs": {
       "title": "Traffic Signs & Signals",
@@ -1532,5 +1532,11 @@
   "index": {
     "title": "Welcome to Your Blank App",
     "subtitle": "Start building your amazing project here!"
-  }
+  },
+  "common.questionOf": "Question {current} of {total}",
+  "common.bookmark": "Bookmark",
+  "exam.flag": "Flag question",
+  "exam.exitTitle": "Exit exam?",
+  "exam.exitMessage": "Your progress will be lost. Do you want to exit?",
+  "exam.exitConfirm": "Exit"
 }

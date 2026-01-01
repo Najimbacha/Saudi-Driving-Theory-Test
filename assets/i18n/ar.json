@@ -39,18 +39,18 @@
         "practice": "اختبار تدريبي",
         "exam": "جلسة اختبار"
       },
-      "continueLine": "تابع: {{name}} • {{value}}%",
-      "continueLineSimple": "تابع: {{name}}",
+      "continueLine": "تابع: {name} • {value}%",
+      "continueLineSimple": "تابع: {name}",
       "continueCta": "متابعة"
     },
     "primaryAction": {
       "continueTitle": "واصل تعلّمك",
-      "continueSubtitle": "الدرس: {{lesson}}",
+      "continueSubtitle": "الدرس: {lesson}",
       "continueCta": "متابعة",
       "startTitle": "ابدأ الاستعداد لنظرية القيادة",
       "startSubtitle": "تعلّم القواعد • تدرّب على الأسئلة • انجح بثقة",
       "startCta": "ابدأ التعلم",
-      "progressLabel": "التقدم: {{value}}٪"
+      "progressLabel": "التقدم: {value}٪"
     },
     "greeting": "Ready to Learn?",
     "subtitle": "Practice anytime, anywhere - no internet needed",
@@ -58,9 +58,9 @@
     "learnSignsDesc": "Learn all traffic signs",
     "learnRules": "Rules & Regulations",
     "learnRulesDesc": "Road rules and safety",
-    "practice": "Practice Quiz",
+    "practice": "????? ????",
     "practiceDesc": "Test your knowledge",
-    "mockExam": "Practice Test",
+    "mockExam": "?????? ??????",
     "mockExamDesc": "Full theory practice",
     "practiceByCategory": "التدرب حسب الفئة",
     "practiceByCategoryDesc": "تعلم موضوعاً تلو الآخر",
@@ -82,15 +82,15 @@
     },
     "continueLearning": {
       "title": "تابع التعلم",
-      "lessonLabel": "الدرس: {{lesson}}",
-      "progressLabel": "التقدم: {{value}}٪",
+      "lessonLabel": "الدرس: {lesson}",
+      "progressLabel": "التقدم: {value}٪",
       "cta": "متابعة"
     },
     "continueTest": {
       "title": "متابعة الاختبار",
       "practiceLabel": "استئناف اختبار التدريب",
       "examLabel": "استئناف جلسة الاختبار",
-      "progress": "السؤال {{current}} من {{total}}",
+      "progress": "السؤال {current} من {total}",
       "cta": "متابعة"
     },
     "focus": {
@@ -145,9 +145,9 @@
       }
     },
     "xpStrip": {
-      "xpLabel": "{{xp}} نقطة خبرة",
-      "streakLabel_one": "سلسلة: {{value}} يوم",
-      "streakLabel_other": "سلسلة: {{value}} أيام"
+      "xpLabel": "{xp} نقطة خبرة",
+      "streakLabel_one": "سلسلة: {value} يوم",
+      "streakLabel_other": "سلسلة: {value} أيام"
     }
   },
   "signs": {
@@ -160,9 +160,9 @@
       "mandatory": "إلزامية",
       "guide": "إرشادية"
     },
-    "showing": "عرض {{from}}-{{to}} من أصل {{total}} إشارة",
+    "showing": "عرض {from}-{to} من أصل {total} إشارة",
     "practiceCategory": "تدرّب على هذه الفئة",
-    "page": "طµظپط­ط© {{current}} / {{total}}",
+    "page": "طµظپط­ط© {current} / {total}",
     "mastery": {
       "new": "جديد",
       "learning": "يتعلم",
@@ -958,17 +958,17 @@
     "tryAgain": "Try Again",
     "backToResults": "Back",
     "explanation": "التفسير",
-    "modeTitle": "{{mode}} {{exam}}",
-    "questionsCount_one": "{{value}} سؤال",
-    "questionsCount_other": "{{value}} سؤالًا",
-    "minutesCount_one": "{{value}} دقيقة",
-    "minutesCount_other": "{{value}} دقائق",
-    "passThresholdLabel": "الهدف: {{value}}",
-    "progressCount": "{{current}} / {{total}}",
-    "scoreSummary": "{{correct}} / {{total}} إجابات صحيحة",
+    "modeTitle": "{mode} {exam}",
+    "questionsCount_one": "{value} سؤال",
+    "questionsCount_other": "{value} سؤالًا",
+    "minutesCount_one": "{value} دقيقة",
+    "minutesCount_other": "{value} دقائق",
+    "passThresholdLabel": "الهدف: {value}",
+    "progressCount": "{current} / {total}",
+    "scoreSummary": "{correct} / {total} إجابات صحيحة",
     "topicBreakdown": "توزيع المواضيع",
-    "categoryBreakdownRow": "{{correct}}/{{total}} ({{accuracy}})",
-    "reviewProgress": "المراجعة: {{current}} / {{total}}",
+    "categoryBreakdownRow": "{correct}/{total} ({accuracy})",
+    "reviewProgress": "المراجعة: {current} / {total}",
     "strictMode": "وضع الامتحان الصارم",
     "strictModeDesc": "لا يمكنك الرجوع وتُقفل الإجابات بعد الاختيار"
   },
@@ -1003,13 +1003,13 @@
     "startDaily": "Start Daily",
     "reviewMistakes": "Review Mistakes",
     "startQuick": "ابدأ سريعًا",
-    "startDailyCount": "ابدأ يوميًا ({{value}})",
-    "startQuickCount": "ابدأ سريعًا ({{value}})",
-    "allCount": "كل الأسئلة ({{value}})",
-    "accuracyLabel": "الدقة: {{value}} (بناءً على محاولاتك)",
-    "mistakesDetail": "الأسئلة التي أجبت عليها خطأ: {{value}}",
+    "startDailyCount": "ابدأ يوميًا ({value})",
+    "startQuickCount": "ابدأ سريعًا ({value})",
+    "allCount": "كل الأسئلة ({value})",
+    "accuracyLabel": "الدقة: {value} (بناءً على محاولاتك)",
+    "mistakesDetail": "الأسئلة التي أجبت عليها خطأ: {value}",
     "unlockStats": "تدرّب لفتح الإحصاءات",
-    "progressCount": "{{current}} / {{total}}"
+    "progressCount": "{current} / {total}"
   },
   "results": {
     "title": "Results",
@@ -1023,9 +1023,9 @@
     "tryAgain": "Try Again",
     "reviewAnswers": "مراجعة الإجابات",
     "backHome": "العودة للرئيسية",
-    "scoreSummary": "{{correct}} / {{total}} إجابات صحيحة",
+    "scoreSummary": "{correct} / {total} إجابات صحيحة",
     "topicBreakdown": "توزيع المواضيع",
-    "categoryBreakdownRow": "{{correct}}/{{total}} ({{accuracy}})"
+    "categoryBreakdownRow": "{correct}/{total} ({accuracy})"
   },
   "review": {
     "title": "مراجعة الإجابات",
@@ -1063,8 +1063,8 @@
     "relatedLearningTitle": "تعلم ذات صلة",
     "relatedCards": {
       "violationTitle": "نقاط المخالفات",
-      "pointsLabel": "{{value}} نقاط",
-      "violationLine": "{{violation}} تضيف نقاطاً إلى سجلك. حافظ على الالتزام بالحدود.",
+      "pointsLabel": "{value} نقاط",
+      "violationLine": "{violation} تضيف نقاطاً إلى سجلك. حافظ على الالتزام بالحدود.",
       "viewDetails": "عرض التفاصيل",
       "signsTitle": "إشارات المرور",
       "viewSigns": "عرض الإشارات",
@@ -1073,7 +1073,7 @@
     },
     "viewSimilarSignsLink": "عرض العلامات المشابهة ←",
     "commonViolationsTitle": "المخالفات الشائعة والنقاط",
-    "pointsBadge": "{{value}} نقاط",
+    "pointsBadge": "{value} نقاط",
     "viewViolationSystemLink": "عرض نظام النقاط الكامل ←",
     "learnMoreTitle": "تعلّم المزيد",
     "viewRelatedSignsLink": "عرض إشارات المرور ذات الصلة ←",
@@ -1085,10 +1085,10 @@
       "minor": "بسيط"
     },
     "noResults": "لا توجد دروس مطابقة",
-    "lessonsCount_one": "{{value}} درس",
-    "lessonsCount_other": "{{value}} دروس",
-    "categoriesCount_one": "{{value}} فئة",
-    "categoriesCount_other": "{{value}} فئات",
+    "lessonsCount_one": "{value} درس",
+    "lessonsCount_other": "{value} دروس",
+    "categoriesCount_one": "{value} فئة",
+    "categoriesCount_other": "{value} فئات",
     "studyPlan": {
       "title": "خطة الدراسة",
       "items": {
@@ -1116,10 +1116,10 @@
     "emptyDesc": "Save questions and signs to review later",
     "questions": "الأسئلة",
     "signs": "الإشارات",
-    "questionsCount_one": "{{value}} سؤال",
-    "questionsCount_other": "{{value}} أسئلة",
-    "signsCount_one": "{{value}} إشارة",
-    "signsCount_other": "{{value}} إشارات"
+    "questionsCount_one": "{value} سؤال",
+    "questionsCount_other": "{value} أسئلة",
+    "signsCount_one": "{value} إشارة",
+    "signsCount_other": "{value} إشارات"
   },
   "stats": {
     "title": "إحصائياتك",
@@ -1127,8 +1127,8 @@
     "bestScore": "أفضل درجة",
     "accuracy": "متوسط الدقة",
     "streak": "السلسلة الحالية",
-    "streakCount_one": "{{value}} يوم",
-    "streakCount_other": "{{value}} أيام",
+    "streakCount_one": "{value} يوم",
+    "streakCount_other": "{value} أيام",
     "days": "يوم",
     "noStats": "No statistics yet",
     "noStatsDesc": "Complete quizzes to see your progress"
@@ -1140,7 +1140,7 @@
     "feedback": "التغذية الراجعة",
     "soundDesc": "تشغيل الأصوات للإجابات الصحيحة والخاطئة",
     "vibrationDesc": "اهتزاز عند اختيار الإجابات",
-    "versionLabel": "الإصدار {{version}}",
+    "versionLabel": "الإصدار {version}",
     "aboutDesc": "تطبيق تعليمي لتعلم نظرية القيادة. يعمل المحتوى بالكامل دون اتصال.",
     "offlineNote": "غير متصل 100%: لا حاجة لاتصال بالإنترنت.",
     "disclaimer": "تنبيه: هذا التطبيق غير تابع لأي جهة حكومية ومخصص للتدريب التعليمي فقط.",
@@ -1260,7 +1260,7 @@
     },
     "empty": "لا توجد إنجازات في هذه الفئة",
     "dailyGoal": "الهدف اليومي",
-    "dailyGoalDesc": "أجب على {{count}} سؤال اليوم",
+    "dailyGoalDesc": "أجب على {count} سؤال اليوم",
     "dailyGoalComplete": "تم إكمال الهدف اليومي!",
     "categories": {
       "all": "الكل",
@@ -1317,13 +1317,13 @@
     "severeTitle": "مخالفات جسيمة (12–24 نقطة مخالفة)",
     "majorTitle": "مخالفات كبيرة (6–8 نقاط مخالفة)",
     "minorTitle": "مخالفات بسيطة (2–4 نقاط مخالفة)",
-    "pointsLabel": "{{value}} نقطة مخالفة",
-    "fullSentence": "{{violation}} ستؤدي إلى {{value}} نقاط مخالفة ({{severity}})",
+    "pointsLabel": "{value} نقطة مخالفة",
+    "fullSentence": "{violation} ستؤدي إلى {value} نقاط مخالفة ({severity})",
     "explainLine": "هذه المخالفة تقلل زمن الاستجابة وترفع المخاطر على الطريق.",
     "whyDangerousLine": "لماذا هي خطيرة: تزيد احتمال التصادم على السائقين والمشاة.",
     "tipBody": "نصيحة للاختبار: اتبع الإشارات والتزم بالسرعة الآمنة دائمًا.",
     "educationalNote": "معرفة قيم نقاط المخالفات تساعدك على تجنب العقوبات والقيادة بأمان.",
-    "previewDescription": "{{violation}} قد تضيف نقاط مخالفة إلى سجلك."
+    "previewDescription": "{violation} قد تضيف نقاط مخالفة إلى سجلك."
   },
   "violations": {
     "v01": "قيادة المركبة تحت تأثير الكحول/المخدرات",
@@ -1414,7 +1414,7 @@
     "pagination": "ترقيم الصفحات",
     "carousel": "عارض الشرائح",
     "xp": "نقطة خبرة",
-    "xpValue": "{{value}} نقطة خبرة",
+    "xpValue": "{value} نقطة خبرة",
     "pressBackAgainToExit": "اضغط رجوع مرة أخرى للخروج",
     "answerRequired": "يرجى الإجابة أولاً",
     "empty": "لا توجد عناصر بعد"
@@ -1425,7 +1425,7 @@
     "filterAll": "الكل",
     "filterInProgress": "قيد التقدم",
     "filterCompleted": "مكتمل",
-    "totalQuestions": "{{value}} سؤال",
+    "totalQuestions": "{value} سؤال",
     "empty": "لا توجد أسئلة متاحة في هذه الفئة بعد",
     "signs": {
       "title": "إشارات المرور والعلامات",
@@ -1532,5 +1532,11 @@
   "index": {
     "title": "مرحباً بك في تطبيقك الفارغ",
     "subtitle": "ابدأ ببناء مشروعك الرائع هنا!"
-  }
+  },
+  "common.questionOf": "?????? {current} ?? {total}",
+  "common.bookmark": "????? ??????",
+  "exam.flag": "??? ????? ??? ??????",
+  "exam.exitTitle": "?? ???? ????? ?????????",
+  "exam.exitMessage": "???? ????? ?????. ?? ???? ???????",
+  "exam.exitConfirm": "????"
 }

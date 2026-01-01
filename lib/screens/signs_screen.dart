@@ -3,10 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../core/constants/app_colors.dart';
 import '../models/sign.dart';
 import '../state/data_state.dart';
-import '../state/app_state.dart';
-import '../widgets/bottom_nav.dart';
 
 class SignsScreen extends ConsumerStatefulWidget {
   const SignsScreen({super.key});
@@ -35,7 +34,6 @@ class _SignsScreenState extends ConsumerState<SignsScreen> {
               decoration: InputDecoration(
                 hintText: 'signs.search'.tr(),
                 prefixIcon: const Icon(Icons.search),
-                border: const OutlineInputBorder(),
               ),
               onChanged: (value) => setState(() => query = value.toLowerCase()),
             ),
@@ -85,14 +83,13 @@ class _SignsScreenState extends ConsumerState<SignsScreen> {
                 }).toList();
                 final width = MediaQuery.of(context).size.width;
                 final columns = width >= 900 ? 4 : width >= 600 ? 3 : 2;
-                final favorites = ref.watch(appSettingsProvider).favorites.signs;
                 return GridView.builder(
                   padding: const EdgeInsets.all(16),
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: columns,
                     crossAxisSpacing: 12,
                     mainAxisSpacing: 12,
-                    childAspectRatio: 0.9,
+                    childAspectRatio: 0.85,
                   ),
                   itemCount: filtered.length,
                   itemBuilder: (context, idx) {
@@ -111,15 +108,16 @@ class _SignsScreenState extends ConsumerState<SignsScreen> {
                               ),
                               const SizedBox(height: 8),
                               Text(title, textAlign: TextAlign.center, style: theme.textTheme.bodySmall),
-                              IconButton(
-                                onPressed: () {
-                                  ref.read(appSettingsProvider.notifier).toggleFavorite(
-                                        type: 'signs',
-                                        id: sign.id,
-                                      );
-                                },
-                                icon: Icon(
-                                  favorites.contains(sign.id) ? Icons.bookmark : Icons.bookmark_border,
+                              const SizedBox(height: 6),
+                              Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                                decoration: BoxDecoration(
+                                  color: AppColors.primary.withValues(alpha: 0.1),
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Text(
+                                  'signs.categories.${sign.category}'.tr(),
+                                  style: theme.textTheme.bodySmall?.copyWith(color: AppColors.primary),
                                 ),
                               ),
                             ],
@@ -136,7 +134,6 @@ class _SignsScreenState extends ConsumerState<SignsScreen> {
           ),
         ],
       ),
-      bottomNavigationBar: const BottomNav(),
     );
   }
 }
@@ -147,7 +144,7 @@ void _showSignDetails(BuildContext context, AppSign sign, String title) {
     showDragHandle: true,
     builder: (context) {
       return Padding(
-        padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
+        padding: const EdgeInsetsDirectional.fromSTEB(20, 12, 20, 24),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -191,7 +188,7 @@ class _CategoryChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(right: 8),
+      padding: const EdgeInsetsDirectional.only(end: 8),
       child: ChoiceChip(
         label: Text(label),
         selected: selected,

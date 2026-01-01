@@ -8,6 +8,7 @@ void main() {
     final questions = [
       const Question(
         id: 'q1',
+        categoryId: 'signs',
         categoryKey: 'quiz.categories.signs',
         difficultyKey: 'quiz.difficulty.easy',
         questionKey: 'quiz.q.q1.text',
@@ -18,6 +19,7 @@ void main() {
       ),
       const Question(
         id: 'q2',
+        categoryId: 'rules',
         categoryKey: 'quiz.categories.rules',
         difficultyKey: 'quiz.difficulty.easy',
         questionKey: 'quiz.q.q2.text',
@@ -31,7 +33,7 @@ void main() {
     controller.start(questions);
     expect(controller.state.questions.length, 2);
 
-    controller.selectAnswer(0);
+    controller.selectAnswer(controller.state.currentQuestion.correctIndex);
     expect(controller.state.correctCount, 1);
     expect(controller.state.showAnswer, true);
 

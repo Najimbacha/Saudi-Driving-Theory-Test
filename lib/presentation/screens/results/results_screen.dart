@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/constants/app_colors.dart';
 import '../../../data/models/exam_result_model.dart';
+import '../../../utils/text_formatters.dart';
 
 class ResultsScreen extends StatelessWidget {
   const ResultsScreen({super.key, required this.result});
@@ -26,30 +27,7 @@ class ResultsScreen extends StatelessWidget {
             correct: result.correctAnswers,
           ),
           const SizedBox(height: 16),
-          _StatsRow(
-            items: [
-              _StatItem(
-                  label: 'results.correct'.tr(),
-                  value: result.correctAnswers.toString()),
-              _StatItem(
-                  label: 'results.incorrect'.tr(),
-                  value: result.wrongAnswers.toString()),
-              _StatItem(label: 'results.accuracy'.tr(), value: '$accuracy%'),
-              _StatItem(
-                  label: 'results.time'.tr(),
-                  value: _formatSeconds(result.timeTakenSeconds)),
-            ],
-          ),
-          const SizedBox(height: 20),
-          Text('exam.topicBreakdown'.tr(),
-              style: Theme.of(context).textTheme.titleMedium),
-          const SizedBox(height: 12),
-          ...result.categoryScores.entries.map(
-            (entry) => ListTile(
-              title: Text('categories.${entry.key}.title'.tr()),
-              trailing: Text(entry.value.toString()),
-            ),
-          ),
+          const SizedBox(height: 8),
           const SizedBox(height: 20),
           Row(
             children: [
@@ -72,8 +50,8 @@ class ResultsScreen extends StatelessWidget {
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
-              onPressed: () => context.go('/practice'),
-              child: Text('results.tryAgain'.tr()),
+              onPressed: () => context.go('/exam'),
+              child: Text('exam.tryAgain'.tr()),
             ),
           ),
         ],
@@ -81,11 +59,6 @@ class ResultsScreen extends StatelessWidget {
     );
   }
 
-  static String _formatSeconds(int seconds) {
-    final minutes = (seconds ~/ 60).toString().padLeft(2, '0');
-    final remain = (seconds % 60).toString().padLeft(2, '0');
-    return '$minutes:$remain';
-  }
 }
 
 class _HeroScore extends StatelessWidget {
@@ -107,26 +80,42 @@ class _HeroScore extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.12),
+        color: color.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            passed ? 'results.passed'.tr() : 'results.failed'.tr(),
-            style:
-                Theme.of(context).textTheme.titleMedium?.copyWith(color: color),
+          Row(
+            children: [
+              Icon(
+                passed ? Icons.emoji_events : Icons.sentiment_dissatisfied,
+                color: color,
+              ),
+              const SizedBox(width: 8),
+              Text(
+                passed ? 'results.passed'.tr() : 'results.failed'.tr(),
+                style: Theme.of(context)
+                    .textTheme
+                    .titleMedium
+                    ?.copyWith(color: color),
+              ),
+            ],
           ),
-          const SizedBox(height: 8),
-          Text(
-            '${'results.score'.tr()}: $score%',
-            style: Theme.of(context).textTheme.titleLarge,
+          const SizedBox(height: 10),
+          TweenAnimationBuilder<double>(
+            tween: Tween(begin: 0, end: double.tryParse(score) ?? 0),
+            duration: const Duration(milliseconds: 700),
+            builder: (context, value, _) {
+              return Text(
+                '${'results.score'.tr()}: ${value.toStringAsFixed(0)}%',
+                style: Theme.of(context).textTheme.displaySmall,
+              );
+            },
           ),
           const SizedBox(height: 6),
           Text(
-            'exam.scoreSummary'
-                .tr(args: [correct.toString(), total.toString()]),
+            formatCorrectAnswers(context, correct, total),
             style: Theme.of(context).textTheme.bodySmall,
           ),
         ],
@@ -135,42 +124,3 @@ class _HeroScore extends StatelessWidget {
   }
 }
 
-class _StatsRow extends StatelessWidget {
-  const _StatsRow({required this.items});
-
-  final List<_StatItem> items;
-
-  @override
-  Widget build(BuildContext context) {
-    return GridView.count(
-      crossAxisCount: 2,
-      crossAxisSpacing: 12,
-      mainAxisSpacing: 12,
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      children: items.map((item) {
-        return Card(
-          child: Padding(
-            padding: const EdgeInsets.all(12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(item.label, style: Theme.of(context).textTheme.bodySmall),
-                const SizedBox(height: 8),
-                Text(item.value,
-                    style: Theme.of(context).textTheme.titleMedium),
-              ],
-            ),
-          ),
-        );
-      }).toList(),
-    );
-  }
-}
-
-class _StatItem {
-  const _StatItem({required this.label, required this.value});
-
-  final String label;
-  final String value;
-}

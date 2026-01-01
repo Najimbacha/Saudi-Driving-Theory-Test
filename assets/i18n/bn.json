@@ -39,18 +39,18 @@
         "practice": "প্র্যাকটিস কুইজ",
         "exam": "পরীক্ষা সেশন"
       },
-      "continueLine": "চালিয়ে যান: {{name}} • {{value}}%",
-      "continueLineSimple": "চালিয়ে যান: {{name}}",
+      "continueLine": "চালিয়ে যান: {name} • {value}%",
+      "continueLineSimple": "চালিয়ে যান: {name}",
       "continueCta": "চালিয়ে যান"
     },
     "primaryAction": {
       "continueTitle": "শেখা চালিয়ে যান",
-      "continueSubtitle": "পাঠ: {{lesson}}",
+      "continueSubtitle": "পাঠ: {lesson}",
       "continueCta": "চালিয়ে যান",
       "startTitle": "ড্রাইভিং থিওরির প্রস্তুতি শুরু করুন",
       "startSubtitle": "নিয়ম শিখুন • প্রশ্ন অনুশীলন করুন • আত্মবিশ্বাসের সাথে পাস করুন",
       "startCta": "শুরু করুন",
-      "progressLabel": "অগ্রগতি: {{value}}%"
+      "progressLabel": "অগ্রগতি: {value}%"
     },
     "greeting": "শিখতে প্রস্তুত?",
     "subtitle": "যেকোনো সময়, যেকোনো জায়গায় অনুশীলন করুন — ইন্টারনেট দরকার নেই",
@@ -58,9 +58,9 @@
     "learnSignsDesc": "সব ট্রাফিক সাইন শিখুন",
     "learnRules": "নিয়ম ও প্রবিধান",
     "learnRulesDesc": "সড়ক নিয়ম ও নিরাপত্তা",
-    "practice": "অনুশীলন কুইজ",
+    "practice": "????? ???????",
     "practiceDesc": "আপনার জ্ঞান যাচাই করুন",
-    "mockExam": "অনুশীলন টেস্ট",
+    "mockExam": "?? ???????",
     "mockExamDesc": "পূর্ণ থিওরি অনুশীলন",
     "practiceByCategory": "বিভাগভিত্তিক অনুশীলন",
     "practiceByCategoryDesc": "বিষয় ধরে শিখুন",
@@ -91,9 +91,9 @@
       "cta": "আজকের ফোকাস শুরু করুন →"
     },
     "xpStrip": {
-      "xpLabel": "{{xp}} এক্সপি",
-      "streakLabel_one": "স্ট্রিক: {{value}} দিন",
-      "streakLabel_other": "স্ট্রিক: {{value}} দিন"
+      "xpLabel": "{xp} এক্সপি",
+      "streakLabel_one": "স্ট্রিক: {value} দিন",
+      "streakLabel_other": "স্ট্রিক: {value} দিন"
     },
     "quickNav": {
       "signs": "সাইন",
@@ -103,15 +103,15 @@
     },
     "continueLearning": {
       "title": "শেখা চালিয়ে যান",
-      "lessonLabel": "পাঠ: {{lesson}}",
-      "progressLabel": "অগ্রগতি: {{value}}%",
+      "lessonLabel": "পাঠ: {lesson}",
+      "progressLabel": "অগ্রগতি: {value}%",
       "cta": "চালিয়ে যান"
     },
     "continueTest": {
       "title": "পরীক্ষা চালিয়ে যান",
       "practiceLabel": "অনুশীলন চালিয়ে যান",
       "examLabel": "পরীক্ষা সেশন চালিয়ে যান",
-      "progress": "প্রশ্ন {{current}} / {{total}}",
+      "progress": "প্রশ্ন {current} / {total}",
       "cta": "চালিয়ে যান"
     },
     "progressSummary": {
@@ -160,9 +160,9 @@
       "mandatory": "বাধ্যতামূলক",
       "guide": "গাইড"
     },
-    "showing": "{{total}} এর মধ্যে {{from}}-{{to}} সাইন দেখানো হচ্ছে",
+    "showing": "{total} এর মধ্যে {from}-{to} সাইন দেখানো হচ্ছে",
     "practiceCategory": "এই বিভাগটি অনুশীলন করুন",
-    "page": "পৃষ্ঠা {{current}} / {{total}}",
+    "page": "পৃষ্ঠা {current} / {total}",
     "mastery": {
       "new": "নতুন",
       "learning": "শিখছে",
@@ -958,17 +958,17 @@
     "tryAgain": "আবার চেষ্টা করুন",
     "backToResults": "ফিরে যান",
     "explanation": "ব্যাখ্যা",
-    "modeTitle": "{{mode}} {{exam}}",
-    "questionsCount_one": "{{value}} প্রশ্ন",
-    "questionsCount_other": "{{value}} প্রশ্ন",
-    "minutesCount_one": "{{value}} মিনিট",
-    "minutesCount_other": "{{value}} মিনিট",
-    "passThresholdLabel": "টার্গেট: {{value}}",
-    "progressCount": "{{current}} / {{total}}",
-    "scoreSummary": "{{correct}} / {{total}} সঠিক উত্তর",
+    "modeTitle": "{mode} {exam}",
+    "questionsCount_one": "{value} প্রশ্ন",
+    "questionsCount_other": "{value} প্রশ্ন",
+    "minutesCount_one": "{value} মিনিট",
+    "minutesCount_other": "{value} মিনিট",
+    "passThresholdLabel": "টার্গেট: {value}",
+    "progressCount": "{current} / {total}",
+    "scoreSummary": "{correct} / {total} সঠিক উত্তর",
     "topicBreakdown": "বিষয়ভিত্তিক বিশ্লেষণ",
-    "categoryBreakdownRow": "{{correct}}/{{total}} ({{accuracy}})",
-    "reviewProgress": "রিভিউ: {{current}} / {{total}}",
+    "categoryBreakdownRow": "{correct}/{total} ({accuracy})",
+    "reviewProgress": "রিভিউ: {current} / {total}",
     "strictMode": "কঠোর পরীক্ষা মোড",
     "strictModeDesc": "পিছনে যাওয়া যাবে না এবং উত্তর লক হয়ে যায়"
   },
@@ -1003,13 +1003,13 @@
     "startDaily": "ডেইলি শুরু করুন",
     "reviewMistakes": "ভুলগুলো দেখুন",
     "startQuick": "কুইক শুরু করুন",
-    "startDailyCount": "ডেইলি শুরু করুন ({{value}})",
-    "startQuickCount": "কুইক শুরু করুন ({{value}})",
-    "allCount": "সব প্রশ্ন ({{value}})",
-    "accuracyLabel": "সঠিকতা: {{value}} (আপনার চেষ্টার ভিত্তিতে)",
-    "mistakesDetail": "ভুল উত্তর দেওয়া প্রশ্ন: {{value}}",
+    "startDailyCount": "ডেইলি শুরু করুন ({value})",
+    "startQuickCount": "কুইক শুরু করুন ({value})",
+    "allCount": "সব প্রশ্ন ({value})",
+    "accuracyLabel": "সঠিকতা: {value} (আপনার চেষ্টার ভিত্তিতে)",
+    "mistakesDetail": "ভুল উত্তর দেওয়া প্রশ্ন: {value}",
     "unlockStats": "পরিসংখ্যান দেখতে অনুশীলন করুন",
-    "progressCount": "{{current}} / {{total}}"
+    "progressCount": "{current} / {total}"
   },
   "results": {
     "title": "ফলাফল",
@@ -1023,9 +1023,9 @@
     "tryAgain": "আবার চেষ্টা করুন",
     "reviewAnswers": "উত্তর পর্যালোচনা",
     "backHome": "হোমে ফিরে যান",
-    "scoreSummary": "{{correct}} / {{total}} সঠিক",
+    "scoreSummary": "{correct} / {total} সঠিক",
     "topicBreakdown": "বিষয়ভিত্তিক বিশ্লেষণ",
-    "categoryBreakdownRow": "{{correct}}/{{total}} ({{accuracy}})"
+    "categoryBreakdownRow": "{correct}/{total} ({accuracy})"
   },
   "review": {
     "title": "উত্তর পর্যালোচনা",
@@ -1063,8 +1063,8 @@
     "relatedLearningTitle": "সম্পর্কিত শেখা",
     "relatedCards": {
       "violationTitle": "লঙ্ঘন পয়েন্ট",
-      "pointsLabel": "{{value}} পয়েন্ট",
-      "violationLine": "{{violation}} আপনার রেকর্ডে পয়েন্ট যোগ করে। সীমার মধ্যে থাকুন।",
+      "pointsLabel": "{value} পয়েন্ট",
+      "violationLine": "{violation} আপনার রেকর্ডে পয়েন্ট যোগ করে। সীমার মধ্যে থাকুন।",
       "viewDetails": "বিস্তারিত দেখুন",
       "signsTitle": "ট্রাফিক সাইন",
       "viewSigns": "সাইন দেখুন",
@@ -1073,7 +1073,7 @@
     },
     "viewSimilarSignsLink": "মিলতী সাইন দেখুন →",
     "commonViolationsTitle": "সাধারণ লঙ্ঘন ও পয়েন্ট",
-    "pointsBadge": "{{value}} পয়েন্ট",
+    "pointsBadge": "{value} পয়েন্ট",
     "viewViolationSystemLink": "সম্পূর্ণ পয়েন্ট সিস্টেম দেখুন →",
     "learnMoreTitle": "আরও জানুন",
     "viewRelatedSignsLink": "সম্পর্কিত ট্রাফিক সাইন দেখুন →",
@@ -1092,10 +1092,10 @@
       "safety": "নিরাপত্তা নিয়ম"
     },
     "noResults": "কোনো পাঠ পাওয়া যায়নি",
-    "lessonsCount_one": "{{value}} পাঠ",
-    "lessonsCount_other": "{{value}} পাঠ",
-    "categoriesCount_one": "{{value}} বিভাগ",
-    "categoriesCount_other": "{{value}} বিভাগ",
+    "lessonsCount_one": "{value} পাঠ",
+    "lessonsCount_other": "{value} পাঠ",
+    "categoriesCount_one": "{value} বিভাগ",
+    "categoriesCount_other": "{value} বিভাগ",
     "studyPlan": {
       "title": "স্টাডি প্ল্যান",
       "items": {
@@ -1116,10 +1116,10 @@
     "emptyDesc": "পরে দেখার জন্য প্রশ্ন ও সাইন সংরক্ষণ করুন",
     "questions": "প্রশ্ন",
     "signs": "সাইন",
-    "questionsCount_one": "{{value}} প্রশ্ন",
-    "questionsCount_other": "{{value}} প্রশ্ন",
-    "signsCount_one": "{{value}} সাইন",
-    "signsCount_other": "{{value}} সাইন"
+    "questionsCount_one": "{value} প্রশ্ন",
+    "questionsCount_other": "{value} প্রশ্ন",
+    "signsCount_one": "{value} সাইন",
+    "signsCount_other": "{value} সাইন"
   },
   "stats": {
     "title": "আপনার পরিসংখ্যান",
@@ -1130,8 +1130,8 @@
     "days": "দিন",
     "noStats": "এখনো কোনো পরিসংখ্যান নেই",
     "noStatsDesc": "প্রগতি দেখতে কুইজ সম্পন্ন করুন",
-    "streakCount_one": "{{value}} দিন",
-    "streakCount_other": "{{value}} দিন"
+    "streakCount_one": "{value} দিন",
+    "streakCount_other": "{value} দিন"
   },
   "settings": {
     "title": "সেটিংস",
@@ -1153,7 +1153,7 @@
     "feedback": "ফিডব্যাক",
     "soundDesc": "সঠিক/ভুল উত্তরের জন্য শব্দ চালান",
     "vibrationDesc": "উত্তরে হ্যাপটিক ফিডব্যাক",
-    "versionLabel": "ভার্সন {{version}}",
+    "versionLabel": "ভার্সন {version}",
     "aboutDesc": "ড্রাইভিং থিওরি শেখার জন্য শিক্ষামূলক অ্যাপ। সব কনটেন্ট অফলাইনে কাজ করে।",
     "offlineNote": "১০০% অফলাইন: ইন্টারনেট দরকার নেই।",
     "disclaimer": "দায়স্বীকার: এই অ্যাপটি কোনো সরকারি প্রতিষ্ঠানের সঙ্গে যুক্ত নয় এবং শুধুমাত্র শিক্ষামূলক অনুশীলনের জন্য।",
@@ -1260,7 +1260,7 @@
     },
     "empty": "এই বিভাগে কোনো অর্জন নেই",
     "dailyGoal": "দৈনিক লক্ষ্য",
-    "dailyGoalDesc": "আজ {{count}} প্রশ্নের উত্তর দিন",
+    "dailyGoalDesc": "আজ {count} প্রশ্নের উত্তর দিন",
     "dailyGoalComplete": "দৈনিক লক্ষ্য সম্পন্ন!",
     "categories": {
       "all": "সব",
@@ -1317,13 +1317,13 @@
     "severeTitle": "গুরুতর লঙ্ঘন (১২–২৪ লঙ্ঘন পয়েন্ট)",
     "majorTitle": "মেজর লঙ্ঘন (৬–৮ লঙ্ঘন পয়েন্ট)",
     "minorTitle": "ক্ষুদ্র লঙ্ঘন (২–৪ লঙ্ঘন পয়েন্ট)",
-    "pointsLabel": "{{value}} লঙ্ঘন পয়েন্ট",
-    "fullSentence": "{{violation}} হলে {{value}} লঙ্ঘন পয়েন্ট হবে ({{severity}})",
+    "pointsLabel": "{value} লঙ্ঘন পয়েন্ট",
+    "fullSentence": "{violation} হলে {value} লঙ্ঘন পয়েন্ট হবে ({severity})",
     "explainLine": "এই লঙ্ঘন প্রতিক্রিয়া সময় কমায় এবং রাস্তায় ঝুঁকি বাড়ায়।",
     "whyDangerousLine": "কেন ঝুঁকিপূর্ণ: চালক ও পথচারীদের সংঘর্ষের ঝুঁকি বাড়ায়।",
     "tipBody": "পরীক্ষার টিপ: সড়ক চিহ্ন মানুন এবং সব সময় নিরাপদ গতি রাখুন।",
     "educationalNote": "লঙ্ঘন পয়েন্ট জানা থাকলে গুরুতর শাস্তি এড়িয়ে নিরাপদে চালাতে পারবেন।",
-    "previewDescription": "{{violation}} আপনার রেকর্ডে লঙ্ঘন পয়েন্ট যোগ করতে পারে।"
+    "previewDescription": "{violation} আপনার রেকর্ডে লঙ্ঘন পয়েন্ট যোগ করতে পারে।"
   },
   "violations": {
     "v01": "মদ/মাদকসেবনের প্রভাবে গাড়ি চালানো",
@@ -1398,7 +1398,7 @@
     "pagination": "পৃষ্ঠা-সংখ্যা",
     "carousel": "কারাউসেল",
     "xp": "এক্সপি",
-    "xpValue": "{{value}} এক্সপি",
+    "xpValue": "{value} এক্সপি",
     "pressBackAgainToExit": "বের হতে আবার ব্যাক চাপুন",
     "answerRequired": "অনুগ্রহ করে আগে উত্তর দিন",
     "empty": "এখনও কোনো আইটেম নেই"
@@ -1409,7 +1409,7 @@
     "filterAll": "সব",
     "filterInProgress": "চলমান",
     "filterCompleted": "সম্পন্ন",
-    "totalQuestions": "{{value}} প্রশ্ন",
+    "totalQuestions": "{value} প্রশ্ন",
     "empty": "এই বিভাগে এখনও কোনো প্রশ্ন নেই",
     "signs": {
       "title": "ট্রাফিক সাইন ও সংকেত",
@@ -1532,5 +1532,11 @@
   "index": {
     "title": "আপনার খালি অ্যাপে স্বাগতম",
     "subtitle": "আপনার দারুণ প্রকল্প এখান থেকেই শুরু করুন!"
-  }
+  },
+  "common.questionOf": "?????? {current} ?? ????? {total}",
+  "common.bookmark": "????????",
+  "exam.flag": "?????? ??????? ????",
+  "exam.exitTitle": "??????? ???? ??? ??? ????",
+  "exam.exitMessage": "????? ??????? ??????? ????? ???? ?? ??? ??? ????",
+  "exam.exitConfirm": "??? ???"
 }

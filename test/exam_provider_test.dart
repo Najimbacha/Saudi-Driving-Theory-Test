@@ -8,6 +8,7 @@ void main() {
     final questions = [
       const Question(
         id: 'q1',
+        categoryId: 'signs',
         categoryKey: 'quiz.categories.signs',
         difficultyKey: 'quiz.difficulty.easy',
         questionKey: 'quiz.q.q1.text',
@@ -18,6 +19,7 @@ void main() {
       ),
       const Question(
         id: 'q2',
+        categoryId: 'rules',
         categoryKey: 'quiz.categories.rules',
         difficultyKey: 'quiz.difficulty.easy',
         questionKey: 'quiz.q.q2.text',
@@ -32,11 +34,12 @@ void main() {
     expect(controller.state.questions.length, 2);
     expect(controller.state.timeLeftSeconds, 60);
 
+    final currentId = controller.state.currentQuestion.id;
     controller.selectAnswer(1);
-    expect(controller.state.answers['q1'], 1);
+    expect(controller.state.answers[currentId], 1);
 
     controller.toggleFlag();
-    expect(controller.state.flagged.contains('q1'), true);
+    expect(controller.state.flagged.contains(currentId), true);
 
     controller.finish();
     expect(controller.state.isCompleted, true);

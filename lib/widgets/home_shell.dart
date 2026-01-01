@@ -1,0 +1,154 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../presentation/providers/exam_provider.dart';
+import '../presentation/screens/exam/exam_screen.dart';
+import '../presentation/screens/home/home_screen.dart';
+import '../presentation/screens/quiz/practice_screen.dart';
+import '../screens/settings_screen.dart';
+import '../screens/signs_screen.dart';
+import '../utils/back_guard.dart';
+import 'bottom_nav.dart';
+
+class TabShellScope extends InheritedNotifier<ValueNotifier<int>> {
+  const TabShellScope({
+    super.key,
+    required ValueNotifier<int> notifier,
+    required super.child,
+  }) : super(notifier: notifier);
+
+  static ValueNotifier<int>? maybeOf(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<TabShellScope>()?.notifier;
+  }
+}
+
+class HomeShell extends ConsumerStatefulWidget {
+  const HomeShell({super.key, this.initialIndex = 0});
+
+  final int initialIndex;
+
+  @override
+  ConsumerState<HomeShell> createState() => _HomeShellState();
+}
+
+class _HomeShellState extends ConsumerState<HomeShell> {
+  late final ValueNotifier<int> _index;
+  late final List<GlobalKey<NavigatorState>> _navKeys;
+
+  @override
+  void initState() {
+    super.initState();
+    _index = ValueNotifier<int>(widget.initialIndex);
+    _navKeys = List.generate(5, (_) => GlobalKey<NavigatorState>());
+  }
+
+  @override
+  void dispose() {
+    _index.dispose();
+    super.dispose();
+  }
+
+  Future<void> _handleBack() async {
+    final currentIndex = _index.value;
+    final currentNav = _navKeys[currentIndex].currentState;
+    final exam = ref.read(examProvider);
+    final examInProgress = exam.questions.isNotEmpty && !exam.isCompleted;
+
+    if (currentIndex == 3 && examInProgress) {
+      final shouldExit = await confirmExitExam(context);
+      if (!shouldExit) return;
+      if (currentNav != null && currentNav.canPop()) {
+        currentNav.pop();
+        return;
+      }
+      _index.value = 0;
+      return;
+    }
+
+    if (currentNav != null && currentNav.canPop()) {
+      currentNav.pop();
+      return;
+    }
+
+    if (currentIndex != 0) {
+      _index.value = 0;
+      return;
+    }
+
+    if (mounted) {
+      Navigator.of(context).maybePop();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return TabShellScope(
+      notifier: _index,
+      child: PopScope(
+        canPop: false,
+        onPopInvokedWithResult: (didPop, _) {
+          if (didPop) return;
+          _handleBack();
+        },
+        child: ValueListenableBuilder<int>(
+          valueListenable: _index,
+          builder: (context, index, _) {
+            return Scaffold(
+              body: IndexedStack(
+                index: index,
+                children: [
+                  _TabNavigator(
+                    navigatorKey: _navKeys[0],
+                    child: const HomeDashboardScreen(),
+                  ),
+                  _TabNavigator(
+                    navigatorKey: _navKeys[1],
+                    child: const SignsScreen(),
+                  ),
+                  _TabNavigator(
+                    navigatorKey: _navKeys[2],
+                    child: const PracticeFlowScreen(),
+                  ),
+                  _TabNavigator(
+                    navigatorKey: _navKeys[3],
+                    child: const ExamFlowScreen(),
+                  ),
+                  _TabNavigator(
+                    navigatorKey: _navKeys[4],
+                    child: const SettingsScreen(),
+                  ),
+                ],
+              ),
+              bottomNavigationBar: (index == 2 || index == 3)
+                  ? null
+                  : BottomNav(
+                      currentIndex: index,
+                      onTap: (next) => _index.value = next,
+                    ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class _TabNavigator extends StatelessWidget {
+  const _TabNavigator({
+    required this.navigatorKey,
+    required this.child,
+  });
+
+  final GlobalKey<NavigatorState> navigatorKey;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Navigator(
+      key: navigatorKey,
+      onGenerateRoute: (_) {
+        return MaterialPageRoute(builder: (_) => child);
+      },
+    );
+  }
+}

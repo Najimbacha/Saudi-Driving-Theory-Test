@@ -27,6 +27,10 @@ class _OnboardingIntroScreenState extends ConsumerState<OnboardingIntroScreen> {
       icon: Icons.quiz_outlined,
       titleKey: 'home.practice',
       subtitleKey: 'home.practiceDesc',
+      bullets: [
+        'quiz.selectCategory',
+        'quiz.start',
+      ],
     ),
     _OnboardingPage(
       icon: Icons.assignment_outlined,
@@ -69,31 +73,66 @@ class _OnboardingIntroScreenState extends ConsumerState<OnboardingIntroScreen> {
               itemBuilder: (context, index) {
                 final page = _pages[index];
                 return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  padding: const EdgeInsets.symmetric(horizontal: 28),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Container(
-                        width: 110,
-                        height: 110,
-                        decoration: BoxDecoration(
-                          color: AppColors.secondary.withOpacity(0.15),
-                          shape: BoxShape.circle,
-                        ),
-                        child: Icon(page.icon, size: 56, color: AppColors.primary),
+                      Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          Container(
+                            width: 140,
+                            height: 140,
+                            decoration: BoxDecoration(
+                              color: AppColors.primary.withValues(alpha: 0.08),
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                          Container(
+                            width: 100,
+                            height: 100,
+                            decoration: BoxDecoration(
+                              color: AppColors.secondary.withValues(alpha: 0.2),
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                          Icon(page.icon, size: 56, color: AppColors.primary),
+                        ],
                       ),
-                      const SizedBox(height: 24),
+                      const SizedBox(height: 28),
                       Text(
                         page.titleKey.tr(),
-                        style: theme.textTheme.titleLarge,
+                        style: theme.textTheme.displaySmall,
                         textAlign: TextAlign.center,
                       ),
-                      const SizedBox(height: 10),
+                      const SizedBox(height: 12),
                       Text(
                         page.subtitleKey.tr(),
-                        style: theme.textTheme.bodyMedium?.copyWith(color: AppColors.textSecondary),
+                        style: theme.textTheme.bodyLarge
+                            ?.copyWith(color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6)),
                         textAlign: TextAlign.center,
                       ),
+                      if (page.bullets.isNotEmpty) ...[
+                        const SizedBox(height: 16),
+                        Column(
+                          children: page.bullets.map((bullet) {
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 8),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Icon(Icons.check_circle, color: AppColors.success, size: 18),
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    bullet.tr(),
+                                    style: theme.textTheme.bodyMedium,
+                                  ),
+                                ],
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                      ],
                     ],
                   ),
                 );
@@ -110,29 +149,40 @@ class _OnboardingIntroScreenState extends ConsumerState<OnboardingIntroScreen> {
                 width: _currentIndex == index ? 18 : 8,
                 height: 8,
                 decoration: BoxDecoration(
-                  color: _currentIndex == index ? AppColors.primary : AppColors.textSecondary,
+                  color: _currentIndex == index
+                      ? AppColors.primary
+                      : Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.4),
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
             ),
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(24, 4, 24, 24),
+            padding: const EdgeInsetsDirectional.fromSTEB(24, 4, 24, 24),
             child: SizedBox(
               width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () {
-                  if (_currentIndex == _pages.length - 1) {
-                    _complete();
-                  } else {
-                    _controller.nextPage(
-                      duration: const Duration(milliseconds: 300),
-                      curve: Curves.easeInOut,
-                    );
-                  }
-                },
-                child: Text(
-                  _currentIndex == _pages.length - 1 ? 'onboarding.getStarted'.tr() : 'common.next'.tr(),
+              child: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 250),
+                child: ElevatedButton(
+                  key: ValueKey(_currentIndex),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor:
+                        _currentIndex == _pages.length - 1 ? AppColors.secondary : AppColors.primary,
+                    foregroundColor: Theme.of(context).colorScheme.onSurface,
+                  ),
+                  onPressed: () {
+                    if (_currentIndex == _pages.length - 1) {
+                      _complete();
+                    } else {
+                      _controller.nextPage(
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeInOut,
+                      );
+                    }
+                  },
+                  child: Text(
+                    _currentIndex == _pages.length - 1 ? 'onboarding.getStarted'.tr() : 'common.next'.tr(),
+                  ),
                 ),
               ),
             ),
@@ -148,9 +198,11 @@ class _OnboardingPage {
     required this.icon,
     required this.titleKey,
     required this.subtitleKey,
+    this.bullets = const [],
   });
 
   final IconData icon;
   final String titleKey;
   final String subtitleKey;
+  final List<String> bullets;
 }

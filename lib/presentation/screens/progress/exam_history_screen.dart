@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/constants/app_colors.dart';
 import '../../providers/exam_history_provider.dart';
 
 class ExamHistoryScreen extends ConsumerWidget {
@@ -22,11 +23,20 @@ class ExamHistoryScreen extends ConsumerWidget {
                 final score = result.scorePercentage.toStringAsFixed(0);
                 return Card(
                   child: ListTile(
+                    leading: CircleAvatar(
+                      backgroundColor: (result.passed
+                              ? AppColors.success
+                              : AppColors.error)
+                          .withValues(alpha: 0.15),
+                      child: Icon(
+                        result.passed ? Icons.check_circle : Icons.cancel,
+                        color:
+                            result.passed ? AppColors.success : AppColors.error,
+                      ),
+                    ),
                     title: Text('${result.examType.toUpperCase()} • $score%'),
                     subtitle: Text(
                         DateFormat.yMMMd().add_jm().format(result.dateTime)),
-                    trailing:
-                        Icon(result.passed ? Icons.check_circle : Icons.cancel),
                   ),
                 );
               },

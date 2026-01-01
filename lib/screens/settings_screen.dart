@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../state/app_state.dart';
-import '../widgets/bottom_nav.dart';
 import '../widgets/banner_ad_widget.dart';
 
 class SettingsScreen extends ConsumerWidget {
@@ -61,7 +60,6 @@ class SettingsScreen extends ConsumerWidget {
           const Center(child: BannerAdWidget()),
         ],
       ),
-      bottomNavigationBar: const BottomNav(),
     );
   }
 }

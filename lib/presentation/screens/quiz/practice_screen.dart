@@ -13,6 +13,7 @@ import '../../../presentation/providers/quiz_provider.dart';
 import '../../../state/data_state.dart';
 import '../../../state/app_state.dart';
 import '../../providers/category_provider.dart';
+import '../../../utils/text_formatters.dart';
 
 class PracticeFlowScreen extends ConsumerStatefulWidget {
   const PracticeFlowScreen({super.key});
@@ -32,6 +33,7 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
     final quiz = ref.watch(quizProvider);
     final quizController = ref.read(quizProvider.notifier);
     final categories = ref.watch(categoriesProvider);
+    final favorites = ref.watch(appSettingsProvider).favorites;
     final categoryParam =
         GoRouterState.of(context).uri.queryParameters['category'];
 
@@ -74,6 +76,7 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
             }
             return _PracticeSelector(
               categories: availableCategories,
+              questions: questions,
               onStart: (categoryId) {
                 final nextFiltered = _filterByCategory(questions, categoryId);
                 if (nextFiltered.isEmpty) {
@@ -94,6 +97,7 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
               .toList();
           return _PracticeSelector(
             categories: availableCategories,
+            questions: questions,
             onStart: (categoryId) {
               final filtered = _filterByCategory(questions, categoryId);
               if (filtered.isEmpty) {
@@ -133,137 +137,180 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
           appBar: AppBar(
             title: Text('quiz.title'.tr()),
             actions: [
-              IconButton(
-                onPressed: () {
+              _BookmarkButton(
+                isBookmarked: favorites.questions.contains(current.id),
+                count: favorites.questions.length,
+                onTap: () {
                   ref.read(appSettingsProvider.notifier).toggleFavorite(
                         type: 'questions',
                         id: current.id,
                       );
                 },
-                icon: Icon(
-                  ref
-                          .watch(appSettingsProvider)
-                          .favorites
-                          .questions
-                          .contains(current.id)
-                      ? Icons.bookmark
-                      : Icons.bookmark_border,
-                ),
               ),
             ],
           ),
-          body: Padding(
-            padding: const EdgeInsets.all(20),
+          body: SafeArea(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  '${'quiz.question'.tr()} ${quiz.currentIndex + 1} ${'quiz.of'.tr()} ${quiz.questions.length}',
-                  style: Theme.of(context).textTheme.bodySmall,
-                ),
-                const SizedBox(height: 12),
-                AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 250),
-                  child: Text(
-                    questionText,
-                    key: ValueKey(current.id),
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                ),
-                const SizedBox(height: 16),
-                if (signPath != null)
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 16),
-                    child: Card(
-                      child: Padding(
-                        padding: const EdgeInsets.all(12),
-                        child: SvgPicture.asset(
-                          'assets/$signPath',
-                          height: 140,
-                          fit: BoxFit.contain,
-                        ),
-                      ),
-                    ),
-                  ),
-                AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 250),
+                Padding(
+                  padding: const EdgeInsetsDirectional.fromSTEB(20, 16, 20, 12),
                   child: Column(
-                    key: ValueKey('${current.id}-options'),
-                    children: List.generate(options.length, (idx) {
-                      final optionText = options[idx];
-                      final wasSelected = selected == idx;
-                      Color? borderColor;
-                      Color? fill;
-                      if (quiz.showAnswer) {
-                        if (idx == current.correctIndex) {
-                          fill = AppColors.success.withOpacity(0.15);
-                          borderColor = AppColors.success;
-                        } else if (wasSelected) {
-                          fill = AppColors.error.withOpacity(0.12);
-                          borderColor = AppColors.error;
-                        }
-                      }
-                      return Container(
-                        margin: const EdgeInsets.only(bottom: 10),
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                              color: borderColor ?? Colors.transparent),
-                          borderRadius: BorderRadius.circular(14),
-                          color: fill ?? Theme.of(context).cardColor,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Semantics(
+                            label: formatQuestionOf(
+                              context,
+                              quiz.currentIndex + 1,
+                              quiz.questions.length,
+                            ),
+                            child: Text(
+                              '${'quiz.question'.tr()} ${formatProgress(context, quiz.currentIndex + 1, quiz.questions.length)}',
+                              style: Theme.of(context).textTheme.bodySmall,
+                            ),
+                          ),
+                          const Spacer(),
+                          Text(
+                            current.categoryKey.tr(),
+                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                  color: AppColors.primary,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: LinearProgressIndicator(
+                          value: (quiz.currentIndex + 1) / quiz.questions.length,
+                          backgroundColor: Theme.of(context).colorScheme.outline,
+                          color: AppColors.primary,
+                          minHeight: 8,
                         ),
-                        child: ListTile(
-                          title: Text(optionText),
-                          onTap: quiz.showAnswer
-                              ? null
-                              : () => quizController.selectAnswer(idx),
-                        ),
-                      );
-                    }),
+                      ),
+                    ],
                   ),
                 ),
-                if (quiz.showAnswer) ...[
-                  const SizedBox(height: 12),
-                  Text(
-                    isCorrect ? 'quiz.correct'.tr() : 'quiz.incorrect'.tr(),
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          color:
-                              isCorrect ? AppColors.success : AppColors.error,
-                        ),
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    _explanation(current, locale),
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
-                ],
-                const Spacer(),
-                Row(
-                  children: [
-                    Expanded(
-                      child: OutlinedButton(
-                        onPressed: quiz.currentIndex == 0
-                            ? null
-                            : () => quizController.reset(),
-                        child: Text('common.cancel'.tr()),
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: () {
-                          if (!quiz.showAnswer) {
-                            return;
-                          }
-                          quizController.next();
-                        },
+                Expanded(
+                  child: ListView(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    children: [
+                      AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 250),
                         child: Text(
-                          quiz.currentIndex + 1 == quiz.questions.length
-                              ? 'quiz.submit'.tr()
-                              : 'common.next'.tr(),
+                          questionText,
+                          key: ValueKey(current.id),
+                          style: Theme.of(context).textTheme.displaySmall,
                         ),
                       ),
-                    ),
-                  ],
+                      const SizedBox(height: 16),
+                      if (signPath != null)
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 16),
+                          child: Card(
+                            child: Padding(
+                              padding: const EdgeInsets.all(12),
+                              child: SvgPicture.asset(
+                                'assets/$signPath',
+                                height: 140,
+                                fit: BoxFit.contain,
+                              ),
+                            ),
+                          ),
+                        ),
+                      AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 250),
+                        child: Column(
+                          key: ValueKey('${current.id}-options'),
+                          children: List.generate(options.length, (idx) {
+                            final optionText = options[idx];
+                            final wasSelected = selected == idx;
+                            Color? borderColor;
+                            Color? fill;
+                            if (quiz.showAnswer) {
+                              if (idx == current.correctIndex) {
+                                fill = AppColors.success.withValues(alpha: 0.15);
+                                borderColor = AppColors.success;
+                              } else if (wasSelected) {
+                                fill = AppColors.error.withValues(alpha: 0.12);
+                                borderColor = AppColors.error;
+                              }
+                            }
+                            return Container(
+                              margin: const EdgeInsets.only(bottom: 10),
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                    color: borderColor ?? Colors.transparent),
+                                borderRadius: BorderRadius.circular(14),
+                                color: fill ?? Theme.of(context).cardColor,
+                              ),
+                              child: ListTile(
+                                leading: _OptionBadge(
+                                  label: String.fromCharCode(65 + idx),
+                                  active: wasSelected,
+                                  success: quiz.showAnswer && idx == current.correctIndex,
+                                  error: quiz.showAnswer && wasSelected && idx != current.correctIndex,
+                                ),
+                                title: Text(optionText),
+                                onTap: quiz.showAnswer
+                                    ? null
+                                    : () => quizController.selectAnswer(idx),
+                              ),
+                            );
+                          }),
+                        ),
+                      ),
+                      if (quiz.showAnswer) ...[
+                        const SizedBox(height: 12),
+                        Text(
+                          isCorrect ? 'quiz.correct'.tr() : 'quiz.incorrect'.tr(),
+                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                color:
+                                    isCorrect ? AppColors.success : AppColors.error,
+                              ),
+                        ),
+                        const SizedBox(height: 6),
+                        Text(
+                          _explanation(current, locale),
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                      ],
+                      const SizedBox(height: 24),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsetsDirectional.fromSTEB(20, 0, 20, 16),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: OutlinedButton(
+                          onPressed: quiz.currentIndex == 0
+                              ? null
+                              : () => quizController.reset(),
+                          child: Text('common.cancel'.tr()),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            if (!quiz.showAnswer) {
+                              return;
+                            }
+                            quizController.next();
+                          },
+                          child: Text(
+                            quiz.currentIndex + 1 == quiz.questions.length
+                                ? 'quiz.submit'.tr()
+                                : 'common.next'.tr(),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -350,66 +397,352 @@ String _explanation(Question question, String locale) {
   return question.explanationKey?.tr() ?? 'quiz.explanationFallback'.tr();
 }
 
-class _PracticeSelector extends StatelessWidget {
-  const _PracticeSelector({required this.categories, required this.onStart});
+class _PracticeSelector extends StatefulWidget {
+  const _PracticeSelector({
+    required this.categories,
+    required this.questions,
+    required this.onStart,
+  });
 
   final List<CategoryModel> categories;
+  final List<Question> questions;
   final void Function(String categoryId) onStart;
 
   @override
+  State<_PracticeSelector> createState() => _PracticeSelectorState();
+}
+
+class _PracticeSelectorState extends State<_PracticeSelector> {
+  String _selectedId = 'all';
+
+  @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final counts = _buildCounts(widget.questions, widget.categories);
+    final selectedLabel = _selectedId == 'all'
+        ? 'quiz.categories.all'.tr()
+        : widget.categories
+            .firstWhere(
+              (c) => c.id == _selectedId,
+              orElse: () => widget.categories.first,
+            )
+            .titleKey
+            .tr();
+    final selectedCount = counts[_selectedId] ?? counts['all'] ?? 0;
+    final minutes = ((selectedCount * 25) / 60).ceil();
+
     return Scaffold(
-      appBar: AppBar(title: Text('quiz.title'.tr())),
-      body: ListView(
-        padding: const EdgeInsets.all(20),
-        children: [
-          Text('quiz.selectCategory'.tr(),
-              style: Theme.of(context).textTheme.titleMedium),
-          const SizedBox(height: 12),
-          if (categories.isEmpty)
-            Text('categories.empty'.tr(),
-                style: Theme.of(context).textTheme.bodySmall)
-          else
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: [
-                _CategoryPill(
-                  label: 'quiz.categories.all'.tr(),
-                  onTap: () => onStart('all'),
-                ),
-                ...categories.map(
-                  (cat) => _CategoryPill(
-                    label: cat.titleKey.tr(),
-                    onTap: () => onStart(cat.id),
-                  ),
-                ),
-              ],
+      appBar: AppBar(
+        title: Text('quiz.title'.tr()),
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(28),
+          child: Padding(
+            padding: const EdgeInsetsDirectional.fromSTEB(16, 0, 16, 12),
+            child: Align(
+              alignment: AlignmentDirectional.centerStart,
+              child: Text(
+                'quiz.selectCategory'.tr(),
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
             ),
-          const SizedBox(height: 24),
-          ElevatedButton(
-            onPressed: () => onStart('all'),
-            child: Text('quiz.start'.tr()),
+          ),
+        ),
+      ),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsetsDirectional.fromSTEB(16, 12, 16, 12),
+            child: Card(
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            selectedLabel,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: Theme.of(context).textTheme.titleMedium,
+                          ),
+                        ),
+                        AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 200),
+                          child: Container(
+                            key: ValueKey(selectedCount),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 6),
+                            decoration: BoxDecoration(
+                              color: scheme.primary.withValues(alpha: 0.1),
+                              borderRadius: BorderRadius.circular(14),
+                              border: Border.all(
+                                  color: scheme.primary.withValues(alpha: 0.2)),
+                            ),
+                            child: Text(
+                              'categories.totalQuestions'
+                                  .tr(namedArgs: {'value': '$selectedCount'}),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodySmall
+                                  ?.copyWith(color: scheme.primary),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'quiz.selectCategory'.tr(),
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsetsDirectional.fromSTEB(16, 4, 16, 8),
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  final tileWidth = (constraints.maxWidth - 12) / 2;
+                  return SingleChildScrollView(
+                    child: Wrap(
+                      spacing: 12,
+                      runSpacing: 12,
+                      children: [
+                        _CategoryTile(
+                          width: tileWidth,
+                          label: 'quiz.categories.all'.tr(),
+                          selected: _selectedId == 'all',
+                          onTap: () => _select('all'),
+                        ),
+                        ...widget.categories.map(
+                          (cat) => _CategoryTile(
+                            width: tileWidth,
+                            label: cat.titleKey.tr(),
+                            selected: _selectedId == cat.id,
+                            onTap: () => _select(cat.id),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+          SafeArea(
+            top: false,
+            child: Padding(
+              padding: const EdgeInsetsDirectional.fromSTEB(16, 0, 16, 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () => widget.onStart(_selectedId),
+                      child: Text('quiz.start'.tr()),
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    '$selectedCount ${'quiz.question'.tr()} • ~$minutes ${'exam.minutes'.tr()}',
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                ],
+              ),
+            ),
           ),
         ],
       ),
     );
   }
+
+  void _select(String id) {
+    setState(() => _selectedId = id);
+  }
 }
 
-class _CategoryPill extends StatelessWidget {
-  const _CategoryPill({required this.label, required this.onTap});
+class _CategoryTile extends StatelessWidget {
+  const _CategoryTile({
+    required this.width,
+    required this.label,
+    required this.selected,
+    required this.onTap,
+  });
 
+  final double width;
   final String label;
+  final bool selected;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    return ActionChip(
-      label: Text(label),
-      onPressed: onTap,
-      backgroundColor: AppColors.primary.withOpacity(0.12),
-      labelStyle: const TextStyle(color: AppColors.primary),
+    final scheme = Theme.of(context).colorScheme;
+    final bg = selected ? scheme.primary.withValues(alpha: 0.12) : scheme.surface;
+    final border = selected ? scheme.primary : scheme.outline;
+    return Semantics(
+      button: true,
+      selected: selected,
+      label: label,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        width: width,
+        constraints: const BoxConstraints(minHeight: 52),
+        decoration: BoxDecoration(
+          color: bg,
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: border),
+        ),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(14),
+          onTap: onTap,
+          child: Padding(
+            padding: const EdgeInsetsDirectional.fromSTEB(12, 10, 12, 10),
+            child: Row(
+              children: [
+                if (selected)
+                  const Icon(Icons.check_circle,
+                      color: AppColors.primary, size: 18)
+                else
+                  Icon(Icons.circle_outlined,
+                      color: scheme.onSurface.withValues(alpha: 0.5), size: 18),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    label,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          fontWeight:
+                              selected ? FontWeight.w600 : FontWeight.w400,
+                        ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+Map<String, int> _buildCounts(
+  List<Question> questions,
+  List<CategoryModel> categories,
+) {
+  final counts = <String, int>{'all': questions.length};
+  for (final category in categories) {
+    counts[category.id] =
+        questions.where((q) => q.categoryId == category.id).length;
+  }
+  return counts;
+}
+
+class _BookmarkButton extends StatelessWidget {
+  const _BookmarkButton({
+    required this.isBookmarked,
+    required this.count,
+    required this.onTap,
+  });
+
+  final bool isBookmarked;
+  final int count;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    return Semantics(
+      button: true,
+      label: 'common.bookmark'.tr(),
+      child: Padding(
+        padding: const EdgeInsetsDirectional.only(end: 6),
+        child: Stack(
+          alignment: AlignmentDirectional.topEnd,
+          children: [
+            IconButton(
+              onPressed: onTap,
+              tooltip: 'common.bookmark'.tr(),
+              icon: Icon(isBookmarked ? Icons.bookmark : Icons.bookmark_border),
+            ),
+            if (count > 0)
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                decoration: BoxDecoration(
+                  color: AppColors.secondary,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Text(
+                  count.toString(),
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodySmall
+                      ?.copyWith(color: scheme.onSurface),
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _OptionBadge extends StatelessWidget {
+  const _OptionBadge({
+    required this.label,
+    required this.active,
+    required this.success,
+    required this.error,
+  });
+
+  final String label;
+  final bool active;
+  final bool success;
+  final bool error;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    Color borderColor = scheme.outline;
+    Color fillColor = Colors.transparent;
+    Color textColor = scheme.onSurface;
+    if (active) {
+      borderColor = AppColors.primary;
+      fillColor = AppColors.primary.withValues(alpha: 0.12);
+      textColor = AppColors.primary;
+    }
+    if (success) {
+      borderColor = AppColors.success;
+      fillColor = AppColors.success.withValues(alpha: 0.2);
+      textColor = AppColors.success;
+    }
+    if (error) {
+      borderColor = AppColors.error;
+      fillColor = AppColors.error.withValues(alpha: 0.18);
+      textColor = AppColors.error;
+    }
+    return Container(
+      width: 36,
+      height: 36,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        color: fillColor,
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: borderColor),
+      ),
+      child: Text(
+        label,
+        style: Theme.of(context)
+            .textTheme
+            .bodyMedium
+            ?.copyWith(color: textColor, fontWeight: FontWeight.w600),
+      ),
     );
   }
 }

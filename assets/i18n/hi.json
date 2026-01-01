@@ -39,18 +39,18 @@
         "practice": "प्रैक्टिस क्विज़",
         "exam": "परीक्षा सत्र"
       },
-      "continueLine": "जारी रखें: {{name}} • {{value}}%",
-      "continueLineSimple": "जारी रखें: {{name}}",
+      "continueLine": "जारी रखें: {name} • {value}%",
+      "continueLineSimple": "जारी रखें: {name}",
       "continueCta": "जारी रखें"
     },
     "primaryAction": {
       "continueTitle": "सीखना जारी रखें",
-      "continueSubtitle": "पाठ: {{lesson}}",
+      "continueSubtitle": "पाठ: {lesson}",
       "continueCta": "जारी रखें",
       "startTitle": "ड्राइविंग थ्योरी की तैयारी शुरू करें",
       "startSubtitle": "नियम सीखें • प्रश्नों का अभ्यास करें • आत्मविश्वास से पास करें",
       "startCta": "सीखना शुरू करें",
-      "progressLabel": "प्रगति: {{value}}%"
+      "progressLabel": "प्रगति: {value}%"
     },
     "greeting": "सीखने के लिए तैयार?",
     "subtitle": "कभी भी, कहीं भी अभ्यास करें — इंटरनेट की जरूरत नहीं",
@@ -58,9 +58,9 @@
     "learnSignsDesc": "सभी ट्रैफिक संकेत सीखें",
     "learnRules": "नियम और विनियम",
     "learnRulesDesc": "सड़क नियम और सुरक्षा",
-    "practice": "अभ्यास क्विज़",
+    "practice": "?????? ??????",
     "practiceDesc": "अपना ज्ञान परखें",
-    "mockExam": "प्रैक्टिस टेस्ट",
+    "mockExam": "??? ???????",
     "mockExamDesc": "पूरा थ्योरी अभ्यास",
     "practiceByCategory": "श्रेणी के अनुसार अभ्यास",
     "practiceByCategoryDesc": "विषयवार सीखें",
@@ -82,15 +82,15 @@
     },
     "continueLearning": {
       "title": "सीखना जारी रखें",
-      "lessonLabel": "पाठ: {{lesson}}",
-      "progressLabel": "प्रगति: {{value}}%",
+      "lessonLabel": "पाठ: {lesson}",
+      "progressLabel": "प्रगति: {value}%",
       "cta": "जारी रखें"
     },
     "continueTest": {
       "title": "टेस्ट जारी रखें",
       "practiceLabel": "अभ्यास जारी रखें",
       "examLabel": "परीक्षा सत्र जारी रखें",
-      "progress": "प्रश्न {{current}} / {{total}}",
+      "progress": "प्रश्न {current} / {total}",
       "cta": "जारी रखें"
     },
     "focus": {
@@ -145,9 +145,9 @@
       }
     },
     "xpStrip": {
-      "xpLabel": "{{xp}} एक्सपी",
-      "streakLabel_one": "स्ट्रीक: {{value}} दिन",
-      "streakLabel_other": "स्ट्रीक: {{value}} दिन"
+      "xpLabel": "{xp} एक्सपी",
+      "streakLabel_one": "स्ट्रीक: {value} दिन",
+      "streakLabel_other": "स्ट्रीक: {value} दिन"
     }
   },
   "signs": {
@@ -160,9 +160,9 @@
       "mandatory": "अनिवार्य",
       "guide": "गाइड"
     },
-    "showing": "{{total}} में से {{from}}-{{to}} साइन दिखा रहे हैं",
+    "showing": "{total} में से {from}-{to} साइन दिखा रहे हैं",
     "practiceCategory": "इस श्रेणी का अभ्यास करें",
-    "page": "पृष्ठ {{current}} / {{total}}",
+    "page": "पृष्ठ {current} / {total}",
     "mastery": {
       "new": "नया",
       "learning": "सीख रहा है",
@@ -958,17 +958,17 @@
     "tryAgain": "फिर से प्रयास करें",
     "backToResults": "वापस",
     "explanation": "व्याख्या",
-    "modeTitle": "{{mode}} {{exam}}",
-    "questionsCount_one": "{{value}} प्रश्न",
-    "questionsCount_other": "{{value}} प्रश्न",
-    "minutesCount_one": "{{value}} मिनट",
-    "minutesCount_other": "{{value}} मिनट",
-    "passThresholdLabel": "लक्ष्य: {{value}}",
-    "progressCount": "{{current}} / {{total}}",
-    "scoreSummary": "{{correct}} / {{total}} सही उत्तर",
+    "modeTitle": "{mode} {exam}",
+    "questionsCount_one": "{value} प्रश्न",
+    "questionsCount_other": "{value} प्रश्न",
+    "minutesCount_one": "{value} मिनट",
+    "minutesCount_other": "{value} मिनट",
+    "passThresholdLabel": "लक्ष्य: {value}",
+    "progressCount": "{current} / {total}",
+    "scoreSummary": "{correct} / {total} सही उत्तर",
     "topicBreakdown": "विषय विभाजन",
-    "categoryBreakdownRow": "{{correct}}/{{total}} ({{accuracy}})",
-    "reviewProgress": "समीक्षा: {{current}} / {{total}}",
+    "categoryBreakdownRow": "{correct}/{total} ({accuracy})",
+    "reviewProgress": "समीक्षा: {current} / {total}",
     "strictMode": "कठोर परीक्षा मोड",
     "strictModeDesc": "पीछे नहीं जा सकते और जवाब लॉक हो जाते हैं"
   },
@@ -1003,13 +1003,13 @@
     "startDaily": "डेली शुरू करें",
     "reviewMistakes": "गलतियाँ देखें",
     "startQuick": "क्विक शुरू करें",
-    "startDailyCount": "डेली शुरू करें ({{value}})",
-    "startQuickCount": "क्विक शुरू करें ({{value}})",
-    "allCount": "सभी प्रश्न ({{value}})",
-    "accuracyLabel": "सटीकता: {{value}} (आपके प्रयासों पर आधारित)",
-    "mistakesDetail": "गलत उत्तर वाले प्रश्न: {{value}}",
+    "startDailyCount": "डेली शुरू करें ({value})",
+    "startQuickCount": "क्विक शुरू करें ({value})",
+    "allCount": "सभी प्रश्न ({value})",
+    "accuracyLabel": "सटीकता: {value} (आपके प्रयासों पर आधारित)",
+    "mistakesDetail": "गलत उत्तर वाले प्रश्न: {value}",
     "unlockStats": "आंकड़े देखने के लिए अभ्यास करें",
-    "progressCount": "{{current}} / {{total}}"
+    "progressCount": "{current} / {total}"
   },
   "results": {
     "title": "परिणाम",
@@ -1023,9 +1023,9 @@
     "tryAgain": "फिर से प्रयास करें",
     "reviewAnswers": "उत्तर समीक्षा",
     "backHome": "होम पर वापस जाएँ",
-    "scoreSummary": "{{correct}} / {{total}} सही",
+    "scoreSummary": "{correct} / {total} सही",
     "topicBreakdown": "विषय विभाजन",
-    "categoryBreakdownRow": "{{correct}}/{{total}} ({{accuracy}})"
+    "categoryBreakdownRow": "{correct}/{total} ({accuracy})"
   },
   "review": {
     "title": "उत्तर समीक्षा",
@@ -1063,8 +1063,8 @@
     "relatedLearningTitle": "संबंधित सीख",
     "relatedCards": {
       "violationTitle": "उल्लंघन पॉइंट्स",
-      "pointsLabel": "{{value}} पॉइंट्स",
-      "violationLine": "{{violation}} आपके रिकॉर्ड में पॉइंट्स जोड़ता है। सीमाओं का पालन करें।",
+      "pointsLabel": "{value} पॉइंट्स",
+      "violationLine": "{violation} आपके रिकॉर्ड में पॉइंट्स जोड़ता है। सीमाओं का पालन करें।",
       "viewDetails": "विवरण देखें",
       "signsTitle": "ट्रैफिक संकेत",
       "viewSigns": "संकेत देखें",
@@ -1073,7 +1073,7 @@
     },
     "viewSimilarSignsLink": "समान संकेत देखें →",
     "commonViolationsTitle": "सामान्य उल्लंघन और पॉइंट्स",
-    "pointsBadge": "{{value}} पॉइंट्स",
+    "pointsBadge": "{value} पॉइंट्स",
     "viewViolationSystemLink": "पूरा पॉइंट सिस्टम देखें →",
     "learnMoreTitle": "और जानें",
     "viewRelatedSignsLink": "संबंधित ट्रैफिक संकेत देखें →",
@@ -1085,10 +1085,10 @@
       "minor": "हल्का"
     },
     "noResults": "कोई पाठ नहीं मिला",
-    "lessonsCount_one": "{{value}} पाठ",
-    "lessonsCount_other": "{{value}} पाठ",
-    "categoriesCount_one": "{{value}} श्रेणी",
-    "categoriesCount_other": "{{value}} श्रेणियाँ",
+    "lessonsCount_one": "{value} पाठ",
+    "lessonsCount_other": "{value} पाठ",
+    "categoriesCount_one": "{value} श्रेणी",
+    "categoriesCount_other": "{value} श्रेणियाँ",
     "studyPlan": {
       "title": "अध्ययन योजना",
       "items": {
@@ -1116,10 +1116,10 @@
     "emptyDesc": "बाद में समीक्षा के लिए प्रश्न और संकेत सहेजें",
     "questions": "प्रश्न",
     "signs": "साइन",
-    "questionsCount_one": "{{value}} प्रश्न",
-    "questionsCount_other": "{{value}} प्रश्न",
-    "signsCount_one": "{{value}} संकेत",
-    "signsCount_other": "{{value}} संकेत"
+    "questionsCount_one": "{value} प्रश्न",
+    "questionsCount_other": "{value} प्रश्न",
+    "signsCount_one": "{value} संकेत",
+    "signsCount_other": "{value} संकेत"
   },
   "stats": {
     "title": "आपके आंकड़े",
@@ -1127,8 +1127,8 @@
     "bestScore": "सर्वश्रेष्ठ स्कोर",
     "accuracy": "औसत सटीकता",
     "streak": "वर्तमान स्ट्रीक",
-    "streakCount_one": "{{value}} दिन",
-    "streakCount_other": "{{value}} दिन",
+    "streakCount_one": "{value} दिन",
+    "streakCount_other": "{value} दिन",
     "days": "दिन",
     "noStats": "अभी कोई आँकड़े नहीं",
     "noStatsDesc": "प्रगति देखने के लिए क्विज़ पूरा करें"
@@ -1140,7 +1140,7 @@
     "feedback": "फ़ीडबैक",
     "soundDesc": "सही/गलत उत्तरों पर ध्वनि चलाएँ",
     "vibrationDesc": "उत्तर पर हैप्टिक फीडबैक",
-    "versionLabel": "संस्करण {{version}}",
+    "versionLabel": "संस्करण {version}",
     "aboutDesc": "ड्राइविंग थ्योरी सीखने के लिए शैक्षिक ऐप। सारा कंटेंट ऑफलाइन काम करता है।",
     "offlineNote": "100% ऑफ़लाइन: इंटरनेट की ज़रूरत नहीं।",
     "disclaimer": "अस्वीकरण: यह ऐप किसी सरकारी संस्था से संबद्ध नहीं है और केवल शैक्षिक अभ्यास के लिए है।",
@@ -1260,7 +1260,7 @@
     },
     "empty": "इस श्रेणी में कोई उपलब्धियां नहीं",
     "dailyGoal": "दैनिक लक्ष्य",
-    "dailyGoalDesc": "आज {{count}} प्रश्नों के उत्तर दें",
+    "dailyGoalDesc": "आज {count} प्रश्नों के उत्तर दें",
     "dailyGoalComplete": "दैनिक लक्ष्य पूरा हुआ!",
     "categories": {
       "all": "सभी",
@@ -1317,13 +1317,13 @@
     "severeTitle": "गंभीर उल्लंघन (12–24 उल्लंघन अंक)",
     "majorTitle": "मुख्य उल्लंघन (6–8 उल्लंघन अंक)",
     "minorTitle": "छोटे उल्लंघन (2–4 उल्लंघन अंक)",
-    "pointsLabel": "{{value}} उल्लंघन अंक",
-    "fullSentence": "{{violation}} से {{value}} उल्लंघन अंक लगेंगे ({{severity}})",
+    "pointsLabel": "{value} उल्लंघन अंक",
+    "fullSentence": "{violation} से {value} उल्लंघन अंक लगेंगे ({severity})",
     "explainLine": "यह उल्लंघन प्रतिक्रिया समय घटाता है और सड़क पर जोखिम बढ़ाता है।",
     "whyDangerousLine": "क्यों खतरनाक: यह चालक और पैदल यात्रियों के लिए टकराव जोखिम बढ़ाता है।",
     "tipBody": "परीक्षा टिप: संकेतों का पालन करें और हमेशा सुरक्षित गति रखें।",
     "educationalNote": "उल्लंघन अंक जानने से आप गंभीर दंड से बच सकते हैं और सुरक्षित ड्राइव कर सकते हैं।",
-    "previewDescription": "{{violation}} आपके रिकॉर्ड में उल्लंघन अंक जोड़ सकती है।"
+    "previewDescription": "{violation} आपके रिकॉर्ड में उल्लंघन अंक जोड़ सकती है।"
   },
   "violations": {
     "v01": "शराब/ड्रग्स के प्रभाव में वाहन चलाना",
@@ -1398,7 +1398,7 @@
     "pagination": "पृष्ठांकन",
     "carousel": "कैरोसेल",
     "xp": "एक्सपी",
-    "xpValue": "{{value}} एक्सपी",
+    "xpValue": "{value} एक्सपी",
     "pressBackAgainToExit": "बाहर निकलने के लिए फिर से बैक दबाएँ",
     "answerRequired": "कृपया पहले उत्तर दें",
     "empty": "अभी कोई आइटम नहीं"
@@ -1409,7 +1409,7 @@
     "filterAll": "सभी",
     "filterInProgress": "जारी",
     "filterCompleted": "पूर्ण",
-    "totalQuestions": "{{value}} प्रश्न",
+    "totalQuestions": "{value} प्रश्न",
     "empty": "इस श्रेणी में अभी कोई प्रश्न उपलब्ध नहीं हैं",
     "signs": {
       "title": "ट्रैफिक संकेत और चिन्ह",
@@ -1532,5 +1532,11 @@
   "index": {
     "title": "आपके खाली ऐप में स्वागत है",
     "subtitle": "अपना शानदार प्रोजेक्ट यहीं से बनाना शुरू करें!"
-  }
+  },
+  "common.questionOf": "?????? {current} ??? ?? {total}",
+  "common.bookmark": "????????",
+  "exam.flag": "?????? ?? ??????? ????",
+  "exam.exitTitle": "??????? ?? ???? ???????",
+  "exam.exitMessage": "???? ?????? ?? ?????? ???? ?? ???? ?????? ????? ????",
+  "exam.exitConfirm": "???? ??????"
 }

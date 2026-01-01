@@ -2,7 +2,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
 
 import '../core/constants/app_colors.dart';
 import '../presentation/providers/category_provider.dart';
@@ -44,53 +43,20 @@ class StatsScreen extends ConsumerWidget {
               ),
             ),
           ] else ...[
+            _SummaryHero(
+              accuracy: accuracy,
+              totalAnswered: totalAnswered,
+              bestScore: stats.bestScore,
+              streak: _formatStreak(context, learning),
+            ),
+            const SizedBox(height: 16),
             _StatGrid(
               items: [
                 _StatTile(label: 'stats.quizzesTaken'.tr(), value: stats.quizzesTaken.toString()),
-                _StatTile(label: 'stats.bestScore'.tr(), value: '${stats.bestScore}%'),
-                _StatTile(label: 'stats.accuracy'.tr(), value: '$accuracy%'),
-                _StatTile(label: 'stats.streak'.tr(), value: _formatStreak(context, learning)),
+                _StatTile(label: 'results.correct'.tr(), value: stats.totalCorrect.toString()),
+                _StatTile(label: 'quiz.question'.tr(), value: totalAnswered.toString()),
+                _StatTile(label: 'results.accuracy'.tr(), value: '$average%'),
               ],
-            ),
-            const SizedBox(height: 16),
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('results.correct'.tr(), style: Theme.of(context).textTheme.bodySmall),
-                          const SizedBox(height: 6),
-                          Text(stats.totalCorrect.toString(), style: Theme.of(context).textTheme.titleMedium),
-                        ],
-                      ),
-                    ),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('quiz.question'.tr(), style: Theme.of(context).textTheme.bodySmall),
-                          const SizedBox(height: 6),
-                          Text(totalAnswered.toString(), style: Theme.of(context).textTheme.titleMedium),
-                        ],
-                      ),
-                    ),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('results.accuracy'.tr(), style: Theme.of(context).textTheme.bodySmall),
-                          const SizedBox(height: 6),
-                          Text('$average%', style: Theme.of(context).textTheme.titleMedium),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
             ),
           ],
           const SizedBox(height: 20),
@@ -115,7 +81,7 @@ class StatsScreen extends ConsumerWidget {
                 child: Text('history.title'.tr(), style: Theme.of(context).textTheme.titleMedium),
               ),
               TextButton(
-                onPressed: () => context.go('/history'),
+                onPressed: () => context.push('/history'),
                 child: Text('common.more'.tr()),
               ),
             ],
@@ -141,6 +107,102 @@ class StatsScreen extends ConsumerWidget {
   String _formatStreak(BuildContext context, LearningState learning) {
     final current = learning.streak['current'] as int? ?? 0;
     return plural('stats.streakCount', current, args: [current.toString()]);
+  }
+}
+
+class _SummaryHero extends StatelessWidget {
+  const _SummaryHero({
+    required this.accuracy,
+    required this.totalAnswered,
+    required this.bestScore,
+    required this.streak,
+  });
+
+  final int accuracy;
+  final int totalAnswered;
+  final int bestScore;
+  final String streak;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Container(
+        padding: const EdgeInsets.all(18),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              AppColors.primary.withValues(alpha: 0.08),
+              AppColors.secondary.withValues(alpha: 0.12),
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(18),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('stats.title'.tr(), style: Theme.of(context).textTheme.titleLarge),
+            const SizedBox(height: 12),
+            Text('$accuracy%',
+                style: Theme.of(context).textTheme.displaySmall?.copyWith(
+                      color: AppColors.primary,
+                    )),
+            const SizedBox(height: 6),
+            Text('results.accuracy'.tr(),
+                style: Theme.of(context).textTheme.bodySmall),
+            const SizedBox(height: 12),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: LinearProgressIndicator(
+                value: accuracy / 100,
+                backgroundColor: Theme.of(context).colorScheme.outline,
+                color: AppColors.primary,
+                minHeight: 8,
+              ),
+            ),
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                _MiniStat(label: 'quiz.question'.tr(), value: totalAnswered.toString()),
+                const SizedBox(width: 8),
+                _MiniStat(label: 'stats.bestScore'.tr(), value: '$bestScore%'),
+                const SizedBox(width: 8),
+                _MiniStat(label: 'stats.streak'.tr(), value: streak),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _MiniStat extends StatelessWidget {
+  const _MiniStat({required this.label, required this.value});
+
+  final String label;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(14),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(label, style: Theme.of(context).textTheme.bodySmall),
+            const SizedBox(height: 4),
+            Text(value, style: Theme.of(context).textTheme.titleMedium),
+          ],
+        ),
+      ),
+    );
   }
 }
 

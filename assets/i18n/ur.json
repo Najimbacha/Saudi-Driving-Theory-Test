@@ -39,18 +39,18 @@
         "practice": "پریکٹس کوئز",
         "exam": "امتحانی سیشن"
       },
-      "continueLine": "جاری رکھیں: {{name}} • {{value}}%",
-      "continueLineSimple": "جاری رکھیں: {{name}}",
+      "continueLine": "جاری رکھیں: {name} • {value}%",
+      "continueLineSimple": "جاری رکھیں: {name}",
       "continueCta": "جاری رکھیں"
     },
     "primaryAction": {
       "continueTitle": "اپنی سیکھنا جاری رکھیں",
-      "continueSubtitle": "سبق: {{lesson}}",
+      "continueSubtitle": "سبق: {lesson}",
       "continueCta": "جاری رکھیں",
       "startTitle": "ڈرائیونگ تھیوری کی تیاری شروع کریں",
       "startSubtitle": "قواعد سیکھیں • سوالات کی مشق کریں • اعتماد سے کامیاب ہوں",
       "startCta": "سیکھنا شروع کریں",
-      "progressLabel": "پیش رفت: {{value}}٪"
+      "progressLabel": "پیش رفت: {value}٪"
     },
     "greeting": "آج کیا سیکھنا ہے؟",
     "subtitle": "کچھ منٹ مشق کریں، ہر دن بہتر ہوں",
@@ -58,9 +58,9 @@
     "learnSignsDesc": "اہم نشانیاں سمجھیں",
     "learnRules": "قواعد و ضوابط",
     "learnRulesDesc": "بنیادی قواعد سیکھیں",
-    "practice": "مشق کا امتحان",
+    "practice": "??? ???",
     "practiceDesc": "مختصر سوالات کی مشق",
-    "mockExam": "پریکٹس ٹیسٹ",
+    "mockExam": "???? ??????",
     "mockExamDesc": "اصل انداز کی مشق",
     "practiceByCategory": "زمرہ وار مشق",
     "practiceByCategoryDesc": "موضوع بہ موضوع سیکھیں",
@@ -82,15 +82,15 @@
     },
     "continueLearning": {
       "title": "سیکھنا جاری رکھیں",
-      "lessonLabel": "سبق: {{lesson}}",
-      "progressLabel": "پیش رفت: {{value}}٪",
+      "lessonLabel": "سبق: {lesson}",
+      "progressLabel": "پیش رفت: {value}٪",
       "cta": "جاری رکھیں"
     },
     "continueTest": {
       "title": "ٹیسٹ جاری رکھیں",
       "practiceLabel": "پریکٹس کو جاری رکھیں",
       "examLabel": "امتحانی سیشن جاری رکھیں",
-      "progress": "سوال {{current}} از {{total}}",
+      "progress": "سوال {current} از {total}",
       "cta": "جاری رکھیں"
     },
     "focus": {
@@ -145,9 +145,9 @@
       }
     },
     "xpStrip": {
-      "xpLabel": "{{xp}} ایکس پی",
-      "streakLabel_one": "سلسلہ: {{value}} دن",
-      "streakLabel_other": "سلسلہ: {{value}} دن"
+      "xpLabel": "{xp} ایکس پی",
+      "streakLabel_one": "سلسلہ: {value} دن",
+      "streakLabel_other": "سلسلہ: {value} دن"
     }
   },
   "signs": {
@@ -160,9 +160,9 @@
       "mandatory": "لازمی",
       "guide": "رہنما"
     },
-    "showing": "نمایش {{from}}-{{to}} از {{total}} نشانیاں",
+    "showing": "نمایش {from}-{to} از {total} نشانیاں",
     "practiceCategory": "اس زمرے کی مشق کریں",
-    "page": "صفحہ {{current}} / {{total}}",
+    "page": "صفحہ {current} / {total}",
     "mastery": {
       "new": "نیا",
       "learning": "سیکھ رہا ہے",
@@ -958,17 +958,17 @@
     "tryAgain": "دوبارہ کوشش کریں",
     "backToResults": "واپس",
     "explanation": "وضاحت",
-    "modeTitle": "{{mode}} {{exam}}",
-    "questionsCount_one": "{{value}} سوال",
-    "questionsCount_other": "{{value}} سوالات",
-    "minutesCount_one": "{{value}} منٹ",
-    "minutesCount_other": "{{value}} منٹ",
-    "passThresholdLabel": "ہدف: {{value}}",
-    "progressCount": "{{current}} / {{total}}",
-    "scoreSummary": "{{correct}} / {{total}} درست جوابات",
+    "modeTitle": "{mode} {exam}",
+    "questionsCount_one": "{value} سوال",
+    "questionsCount_other": "{value} سوالات",
+    "minutesCount_one": "{value} منٹ",
+    "minutesCount_other": "{value} منٹ",
+    "passThresholdLabel": "ہدف: {value}",
+    "progressCount": "{current} / {total}",
+    "scoreSummary": "{correct} / {total} درست جوابات",
     "topicBreakdown": "موضوعات کی تقسیم",
-    "categoryBreakdownRow": "{{correct}}/{{total}} ({{accuracy}})",
-    "reviewProgress": "جائزہ: {{current}} / {{total}}",
+    "categoryBreakdownRow": "{correct}/{total} ({accuracy})",
+    "reviewProgress": "جائزہ: {current} / {total}",
     "strictMode": "سخت امتحانی موڈ",
     "strictModeDesc": "پیچھے جانا بند اور جواب لاک ہو جاتے ہیں"
   },
@@ -1003,13 +1003,13 @@
     "startDaily": "روزانہ شروع کریں",
     "reviewMistakes": "غلطیوں کا جائزہ",
     "startQuick": "فوری شروع کریں",
-    "startDailyCount": "روزانہ شروع کریں ({{value}})",
-    "startQuickCount": "فوری شروع کریں ({{value}})",
-    "allCount": "تمام سوالات ({{value}})",
-    "accuracyLabel": "درستگی: {{value}} (آپ کی کوششوں کی بنیاد پر)",
-    "mistakesDetail": "غلط جواب دیے گئے سوالات: {{value}}",
+    "startDailyCount": "روزانہ شروع کریں ({value})",
+    "startQuickCount": "فوری شروع کریں ({value})",
+    "allCount": "تمام سوالات ({value})",
+    "accuracyLabel": "درستگی: {value} (آپ کی کوششوں کی بنیاد پر)",
+    "mistakesDetail": "غلط جواب دیے گئے سوالات: {value}",
     "unlockStats": "اعداد و شمار دیکھنے کے لئے مشق کریں",
-    "progressCount": "{{current}} / {{total}}"
+    "progressCount": "{current} / {total}"
   },
   "results": {
     "title": "نتائج",
@@ -1023,9 +1023,9 @@
     "tryAgain": "دوبارہ کوشش کریں",
     "reviewAnswers": "جوابات کا جائزہ",
     "backHome": "ہوم پر جائیں",
-    "scoreSummary": "{{correct}} / {{total}} درست",
+    "scoreSummary": "{correct} / {total} درست",
     "topicBreakdown": "موضوعات کی تقسیم",
-    "categoryBreakdownRow": "{{correct}}/{{total}} ({{accuracy}})"
+    "categoryBreakdownRow": "{correct}/{total} ({accuracy})"
   },
   "review": {
     "title": "جوابات کا جائزہ",
@@ -1063,8 +1063,8 @@
     "relatedLearningTitle": "متعلقہ سیکھائی",
     "relatedCards": {
       "violationTitle": "خلاف ورزی کے پوائنٹس",
-      "pointsLabel": "{{value}} پوائنٹس",
-      "violationLine": "{{violation}} آپ کے ریکارڈ میں پوائنٹس شامل کرتا ہے۔ حدود کا خیال رکھیں۔",
+      "pointsLabel": "{value} پوائنٹس",
+      "violationLine": "{violation} آپ کے ریکارڈ میں پوائنٹس شامل کرتا ہے۔ حدود کا خیال رکھیں۔",
       "viewDetails": "تفصیلات دیکھیں",
       "signsTitle": "ٹریفک علامات",
       "viewSigns": "علامات دیکھیں",
@@ -1073,7 +1073,7 @@
     },
     "viewSimilarSignsLink": "ملتی جلتی نشانیاں دیکھیں ←",
     "commonViolationsTitle": "عام خلاف ورزیاں اور پوائنٹس",
-    "pointsBadge": "{{value}} پوائنٹس",
+    "pointsBadge": "{value} پوائنٹس",
     "viewViolationSystemLink": "مکمل پوائنٹس نظام دیکھیں ←",
     "learnMoreTitle": "مزید سیکھیں",
     "viewRelatedSignsLink": "متعلقہ ٹریفک نشانیاں دیکھیں ←",
@@ -1085,10 +1085,10 @@
       "minor": "معمولی"
     },
     "noResults": "کوئی سبق نہیں ملا",
-    "lessonsCount_one": "{{value}} سبق",
-    "lessonsCount_other": "{{value}} اسباق",
-    "categoriesCount_one": "{{value}} زمرہ",
-    "categoriesCount_other": "{{value}} زمرے",
+    "lessonsCount_one": "{value} سبق",
+    "lessonsCount_other": "{value} اسباق",
+    "categoriesCount_one": "{value} زمرہ",
+    "categoriesCount_other": "{value} زمرے",
     "studyPlan": {
       "title": "مطالعہ کا منصوبہ",
       "items": {
@@ -1116,10 +1116,10 @@
     "emptyDesc": "جو سوالات آپ پسند کریں گے وہ یہاں آئیں گے",
     "questions": "سوالات",
     "signs": "نشانیاں",
-    "questionsCount_one": "{{value}} سوال",
-    "questionsCount_other": "{{value}} سوالات",
-    "signsCount_one": "{{value}} نشانی",
-    "signsCount_other": "{{value}} نشانیاں"
+    "questionsCount_one": "{value} سوال",
+    "questionsCount_other": "{value} سوالات",
+    "signsCount_one": "{value} نشانی",
+    "signsCount_other": "{value} نشانیاں"
   },
   "stats": {
     "title": "آپ کے اعداد و شمار",
@@ -1127,8 +1127,8 @@
     "bestScore": "بہترین سکور",
     "accuracy": "اوسط درستگی",
     "streak": "موجودہ سلسلہ",
-    "streakCount_one": "{{value}} دن",
-    "streakCount_other": "{{value}} دن",
+    "streakCount_one": "{value} دن",
+    "streakCount_other": "{value} دن",
     "days": "دن",
     "noStats": "ابھی کوئی اعداد نہیں",
     "noStatsDesc": "کچھ مشق کریں تاکہ اعداد دکھیں"
@@ -1140,7 +1140,7 @@
     "feedback": "فیڈبیک",
     "soundDesc": "صحیح/غلط جواب پر آواز چلائیں",
     "vibrationDesc": "جوابات پر ہاپٹک فیڈبیک",
-    "versionLabel": "ورژن {{version}}",
+    "versionLabel": "ورژن {version}",
     "aboutDesc": "ڈرائیونگ تھیوری سیکھنے کے لیے تعلیمی ایپ۔ تمام مواد آف لائن دستیاب ہے۔",
     "offlineNote": "100% آف لائن: انٹرنیٹ کی ضرورت نہیں۔",
     "disclaimer": "ڈسکلیمر: یہ ایپ کسی حکومتی ادارے سے منسلک نہیں اور صرف تعلیمی مشق کے لیے ہے۔",
@@ -1260,7 +1260,7 @@
     },
     "empty": "اس زمرے میں کوئی کامیابیاں نہیں",
     "dailyGoal": "روزانہ ہدف",
-    "dailyGoalDesc": "آج {{count}} سوالات کے جوابات دیں",
+    "dailyGoalDesc": "آج {count} سوالات کے جوابات دیں",
     "dailyGoalComplete": "روزانہ ہدف مکمل!",
     "categories": {
       "all": "سب",
@@ -1317,13 +1317,13 @@
     "severeTitle": "سنگین خلاف ورزیاں (12–24 خلاف ورزی پوائنٹس)",
     "majorTitle": "اہم خلاف ورزیاں (6–8 خلاف ورزی پوائنٹس)",
     "minorTitle": "معمولی خلاف ورزیاں (2–4 خلاف ورزی پوائنٹس)",
-    "pointsLabel": "{{value}} خلاف ورزی پوائنٹس",
-    "fullSentence": "{{violation}} کے نتیجے میں {{value}} خلاف ورزی پوائنٹس ہوں گے ({{severity}})",
+    "pointsLabel": "{value} خلاف ورزی پوائنٹس",
+    "fullSentence": "{violation} کے نتیجے میں {value} خلاف ورزی پوائنٹس ہوں گے ({severity})",
     "explainLine": "یہ خلاف ورزی ردعمل کا وقت کم کرتی اور خطرہ بڑھاتی ہے۔",
     "whyDangerousLine": "کیوں خطرناک ہے: ڈرائیورز اور پیدل چلنے والوں کے لیے حادثے کا خطرہ بڑھتا ہے۔",
     "tipBody": "امتحانی ٹپ: سائنز پر عمل کریں اور محفوظ رفتار رکھیں۔",
     "educationalNote": "خلاف ورزی پوائنٹس جاننا آپ کو سنگین سزاؤں سے بچنے اور محفوظ ڈرائیونگ میں مدد دیتا ہے۔",
-    "previewDescription": "{{violation}} آپ کے ریکارڈ میں خلاف ورزی پوائنٹس بڑھا سکتی ہے۔"
+    "previewDescription": "{violation} آپ کے ریکارڈ میں خلاف ورزی پوائنٹس بڑھا سکتی ہے۔"
   },
   "violations": {
     "v01": "شراب یا منشیات کے اثر میں گاڑی چلانا",
@@ -1414,7 +1414,7 @@
     "pagination": "صفحہ بندی",
     "carousel": "کاروسیل",
     "xp": "ایکس پی",
-    "xpValue": "{{value}} ایکس پی",
+    "xpValue": "{value} ایکس پی",
     "pressBackAgainToExit": "خارج ہونے کے لیے دوبارہ بیک دبائیں",
     "answerRequired": "براہ کرم پہلے جواب دیں",
     "empty": "ابھی کوئی آئٹم نہیں"
@@ -1425,7 +1425,7 @@
     "filterAll": "تمام",
     "filterInProgress": "جاری",
     "filterCompleted": "مکمل",
-    "totalQuestions": "{{value}} سوالات",
+    "totalQuestions": "{value} سوالات",
     "empty": "اس زمرے میں ابھی کوئی سوالات دستیاب نہیں",
     "signs": {
       "title": "ٹریفک اشارے اور علامات",
@@ -1532,5 +1532,11 @@
   "index": {
     "title": "آپ کی خالی ایپ میں خوش آمدید",
     "subtitle": "اپنا شاندار پروجیکٹ یہیں سے بنانا شروع کریں!"
-  }
+  },
+  "common.questionOf": "???? {current} ?? {total}",
+  "common.bookmark": "?? ????",
+  "exam.flag": "???? ?? ???? ?? ????",
+  "exam.exitTitle": "?????? ??? ?????",
+  "exam.exitMessage": "?? ?? ??? ??? ???? ?? ???? ??? ??? ?? ???? ???? ????? ????",
+  "exam.exitConfirm": "???? ?????"
 }

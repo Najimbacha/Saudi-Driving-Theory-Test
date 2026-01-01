@@ -1,6 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
+import '../core/constants/app_colors.dart';
+
 class TrafficViolationPointsScreen extends StatelessWidget {
   const TrafficViolationPointsScreen({super.key});
 
@@ -51,7 +53,7 @@ class _ViolationList extends StatelessWidget {
     return ListView(
       padding: const EdgeInsets.all(16),
       children: [
-        Text(title, style: Theme.of(context).textTheme.titleMedium),
+        Text(title, style: Theme.of(context).textTheme.titleLarge),
         const SizedBox(height: 12),
         Card(
           child: Padding(
@@ -73,6 +75,16 @@ class _ViolationList extends StatelessWidget {
         ...items.map(
           (item) => Card(
             child: ListTile(
+              leading: CircleAvatar(
+                backgroundColor: AppColors.error.withValues(alpha: 0.15),
+                child: Text(
+                  item.points.toString(),
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodySmall
+                      ?.copyWith(color: AppColors.error),
+                ),
+              ),
               title: Text('violations.${item.id}'.tr()),
               subtitle: Text(
                 'violationPoints.pointsLabel'.tr(args: [item.points.toString()]),
