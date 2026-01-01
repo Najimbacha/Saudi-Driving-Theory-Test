@@ -1,10 +1,12 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/constants/app_colors.dart';
 import '../../../data/models/exam_result_model.dart';
+import '../../../data/models/category_model.dart';
 import '../../../models/question.dart';
 import '../../../presentation/providers/exam_history_provider.dart';
 import '../../../presentation/providers/quiz_provider.dart';
@@ -26,8 +28,10 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
   @override
   Widget build(BuildContext context) {
     final questionsAsync = ref.watch(questionsProvider);
+    final signsAsync = ref.watch(signsProvider);
     final quiz = ref.watch(quizProvider);
     final quizController = ref.read(quizProvider.notifier);
+    final categories = ref.watch(categoriesProvider);
     final categoryParam =
         GoRouterState.of(context).uri.queryParameters['category'];
 
@@ -47,23 +51,60 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
           if (categoryParam != null && !_initialCategoryHandled) {
             _initialCategoryHandled = true;
             final filtered = _filterByCategory(questions, categoryParam);
-            if (filtered.isEmpty) {
-              WidgetsBinding.instance.addPostFrameCallback((_) {
+            final availableCategories = categories
+                .where((cat) => _filterByCategory(questions, cat.id).isNotEmpty)
+                .toList();
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              if (!context.mounted) return;
+              if (filtered.isEmpty) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text('categories.empty'.tr()),
                     backgroundColor: AppColors.secondary,
                   ),
                 );
+              }
+            });
+            if (filtered.isNotEmpty) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                if (!context.mounted) return;
+                quizController.start(filtered);
               });
-            } else {
-              quizController.start(filtered);
               return const SizedBox.shrink();
             }
+            return _PracticeSelector(
+              categories: availableCategories,
+              onStart: (categoryId) {
+                final nextFiltered = _filterByCategory(questions, categoryId);
+                if (nextFiltered.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('categories.empty'.tr()),
+                      backgroundColor: AppColors.secondary,
+                    ),
+                  );
+                  return;
+                }
+                quizController.start(nextFiltered);
+              },
+            );
           }
+          final availableCategories = categories
+              .where((cat) => _filterByCategory(questions, cat.id).isNotEmpty)
+              .toList();
           return _PracticeSelector(
+            categories: availableCategories,
             onStart: (categoryId) {
               final filtered = _filterByCategory(questions, categoryId);
+              if (filtered.isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('categories.empty'.tr()),
+                    backgroundColor: AppColors.secondary,
+                  ),
+                );
+                return;
+              }
               quizController.start(filtered);
             },
           );
@@ -79,6 +120,10 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
           return const SizedBox.shrink();
         }
         final current = quiz.currentQuestion;
+        final signMap = signsAsync.valueOrNull == null
+            ? <String, String>{}
+            : {for (final s in signsAsync.valueOrNull!) s.id: s.svgPath};
+        final signPath = current.signId != null ? signMap[current.signId!] : null;
         final locale = context.locale.languageCode;
         final selected = quiz.selectedAnswers[current.id];
         final isCorrect = selected != null && selected == current.correctIndex;
@@ -126,6 +171,20 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
                   ),
                 ),
                 const SizedBox(height: 16),
+                if (signPath != null)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 16),
+                    child: Card(
+                      child: Padding(
+                        padding: const EdgeInsets.all(12),
+                        child: SvgPicture.asset(
+                          'assets/$signPath',
+                          height: 140,
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                    ),
+                  ),
                 AnimatedSwitcher(
                   duration: const Duration(milliseconds: 250),
                   child: Column(
@@ -291,14 +350,14 @@ String _explanation(Question question, String locale) {
   return question.explanationKey?.tr() ?? 'quiz.explanationFallback'.tr();
 }
 
-class _PracticeSelector extends ConsumerWidget {
-  const _PracticeSelector({required this.onStart});
+class _PracticeSelector extends StatelessWidget {
+  const _PracticeSelector({required this.categories, required this.onStart});
 
+  final List<CategoryModel> categories;
   final void Function(String categoryId) onStart;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final categories = ref.watch(categoriesProvider);
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('quiz.title'.tr())),
       body: ListView(
@@ -307,22 +366,26 @@ class _PracticeSelector extends ConsumerWidget {
           Text('quiz.selectCategory'.tr(),
               style: Theme.of(context).textTheme.titleMedium),
           const SizedBox(height: 12),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: [
-              _CategoryPill(
-                label: 'quiz.categories.all'.tr(),
-                onTap: () => onStart('all'),
-              ),
-              ...categories.map(
-                (cat) => _CategoryPill(
-                  label: cat.titleKey.tr(),
-                  onTap: () => onStart(cat.id),
+          if (categories.isEmpty)
+            Text('categories.empty'.tr(),
+                style: Theme.of(context).textTheme.bodySmall)
+          else
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                _CategoryPill(
+                  label: 'quiz.categories.all'.tr(),
+                  onTap: () => onStart('all'),
                 ),
-              ),
-            ],
-          ),
+                ...categories.map(
+                  (cat) => _CategoryPill(
+                    label: cat.titleKey.tr(),
+                    onTap: () => onStart(cat.id),
+                  ),
+                ),
+              ],
+            ),
           const SizedBox(height: 24),
           ElevatedButton(
             onPressed: () => onStart('all'),

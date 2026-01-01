@@ -968,7 +968,9 @@
     "scoreSummary": "{{correct}} / {{total}} सही उत्तर",
     "topicBreakdown": "विषय विभाजन",
     "categoryBreakdownRow": "{{correct}}/{{total}} ({{accuracy}})",
-    "reviewProgress": "समीक्षा: {{current}} / {{total}}"
+    "reviewProgress": "समीक्षा: {{current}} / {{total}}",
+    "strictMode": "कठोर परीक्षा मोड",
+    "strictModeDesc": "पीछे नहीं जा सकते और जवाब लॉक हो जाते हैं"
   },
   "practice": {
     "byMode": "मोड के अनुसार",
@@ -1024,6 +1026,11 @@
     "scoreSummary": "{{correct}} / {{total}} सही",
     "topicBreakdown": "विषय विभाजन",
     "categoryBreakdownRow": "{{correct}}/{{total}} ({{accuracy}})"
+  },
+  "review": {
+    "title": "उत्तर समीक्षा",
+    "explanation": "व्याख्या",
+    "missingQuestion": "प्रश्न विवरण उपलब्ध नहीं"
   },
   "history": {
     "title": "परीक्षा इतिहास",

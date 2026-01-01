@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../models/sign.dart';
 import '../state/data_state.dart';
 import '../state/app_state.dart';
 import '../widgets/bottom_nav.dart';
@@ -99,7 +100,7 @@ class _SignsScreenState extends ConsumerState<SignsScreen> {
                     final title = sign.titles[locale] ?? sign.titles['en'] ?? '';
                     return Card(
                       child: InkWell(
-                        onTap: () {},
+                        onTap: () => _showSignDetails(context, sign, title),
                         child: Padding(
                           padding: const EdgeInsets.all(12),
                           child: Column(
@@ -138,6 +139,42 @@ class _SignsScreenState extends ConsumerState<SignsScreen> {
       bottomNavigationBar: const BottomNav(),
     );
   }
+}
+
+void _showSignDetails(BuildContext context, AppSign sign, String title) {
+  showModalBottomSheet(
+    context: context,
+    showDragHandle: true,
+    builder: (context) {
+      return Padding(
+        padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(
+              height: 140,
+              child: SvgPicture.asset('assets/${sign.svgPath}', fit: BoxFit.contain),
+            ),
+            const SizedBox(height: 12),
+            Text(title, style: Theme.of(context).textTheme.titleMedium, textAlign: TextAlign.center),
+            const SizedBox(height: 6),
+            Text(
+              'signs.categories.${sign.category}'.tr(),
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+            const SizedBox(height: 16),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text('common.close'.tr()),
+              ),
+            ),
+          ],
+        ),
+      );
+    },
+  );
 }
 
 class _CategoryChip extends StatelessWidget {

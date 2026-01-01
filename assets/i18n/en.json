@@ -987,7 +987,9 @@
     "scoreSummary": "{{correct}} / {{total}} correct answers",
     "topicBreakdown": "Topic Breakdown",
     "categoryBreakdownRow": "{{correct}}/{{total}} ({{accuracy}})",
-    "reviewProgress": "Review: {{current}} / {{total}}"
+    "reviewProgress": "Review: {{current}} / {{total}}",
+    "strictMode": "Strict exam mode",
+    "strictModeDesc": "No back navigation and answers are locked"
   },
   "practice": {
     "byMode": "By Mode",
@@ -1043,6 +1045,11 @@
     "scoreSummary": "{{correct}} / {{total}} correct",
     "topicBreakdown": "Topic Breakdown",
     "categoryBreakdownRow": "{{correct}}/{{total}} ({{accuracy}})"
+  },
+  "review": {
+    "title": "Answer Review",
+    "explanation": "Explanation",
+    "missingQuestion": "Question details not available"
   },
   "history": {
     "title": "Exam History",

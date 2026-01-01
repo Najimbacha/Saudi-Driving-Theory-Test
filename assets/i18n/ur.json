@@ -968,7 +968,9 @@
     "scoreSummary": "{{correct}} / {{total}} درست جوابات",
     "topicBreakdown": "موضوعات کی تقسیم",
     "categoryBreakdownRow": "{{correct}}/{{total}} ({{accuracy}})",
-    "reviewProgress": "جائزہ: {{current}} / {{total}}"
+    "reviewProgress": "جائزہ: {{current}} / {{total}}",
+    "strictMode": "سخت امتحانی موڈ",
+    "strictModeDesc": "پیچھے جانا بند اور جواب لاک ہو جاتے ہیں"
   },
   "practice": {
     "byMode": "موڈ کے مطابق",
@@ -1024,6 +1026,11 @@
     "scoreSummary": "{{correct}} / {{total}} درست",
     "topicBreakdown": "موضوعات کی تقسیم",
     "categoryBreakdownRow": "{{correct}}/{{total}} ({{accuracy}})"
+  },
+  "review": {
+    "title": "جوابات کا جائزہ",
+    "explanation": "وضاحت",
+    "missingQuestion": "سوال کی تفصیل دستیاب نہیں"
   },
   "history": {
     "title": "ٹیسٹ ہسٹری",

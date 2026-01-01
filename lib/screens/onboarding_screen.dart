@@ -26,7 +26,7 @@ class OnboardingScreen extends ConsumerWidget {
                 child: ElevatedButton(
                   onPressed: () {
                     ref.read(appSettingsProvider.notifier).setHasSeenOnboarding(true);
-                    context.go('/');
+                    context.go('/home');
                   },
                   child: Text('common.continue'.tr()),
                 ),

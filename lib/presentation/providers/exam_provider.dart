@@ -14,6 +14,7 @@ class ExamState {
     required this.timeLeftSeconds,
     required this.startedAt,
     required this.isCompleted,
+    required this.strictMode,
   });
 
   final List<Question> questions;
@@ -23,6 +24,7 @@ class ExamState {
   final int timeLeftSeconds;
   final DateTime startedAt;
   final bool isCompleted;
+  final bool strictMode;
 
   Question get currentQuestion => questions[currentIndex];
 
@@ -34,6 +36,7 @@ class ExamState {
     int? timeLeftSeconds,
     DateTime? startedAt,
     bool? isCompleted,
+    bool? strictMode,
   }) {
     return ExamState(
       questions: questions ?? this.questions,
@@ -43,6 +46,7 @@ class ExamState {
       timeLeftSeconds: timeLeftSeconds ?? this.timeLeftSeconds,
       startedAt: startedAt ?? this.startedAt,
       isCompleted: isCompleted ?? this.isCompleted,
+      strictMode: strictMode ?? this.strictMode,
     );
   }
 }
@@ -58,12 +62,13 @@ class ExamController extends StateNotifier<ExamState> {
             timeLeftSeconds: 0,
             startedAt: DateTime.fromMillisecondsSinceEpoch(0),
             isCompleted: false,
+            strictMode: false,
           ),
         );
 
   Timer? _timer;
 
-  void start(List<Question> questions, {required int minutes}) {
+  void start(List<Question> questions, {required int minutes, required bool strictMode}) {
     _timer?.cancel();
     state = ExamState(
       questions: _shuffle(questions),
@@ -73,6 +78,7 @@ class ExamController extends StateNotifier<ExamState> {
       timeLeftSeconds: minutes * 60,
       startedAt: DateTime.now(),
       isCompleted: false,
+      strictMode: strictMode,
     );
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (state.isCompleted) {
@@ -91,6 +97,9 @@ class ExamController extends StateNotifier<ExamState> {
 
   void selectAnswer(int index) {
     final question = state.currentQuestion;
+    if (state.strictMode && state.answers.containsKey(question.id)) {
+      return;
+    }
     final next = Map<String, int>.from(state.answers);
     next[question.id] = index;
     state = state.copyWith(answers: next);
@@ -130,6 +139,7 @@ class ExamController extends StateNotifier<ExamState> {
       timeLeftSeconds: 0,
       startedAt: DateTime.fromMillisecondsSinceEpoch(0),
       isCompleted: false,
+      strictMode: false,
     );
   }
 

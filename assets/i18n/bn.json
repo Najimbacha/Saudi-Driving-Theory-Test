@@ -968,7 +968,9 @@
     "scoreSummary": "{{correct}} / {{total}} সঠিক উত্তর",
     "topicBreakdown": "বিষয়ভিত্তিক বিশ্লেষণ",
     "categoryBreakdownRow": "{{correct}}/{{total}} ({{accuracy}})",
-    "reviewProgress": "রিভিউ: {{current}} / {{total}}"
+    "reviewProgress": "রিভিউ: {{current}} / {{total}}",
+    "strictMode": "কঠোর পরীক্ষা মোড",
+    "strictModeDesc": "পিছনে যাওয়া যাবে না এবং উত্তর লক হয়ে যায়"
   },
   "practice": {
     "byMode": "মোড অনুযায়ী",
@@ -1024,6 +1026,11 @@
     "scoreSummary": "{{correct}} / {{total}} সঠিক",
     "topicBreakdown": "বিষয়ভিত্তিক বিশ্লেষণ",
     "categoryBreakdownRow": "{{correct}}/{{total}} ({{accuracy}})"
+  },
+  "review": {
+    "title": "উত্তর পর্যালোচনা",
+    "explanation": "ব্যাখ্যা",
+    "missingQuestion": "প্রশ্নের বিস্তারিত পাওয়া যায়নি"
   },
   "history": {
     "title": "পরীক্ষার ইতিহাস",

@@ -968,7 +968,9 @@
     "scoreSummary": "{{correct}} / {{total}} إجابات صحيحة",
     "topicBreakdown": "توزيع المواضيع",
     "categoryBreakdownRow": "{{correct}}/{{total}} ({{accuracy}})",
-    "reviewProgress": "المراجعة: {{current}} / {{total}}"
+    "reviewProgress": "المراجعة: {{current}} / {{total}}",
+    "strictMode": "وضع الامتحان الصارم",
+    "strictModeDesc": "لا يمكنك الرجوع وتُقفل الإجابات بعد الاختيار"
   },
   "practice": {
     "byMode": "By Mode",
@@ -1024,6 +1026,11 @@
     "scoreSummary": "{{correct}} / {{total}} إجابات صحيحة",
     "topicBreakdown": "توزيع المواضيع",
     "categoryBreakdownRow": "{{correct}}/{{total}} ({{accuracy}})"
+  },
+  "review": {
+    "title": "مراجعة الإجابات",
+    "explanation": "الشرح",
+    "missingQuestion": "تفاصيل السؤال غير متاحة"
   },
   "history": {
     "title": "سجل الاختبارات",

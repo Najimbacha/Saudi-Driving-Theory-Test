@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/constants/app_colors.dart';
+import '../../../models/question.dart';
+import '../../../state/data_state.dart';
 import '../../providers/category_provider.dart';
 
 class CategoriesScreen extends ConsumerStatefulWidget {
@@ -26,11 +28,24 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
   @override
   Widget build(BuildContext context) {
     final categories = ref.watch(categoriesProvider);
+    final questionsAsync = ref.watch(questionsProvider);
     final theme = Theme.of(context);
     final query = _controller.text.trim().toLowerCase();
+    final questions = questionsAsync.valueOrNull ?? const <Question>[];
+    final hasQuestionData = questionsAsync.hasValue;
+    final questionCounts = <String, int>{};
+    for (final question in questions) {
+      questionCounts.update(
+        question.categoryId,
+        (value) => value + 1,
+        ifAbsent: () => 1,
+      );
+    }
     final visible = categories.where((cat) {
       final title = cat.titleKey.tr().toLowerCase();
-      return query.isEmpty || title.contains(query);
+      if (query.isNotEmpty && !title.contains(query)) return false;
+      if (!hasQuestionData) return true;
+      return (questionCounts[cat.id] ?? 0) > 0;
     }).toList();
 
     return Scaffold(
@@ -93,7 +108,9 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
                 subtitle: category.subtitleKey.tr(),
                 color: _parseColor(category.colorHex),
                 icon: _iconFor(category.iconName),
-                total: category.totalQuestions,
+                total: hasQuestionData
+                    ? (questionCounts[category.id] ?? 0)
+                    : category.totalQuestions,
                 onTap: () => context.go('/practice?category=${category.id}'),
               );
             },
@@ -215,7 +232,9 @@ class _CategoryCard extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               Text(
-                'categories.totalQuestions'.tr(args: [total.toString()]),
+                'categories.totalQuestions'.tr(namedArgs: {
+                  'value': total.toString(),
+                }),
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(color: AppColors.textSecondary),
               ),
             ],

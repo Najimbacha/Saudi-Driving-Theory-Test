@@ -16,6 +16,7 @@ import '../../screens/license_guide_screen.dart';
 import '../../screens/not_found_screen.dart';
 import '../../presentation/screens/quiz/practice_screen.dart';
 import '../../presentation/screens/results/results_screen.dart';
+import '../../presentation/screens/results/review_screen.dart';
 import '../../presentation/screens/progress/exam_history_screen.dart';
 import '../../screens/privacy_screen.dart';
 import '../../screens/settings_screen.dart';
@@ -42,6 +43,14 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           final result = state.extra as ExamResult?;
           if (result == null) return const NotFoundScreen();
           return ResultsScreen(result: result);
+        },
+      ),
+      GoRoute(
+        path: '/review',
+        builder: (context, state) {
+          final result = state.extra as ExamResult?;
+          if (result == null) return const NotFoundScreen();
+          return ReviewScreen(result: result);
         },
       ),
       GoRoute(path: '/favorites', builder: (context, _) => const FavoritesScreen()),

@@ -62,11 +62,19 @@ class ResultsScreen extends StatelessWidget {
               const SizedBox(width: 12),
               Expanded(
                 child: ElevatedButton(
-                  onPressed: () => context.go('/practice'),
-                  child: Text('results.tryAgain'.tr()),
+                  onPressed: () => context.push('/review', extra: result),
+                  child: Text('results.reviewAnswers'.tr()),
                 ),
               ),
             ],
+          ),
+          const SizedBox(height: 12),
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: () => context.go('/practice'),
+              child: Text('results.tryAgain'.tr()),
+            ),
           ),
         ],
       ),

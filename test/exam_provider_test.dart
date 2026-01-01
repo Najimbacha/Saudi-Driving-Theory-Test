@@ -28,7 +28,7 @@ void main() {
       ),
     ];
 
-    controller.start(questions, minutes: 1);
+    controller.start(questions, minutes: 1, strictMode: true);
     expect(controller.state.questions.length, 2);
     expect(controller.state.timeLeftSeconds, 60);
 

@@ -48,8 +48,12 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
             return const SizedBox.shrink();
           }
           return _ExamIntro(
-            onStart: (count, minutes) =>
-                controller.start(questions.take(count).toList(), minutes: minutes),
+            onStart: (count, minutes, strictMode) =>
+                controller.start(
+                  questions.take(count).toList(),
+                  minutes: minutes,
+                  strictMode: strictMode,
+                ),
           );
         }
         final current = exam.currentQuestion;
@@ -57,21 +61,23 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
         final questionText = _questionText(current, locale);
         final options = _options(current, locale);
         final selected = exam.answers[current.id];
-        return Scaffold(
-          appBar: AppBar(
-            title: Text('exam.title'.tr()),
-            actions: [
-              IconButton(
-                onPressed: controller.toggleFlag,
-                icon: Icon(
-                  exam.flagged.contains(current.id) ? Icons.flag : Icons.outlined_flag,
+        return PopScope(
+          canPop: !(exam.strictMode && !exam.isCompleted),
+          child: Scaffold(
+            appBar: AppBar(
+              title: Text('exam.title'.tr()),
+              actions: [
+                IconButton(
+                  onPressed: controller.toggleFlag,
+                  icon: Icon(
+                    exam.flagged.contains(current.id) ? Icons.flag : Icons.outlined_flag,
+                  ),
                 ),
-              ),
-            ],
-          ),
-          body: Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
+              ],
+            ),
+            body: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _TimerBanner(timeLeftSeconds: exam.timeLeftSeconds),
@@ -119,7 +125,9 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
                   children: [
                     Expanded(
                       child: OutlinedButton(
-                        onPressed: exam.currentIndex == 0 ? null : controller.previous,
+                        onPressed: exam.strictMode || exam.currentIndex == 0
+                            ? null
+                            : controller.previous,
                         child: Text('common.previous'.tr()),
                       ),
                     ),
@@ -140,13 +148,16 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
                 ),
                 const SizedBox(height: 8),
                 TextButton(
-                  onPressed: () => _showQuestionGrid(context, exam, controller),
+                  onPressed: exam.strictMode && !exam.isCompleted
+                      ? null
+                      : () => _showQuestionGrid(context, exam, controller),
                   child: Text('exam.reviewAnswers'.tr()),
                 ),
               ],
             ),
           ),
-        );
+        ),
+      );
       },
     );
   }
@@ -195,6 +206,12 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
   }
 
   void _showQuestionGrid(BuildContext context, ExamState exam, ExamController controller) {
+    if (exam.strictMode && !exam.isCompleted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('exam.strictModeDesc'.tr())),
+      );
+      return;
+    }
     showModalBottomSheet(
       context: context,
       builder: (context) {
@@ -254,10 +271,17 @@ List<String> _options(Question question, String locale) {
   return question.optionsKeys.map((key) => key.tr()).toList();
 }
 
-class _ExamIntro extends StatelessWidget {
+class _ExamIntro extends StatefulWidget {
   const _ExamIntro({required this.onStart});
 
-  final void Function(int count, int minutes) onStart;
+  final void Function(int count, int minutes, bool strictMode) onStart;
+
+  @override
+  State<_ExamIntro> createState() => _ExamIntroState();
+}
+
+class _ExamIntroState extends State<_ExamIntro> {
+  bool _strictMode = true;
 
   @override
   Widget build(BuildContext context) {
@@ -297,12 +321,12 @@ class _ExamIntro extends StatelessWidget {
                   children: [
                     _StatChip(
                       label: 'exam.duration'.tr(),
-                      value: '30 ${'exam.minutes'.tr()}',
+                      value: '40 ${'exam.minutes'.tr()}',
                     ),
                     const SizedBox(width: 8),
                     _StatChip(
                       label: 'exam.questions'.tr(),
-                      value: '30',
+                      value: '40',
                     ),
                     const SizedBox(width: 8),
                     _StatChip(
@@ -338,24 +362,31 @@ class _ExamIntro extends StatelessWidget {
           const SizedBox(height: 20),
           Text('exam.selectMode'.tr(), style: theme.textTheme.titleMedium),
           const SizedBox(height: 12),
-          _ModeCard(
-            title: 'exam.modes.quick'.tr(),
-            description: '10 ${'exam.questions'.tr()} • 10 ${'exam.minutes'.tr()}',
-            icon: Icons.bolt_outlined,
-            onTap: () => onStart(10, 10),
-          ),
-          _ModeCard(
-            title: 'exam.modes.standard'.tr(),
-            description: '20 ${'exam.questions'.tr()} • 20 ${'exam.minutes'.tr()}',
-            icon: Icons.dashboard_outlined,
-            onTap: () => onStart(20, 20),
-          ),
-          _ModeCard(
-            title: 'exam.modes.full'.tr(),
-            description: '30 ${'exam.questions'.tr()} • 30 ${'exam.minutes'.tr()}',
-            icon: Icons.workspace_premium_outlined,
-            onTap: () => onStart(30, 30),
-          ),
+            SwitchListTile(
+              value: _strictMode,
+              onChanged: (value) => setState(() => _strictMode = value),
+              title: Text('exam.strictMode'.tr()),
+              subtitle: Text('exam.strictModeDesc'.tr()),
+            ),
+            const SizedBox(height: 12),
+            _ModeCard(
+              title: 'exam.modes.quick'.tr(),
+              description: '20 ${'exam.questions'.tr()} • 20 ${'exam.minutes'.tr()}',
+              icon: Icons.bolt_outlined,
+              onTap: () => widget.onStart(20, 20, _strictMode),
+            ),
+            _ModeCard(
+              title: 'exam.modes.standard'.tr(),
+              description: '30 ${'exam.questions'.tr()} • 30 ${'exam.minutes'.tr()}',
+              icon: Icons.dashboard_outlined,
+              onTap: () => widget.onStart(30, 30, _strictMode),
+            ),
+            _ModeCard(
+              title: 'exam.modes.full'.tr(),
+              description: '40 ${'exam.questions'.tr()} • 40 ${'exam.minutes'.tr()}',
+              icon: Icons.workspace_premium_outlined,
+              onTap: () => widget.onStart(40, 40, _strictMode),
+            ),
         ],
       ),
     );
