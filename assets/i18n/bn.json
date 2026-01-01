@@ -62,10 +62,14 @@
     "practiceDesc": "আপনার জ্ঞান যাচাই করুন",
     "mockExam": "অনুশীলন টেস্ট",
     "mockExamDesc": "পূর্ণ থিওরি অনুশীলন",
+    "practiceByCategory": "বিভাগভিত্তিক অনুশীলন",
+    "practiceByCategoryDesc": "বিষয় ধরে শিখুন",
     "favorites": "প্রিয়",
     "favoritesDesc": "আপনার সংরক্ষিত আইটেম",
     "stats": "আপনার অগ্রগতি",
     "statsDesc": "আপনার শেখা ট্র্যাক করুন",
+    "history": "পরীক্ষার ইতিহাস",
+    "historyDesc": "পূর্বের ফলাফল দেখুন",
     "violationPoints": "ট্রাফিক লঙ্ঘন পয়েন্ট",
     "violationPointsDesc": "লঙ্ঘন পয়েন্ট সিস্টেম শিখুন",
     "trafficFines": "ট্রাফিক জরিমানা ও দণ্ড",
@@ -1021,6 +1025,10 @@
     "topicBreakdown": "বিষয়ভিত্তিক বিশ্লেষণ",
     "categoryBreakdownRow": "{{correct}}/{{total}} ({{accuracy}})"
   },
+  "history": {
+    "title": "পরীক্ষার ইতিহাস",
+    "empty": "আগের কোনো ফলাফল নেই"
+  },
   "learn": {
     "title": "ড্রাইভিং থিওরি শিখুন",
     "lessons": "পাঠ",
@@ -1385,7 +1393,72 @@
     "xp": "এক্সপি",
     "xpValue": "{{value}} এক্সপি",
     "pressBackAgainToExit": "বের হতে আবার ব্যাক চাপুন",
-    "answerRequired": "অনুগ্রহ করে আগে উত্তর দিন"
+    "answerRequired": "অনুগ্রহ করে আগে উত্তর দিন",
+    "empty": "এখনও কোনো আইটেম নেই"
+  },
+  "categories": {
+    "title": "অনুশীলনের বিভাগসমূহ",
+    "search": "বিভাগ খুঁজুন...",
+    "filterAll": "সব",
+    "filterInProgress": "চলমান",
+    "filterCompleted": "সম্পন্ন",
+    "totalQuestions": "{{value}} প্রশ্ন",
+    "signs": {
+      "title": "ট্রাফিক সাইন ও সংকেত",
+      "subtitle": "সাইন ও সংকেত শিখুন"
+    },
+    "rules": {
+      "title": "ট্রাফিক নিয়ম",
+      "subtitle": "অগ্রাধিকার ও বিধি"
+    },
+    "safety": {
+      "title": "সড়ক নিরাপত্তা",
+      "subtitle": "নিরাপদ চালনার ভিত্তি"
+    },
+    "signals": {
+      "title": "ট্রাফিক সিগন্যাল",
+      "subtitle": "লাইট ও হাতের সংকেত"
+    },
+    "markings": {
+      "title": "সড়ক চিহ্ন",
+      "subtitle": "লাইন ও লেন নির্দেশনা"
+    },
+    "parking": {
+      "title": "পার্কিং নিয়ম",
+      "subtitle": "কোথায় এবং কীভাবে পার্ক করবেন"
+    },
+    "emergency": {
+      "title": "জরুরি পরিস্থিতি",
+      "subtitle": "জরুরিতে কী করবেন"
+    },
+    "pedestrians": {
+      "title": "পথচারীর অধিকার",
+      "subtitle": "ক্রসিং ও অগ্রাধিকার"
+    },
+    "highway": {
+      "title": "হাইওয়ে ড্রাইভিং",
+      "subtitle": "দ্রুতগতির সড়কের নিয়ম"
+    },
+    "weather": {
+      "title": "আবহাওয়ার অবস্থা",
+      "subtitle": "বৃষ্টি ও ধুলোঝড়ে চালনা"
+    },
+    "maintenance": {
+      "title": "যানবাহন রক্ষণাবেক্ষণ",
+      "subtitle": "গাড়িকে কার্যক্ষম রাখুন"
+    },
+    "responsibilities": {
+      "title": "চালকের দায়িত্ব",
+      "subtitle": "আইনি ও নৈতিক দায়িত্ব"
+    },
+    "violation_points": {
+      "title": "ট্রাফিক লঙ্ঘন পয়েন্ট",
+      "subtitle": "পয়েন্ট সিস্টেমের সারাংশ"
+    },
+    "traffic_fines": {
+      "title": "ট্রাফিক জরিমানা",
+      "subtitle": "জরিমানা ও দণ্ড"
+    }
   },
   "ads": {
     "rewardedRetry": "তাৎক্ষণিকভাবে আবার চেষ্টা করতে বিজ্ঞাপন দেখুন"

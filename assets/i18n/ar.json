@@ -62,10 +62,14 @@
     "practiceDesc": "Test your knowledge",
     "mockExam": "Practice Test",
     "mockExamDesc": "Full theory practice",
+    "practiceByCategory": "التدرب حسب الفئة",
+    "practiceByCategoryDesc": "تعلم موضوعاً تلو الآخر",
     "favorites": "المفضلة",
     "favoritesDesc": "Your saved items",
     "stats": "تقدمك",
     "statsDesc": "Track your learning",
+    "history": "سجل الاختبارات",
+    "historyDesc": "راجع نتائجك السابقة",
     "violationPoints": "نقاط المخالفات المرورية",
     "violationPointsDesc": "تعرّف على نظام نقاط المخالفات",
     "trafficFines": "الغرامات والعقوبات المرورية",
@@ -1021,6 +1025,10 @@
     "topicBreakdown": "توزيع المواضيع",
     "categoryBreakdownRow": "{{correct}}/{{total}} ({{accuracy}})"
   },
+  "history": {
+    "title": "سجل الاختبارات",
+    "empty": "لا توجد نتائج سابقة بعد"
+  },
   "learn": {
     "title": "Learn Driving Theory",
     "lessons": "الدروس",
@@ -1401,7 +1409,72 @@
     "xp": "نقطة خبرة",
     "xpValue": "{{value}} نقطة خبرة",
     "pressBackAgainToExit": "اضغط رجوع مرة أخرى للخروج",
-    "answerRequired": "يرجى الإجابة أولاً"
+    "answerRequired": "يرجى الإجابة أولاً",
+    "empty": "لا توجد عناصر بعد"
+  },
+  "categories": {
+    "title": "فئات التدريب",
+    "search": "ابحث عن الفئات...",
+    "filterAll": "الكل",
+    "filterInProgress": "قيد التقدم",
+    "filterCompleted": "مكتمل",
+    "totalQuestions": "{{value}} سؤال",
+    "signs": {
+      "title": "إشارات المرور والعلامات",
+      "subtitle": "تعلّم الإشارات والرموز"
+    },
+    "rules": {
+      "title": "قواعد المرور",
+      "subtitle": "الأولوية واللوائح"
+    },
+    "safety": {
+      "title": "السلامة على الطريق",
+      "subtitle": "أساسيات القيادة الآمنة"
+    },
+    "signals": {
+      "title": "إشارات المرور الضوئية",
+      "subtitle": "الإشارات الضوئية واليدوية"
+    },
+    "markings": {
+      "title": "علامات الطريق",
+      "subtitle": "خطوط وحارات الطريق"
+    },
+    "parking": {
+      "title": "قواعد الوقوف",
+      "subtitle": "أين وكيف تقف"
+    },
+    "emergency": {
+      "title": "الحالات الطارئة",
+      "subtitle": "ما يجب فعله في الطوارئ"
+    },
+    "pedestrians": {
+      "title": "حقوق المشاة",
+      "subtitle": "المعابر والأولوية"
+    },
+    "highway": {
+      "title": "القيادة على الطريق السريع",
+      "subtitle": "قواعد الطرق السريعة"
+    },
+    "weather": {
+      "title": "ظروف الطقس",
+      "subtitle": "القيادة في المطر والعواصف الرملية"
+    },
+    "maintenance": {
+      "title": "صيانة المركبة",
+      "subtitle": "حافظ على مركبتك صالحة"
+    },
+    "responsibilities": {
+      "title": "مسؤوليات السائق",
+      "subtitle": "الواجبات القانونية والأخلاقية"
+    },
+    "violation_points": {
+      "title": "نقاط المخالفات المرورية",
+      "subtitle": "نظرة عامة على نظام النقاط"
+    },
+    "traffic_fines": {
+      "title": "الغرامات المرورية",
+      "subtitle": "الغرامات والعقوبات"
+    }
   },
   "ads": {
     "rewardedRetry": "شاهد الإعلان لإعادة المحاولة فوراً"

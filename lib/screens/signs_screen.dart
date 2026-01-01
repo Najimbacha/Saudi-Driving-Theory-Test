@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../state/data_state.dart';
+import '../state/app_state.dart';
 import '../widgets/bottom_nav.dart';
 
 class SignsScreen extends ConsumerStatefulWidget {
@@ -15,6 +16,7 @@ class SignsScreen extends ConsumerStatefulWidget {
 
 class _SignsScreenState extends ConsumerState<SignsScreen> {
   String query = '';
+  String category = 'all';
 
   @override
   Widget build(BuildContext context) {
@@ -37,15 +39,52 @@ class _SignsScreenState extends ConsumerState<SignsScreen> {
               onChanged: (value) => setState(() => query = value.toLowerCase()),
             ),
           ),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Row(
+              children: [
+                _CategoryChip(
+                  label: 'signs.categories.all'.tr(),
+                  selected: category == 'all',
+                  onTap: () => setState(() => category = 'all'),
+                ),
+                _CategoryChip(
+                  label: 'signs.categories.warning'.tr(),
+                  selected: category == 'warning',
+                  onTap: () => setState(() => category = 'warning'),
+                ),
+                _CategoryChip(
+                  label: 'signs.categories.regulatory'.tr(),
+                  selected: category == 'regulatory',
+                  onTap: () => setState(() => category = 'regulatory'),
+                ),
+                _CategoryChip(
+                  label: 'signs.categories.mandatory'.tr(),
+                  selected: category == 'mandatory',
+                  onTap: () => setState(() => category = 'mandatory'),
+                ),
+                _CategoryChip(
+                  label: 'signs.categories.guide'.tr(),
+                  selected: category == 'guide',
+                  onTap: () => setState(() => category = 'guide'),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 8),
           Expanded(
             child: signsAsync.when(
               data: (signs) {
                 final filtered = signs.where((s) {
                   final title = s.titles[locale] ?? s.titles['en'] ?? '';
-                  return title.toLowerCase().contains(query);
+                  final matchQuery = title.toLowerCase().contains(query);
+                  final matchCategory = category == 'all' || s.category == category;
+                  return matchQuery && matchCategory;
                 }).toList();
                 final width = MediaQuery.of(context).size.width;
                 final columns = width >= 900 ? 4 : width >= 600 ? 3 : 2;
+                final favorites = ref.watch(appSettingsProvider).favorites.signs;
                 return GridView.builder(
                   padding: const EdgeInsets.all(16),
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -71,6 +110,17 @@ class _SignsScreenState extends ConsumerState<SignsScreen> {
                               ),
                               const SizedBox(height: 8),
                               Text(title, textAlign: TextAlign.center, style: theme.textTheme.bodySmall),
+                              IconButton(
+                                onPressed: () {
+                                  ref.read(appSettingsProvider.notifier).toggleFavorite(
+                                        type: 'signs',
+                                        id: sign.id,
+                                      );
+                                },
+                                icon: Icon(
+                                  favorites.contains(sign.id) ? Icons.bookmark : Icons.bookmark_border,
+                                ),
+                              ),
                             ],
                           ),
                         ),
@@ -86,6 +136,30 @@ class _SignsScreenState extends ConsumerState<SignsScreen> {
         ],
       ),
       bottomNavigationBar: const BottomNav(),
+    );
+  }
+}
+
+class _CategoryChip extends StatelessWidget {
+  const _CategoryChip({
+    required this.label,
+    required this.selected,
+    required this.onTap,
+  });
+
+  final String label;
+  final bool selected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 8),
+      child: ChoiceChip(
+        label: Text(label),
+        selected: selected,
+        onSelected: (_) => onTap(),
+      ),
     );
   }
 }

@@ -19,7 +19,7 @@ class HomeScreen extends StatelessWidget {
           child: ListView(
             padding: const EdgeInsets.all(16),
             children: [
-            Text('home.title'.tr(), style: theme.textTheme.titleLarge),
+            Text('home.greeting'.tr(), style: theme.textTheme.titleLarge),
             const SizedBox(height: 12),
             Card(
               child: Padding(
@@ -27,15 +27,15 @@ class HomeScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('home.hero.title'.tr(), style: theme.textTheme.titleMedium),
+                    Text('home.hero.pickMode'.tr(), style: theme.textTheme.titleMedium),
                     const SizedBox(height: 8),
                     Wrap(
                       spacing: 8,
                       runSpacing: 8,
                       children: [
-                        _pill(context, 'home.hero.offline'),
-                        _pill(context, 'home.hero.noLogin'),
-                        _pill(context, 'home.hero.noInternet'),
+                        _pill(context, 'home.badges.offline'),
+                        _pill(context, 'home.badges.noLogin'),
+                        _pill(context, 'home.badges.noInternet'),
                       ],
                     ),
                     const SizedBox(height: 16),
@@ -61,17 +61,17 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
-            Text('home.roadKnowledge'.tr(), style: theme.textTheme.titleMedium),
+            Text('home.roadKnowledge.title'.tr(), style: theme.textTheme.titleMedium),
             const SizedBox(height: 12),
             Row(
               children: [
-                Expanded(child: _roadCard(context, 'home.cards.signs', () => context.go('/signs'))),
+                Expanded(child: _roadCard(context, 'home.roadKnowledge.signs.title', () => context.go('/signs'))),
                 const SizedBox(width: 12),
-                Expanded(child: _roadCard(context, 'home.cards.violationPoints', () => context.go('/violation-points'))),
+                Expanded(child: _roadCard(context, 'home.roadKnowledge.points.title', () => context.go('/violation-points'))),
               ],
             ),
             const SizedBox(height: 12),
-            _roadCard(context, 'home.cards.generalRules', () => context.go('/learn')),
+            _roadCard(context, 'home.roadKnowledge.rules.title', () => context.go('/learn')),
             const SizedBox(height: 16),
             const Center(child: BannerAdWidget()),
             ],

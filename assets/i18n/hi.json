@@ -62,10 +62,14 @@
     "practiceDesc": "अपना ज्ञान परखें",
     "mockExam": "प्रैक्टिस टेस्ट",
     "mockExamDesc": "पूरा थ्योरी अभ्यास",
+    "practiceByCategory": "श्रेणी के अनुसार अभ्यास",
+    "practiceByCategoryDesc": "विषयवार सीखें",
     "favorites": "पसंदीदा",
     "favoritesDesc": "आपके सहेजे हुए आइटम",
     "stats": "आपकी प्रगति",
     "statsDesc": "अपनी प्रगति ट्रैक करें",
+    "history": "परीक्षा इतिहास",
+    "historyDesc": "पिछले परिणाम देखें",
     "violationPoints": "ट्रैफिक उल्लंघन अंक",
     "violationPointsDesc": "उल्लंघन अंक सिस्टम सीखें",
     "trafficFines": "ट्रैफिक जुर्माने और दंड",
@@ -1021,6 +1025,10 @@
     "topicBreakdown": "विषय विभाजन",
     "categoryBreakdownRow": "{{correct}}/{{total}} ({{accuracy}})"
   },
+  "history": {
+    "title": "परीक्षा इतिहास",
+    "empty": "कोई पुराने परिणाम नहीं हैं"
+  },
   "learn": {
     "title": "ड्राइविंग थ्योरी सीखें",
     "lessons": "पाठ",
@@ -1385,7 +1393,72 @@
     "xp": "एक्सपी",
     "xpValue": "{{value}} एक्सपी",
     "pressBackAgainToExit": "बाहर निकलने के लिए फिर से बैक दबाएँ",
-    "answerRequired": "कृपया पहले उत्तर दें"
+    "answerRequired": "कृपया पहले उत्तर दें",
+    "empty": "अभी कोई आइटम नहीं"
+  },
+  "categories": {
+    "title": "अभ्यास श्रेणियाँ",
+    "search": "श्रेणियाँ खोजें...",
+    "filterAll": "सभी",
+    "filterInProgress": "जारी",
+    "filterCompleted": "पूर्ण",
+    "totalQuestions": "{{value}} प्रश्न",
+    "signs": {
+      "title": "ट्रैफिक संकेत और चिन्ह",
+      "subtitle": "संकेत और चिन्ह सीखें"
+    },
+    "rules": {
+      "title": "ट्रैफिक नियम",
+      "subtitle": "राइट ऑफ वे और नियम"
+    },
+    "safety": {
+      "title": "सड़क सुरक्षा",
+      "subtitle": "सुरक्षित ड्राइविंग की मूल बातें"
+    },
+    "signals": {
+      "title": "ट्रैफिक सिग्नल",
+      "subtitle": "लाइट्स और हाथ के संकेत"
+    },
+    "markings": {
+      "title": "सड़क चिन्हांकन",
+      "subtitle": "लाइनें और लेन मार्गदर्शन"
+    },
+    "parking": {
+      "title": "पार्किंग नियम",
+      "subtitle": "कहां और कैसे पार्क करें"
+    },
+    "emergency": {
+      "title": "आपात स्थितियाँ",
+      "subtitle": "आपात में क्या करें"
+    },
+    "pedestrians": {
+      "title": "पैदल यात्रियों के अधिकार",
+      "subtitle": "क्रॉसिंग और प्राथमिकता"
+    },
+    "highway": {
+      "title": "हाईवे ड्राइविंग",
+      "subtitle": "तेज़ रफ्तार सड़कों के नियम"
+    },
+    "weather": {
+      "title": "मौसम की स्थितियाँ",
+      "subtitle": "बारिश और धूल भरी आंधी में ड्राइविंग"
+    },
+    "maintenance": {
+      "title": "वाहन रखरखाव",
+      "subtitle": "वाहन को दुरुस्त रखें"
+    },
+    "responsibilities": {
+      "title": "चालक की जिम्मेदारियाँ",
+      "subtitle": "कानूनी और नैतिक कर्तव्य"
+    },
+    "violation_points": {
+      "title": "ट्रैफिक उल्लंघन अंक",
+      "subtitle": "अंक प्रणाली का सार"
+    },
+    "traffic_fines": {
+      "title": "ट्रैफिक जुर्माने",
+      "subtitle": "जुर्माने और दंड"
+    }
   },
   "ads": {
     "rewardedRetry": "तुरंत दोबारा प्रयास के लिए विज्ञापन देखें"

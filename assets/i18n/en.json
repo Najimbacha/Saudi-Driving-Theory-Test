@@ -62,10 +62,14 @@
     "practiceDesc": "Test your knowledge",
     "mockExam": "Practice Test",
     "mockExamDesc": "Full theory practice",
+    "practiceByCategory": "Practice by Category",
+    "practiceByCategoryDesc": "Learn topic by topic",
     "favorites": "Favorites",
     "favoritesDesc": "Your saved items",
     "stats": "Your Progress",
     "statsDesc": "Track your learning",
+    "history": "Exam History",
+    "historyDesc": "Review past results",
     "violationPoints": "Traffic Violation Points",
     "violationPointsDesc": "Learn the violation point system",
     "trafficFines": "Traffic Fines & Penalties",
@@ -1040,6 +1044,10 @@
     "topicBreakdown": "Topic Breakdown",
     "categoryBreakdownRow": "{{correct}}/{{total}} ({{accuracy}})"
   },
+  "history": {
+    "title": "Exam History",
+    "empty": "No past results yet"
+  },
   "learn": {
     "title": "Learn Driving Theory",
     "lessons": "Lessons",
@@ -1427,7 +1435,72 @@
     "xp": "XP",
     "xpValue": "{{value}} XP",
     "pressBackAgainToExit": "Press back again to exit",
-    "answerRequired": "Please answer the question first"
+    "answerRequired": "Please answer the question first",
+    "empty": "No items yet"
+  },
+  "categories": {
+    "title": "Practice Categories",
+    "search": "Search categories...",
+    "filterAll": "All",
+    "filterInProgress": "In Progress",
+    "filterCompleted": "Completed",
+    "totalQuestions": "{{value}} questions",
+    "signs": {
+      "title": "Traffic Signs & Signals",
+      "subtitle": "Learn signs and signals"
+    },
+    "rules": {
+      "title": "Traffic Rules",
+      "subtitle": "Right of way and regulations"
+    },
+    "safety": {
+      "title": "Road Safety",
+      "subtitle": "Safe driving essentials"
+    },
+    "signals": {
+      "title": "Traffic Signals",
+      "subtitle": "Lights and hand signals"
+    },
+    "markings": {
+      "title": "Road Markings",
+      "subtitle": "Lines and lanes guidance"
+    },
+    "parking": {
+      "title": "Parking Rules",
+      "subtitle": "Where and how to park"
+    },
+    "emergency": {
+      "title": "Emergency Situations",
+      "subtitle": "What to do in emergencies"
+    },
+    "pedestrians": {
+      "title": "Pedestrian Rights",
+      "subtitle": "Crossings and priority"
+    },
+    "highway": {
+      "title": "Highway Driving",
+      "subtitle": "Rules for high-speed roads"
+    },
+    "weather": {
+      "title": "Weather Conditions",
+      "subtitle": "Driving in rain and sandstorms"
+    },
+    "maintenance": {
+      "title": "Vehicle Maintenance",
+      "subtitle": "Keep your car roadworthy"
+    },
+    "responsibilities": {
+      "title": "Driver Responsibilities",
+      "subtitle": "Legal and ethical duties"
+    },
+    "violation_points": {
+      "title": "Traffic Violation Points",
+      "subtitle": "Point system overview"
+    },
+    "traffic_fines": {
+      "title": "Traffic Fines",
+      "subtitle": "Fines and penalties"
+    }
   },
   "ads": {
     "rewardedRetry": "Watch ad for instant retry"

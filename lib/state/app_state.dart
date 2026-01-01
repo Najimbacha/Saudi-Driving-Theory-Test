@@ -230,11 +230,11 @@ class AppSettingsNotifier extends StateNotifier<AppSettingsState> {
   }
 }
 
-final sharedPrefsProvider = FutureProvider<SharedPreferences>((ref) async {
-  return SharedPreferences.getInstance();
+final sharedPrefsProvider = Provider<SharedPreferences>((ref) {
+  throw UnimplementedError('sharedPrefsProvider must be overridden in main()');
 });
 
 final appSettingsProvider = StateNotifierProvider<AppSettingsNotifier, AppSettingsState>((ref) {
-  final prefs = ref.watch(sharedPrefsProvider).requireValue;
+  final prefs = ref.watch(sharedPrefsProvider);
   return AppSettingsNotifier(prefs);
 });

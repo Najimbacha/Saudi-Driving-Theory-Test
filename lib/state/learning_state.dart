@@ -351,6 +351,6 @@ class LearningNotifier extends StateNotifier<LearningState> {
 }
 
 final learningProvider = StateNotifierProvider<LearningNotifier, LearningState>((ref) {
-  final prefs = ref.watch(sharedPrefsProvider).requireValue;
+  final prefs = ref.watch(sharedPrefsProvider);
   return LearningNotifier(prefs);
 });
