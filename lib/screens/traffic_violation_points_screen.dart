@@ -87,7 +87,8 @@ class _ViolationList extends StatelessWidget {
               ),
               title: Text('violations.${item.id}'.tr()),
               subtitle: Text(
-                'violationPoints.pointsLabel'.tr(args: [item.points.toString()]),
+                'violationPoints.pointsLabel'
+                    .tr(namedArgs: {'value': item.points.toString()}),
               ),
               trailing: const Icon(Icons.chevron_right),
             ),

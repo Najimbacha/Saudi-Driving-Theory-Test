@@ -110,14 +110,24 @@ class _ReviewHeader extends StatelessWidget {
               children: [
                 Expanded(
                   child: OutlinedButton(
-                    onPressed: () => context.go('/home'),
+                    onPressed: () {
+                      // Navigate back, which will go to results screen, then user can navigate from there
+                      if (context.canPop()) {
+                        context.pop();
+                      } else {
+                        context.pushReplacement('/home');
+                      }
+                    },
                     child: Text('results.backHome'.tr()),
                   ),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
                   child: ElevatedButton(
-                    onPressed: () => context.go('/exam'),
+                    onPressed: () {
+                      // Navigate to exam, replacing the review screen
+                      context.pushReplacement('/exam');
+                    },
                     child: Text('exam.tryAgain'.tr()),
                   ),
                 ),

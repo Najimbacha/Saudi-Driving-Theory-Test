@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../services/ad_service.dart';
 import '../state/app_state.dart';
 import '../widgets/banner_ad_widget.dart';
 
@@ -56,8 +57,19 @@ class SettingsScreen extends ConsumerWidget {
             onChanged: notifier.setVibrationEnabled,
             title: Text('settings.vibration'.tr()),
           ),
+          SwitchListTile(
+            value: settings.adsEnabled,
+            onChanged: (value) async {
+              if (value) {
+                await AdService.instance.init();
+              }
+              notifier.setAdsEnabled(value);
+            },
+            title: Text('settings.ads'.tr()),
+            subtitle: Text('settings.adsDesc'.tr()),
+          ),
           const SizedBox(height: 12),
-          const Center(child: BannerAdWidget()),
+          if (settings.adsEnabled) const Center(child: BannerAdWidget()),
         ],
       ),
     );

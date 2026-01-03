@@ -58,9 +58,9 @@
     "learnSignsDesc": "সব ট্রাফিক সাইন শিখুন",
     "learnRules": "নিয়ম ও প্রবিধান",
     "learnRulesDesc": "সড়ক নিয়ম ও নিরাপত্তা",
-    "practice": "????? ???????",
+    "practice": "প্র্যাকটিস",
     "practiceDesc": "আপনার জ্ঞান যাচাই করুন",
-    "mockExam": "?? ???????",
+    "mockExam": "মক পরীক্ষা",
     "mockExamDesc": "পূর্ণ থিওরি অনুশীলন",
     "practiceByCategory": "বিভাগভিত্তিক অনুশীলন",
     "practiceByCategoryDesc": "বিষয় ধরে শিখুন",
@@ -1144,6 +1144,8 @@
     },
     "sound": "সাউন্ড ইফেক্ট",
     "vibration": "ভাইব্রেশন",
+    "ads": "বিজ্ঞাপন দেখান",
+    "adsDesc": "বিজ্ঞাপন ঐচ্ছিক এবং উন্নয়নে সহায়তা করে।",
     "removeAds": "বিজ্ঞাপন সরান",
     "restorePurchase": "ক্রয় পুনরুদ্ধার করুন",
     "privacy": "গোপনীয়তা নীতি",
@@ -1533,10 +1535,10 @@
     "title": "আপনার খালি অ্যাপে স্বাগতম",
     "subtitle": "আপনার দারুণ প্রকল্প এখান থেকেই শুরু করুন!"
   },
-  "common.questionOf": "?????? {current} ?? ????? {total}",
-  "common.bookmark": "????????",
-  "exam.flag": "?????? ??????? ????",
-  "exam.exitTitle": "??????? ???? ??? ??? ????",
-  "exam.exitMessage": "????? ??????? ??????? ????? ???? ?? ??? ??? ????",
-  "exam.exitConfirm": "??? ???"
+  "common.questionOf": "প্রশ্ন {current} / {total}",
+  "common.bookmark": "বুকমার্ক",
+  "exam.flag": "রিভিউর জন্য চিহ্নিত করুন",
+  "exam.exitTitle": "পরীক্ষা থেকে বের হতে চান?",
+  "exam.exitMessage": "আপনার অগ্রগতি হারিয়ে যাবে। আপনি কি বের হতে চান?",
+  "exam.exitConfirm": "বের হন"
 }

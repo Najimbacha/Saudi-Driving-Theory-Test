@@ -38,4 +38,9 @@ class AppColors {
   static const darkOutline = Color(0xFF263A5A);
   static const darkText = Color(0xFFEAF0FF);
   static const darkMuted = Color(0xFF9AA9C2);
+
+  // Gradient Lists
+  static const List<Color> primaryGradient = [primary, primaryLight];
+  static const List<Color> secondaryGradient = [secondary, secondaryLight];
+  static const List<Color> accentGradient = [accent, warning];
 }

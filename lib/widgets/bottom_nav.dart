@@ -14,6 +14,7 @@ class BottomNav extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
+    final isDark = scheme.brightness == Brightness.dark;
     final items = [
       _NavItem(
         icon: Icons.home_rounded,
@@ -24,7 +25,7 @@ class BottomNav extends StatelessWidget {
         label: 'nav.signs'.tr(),
       ),
       _NavItem(
-        icon: Icons.help_rounded,
+        icon: Icons.quiz_outlined,
         label: 'nav.practice'.tr(),
       ),
       _NavItem(
@@ -39,23 +40,28 @@ class BottomNav extends StatelessWidget {
     return SafeArea(
       top: false,
       child: Container(
-        margin: const EdgeInsetsDirectional.fromSTEB(16, 0, 16, 12),
-        padding: const EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
+        margin: const EdgeInsetsDirectional.fromSTEB(16, 0, 16, 16),
+        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
         decoration: BoxDecoration(
-          color: scheme.surface.withValues(alpha: scheme.brightness == Brightness.dark ? 0.92 : 0.98),
-          borderRadius: BorderRadius.circular(24),
+          color: isDark
+              ? scheme.surfaceContainerHighest
+              : scheme.surface,
+          borderRadius: BorderRadius.circular(28),
           border: Border.all(
-            color: scheme.outline.withValues(alpha: 0.35),
+            color: scheme.outline.withValues(alpha: isDark ? 0.3 : 0.2),
+            width: 1,
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.25),
-              blurRadius: 16,
-              offset: const Offset(0, 8),
+              color: Colors.black.withValues(alpha: isDark ? 0.4 : 0.08),
+              blurRadius: 20,
+              offset: const Offset(0, -4),
+              spreadRadius: 0,
             ),
           ],
         ),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: List.generate(items.length, (index) {
             final item = items[index];
             final selected = index == currentIndex;
@@ -64,51 +70,58 @@ class BottomNav extends StatelessWidget {
                 button: true,
                 selected: selected,
                 label: item.label,
-                child: InkWell(
-                  onTap: () => onTap(index),
-                  borderRadius: BorderRadius.circular(18),
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 180),
-                    curve: Curves.easeInOut,
-                    padding: const EdgeInsetsDirectional.fromSTEB(8, 6, 8, 6),
-                    decoration: BoxDecoration(
-                      color: selected
-                          ? scheme.primary.withValues(alpha: scheme.brightness == Brightness.dark ? 0.18 : 0.12)
-                          : Colors.transparent,
-                      borderRadius: BorderRadius.circular(18),
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        AnimatedScale(
-                          scale: selected ? 1.05 : 1,
-                          duration: const Duration(milliseconds: 180),
-                          child: Icon(
-                            item.icon,
-                            color: selected
-                                ? scheme.primary
-                                : scheme.onSurface.withValues(alpha: 0.55),
-                            size: 22,
+                child: Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: () => onTap(index),
+                    borderRadius: BorderRadius.circular(20),
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 200),
+                      curve: Curves.easeInOutCubic,
+                      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+                      decoration: BoxDecoration(
+                        color: selected
+                            ? scheme.primaryContainer.withValues(alpha: isDark ? 1 : 0.8)
+                            : Colors.transparent,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          AnimatedScale(
+                            duration: const Duration(milliseconds: 200),
+                            curve: Curves.easeInOutCubic,
+                            scale: selected ? 1.1 : 1.0,
+                            child: Icon(
+                              item.icon,
+                              color: selected
+                                  ? scheme.primary
+                                  : scheme.onSurface.withValues(alpha: 0.6),
+                              size: 24,
+                            ),
                           ),
-                        ),
-                        const SizedBox(height: 4),
-                        AnimatedDefaultTextStyle(
-                          duration: const Duration(milliseconds: 180),
-                          style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                                color: selected
-                                    ? scheme.primary
-                                    : scheme.onSurface.withValues(alpha: 0.55),
-                                fontWeight:
-                                    selected ? FontWeight.w700 : FontWeight.w500,
-                                fontSize: 12,
-                              ),
-                          child: Text(
-                            item.label,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
+                          const SizedBox(height: 4),
+                          AnimatedDefaultTextStyle(
+                            duration: const Duration(milliseconds: 200),
+                            style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                                  color: selected
+                                      ? scheme.primary
+                                      : scheme.onSurface.withValues(alpha: 0.6),
+                                  fontWeight: selected
+                                      ? FontWeight.w700
+                                      : FontWeight.w500,
+                                  fontSize: 11,
+                                  letterSpacing: 0.2,
+                                ),
+                            child: Text(
+                              item.label,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              textAlign: TextAlign.center,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -120,10 +133,10 @@ class BottomNav extends StatelessWidget {
     );
   }
 }
-
 class _NavItem {
   const _NavItem({required this.icon, required this.label});
 
   final IconData icon;
   final String label;
 }
+

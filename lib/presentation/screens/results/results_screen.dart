@@ -33,7 +33,10 @@ class ResultsScreen extends StatelessWidget {
             children: [
               Expanded(
                 child: OutlinedButton(
-                  onPressed: () => context.go('/home'),
+                  onPressed: () {
+                    // Navigate to home, replacing current screen to allow back button to work properly
+                    context.pushReplacement('/home');
+                  },
                   child: Text('results.backHome'.tr()),
                 ),
               ),
@@ -50,7 +53,10 @@ class ResultsScreen extends StatelessWidget {
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
-              onPressed: () => context.go('/exam'),
+              onPressed: () {
+                // Navigate to exam screen, replacing current screen
+                context.pushReplacement('/exam');
+              },
               child: Text('exam.tryAgain'.tr()),
             ),
           ),

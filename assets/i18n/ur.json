@@ -58,9 +58,9 @@
     "learnSignsDesc": "اہم نشانیاں سمجھیں",
     "learnRules": "قواعد و ضوابط",
     "learnRulesDesc": "بنیادی قواعد سیکھیں",
-    "practice": "??? ???",
+    "practice": "پریکٹس",
     "practiceDesc": "مختصر سوالات کی مشق",
-    "mockExam": "???? ??????",
+    "mockExam": "نمونہ امتحان",
     "mockExamDesc": "اصل انداز کی مشق",
     "practiceByCategory": "زمرہ وار مشق",
     "practiceByCategoryDesc": "موضوع بہ موضوع سیکھیں",
@@ -1161,6 +1161,8 @@
     },
     "sound": "آواز کے اثرات",
     "vibration": "وائبریشن",
+    "ads": "اشتہارات دکھائیں",
+    "adsDesc": "اشتہارات اختیاری ہیں اور ترقی میں مدد کرتے ہیں۔",
     "removeAds": "اشتہارات ہٹائیں",
     "restorePurchase": "خریداری بحال کریں",
     "privacy": "رازداری کی پالیسی",
@@ -1533,10 +1535,10 @@
     "title": "آپ کی خالی ایپ میں خوش آمدید",
     "subtitle": "اپنا شاندار پروجیکٹ یہیں سے بنانا شروع کریں!"
   },
-  "common.questionOf": "???? {current} ?? {total}",
-  "common.bookmark": "?? ????",
-  "exam.flag": "???? ?? ???? ?? ????",
-  "exam.exitTitle": "?????? ??? ?????",
-  "exam.exitMessage": "?? ?? ??? ??? ???? ?? ???? ??? ??? ?? ???? ???? ????? ????",
-  "exam.exitConfirm": "???? ?????"
+  "common.questionOf": "سوال {current} از {total}",
+  "common.bookmark": "بک مارک",
+  "exam.flag": "جائزہ کے لیے نشان لگائیں",
+  "exam.exitTitle": "امتحان سے باہر جائیں؟",
+  "exam.exitMessage": "آپ کی پیش رفت ضائع ہو جائے گی۔ کیا آپ باہر جانا چاہتے ہیں؟",
+  "exam.exitConfirm": "باہر جائیں"
 }

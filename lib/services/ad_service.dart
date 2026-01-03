@@ -9,15 +9,21 @@ class AdService {
 
   static const String testBannerId = 'ca-app-pub-3940256099942544/6300978111';
   static const String testRewardedId = 'ca-app-pub-3940256099942544/5224354917';
+  bool _initialized = false;
 
   Future<void> init() async {
+    if (_initialized) return;
     await MobileAds.instance.initialize();
+    _initialized = true;
   }
 
-  BannerAd createBanner() {
+  BannerAd? createBanner() {
+    if (!_initialized) return null;
+    const bannerId = kReleaseMode ? '' : testBannerId;
+    if (bannerId.isEmpty) return null;
     return BannerAd(
       size: AdSize.banner,
-      adUnitId: testBannerId,
+      adUnitId: bannerId,
       listener: const BannerAdListener(),
       request: const AdRequest(),
     );
@@ -27,10 +33,13 @@ class AdService {
   bool _loadingRewarded = false;
 
   Future<void> loadRewarded() async {
+    if (!_initialized) return;
     if (_loadingRewarded) return;
+    const rewardedId = kReleaseMode ? '' : testRewardedId;
+    if (rewardedId.isEmpty) return;
     _loadingRewarded = true;
     await RewardedAd.load(
-      adUnitId: testRewardedId,
+      adUnitId: rewardedId,
       request: const AdRequest(),
       rewardedAdLoadCallback: RewardedAdLoadCallback(
         onAdLoaded: (ad) {
@@ -46,6 +55,7 @@ class AdService {
   }
 
   Future<bool> showRewarded({required VoidCallback onReward}) async {
+    if (!_initialized) return false;
     final ad = _rewarded;
     if (ad == null) return false;
     final completer = Completer<bool>();

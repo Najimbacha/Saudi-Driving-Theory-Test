@@ -1180,6 +1180,8 @@
     },
     "sound": "Sound Effects",
     "vibration": "Vibration",
+    "ads": "Show ads",
+    "adsDesc": "Ads are optional and help support development.",
     "removeAds": "Remove Ads",
     "restorePurchase": "Restore Purchase",
     "privacy": "Privacy Policy",

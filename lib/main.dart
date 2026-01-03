@@ -11,7 +11,10 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
   final prefs = await SharedPreferences.getInstance();
-  await AdService.instance.init();
+  final adsEnabled = prefs.getBool('adsEnabled') ?? false;
+  if (adsEnabled) {
+    await AdService.instance.init();
+  }
 
   runApp(
     ProviderScope(

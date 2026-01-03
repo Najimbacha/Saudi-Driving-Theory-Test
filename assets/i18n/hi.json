@@ -58,9 +58,9 @@
     "learnSignsDesc": "सभी ट्रैफिक संकेत सीखें",
     "learnRules": "नियम और विनियम",
     "learnRulesDesc": "सड़क नियम और सुरक्षा",
-    "practice": "?????? ??????",
+    "practice": "अभ्यास",
     "practiceDesc": "अपना ज्ञान परखें",
-    "mockExam": "??? ???????",
+    "mockExam": "मॉक परीक्षा",
     "mockExamDesc": "पूरा थ्योरी अभ्यास",
     "practiceByCategory": "श्रेणी के अनुसार अभ्यास",
     "practiceByCategoryDesc": "विषयवार सीखें",
@@ -1161,6 +1161,8 @@
     },
     "sound": "ध्वनि प्रभाव",
     "vibration": "कंपन",
+    "ads": "विज्ञापन दिखाएं",
+    "adsDesc": "विज्ञापन वैकल्पिक हैं और विकास में मदद करते हैं।",
     "removeAds": "विज्ञापन हटाएं",
     "restorePurchase": "खरीदारी पुनर्स्थापित करें",
     "privacy": "गोपनीयता नीति",
@@ -1533,10 +1535,10 @@
     "title": "आपके खाली ऐप में स्वागत है",
     "subtitle": "अपना शानदार प्रोजेक्ट यहीं से बनाना शुरू करें!"
   },
-  "common.questionOf": "?????? {current} ??? ?? {total}",
-  "common.bookmark": "????????",
-  "exam.flag": "?????? ?? ??????? ????",
-  "exam.exitTitle": "??????? ?? ???? ???????",
-  "exam.exitMessage": "???? ?????? ?? ?????? ???? ?? ???? ?????? ????? ????",
-  "exam.exitConfirm": "???? ??????"
+  "common.questionOf": "प्रश्न {current} / {total}",
+  "common.bookmark": "बुकमार्क",
+  "exam.flag": "समीक्षा के लिए चिह्नित करें",
+  "exam.exitTitle": "परीक्षा छोड़ें?",
+  "exam.exitMessage": "आपकी प्रगति खो जाएगी। क्या आप बाहर निकलना चाहते हैं?",
+  "exam.exitConfirm": "बाहर निकलें"
 }

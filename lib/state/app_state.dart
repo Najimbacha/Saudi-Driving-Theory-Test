@@ -81,6 +81,7 @@ class AppSettingsState {
     required this.stats,
     required this.soundEnabled,
     required this.vibrationEnabled,
+    required this.adsEnabled,
   });
 
   final String languageCode;
@@ -90,6 +91,7 @@ class AppSettingsState {
   final AppStats stats;
   final bool soundEnabled;
   final bool vibrationEnabled;
+  final bool adsEnabled;
 
   AppSettingsState copyWith({
     String? languageCode,
@@ -99,6 +101,7 @@ class AppSettingsState {
     AppStats? stats,
     bool? soundEnabled,
     bool? vibrationEnabled,
+    bool? adsEnabled,
   }) {
     return AppSettingsState(
       languageCode: languageCode ?? this.languageCode,
@@ -108,6 +111,7 @@ class AppSettingsState {
       stats: stats ?? this.stats,
       soundEnabled: soundEnabled ?? this.soundEnabled,
       vibrationEnabled: vibrationEnabled ?? this.vibrationEnabled,
+      adsEnabled: adsEnabled ?? this.adsEnabled,
     );
   }
 }
@@ -123,6 +127,7 @@ class AppSettingsNotifier extends StateNotifier<AppSettingsState> {
             stats: _loadStats(_prefs),
             soundEnabled: _prefs.getString('soundEnabled') != 'false',
             vibrationEnabled: _prefs.getString('vibrationEnabled') != 'false',
+            adsEnabled: _prefs.getBool('adsEnabled') ?? false,
           ),
         );
 
@@ -203,6 +208,11 @@ class AppSettingsNotifier extends StateNotifier<AppSettingsState> {
   void setVibrationEnabled(bool enabled) {
     _prefs.setString('vibrationEnabled', enabled.toString());
     state = state.copyWith(vibrationEnabled: enabled);
+  }
+
+  void setAdsEnabled(bool enabled) {
+    _prefs.setBool('adsEnabled', enabled);
+    state = state.copyWith(adsEnabled: enabled);
   }
 
   void toggleFavorite({required String type, required String id}) {

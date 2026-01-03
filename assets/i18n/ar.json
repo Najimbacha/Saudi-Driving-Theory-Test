@@ -58,9 +58,9 @@
     "learnSignsDesc": "Learn all traffic signs",
     "learnRules": "Rules & Regulations",
     "learnRulesDesc": "Road rules and safety",
-    "practice": "????? ????",
+    "practice": "تدريب",
     "practiceDesc": "Test your knowledge",
-    "mockExam": "?????? ??????",
+    "mockExam": "اختبار تجريبي",
     "mockExamDesc": "Full theory practice",
     "practiceByCategory": "التدرب حسب الفئة",
     "practiceByCategoryDesc": "تعلم موضوعاً تلو الآخر",
@@ -162,7 +162,7 @@
     },
     "showing": "عرض {from}-{to} من أصل {total} إشارة",
     "practiceCategory": "تدرّب على هذه الفئة",
-    "page": "طµظپط­ط© {current} / {total}",
+    "page": "الصفحة {current} / {total}",
     "mastery": {
       "new": "جديد",
       "learning": "يتعلم",
@@ -1161,6 +1161,8 @@
     },
     "sound": "المؤثرات الصوتية",
     "vibration": "الاهتزاز",
+    "ads": "عرض الإعلانات",
+    "adsDesc": "الإعلانات اختيارية وتدعم التطوير.",
     "removeAds": "إزالة الإعلانات",
     "restorePurchase": "استعادة الشراء",
     "privacy": "سياسة الخصوصية",
@@ -1533,10 +1535,10 @@
     "title": "مرحباً بك في تطبيقك الفارغ",
     "subtitle": "ابدأ ببناء مشروعك الرائع هنا!"
   },
-  "common.questionOf": "?????? {current} ?? {total}",
-  "common.bookmark": "????? ??????",
-  "exam.flag": "??? ????? ??? ??????",
-  "exam.exitTitle": "?? ???? ????? ?????????",
-  "exam.exitMessage": "???? ????? ?????. ?? ???? ???????",
-  "exam.exitConfirm": "????"
+  "common.questionOf": "السؤال {current} من {total}",
+  "common.bookmark": "إشارة مرجعية",
+  "exam.flag": "وضع علامة للمراجعة",
+  "exam.exitTitle": "الخروج من الاختبار؟",
+  "exam.exitMessage": "سيتم فقدان تقدمك. هل تريد الخروج؟",
+  "exam.exitConfirm": "خروج"
 }

@@ -133,7 +133,41 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
         final isCorrect = selected != null && selected == current.correctIndex;
         final questionText = _questionText(current, locale);
         final options = _options(current, locale);
-        return Scaffold(
+        final isActiveQuiz = quiz.questions.isNotEmpty && !quiz.isCompleted;
+        return PopScope(
+          canPop: !isActiveQuiz,
+          onPopInvokedWithResult: (didPop, _) async {
+            if (didPop) return;
+            if (!isActiveQuiz) {
+              if (context.mounted) {
+                Navigator.of(context).pop();
+              }
+              return;
+            }
+            // Confirm exit during active quiz
+            final shouldExit = await showDialog<bool>(
+              context: context,
+              builder: (context) => AlertDialog(
+                title: Text('exam.exitTitle'.tr()),
+                content: Text('exam.exitMessage'.tr()),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.of(context).pop(false),
+                    child: Text('common.cancel'.tr()),
+                  ),
+                  TextButton(
+                    onPressed: () => Navigator.of(context).pop(true),
+                    child: Text('exam.exitConfirm'.tr()),
+                  ),
+                ],
+              ),
+            );
+            if (shouldExit == true && context.mounted) {
+              quizController.reset();
+              Navigator.of(context).pop();
+            }
+          },
+          child: Scaffold(
           appBar: AppBar(
             title: Text('quiz.title'.tr()),
             actions: [
@@ -287,21 +321,49 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
                     children: [
                       Expanded(
                         child: OutlinedButton(
-                          onPressed: quiz.currentIndex == 0
-                              ? null
-                              : () => quizController.reset(),
+                          onPressed: () {
+                            if (quiz.questions.isNotEmpty && !quiz.isCompleted) {
+                              // Confirm exit
+                              showDialog<bool>(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  title: Text('exam.exitTitle'.tr()),
+                                  content: Text('exam.exitMessage'.tr()),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () => Navigator.of(context).pop(false),
+                                      child: Text('common.cancel'.tr()),
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop(true);
+                                      },
+                                      child: Text('exam.exitConfirm'.tr()),
+                                    ),
+                                  ],
+                                ),
+                              ).then((shouldExit) {
+                                if (shouldExit == true && context.mounted) {
+                                  quizController.reset();
+                                  Navigator.of(context).pop();
+                                }
+                              });
+                            } else {
+                              // No active quiz, just go back
+                              Navigator.of(context).pop();
+                            }
+                          },
                           child: Text('common.cancel'.tr()),
                         ),
                       ),
                       const SizedBox(width: 12),
                       Expanded(
                         child: ElevatedButton(
-                          onPressed: () {
-                            if (!quiz.showAnswer) {
-                              return;
-                            }
-                            quizController.next();
-                          },
+                          onPressed: quiz.showAnswer
+                              ? () {
+                                  quizController.next();
+                                }
+                              : null,
                           child: Text(
                             quiz.currentIndex + 1 == quiz.questions.length
                                 ? 'quiz.submit'.tr()
@@ -315,7 +377,8 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
               ],
             ),
           ),
-        );
+        ),
+      );
       },
     );
   }
