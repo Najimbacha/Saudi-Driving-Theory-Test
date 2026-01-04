@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 import '../../../core/constants/app_colors.dart';
 import '../../../core/theme/modern_theme.dart';
@@ -91,8 +92,8 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
                       child: Text(
                         'Error: $error\n\nPlease ensure assets/data/ directory contains valid question JSON files.',
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          fontFamily: 'monospace',
-                        ),
+                              fontFamily: 'monospace',
+                            ),
                       ),
                     ),
                   ],
@@ -108,7 +109,7 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
         }
         if (quiz.questions.isEmpty) {
           // ... (Logic for category selection remains mostly same, just styled)
-           if (categoryParam != null && !_initialCategoryHandled) {
+          if (categoryParam != null && !_initialCategoryHandled) {
             _initialCategoryHandled = true;
             final filtered = _filterByCategory(questions, categoryParam);
             final availableCategories = categories
@@ -171,7 +172,7 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
             },
           );
         }
-        
+
         if (quiz.isCompleted) {
           if (!_handledCompletion) {
             _handledCompletion = true;
@@ -187,26 +188,31 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
         final signMap = signsAsync.valueOrNull == null
             ? <String, String>{}
             : {for (final s in signsAsync.valueOrNull!) s.id: s.svgPath};
-        final signPath = current.signId != null ? signMap[current.signId!] : null;
+        final signPath =
+            current.signId != null ? signMap[current.signId!] : null;
         final locale = context.locale.languageCode;
         final selected = quiz.selectedAnswers[current.id];
         final isCorrect = selected != null && selected == current.correctIndex;
         final questionText = _questionText(current, locale);
         final options = _options(current, locale);
         final isActiveQuiz = quiz.questions.isNotEmpty && !quiz.isCompleted;
-        final isDark = Theme.of(context).brightness == Brightness.dark;
+        const isDark = true;
+        const primaryTextColor = Colors.white;
+        const secondaryTextColor = Colors.white70;
+        final defaultFill = Colors.white.withValues(alpha: 0.06);
+        final subtleFill = Colors.white.withValues(alpha: 0.04);
 
         return PopScope(
           canPop: false,
           onPopInvokedWithResult: (didPop, _) async {
             if (didPop) return;
-            
+
             final shell = TabShellScope.maybeOf(context);
             if (!isActiveQuiz) {
               if (shell != null) {
                 shell.value = 0;
               } else {
-                 if (context.mounted) Navigator.of(context).pop();
+                if (context.mounted) Navigator.of(context).pop();
               }
               return;
             }
@@ -214,17 +220,23 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
             final shouldExit = await showDialog<bool>(
               context: context,
               builder: (context) => AlertDialog(
-                backgroundColor: isDark ? ModernTheme.surface : Colors.white,
-                title: Text('exam.exitTitle'.tr(), style: GoogleFonts.outfit(fontWeight: FontWeight.bold)),
-                content: Text('exam.exitMessage'.tr(), style: GoogleFonts.outfit()),
+                backgroundColor: const Color(0xFF1E293B),
+                title: Text('exam.exitTitle'.tr(),
+                    style: GoogleFonts.outfit(
+                        fontWeight: FontWeight.bold, color: Colors.white)),
+                content: Text('exam.exitMessage'.tr(),
+                    style: GoogleFonts.outfit(color: Colors.white70)),
                 actions: [
                   TextButton(
                     onPressed: () => Navigator.of(context).pop(false),
-                    child: Text('common.cancel'.tr(), style: GoogleFonts.outfit(color: ModernTheme.tertiary)),
+                    child: Text('common.cancel'.tr(),
+                        style: GoogleFonts.outfit(color: Colors.white54)),
                   ),
                   TextButton(
                     onPressed: () => Navigator.of(context).pop(true),
-                    child: Text('exam.exitConfirm'.tr(), style: GoogleFonts.outfit(color: ModernTheme.secondary)),
+                    child: Text('exam.exitConfirm'.tr(),
+                        style:
+                            GoogleFonts.outfit(color: ModernTheme.secondary)),
                   ),
                 ],
               ),
@@ -245,8 +257,9 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
               elevation: 0,
               iconTheme: const IconThemeData(color: Colors.white),
               title: Text(
-                'quiz.title'.tr(), 
-                style: GoogleFonts.outfit(fontWeight: FontWeight.bold, color: Colors.white),
+                'quiz.title'.tr(),
+                style: GoogleFonts.outfit(
+                    fontWeight: FontWeight.bold, color: primaryTextColor),
               ),
               centerTitle: true,
               actions: [
@@ -256,7 +269,8 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
                   onTap: () {
                     final settings = ref.read(appSettingsProvider);
                     if (settings.vibrationEnabled) HapticFeedback.lightImpact();
-                    if (settings.soundEnabled) SystemSound.play(SystemSoundType.click);
+                    if (settings.soundEnabled)
+                      SystemSound.play(SystemSoundType.click);
                     ref.read(appSettingsProvider.notifier).toggleFavorite(
                           type: 'questions',
                           id: current.id,
@@ -266,24 +280,29 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
               ],
             ),
             body: Container(
-              decoration: BoxDecoration(
-                gradient: isDark ? ModernTheme.darkGradient : ModernTheme.lightGradient,
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Color(0xFF0F172A), Color(0xFF1E293B)],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                ),
               ),
               child: SafeArea(
                 child: Column(
                   children: [
                     // Progress Header
                     Padding(
-                      padding: const EdgeInsetsDirectional.fromSTEB(20, 10, 20, 10),
+                      padding:
+                          const EdgeInsetsDirectional.fromSTEB(20, 10, 20, 10),
                       child: Column(
                         children: [
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                               Text(
+                              Text(
                                 '${'quiz.question'.tr()} ${quiz.currentIndex + 1}/${quiz.questions.length}',
                                 style: GoogleFonts.outfit(
-                                  color: Colors.white70,
+                                  color: secondaryTextColor,
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
@@ -300,7 +319,8 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
                           ClipRRect(
                             borderRadius: BorderRadius.circular(10),
                             child: LinearProgressIndicator(
-                              value: (quiz.currentIndex + 1) / quiz.questions.length,
+                              value: (quiz.currentIndex + 1) /
+                                  quiz.questions.length,
                               backgroundColor: Colors.white10,
                               color: ModernTheme.primary,
                               minHeight: 6,
@@ -313,7 +333,8 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
                     // Scrollable Content
                     Expanded(
                       child: ListView(
-                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 10),
                         children: [
                           // Question Text
                           AnimatedSwitcher(
@@ -324,7 +345,7 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
                               style: GoogleFonts.outfit(
                                 fontSize: 22, // Larger text
                                 fontWeight: FontWeight.w600,
-                                color: Theme.of(context).colorScheme.onSurface,
+                                color: Colors.white,
                                 height: 1.3,
                               ),
                             ),
@@ -354,52 +375,87 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
                               children: List.generate(options.length, (idx) {
                                 final optionText = options[idx];
                                 final wasSelected = selected == idx;
-                                Color borderColor = Colors.transparent;
+                                Color borderColor = Colors.white10;
                                 Color? fillColor;
-                                
+                                List<BoxShadow> shadow = const [];
+
                                 if (quiz.showAnswer) {
                                   if (idx == current.correctIndex) {
-                                    fillColor = AppColors.success.withValues(alpha: 0.2);
+                                    fillColor = AppColors.success
+                                        .withValues(alpha: 0.18);
                                     borderColor = AppColors.success;
+                                    shadow = [
+                                      BoxShadow(
+                                        color: AppColors.success
+                                            .withValues(alpha: 0.2),
+                                        blurRadius: 8,
+                                        offset: const Offset(0, 4),
+                                      )
+                                    ];
                                   } else if (wasSelected) {
-                                    fillColor = AppColors.error.withValues(alpha: 0.2);
+                                    fillColor =
+                                        AppColors.error.withValues(alpha: 0.18);
                                     borderColor = AppColors.error;
+                                    shadow = [
+                                      BoxShadow(
+                                        color: AppColors.error
+                                            .withValues(alpha: 0.2),
+                                        blurRadius: 8,
+                                        offset: const Offset(0, 4),
+                                      )
+                                    ];
                                   } else {
-                                     fillColor = Colors.white.withValues(alpha: 0.03);
+                                    fillColor = subtleFill;
+                                    borderColor = Colors.white10;
                                   }
                                 } else {
-                                  fillColor = Colors.white.withValues(alpha: 0.05);
+                                  fillColor = defaultFill;
+                                  borderColor = Colors.white10;
                                 }
 
                                 return Padding(
                                   padding: const EdgeInsets.only(bottom: 12),
-                                    child: GestureDetector(
+                                  child: GestureDetector(
                                     onTap: quiz.showAnswer
                                         ? null
                                         : () {
-                                            final settings = ref.read(appSettingsProvider);
-                                            if (settings.vibrationEnabled) HapticFeedback.lightImpact();
-                                            if (settings.soundEnabled) SystemSound.play(SystemSoundType.click);
+                                            final settings =
+                                                ref.read(appSettingsProvider);
+                                            if (settings.vibrationEnabled)
+                                              HapticFeedback.lightImpact();
+                                            if (settings.soundEnabled)
+                                              SystemSound.play(
+                                                  SystemSoundType.click);
                                             quizController.selectAnswer(idx);
                                           },
                                     child: AnimatedContainer(
-                                      duration: const Duration(milliseconds: 200),
+                                      duration:
+                                          const Duration(milliseconds: 200),
                                       decoration: BoxDecoration(
                                         color: fillColor,
                                         borderRadius: BorderRadius.circular(16),
                                         border: Border.all(
                                           color: borderColor,
-                                          width: (borderColor != Colors.transparent) ? 2 : 1,
+                                          width: (borderColor !=
+                                                  Colors.transparent)
+                                              ? 2
+                                              : 1,
                                         ),
+                                        boxShadow: shadow,
                                       ),
                                       padding: const EdgeInsets.all(16),
                                       child: Row(
                                         children: [
                                           _OptionBadge(
-                                            label: String.fromCharCode(65 + idx),
+                                            label:
+                                                String.fromCharCode(65 + idx),
                                             active: wasSelected,
-                                            success: quiz.showAnswer && idx == current.correctIndex,
-                                            error: quiz.showAnswer && wasSelected && idx != current.correctIndex,
+                                            success: quiz.showAnswer &&
+                                                idx == current.correctIndex,
+                                            error: quiz.showAnswer &&
+                                                wasSelected &&
+                                                idx != current.correctIndex,
+                                            isDark: isDark,
                                           ),
                                           const SizedBox(width: 16),
                                           Expanded(
@@ -407,14 +463,21 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
                                               optionText,
                                               style: GoogleFonts.outfit(
                                                 fontSize: 16,
-                                                color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.9),
+                                                color: Colors.white
+                                                    .withValues(alpha: 0.9),
                                               ),
                                             ),
                                           ),
-                                          if (quiz.showAnswer && idx == current.correctIndex)
-                                            const Icon(Icons.check_circle_rounded, color: AppColors.success),
-                                          if (quiz.showAnswer && wasSelected && idx != current.correctIndex)
-                                            const Icon(Icons.cancel_rounded, color: AppColors.error),
+                                          if (quiz.showAnswer &&
+                                              idx == current.correctIndex)
+                                            const Icon(
+                                                Icons.check_circle_rounded,
+                                                color: AppColors.success),
+                                          if (quiz.showAnswer &&
+                                              wasSelected &&
+                                              idx != current.correctIndex)
+                                            const Icon(Icons.cancel_rounded,
+                                                color: AppColors.error),
                                         ],
                                       ),
                                     ),
@@ -423,29 +486,41 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
                               }),
                             ),
                           ),
-                          
+
                           // Explanation
                           if (quiz.showAnswer) ...[
                             const SizedBox(height: 20),
                             GlassContainer(
-                              color: (isCorrect ? AppColors.success : AppColors.error).withValues(alpha: 0.1),
-                              border: Border.all(color: (isCorrect ? AppColors.success : AppColors.error).withValues(alpha: 0.3)),
+                              color: (isCorrect
+                                      ? AppColors.success
+                                      : AppColors.error)
+                                  .withValues(alpha: 0.1),
+                              border: Border.all(
+                                  color: (isCorrect
+                                          ? AppColors.success
+                                          : AppColors.error)
+                                      .withValues(alpha: 0.3)),
                               padding: const EdgeInsets.all(16),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    isCorrect ? 'quiz.correct'.tr() : 'quiz.incorrect'.tr(),
+                                    isCorrect
+                                        ? 'quiz.correct'.tr()
+                                        : 'quiz.incorrect'.tr(),
                                     style: GoogleFonts.outfit(
                                       fontWeight: FontWeight.bold,
-                                      color: isCorrect ? AppColors.success : AppColors.error,
+                                      color: isCorrect
+                                          ? AppColors.success
+                                          : AppColors.error,
                                       fontSize: 18,
                                     ),
                                   ),
                                   const SizedBox(height: 8),
                                   Text(
                                     _explanation(current, locale),
-                                    style: GoogleFonts.outfit(color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7)),
+                                    style: GoogleFonts.outfit(
+                                        color: Colors.white70),
                                   ),
                                 ],
                               ),
@@ -458,7 +533,8 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
 
                     // Actions
                     GlassContainer(
-                      borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+                      borderRadius:
+                          const BorderRadius.vertical(top: Radius.circular(24)),
                       color: Colors.black.withValues(alpha: 0.2),
                       blur: 10,
                       padding: const EdgeInsets.all(20),
@@ -467,37 +543,71 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
                           Expanded(
                             child: OutlinedButton(
                               style: OutlinedButton.styleFrom(
-                                side: const BorderSide(color: Colors.white24),
-                                foregroundColor: Colors.white,
-                                padding: const EdgeInsets.symmetric(vertical: 16),
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                                side:
+                                    const BorderSide(color: Colors.white24),
+                                foregroundColor: primaryTextColor,
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 16),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(16)),
                               ),
                               onPressed: () {
                                 // Logic remains same
-                                if (quiz.questions.isNotEmpty && !quiz.isCompleted) {
-                                   // ... Confirm exit logic
-                                   showDialog<bool>(
-                                      context: context,
-                                      builder: (context) => AlertDialog(
-                                        backgroundColor: isDark ? ModernTheme.surface : Colors.white,
-                                        title: Text('exam.exitTitle'.tr(), style: GoogleFonts.outfit(fontWeight: FontWeight.bold)),
-                                        content: Text('exam.exitMessage'.tr(), style: GoogleFonts.outfit()),
-                                        actions: [
-                                          TextButton(onPressed: () => Navigator.of(context).pop(false), child: Text('common.cancel'.tr(), style: GoogleFonts.outfit(color: Colors.white70))),
-                                          TextButton(onPressed: () => Navigator.of(context).pop(true), child: Text('exam.exitConfirm'.tr(), style: GoogleFonts.outfit(color: ModernTheme.secondary))),
-                                        ],
-                                      ),
-                                    ).then((shouldExit) {
-                                      if (shouldExit == true && context.mounted) {
-                                        quizController.reset();
+                                if (quiz.questions.isNotEmpty &&
+                                    !quiz.isCompleted) {
+                                  // ... Confirm exit logic
+                                  showDialog<bool>(
+                                    context: context,
+                                    builder: (context) => AlertDialog(
+                                      backgroundColor:
+                                          const Color(0xFF1E293B),
+                                      title: Text('exam.exitTitle'.tr(),
+                                          style: GoogleFonts.outfit(
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.white)),
+                                      content: Text('exam.exitMessage'.tr(),
+                                          style: GoogleFonts.outfit(
+                                              color: Colors.white70)),
+                                      actions: [
+                                        TextButton(
+                                            onPressed: () =>
+                                                Navigator.of(context)
+                                                    .pop(false),
+                                            child: Text('common.cancel'.tr(),
+                                                style: GoogleFonts.outfit(
+                                                    color: Colors.white54))),
+                                        TextButton(
+                                            onPressed: () =>
+                                                Navigator.of(context).pop(true),
+                                            child: Text('exam.exitConfirm'.tr(),
+                                                style: GoogleFonts.outfit(
+                                                    color: ModernTheme
+                                                        .secondary))),
+                                      ],
+                                    ),
+                                  ).then((shouldExit) {
+                                    if (shouldExit == true && context.mounted) {
+                                      quizController.reset();
+                                      final shell =
+                                          TabShellScope.maybeOf(context);
+                                      if (shell != null) {
+                                        shell.value = 0;
+                                      } else {
                                         Navigator.of(context).pop();
                                       }
-                                    });
+                                    }
+                                  });
                                 } else {
-                                  Navigator.of(context).pop();
+                                  final shell = TabShellScope.maybeOf(context);
+                                  if (shell != null) {
+                                    shell.value = 0;
+                                  } else {
+                                    Navigator.of(context).pop();
+                                  }
                                 }
                               },
-                              child: Text('common.cancel'.tr(), style: GoogleFonts.outfit()),
+                              child: Text('common.cancel'.tr(),
+                                  style: GoogleFonts.outfit()),
                             ),
                           ),
                           const SizedBox(width: 16),
@@ -506,16 +616,36 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: ModernTheme.primary,
                                 foregroundColor: Colors.white,
-                                padding: const EdgeInsets.symmetric(vertical: 16),
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 16),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(16)),
                                 elevation: 8,
-                                shadowColor: ModernTheme.primary.withValues(alpha: 0.5),
+                                shadowColor:
+                                    ModernTheme.primary.withValues(alpha: 0.5),
+                              ).copyWith(
+                                backgroundColor:
+                                    MaterialStateProperty.resolveWith((states) {
+                                  if (states.contains(MaterialState.disabled))
+                                    return ModernTheme.primary
+                                        .withOpacity(0.45);
+                                  return ModernTheme.primary;
+                                }),
+                                foregroundColor:
+                                    MaterialStateProperty.resolveWith((states) {
+                                  if (states.contains(MaterialState.disabled))
+                                    return Colors.white60;
+                                  return Colors.white;
+                                }),
                               ),
                               onPressed: quiz.showAnswer
                                   ? () {
-                                      final settings = ref.read(appSettingsProvider);
-                                      if (settings.vibrationEnabled) HapticFeedback.lightImpact();
-                                      if (settings.soundEnabled) SystemSound.play(SystemSoundType.click);
+                                      final settings =
+                                          ref.read(appSettingsProvider);
+                                      if (settings.vibrationEnabled)
+                                        HapticFeedback.lightImpact();
+                                      if (settings.soundEnabled)
+                                        SystemSound.play(SystemSoundType.click);
                                       quizController.next();
                                     }
                                   : null,
@@ -523,7 +653,8 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
                                 quiz.currentIndex + 1 == quiz.questions.length
                                     ? 'quiz.submit'.tr()
                                     : 'common.next'.tr(),
-                                style: GoogleFonts.outfit(fontWeight: FontWeight.bold, fontSize: 16),
+                                style: GoogleFonts.outfit(
+                                    fontWeight: FontWeight.bold, fontSize: 16),
                               ),
                             ),
                           ),
@@ -555,7 +686,7 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
       wrongAnswers: wrong,
       skippedAnswers: 0,
       scorePercentage: total == 0 ? 0 : (correct / total) * 100,
-      passed: correct / total >= 0.7,
+      passed: total == 0 ? false : correct / total >= 0.7,
       timeTakenSeconds: DateTime.now().difference(quiz.startedAt).inSeconds,
       categoryScores: _categoryScores(quiz),
       questionAnswers: quiz.selectedAnswers.entries
@@ -594,10 +725,18 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
 // ... (Helper functions for _questionText, _options, _explanation - Keep exact same logic)
 String _questionText(Question question, String locale) {
   switch (locale) {
-    case 'ar': if (question.questionTextAr != null) return question.questionTextAr!; break;
-    case 'ur': if (question.questionTextUr != null) return question.questionTextUr!; break;
-    case 'hi': if (question.questionTextHi != null) return question.questionTextHi!; break;
-    case 'bn': if (question.questionTextBn != null) return question.questionTextBn!; break;
+    case 'ar':
+      if (question.questionTextAr != null) return question.questionTextAr!;
+      break;
+    case 'ur':
+      if (question.questionTextUr != null) return question.questionTextUr!;
+      break;
+    case 'hi':
+      if (question.questionTextHi != null) return question.questionTextHi!;
+      break;
+    case 'bn':
+      if (question.questionTextBn != null) return question.questionTextBn!;
+      break;
   }
   if (question.questionText != null) return question.questionText!;
   return question.questionKey.tr();
@@ -606,22 +745,39 @@ String _questionText(Question question, String locale) {
 List<String> _options(Question question, String locale) {
   List<String>? localeOptions;
   switch (locale) {
-    case 'ar': localeOptions = question.optionsAr; break;
-    case 'ur': localeOptions = question.optionsUr; break;
-    case 'hi': localeOptions = question.optionsHi; break;
-    case 'bn': localeOptions = question.optionsBn; break;
+    case 'ar':
+      localeOptions = question.optionsAr;
+      break;
+    case 'ur':
+      localeOptions = question.optionsUr;
+      break;
+    case 'hi':
+      localeOptions = question.optionsHi;
+      break;
+    case 'bn':
+      localeOptions = question.optionsBn;
+      break;
   }
   if (localeOptions != null && localeOptions.isNotEmpty) return localeOptions;
-  if (question.options != null && question.options!.isNotEmpty) return question.options!;
+  if (question.options != null && question.options!.isNotEmpty)
+    return question.options!;
   return question.optionsKeys.map((key) => key.tr()).toList();
 }
 
 String _explanation(Question question, String locale) {
   switch (locale) {
-    case 'ar': if (question.explanationAr != null) return question.explanationAr!; break;
-    case 'ur': if (question.explanationUr != null) return question.explanationUr!; break;
-    case 'hi': if (question.explanationHi != null) return question.explanationHi!; break;
-    case 'bn': if (question.explanationBn != null) return question.explanationBn!; break;
+    case 'ar':
+      if (question.explanationAr != null) return question.explanationAr!;
+      break;
+    case 'ur':
+      if (question.explanationUr != null) return question.explanationUr!;
+      break;
+    case 'hi':
+      if (question.explanationHi != null) return question.explanationHi!;
+      break;
+    case 'bn':
+      if (question.explanationBn != null) return question.explanationBn!;
+      break;
   }
   if (question.explanation != null) return question.explanation!;
   return question.explanationKey?.tr() ?? 'quiz.explanationFallback'.tr();
@@ -646,112 +802,205 @@ class _PracticeSelector extends StatefulWidget {
 class _PracticeSelectorState extends State<_PracticeSelector> {
   String _selectedId = 'all';
 
+  static IconData _iconForCategoryId(String id) {
+    switch (id) {
+      case 'all':
+        return PhosphorIconsRegular.gridFour;
+      case 'signs':
+        return PhosphorIconsRegular.trafficSign;
+      case 'rules':
+        return PhosphorIconsRegular.gavel;
+      case 'safety':
+        return PhosphorIconsRegular.shieldCheck;
+      case 'signals':
+        return PhosphorIconsRegular.trafficSignal;
+      case 'markings':
+        return PhosphorIconsRegular.roadHorizon;
+      case 'parking':
+        return PhosphorIconsRegular.carSimple;
+      case 'emergency':
+        return PhosphorIconsRegular.warning;
+      case 'pedestrians':
+        return PhosphorIconsRegular.personSimpleWalk;
+      case 'highway':
+        return PhosphorIconsRegular.roadHorizon;
+      case 'weather':
+        return PhosphorIconsRegular.sunDim;
+      case 'maintenance':
+        return PhosphorIconsRegular.wrench;
+      case 'responsibilities':
+        return PhosphorIconsRegular.identificationBadge;
+      case 'violation_points':
+        return PhosphorIconsRegular.warningDiamond;
+      case 'traffic_fines':
+        return PhosphorIconsRegular.fileText;
+      default:
+        return PhosphorIconsRegular.signpost;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final counts = _buildCounts(widget.questions, widget.categories);
     final selectedLabel = _selectedId == 'all'
         ? 'quiz.categories.all'.tr()
         : widget.categories
-            .firstWhere((c) => c.id == _selectedId, orElse: () => widget.categories.first)
-            .titleKey.tr();
+            .firstWhere((c) => c.id == _selectedId,
+                orElse: () => widget.categories.first)
+            .titleKey
+            .tr();
     final selectedCount = counts[_selectedId] ?? counts['all'] ?? 0;
     final minutes = ((selectedCount * 25) / 60).ceil();
 
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        title: Text('quiz.selectCategory'.tr(), style: GoogleFonts.outfit(fontWeight: FontWeight.bold, color: Colors.white)),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        centerTitle: true,
-        iconTheme: const IconThemeData(color: Colors.white),
-      ),
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Color(0xFF0F172A), Color(0xFF1E293B)],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, _) {
+        if (didPop) return;
+        final shell = TabShellScope.maybeOf(context);
+        if (shell != null) {
+          shell.value = 0;
+          return;
+        }
+        Navigator.of(context).maybePop();
+      },
+      child: Scaffold(
+        extendBodyBehindAppBar: true,
+        appBar: AppBar(
+          title: Text('quiz.selectCategory'.tr(),
+              style: GoogleFonts.outfit(
+                  fontWeight: FontWeight.bold, color: Colors.white)),
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          centerTitle: true,
+          iconTheme: const IconThemeData(color: Colors.white),
         ),
-        child: SafeArea(
-          child: Column(
-            children: [
-              // Hero Selection Card
-              Padding(
-                padding: const EdgeInsets.all(20),
-                child: GlassContainer(
-                  padding: const EdgeInsets.all(24),
-                  gradient: ModernTheme.primaryGradient,
-                  child: Column(
-                    children: [
-                      Text(
-                        selectedLabel,
-                        style: GoogleFonts.outfit(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
+        body: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Color(0xE60F172A), Color(0xE61E293B)],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+            ),
+          ),
+          child: SafeArea(
+            child: Column(
+              children: [
+                // Hero Selection Card
+                Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: GlassContainer(
+                    padding: const EdgeInsets.all(26),
+                    gradient: ModernTheme.primaryGradient,
+                    color: Colors.white.withValues(alpha: 0.06),
+                    border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
+                    borderRadius: BorderRadius.circular(28),
+                    blur: 12,
+                    child: Column(
+                      children: [
+                        Text(
+                          selectedLabel,
+                          style: GoogleFonts.outfit(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                          textAlign: TextAlign.center,
                         ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 12),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          _StatPill(icon: Icons.question_answer_rounded, label: '$selectedCount Questions'),
-                          const SizedBox(width: 8),
-                          _StatPill(icon: Icons.timer_rounded, label: '~$minutes mins'),
-                        ],
-                      ),
-                    ],
+                        const SizedBox(height: 12),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            _StatPill(
+                                icon: PhosphorIconsRegular.question,
+                                label: '$selectedCount Questions'),
+                            const SizedBox(width: 8),
+                            _StatPill(
+                                icon: PhosphorIconsRegular.timer,
+                                label: '~$minutes mins'),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              
-              Expanded(
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Wrap(
-                    spacing: 12,
-                    runSpacing: 12,
-                    children: [
-                      _CategoryGlassTile(
-                        label: 'quiz.categories.all'.tr(),
-                        selected: _selectedId == 'all',
-                        onTap: () => setState(() => _selectedId = 'all'),
-                        width: (MediaQuery.of(context).size.width - 52) / 2,
-                      ),
-                      ...widget.categories.map((cat) => _CategoryGlassTile(
-                        label: cat.titleKey.tr(),
-                        selected: _selectedId == cat.id,
-                        onTap: () => setState(() => _selectedId = cat.id),
-                        width: (MediaQuery.of(context).size.width - 52) / 2,
-                      )),
-                    ],
-                  ),
-                ),
-              ),
 
-              Padding(
-                padding: const EdgeInsets.all(20),
-                child: SizedBox(
-                   width: double.infinity,
-                   child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: ModernTheme.secondary,
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(vertical: 18),
-                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Wrap(
+                      spacing: 12,
+                      runSpacing: 12,
+                      children: [
+                        _CategoryGlassTile(
+                          label: 'quiz.categories.all'.tr(),
+                          selected: _selectedId == 'all',
+                          icon: _iconForCategoryId('all'),
+                          onTap: () => setState(() => _selectedId = 'all'),
+                          width: (MediaQuery.of(context).size.width - 52) / 2,
+                        ),
+                        ...widget.categories.map((cat) => _CategoryGlassTile(
+                              label: cat.titleKey.tr(),
+                              selected: _selectedId == cat.id,
+                              icon: _iconForCategoryId(cat.id),
+                              onTap: () => setState(() => _selectedId = cat.id),
+                              width: (MediaQuery.of(context).size.width - 52) / 2,
+                            )),
+                      ],
                     ),
-                    onPressed: () => widget.onStart(_selectedId),
-                    child: Text(
-                      'quiz.start'.tr(),
-                      style: GoogleFonts.outfit(fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                   ),
+                  ),
                 ),
-              ),
-            ],
+
+                Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.transparent,
+                        foregroundColor: Colors.white,
+                        padding: EdgeInsets.zero,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20)),
+                        elevation: 8,
+                        shadowColor:
+                            ModernTheme.secondary.withValues(alpha: 0.35),
+                      ),
+                      onPressed: () => widget.onStart(_selectedId),
+                      child: Ink(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              ModernTheme.secondary.withValues(alpha: 0.95),
+                              ModernTheme.secondary.withValues(alpha: 0.8),
+                            ],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: [
+                            BoxShadow(
+                              color: ModernTheme.secondary
+                                  .withValues(alpha: 0.25),
+                              blurRadius: 12,
+                              offset: const Offset(0, 6),
+                            ),
+                          ],
+                        ),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 22),
+                          alignment: Alignment.center,
+                          child: Text(
+                            'quiz.start'.tr(),
+                            style: GoogleFonts.outfit(
+                                fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -763,61 +1012,100 @@ class _CategoryGlassTile extends StatelessWidget {
   const _CategoryGlassTile({
     required this.label,
     required this.selected,
+    required this.icon,
     required this.onTap,
     required this.width,
   });
 
   final String label;
   final bool selected;
+  final IconData icon;
   final VoidCallback onTap;
   final double width;
 
   @override
   Widget build(BuildContext context) {
+    final iconColor =
+        selected ? ModernTheme.secondary : Colors.white.withValues(alpha: 0.55);
     return GestureDetector(
       onTap: () {
-        final settings = ProviderScope.containerOf(context).read(appSettingsProvider);
+        final settings =
+            ProviderScope.containerOf(context).read(appSettingsProvider);
         if (settings.vibrationEnabled) HapticFeedback.lightImpact();
         if (settings.soundEnabled) SystemSound.play(SystemSoundType.click);
         onTap();
       },
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        width: width,
-        height: 60,
-        decoration: BoxDecoration(
-          color: selected ? ModernTheme.primary : Colors.white.withValues(alpha: 0.1),
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: selected ? ModernTheme.primary : Colors.white.withValues(alpha: 0.2),
-            width: 1,
-          ),
-          boxShadow: selected ? [
-            BoxShadow(
-              color: ModernTheme.primary.withValues(alpha: 0.4),
-              blurRadius: 12,
-              offset: const Offset(0, 4),
-            )
-          ] : [],
-        ),
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        alignment: Alignment.centerLeft,
-        child: Row(
-          children: [
-            Expanded(
-              child: Text(
-                label,
-                style: GoogleFonts.outfit(
-                  color: Colors.white,
-                  fontWeight: selected ? FontWeight.bold : FontWeight.w500,
-                ),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
+      child: AnimatedScale(
+        scale: selected ? 1.02 : 1,
+        duration: const Duration(milliseconds: 140),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 160),
+          width: width,
+          height: 120,
+          decoration: BoxDecoration(
+            color: selected
+                ? Colors.white.withValues(alpha: 0.14)
+                : Colors.white.withValues(alpha: 0.08),
+            borderRadius: BorderRadius.circular(18),
+            border: Border.all(
+              color: selected
+                  ? ModernTheme.secondary.withValues(alpha: 0.45)
+                  : Colors.white.withValues(alpha: 0.12),
+              width: 1,
             ),
-            if (selected)
-              const Icon(Icons.check_circle_rounded, color: Colors.white, size: 20),
-          ],
+            boxShadow: selected
+                ? [
+                    BoxShadow(
+                      color: ModernTheme.secondary.withValues(alpha: 0.25),
+                      blurRadius: 14,
+                      offset: const Offset(0, 6),
+                    )
+                  ]
+                : [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.15),
+                      blurRadius: 8,
+                      offset: const Offset(0, 4),
+                    )
+                  ],
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          child: Stack(
+            children: [
+              Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(icon, size: 45, color: iconColor),
+                    const SizedBox(height: 4),
+                    Text(
+                      label,
+                      style: GoogleFonts.outfit(
+                        color: Colors.white,
+                        fontWeight:
+                            selected ? FontWeight.w600 : FontWeight.w500,
+                        letterSpacing: 0.3,
+                        fontSize: 13,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              ),
+              if (selected)
+                Positioned(
+                  top: 6,
+                  right: 6,
+                  child: Icon(
+                    PhosphorIconsRegular.checkCircle,
+                    color: ModernTheme.secondary,
+                    size: 18,
+                  ),
+                ),
+            ],
+          ),
         ),
       ),
     );
@@ -826,7 +1114,7 @@ class _CategoryGlassTile extends StatelessWidget {
 
 class _StatPill extends StatelessWidget {
   const _StatPill({required this.icon, required this.label});
-  
+
   final IconData icon;
   final String label;
 
@@ -842,7 +1130,8 @@ class _StatPill extends StatelessWidget {
         children: [
           Icon(icon, color: Colors.white70, size: 14),
           const SizedBox(width: 4),
-          Text(label, style: GoogleFonts.outfit(color: Colors.white, fontSize: 12)),
+          Text(label,
+              style: GoogleFonts.outfit(color: Colors.white, fontSize: 12)),
         ],
       ),
     );
@@ -867,7 +1156,9 @@ class _BookmarkButton extends StatelessWidget {
       style: IconButton.styleFrom(
         foregroundColor: isBookmarked ? ModernTheme.secondary : Colors.white70,
       ),
-      icon: Icon(isBookmarked ? Icons.bookmark_rounded : Icons.bookmark_border_rounded),
+      icon: Icon(isBookmarked
+          ? Icons.bookmark_rounded
+          : Icons.bookmark_border_rounded),
     );
   }
 }
@@ -878,22 +1169,23 @@ class _OptionBadge extends StatelessWidget {
     required this.active,
     required this.success,
     required this.error,
+    required this.isDark,
   });
 
   final String label;
   final bool active;
   final bool success;
   final bool error;
+  final bool isDark;
 
   @override
   Widget build(BuildContext context) {
-    Color bg = Colors.white10;
-    Color border = Colors.white24;
-    Color text = Colors.white;
+    Color bg = isDark ? Colors.white10 : Colors.black.withOpacity(0.06);
+    Color border = isDark ? Colors.white24 : Colors.black12;
 
     if (active) {
-      bg = ModernTheme.primary;
-      border = ModernTheme.primary;
+      bg = ModernTheme.secondary;
+      border = ModernTheme.secondary;
     }
     if (success) {
       bg = AppColors.success;
@@ -903,6 +1195,8 @@ class _OptionBadge extends StatelessWidget {
       bg = AppColors.error;
       border = AppColors.error;
     }
+
+    final text = bg.computeLuminance() > 0.5 ? Colors.black : Colors.white;
 
     return Container(
       width: 32,

@@ -224,7 +224,7 @@ class AppSettingsNotifier extends StateNotifier<AppSettingsState> {
   }
 
   void updateStats({required int correct, required int total}) {
-    final score = ((correct / total) * 100).round();
+    final score = total <= 0 ? 0 : ((correct / total) * 100).round();
     final stats = state.stats.copyWith(
       quizzesTaken: state.stats.quizzesTaken + 1,
       bestScore: score > state.stats.bestScore ? score : state.stats.bestScore,

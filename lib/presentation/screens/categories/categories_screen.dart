@@ -251,6 +251,8 @@ class _CategoryGlassCard extends StatelessWidget {
       onTap: onTap,
       child: GlassContainer(
         padding: const EdgeInsets.all(20),
+        color: Colors.white.withValues(alpha: 0.06),
+        border: Border.all(color: Colors.white10),
         child: Row(
           children: [
             Container(
@@ -283,7 +285,7 @@ class _CategoryGlassCard extends StatelessWidget {
                           style: GoogleFonts.outfit(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
-                            color: Theme.of(context).colorScheme.onSurface,
+                            color: Colors.white,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
@@ -312,7 +314,7 @@ class _CategoryGlassCard extends StatelessWidget {
                   Text(
                     subtitle,
                     style: GoogleFonts.outfit(
-                      color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
+                      color: Colors.white70,
                       fontSize: 13,
                     ),
                     maxLines: 2,
@@ -321,11 +323,13 @@ class _CategoryGlassCard extends StatelessWidget {
                   const SizedBox(height: 8),
                   Row(
                     children: [
-                      Icon(Icons.quiz_rounded, size: 14, color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.4)),
+                      const Icon(Icons.quiz_rounded,
+                          size: 14, color: Colors.white54),
                       const SizedBox(width: 4),
                       Text(
                         '$total Questions',
-                        style: GoogleFonts.outfit(color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.4), fontSize: 12),
+                        style: GoogleFonts.outfit(
+                            color: Colors.white54, fontSize: 12),
                       ),
                       const Spacer(),
                       const Icon(Icons.arrow_forward_rounded, size: 16, color: ModernTheme.secondary),

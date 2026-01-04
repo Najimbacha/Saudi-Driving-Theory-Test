@@ -307,9 +307,11 @@ class _LanguageGlassSheet extends StatelessWidget {
       color: const Color(0xFF0F172A).withValues(alpha: 0.95),
       padding: const EdgeInsets.all(24),
       child: SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
             Container(width: 40, height: 4, decoration: BoxDecoration(color: Colors.white24, borderRadius: BorderRadius.circular(2))),
             const SizedBox(height: 24),
             Text('settings.language'.tr(), style: GoogleFonts.outfit(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
@@ -343,6 +345,7 @@ class _LanguageGlassSheet extends StatelessWidget {
               ),
             )),
           ],
+          ),
         ),
       ),
     );
@@ -361,9 +364,11 @@ class _ThemeGlassSheet extends StatelessWidget {
       color: const Color(0xFF0F172A).withValues(alpha: 0.95),
       padding: const EdgeInsets.all(24),
       child: SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
              Container(width: 40, height: 4, decoration: BoxDecoration(color: Colors.white24, borderRadius: BorderRadius.circular(2))),
             const SizedBox(height: 24),
             Text('settings.theme'.tr(), style: GoogleFonts.outfit(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
@@ -396,6 +401,7 @@ class _ThemeGlassSheet extends StatelessWidget {
               ),
             )),
           ],
+          ),
         ),
       ),
     );

@@ -1,0 +1,5 @@
+version: "1"
+models:
+  - title: DeepSeek Coder
+    provider: ollama
+    model: deepseek-coder

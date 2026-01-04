@@ -27,7 +27,7 @@ class ModernTheme {
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
-  
+
   static const LinearGradient glassGradient = LinearGradient(
     colors: [Colors.white12, Colors.white10],
     begin: Alignment.topLeft,
@@ -47,29 +47,77 @@ class ModernTheme {
   );
 
   static ThemeData get lightTheme {
-    return ThemeData.light().copyWith(
-      scaffoldBackgroundColor: const Color(0xFFF1F5F9),
-      colorScheme: const ColorScheme.light(
+    // Improved high-contrast light theme for better clarity
+    final base = ThemeData.light();
+    return base.copyWith(
+      brightness: Brightness.light,
+      scaffoldBackgroundColor: Colors.white,
+      colorScheme: base.colorScheme.copyWith(
         primary: primary,
         secondary: secondary,
         tertiary: tertiary,
         surface: Colors.white,
-        onSurface: Color(0xFF1E293B),
+        background: Colors.white,
+        onSurface: const Color(0xFF0F172A),
+        brightness: Brightness.light,
       ),
-      textTheme: GoogleFonts.outfitTextTheme(ThemeData.light().textTheme),
+      textTheme: GoogleFonts.outfitTextTheme(base.textTheme).apply(
+        bodyColor: Colors.black87,
+        displayColor: Colors.black87,
+      ),
       appBarTheme: const AppBarTheme(
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.white,
         elevation: 0,
         centerTitle: true,
-        iconTheme: IconThemeData(color: Color(0xFF1E293B)),
-        titleTextStyle: TextStyle(color: Color(0xFF1E293B), fontSize: 20, fontWeight: FontWeight.bold),
+        iconTheme: IconThemeData(color: Colors.black87),
+        titleTextStyle: TextStyle(
+            color: Colors.black87, fontSize: 20, fontWeight: FontWeight.bold),
       ),
       cardTheme: CardThemeData(
         color: Colors.white,
         elevation: 4,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
       ),
-      iconTheme: const IconThemeData(color: Color(0xFF1E293B)),
+      iconTheme: const IconThemeData(color: Colors.black87),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: primary,
+          foregroundColor: Colors.white,
+          elevation: 2,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        ),
+      ),
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: OutlinedButton.styleFrom(
+          foregroundColor: Colors.black87,
+          side: BorderSide(color: Colors.grey.shade300),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        ),
+      ),
+      inputDecorationTheme: InputDecorationTheme(
+        filled: true,
+        fillColor: Colors.grey.shade50,
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+        labelStyle: const TextStyle(color: Colors.black87),
+        hintStyle: TextStyle(color: Colors.black45),
+        border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+            borderSide: BorderSide(color: Colors.grey.shade300)),
+        enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+            borderSide: BorderSide(color: Colors.grey.shade300)),
+      ),
+      bottomNavigationBarTheme: BottomNavigationBarThemeData(
+        backgroundColor: Colors.white,
+        selectedItemColor: primary,
+        unselectedItemColor: Colors.black54,
+        elevation: 8,
+        showUnselectedLabels: true,
+      ),
+      dividerColor: Colors.grey.shade300,
+      visualDensity: VisualDensity.adaptivePlatformDensity,
     );
   }
 

@@ -29,25 +29,6 @@ class HomeDashboardScreen extends ConsumerWidget {
 
     return Scaffold(
       extendBodyBehindAppBar: true, // Allow glass effect to overlap content
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        title: Text(
-          'home.explore'.tr(),
-          style: GoogleFonts.outfit(
-            fontWeight: FontWeight.w700,
-            fontSize: 24,
-          ),
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.person_outline_rounded),
-            onPressed: () {
-              // Profile action
-            },
-          ),
-        ],
-      ),
       body: Container(
         decoration: BoxDecoration(
           gradient: Theme.of(context).brightness == Brightness.dark
@@ -60,7 +41,8 @@ class HomeDashboardScreen extends ConsumerWidget {
               // Hero Section with Greeting
               SliverToBoxAdapter(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                   child: _GlassHeroSection(
                     totalAnswered: totalAnswered,
                     accuracy: accuracy,
@@ -72,7 +54,8 @@ class HomeDashboardScreen extends ConsumerWidget {
               // Quick Actions Header
               SliverToBoxAdapter(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
                   child: Text(
                     'home.quickStart'.tr(),
                     style: theme.textTheme.titleLarge?.copyWith(
@@ -98,8 +81,10 @@ class HomeDashboardScreen extends ConsumerWidget {
                           gradient: ModernTheme.primaryGradient,
                           onTap: () {
                             final shell = TabShellScope.maybeOf(context);
-                            if (shell != null) shell.value = 2;
-                            else context.push('/practice');
+                            if (shell != null)
+                              shell.value = 2;
+                            else
+                              context.push('/practice');
                           },
                         ),
                       ),
@@ -113,8 +98,10 @@ class HomeDashboardScreen extends ConsumerWidget {
                           gradient: ModernTheme.accentGradient,
                           onTap: () {
                             final shell = TabShellScope.maybeOf(context);
-                            if (shell != null) shell.value = 3;
-                            else context.push('/exam');
+                            if (shell != null)
+                              shell.value = 3;
+                            else
+                              context.push('/exam');
                           },
                         ),
                       ),
@@ -157,8 +144,10 @@ class HomeDashboardScreen extends ConsumerWidget {
                       color: Colors.amber,
                       onTap: () {
                         final shell = TabShellScope.maybeOf(context);
-                        if (shell != null) shell.value = 1;
-                        else context.push('/signs');
+                        if (shell != null)
+                          shell.value = 1;
+                        else
+                          context.push('/signs');
                       },
                     ),
                     const SizedBox(height: 12),
@@ -199,18 +188,25 @@ class _GlassHeroSection extends StatelessWidget {
   final int totalAnswered;
   final int accuracy;
   final int streak;
-
   @override
+  Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return GlassContainer(
       height: 200,
       width: double.infinity,
-      gradient: isDark ? ModernTheme.glassGradient : LinearGradient(
-        colors: [Colors.black.withValues(alpha: 0.05), Colors.black.withValues(alpha: 0.02)],
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight,
-      ),
-      border: Border.all(color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.1)),
+      gradient: isDark
+          ? ModernTheme.glassGradient
+          : LinearGradient(
+              colors: [
+                Colors.black.withValues(alpha: 0.05),
+                Colors.black.withValues(alpha: 0.02)
+              ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+      border: Border.all(
+          color:
+              Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.1)),
       child: Stack(
         children: [
           // Background decoration
@@ -231,7 +227,7 @@ class _GlassHeroSection extends StatelessWidget {
               ),
             ),
           ),
-          
+
           Padding(
             padding: const EdgeInsets.all(24),
             child: Column(
@@ -250,7 +246,10 @@ class _GlassHeroSection extends StatelessWidget {
                   'home.subtitle'.tr(),
                   style: GoogleFonts.outfit(
                     fontSize: 14,
-                    color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
+                    color: Theme.of(context)
+                        .colorScheme
+                        .onSurface
+                        .withValues(alpha: 0.7),
                   ),
                 ),
                 const Spacer(),
@@ -259,7 +258,9 @@ class _GlassHeroSection extends StatelessWidget {
                   children: [
                     _StatBadge(
                       label: 'Streak',
-                      value: '$streak 🔥',
+                      value: '$streak',
+                      icon: Icons.local_fire_department_rounded,
+                      iconColor: Colors.orangeAccent,
                     ),
                     _StatBadge(
                       label: 'Accuracy',
@@ -281,30 +282,51 @@ class _GlassHeroSection extends StatelessWidget {
 }
 
 class _StatBadge extends StatelessWidget {
-  const _StatBadge({required this.label, required this.value});
+  const _StatBadge({
+    required this.label,
+    required this.value,
+    this.icon,
+    this.iconColor,
+  });
 
   final String label;
   final String value;
+  final IconData? icon;
+  final Color? iconColor;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          value,
-          style: GoogleFonts.outfit(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            fontWeight: FontWeight.bold,
-            color: Theme.of(context).colorScheme.onSurface,
-          ),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              value,
+              style: GoogleFonts.outfit(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
+            ),
+            if (icon != null) ...[
+              const SizedBox(width: 4),
+              Icon(
+                icon,
+                size: 18,
+                color: iconColor ??
+                    Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.9),
+              ),
+            ],
+          ],
         ),
         Text(
           label,
           style: GoogleFonts.outfit(
             fontSize: 12,
-            color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
+            color:
+                Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
           ),
         ),
       ],
@@ -385,7 +407,10 @@ class _GlassActionCard extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
                 style: GoogleFonts.outfit(
                   fontSize: 12,
-                  color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
+                  color: Theme.of(context)
+                      .colorScheme
+                      .onSurface
+                      .withValues(alpha: 0.6),
                   height: 1.2,
                 ),
               ),
@@ -451,7 +476,10 @@ class _GlassListTile extends StatelessWidget {
                     subtitle,
                     style: GoogleFonts.outfit(
                       fontSize: 12,
-                      color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
+                      color: Theme.of(context)
+                          .colorScheme
+                          .onSurface
+                          .withValues(alpha: 0.6),
                     ),
                   ),
                 ],
@@ -459,7 +487,10 @@ class _GlassListTile extends StatelessWidget {
             ),
             Icon(
               Icons.arrow_forward_ios_rounded,
-              color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.3),
+              color: Theme.of(context)
+                  .colorScheme
+                  .onSurface
+                  .withValues(alpha: 0.3),
               size: 16,
             ),
           ],

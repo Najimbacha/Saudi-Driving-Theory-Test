@@ -14,6 +14,7 @@ import '../../../models/question.dart';
 import '../../../presentation/providers/exam_history_provider.dart';
 import '../../../presentation/providers/exam_provider.dart';
 import '../../../state/data_state.dart';
+import '../../../state/app_state.dart';
 import '../../../utils/back_guard.dart';
 
 class ExamFlowScreen extends ConsumerStatefulWidget {
@@ -33,7 +34,8 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
     final controller = ref.read(examProvider.notifier);
 
     return questionsAsync.when(
-      loading: () => const Scaffold(body: Center(child: CircularProgressIndicator())),
+      loading: () =>
+          const Scaffold(body: Center(child: CircularProgressIndicator())),
       error: (error, stackTrace) => Scaffold(
         appBar: AppBar(title: Text('exam.title'.tr())),
         body: Center(
@@ -80,8 +82,8 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
                       child: Text(
                         'Error: $error\n\nPlease ensure assets/data/ directory contains valid question JSON files.',
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          fontFamily: 'monospace',
-                        ),
+                              fontFamily: 'monospace',
+                            ),
                       ),
                     ),
                   ],
@@ -107,12 +109,11 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
             return const SizedBox.shrink();
           }
           return _ExamIntro(
-            onStart: (count, minutes, strictMode) =>
-                controller.start(
-                  (_randomSubset(questions, count)),
-                  minutes: minutes,
-                  strictMode: strictMode,
-                ),
+            onStart: (count, minutes, strictMode) => controller.start(
+              (_randomSubset(questions, count)),
+              minutes: minutes,
+              strictMode: strictMode,
+            ),
           );
         }
         final current = exam.currentQuestion;
@@ -121,30 +122,30 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
         final options = _options(current, locale);
         final selected = exam.answers[current.id];
         final inProgress = exam.questions.isNotEmpty && !exam.isCompleted;
-        
+
         return PopScope(
           canPop: false,
           onPopInvokedWithResult: (didPop, _) async {
             if (didPop) return;
-            
+
             final shell = TabShellScope.maybeOf(context);
             if (!inProgress) {
               if (shell != null) {
-                 shell.value = 0;
+                shell.value = 0;
               } else {
-                 Navigator.of(context).pop();
+                Navigator.of(context).pop();
               }
               return;
             }
-            
+
             final shouldExit = await confirmExitExam(context);
             if (shouldExit && context.mounted) {
-               if (shell != null) {
-                 controller.reset();
-                 shell.value = 0;
-               } else {
-                 Navigator.of(context).pop();
-               }
+              if (shell != null) {
+                controller.reset();
+                shell.value = 0;
+              } else {
+                Navigator.of(context).pop();
+              }
             }
           },
           child: Scaffold(
@@ -155,27 +156,33 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
               iconTheme: const IconThemeData(color: Colors.white),
               title: Text(
                 'exam.title'.tr(),
-                style: GoogleFonts.outfit(fontWeight: FontWeight.bold, color: Colors.white),
+                style: GoogleFonts.outfit(
+                    fontWeight: FontWeight.bold, color: Colors.white),
               ),
               centerTitle: true,
               actions: [
                 Container(
                   margin: const EdgeInsets.only(right: 8),
                   decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.1),
-                    shape: BoxShape.circle
-                  ),
+                      color: Colors.white.withValues(alpha: 0.1),
+                      shape: BoxShape.circle),
                   child: IconButton(
                     onPressed: () {
                       final settings = ref.read(appSettingsProvider);
-                      if (settings.vibrationEnabled) HapticFeedback.lightImpact();
-                      if (settings.soundEnabled) SystemSound.play(SystemSoundType.click);
+                      if (settings.vibrationEnabled)
+                        HapticFeedback.lightImpact();
+                      if (settings.soundEnabled)
+                        SystemSound.play(SystemSoundType.click);
                       controller.toggleFlag();
                     },
                     tooltip: 'exam.flag'.tr(),
                     icon: Icon(
-                      exam.flagged.contains(current.id) ? Icons.flag_rounded : Icons.flag_outlined,
-                      color: exam.flagged.contains(current.id) ? AppColors.warning : Colors.white70,
+                      exam.flagged.contains(current.id)
+                          ? Icons.flag_rounded
+                          : Icons.flag_outlined,
+                      color: exam.flagged.contains(current.id)
+                          ? AppColors.warning
+                          : Colors.white70,
                     ),
                   ),
                 ),
@@ -194,13 +201,15 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
                   children: [
                     // Timer & Progress Header
                     Padding(
-                      padding: const EdgeInsetsDirectional.fromSTEB(20, 10, 20, 10),
+                      padding:
+                          const EdgeInsetsDirectional.fromSTEB(20, 10, 20, 10),
                       child: Column(
                         children: [
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                               _TimerBanner(timeLeftSeconds: exam.timeLeftSeconds),
+                              _TimerBanner(
+                                  timeLeftSeconds: exam.timeLeftSeconds),
                               Text(
                                 '${exam.currentIndex + 1}/${exam.questions.length}',
                                 style: GoogleFonts.outfit(
@@ -214,9 +223,10 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
                           ClipRRect(
                             borderRadius: BorderRadius.circular(10),
                             child: LinearProgressIndicator(
-                              value: (exam.currentIndex + 1) / exam.questions.length,
+                              value: (exam.currentIndex + 1) /
+                                  exam.questions.length,
                               backgroundColor: Colors.white10,
-                              color: ModernTheme.secondary,
+                              color: ModernTheme.primary,
                               minHeight: 6,
                             ),
                           ),
@@ -225,9 +235,10 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
                     ),
 
                     // Content
-                     Expanded(
+                    Expanded(
                       child: ListView(
-                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 10),
                         children: [
                           // Question Text
                           AnimatedSwitcher(
@@ -246,45 +257,59 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
                           const SizedBox(height: 32),
 
                           // Options
-                           AnimatedSwitcher(
+                          AnimatedSwitcher(
                             duration: const Duration(milliseconds: 300),
                             child: Column(
                               key: ValueKey('${current.id}-options'),
                               children: List.generate(options.length, (idx) {
                                 final optionText = options[idx];
                                 final isSelected = selected == idx;
-                                
+
                                 return Padding(
                                   padding: const EdgeInsets.only(bottom: 12),
                                   child: GestureDetector(
                                     onTap: () {
-                                      final settings = ref.read(appSettingsProvider);
-                                      if (settings.vibrationEnabled) HapticFeedback.lightImpact();
-                                      if (settings.soundEnabled) SystemSound.play(SystemSoundType.click);
+                                      final settings =
+                                          ref.read(appSettingsProvider);
+                                      if (settings.vibrationEnabled)
+                                        HapticFeedback.lightImpact();
+                                      if (settings.soundEnabled)
+                                        SystemSound.play(SystemSoundType.click);
                                       controller.selectAnswer(idx);
                                     },
                                     child: AnimatedContainer(
-                                      duration: const Duration(milliseconds: 200),
+                                      duration:
+                                          const Duration(milliseconds: 200),
                                       decoration: BoxDecoration(
-                                        color: isSelected ? ModernTheme.secondary.withValues(alpha: 0.2) : Colors.white.withValues(alpha: 0.05),
+                                        color: isSelected
+                                            ? ModernTheme.secondary
+                                                .withValues(alpha: 0.2)
+                                            : Colors.white
+                                                .withValues(alpha: 0.05),
                                         borderRadius: BorderRadius.circular(16),
                                         border: Border.all(
-                                          color: isSelected ? ModernTheme.secondary : Colors.white10,
+                                          color: isSelected
+                                              ? ModernTheme.secondary
+                                              : Colors.white10,
                                           width: isSelected ? 2 : 1,
                                         ),
-                                        boxShadow: isSelected ? [
-                                          BoxShadow(
-                                            color: ModernTheme.secondary.withValues(alpha: 0.2),
-                                            blurRadius: 8,
-                                            offset: const Offset(0, 4),
-                                          )
-                                        ] : [],
+                                        boxShadow: isSelected
+                                            ? [
+                                                BoxShadow(
+                                                  color: ModernTheme.secondary
+                                                      .withValues(alpha: 0.2),
+                                                  blurRadius: 8,
+                                                  offset: const Offset(0, 4),
+                                                )
+                                              ]
+                                            : [],
                                       ),
                                       padding: const EdgeInsets.all(16),
                                       child: Row(
                                         children: [
                                           _OptionBadge(
-                                            label: String.fromCharCode(65 + idx),
+                                            label:
+                                                String.fromCharCode(65 + idx),
                                             selected: isSelected,
                                           ),
                                           const SizedBox(width: 16),
@@ -293,13 +318,18 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
                                               optionText,
                                               style: GoogleFonts.outfit(
                                                 fontSize: 16,
-                                                color: Colors.white.withValues(alpha: 0.9),
-                                                fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                                                color: Colors.white
+                                                    .withValues(alpha: 0.9),
+                                                fontWeight: isSelected
+                                                    ? FontWeight.w600
+                                                    : FontWeight.normal,
                                               ),
                                             ),
                                           ),
                                           if (isSelected)
-                                            Icon(Icons.check_circle_rounded, color: ModernTheme.secondary, size: 20),
+                                            Icon(Icons.check_circle_rounded,
+                                                color: ModernTheme.secondary,
+                                                size: 20),
                                         ],
                                       ),
                                     ),
@@ -310,14 +340,16 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
                           ),
                         ],
                       ),
-                     ),
+                    ),
 
                     // Actions
                     GlassContainer(
-                      borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+                      borderRadius:
+                          const BorderRadius.vertical(top: Radius.circular(24)),
                       color: Colors.black.withValues(alpha: 0.2),
                       blur: 10,
-                      padding: const EdgeInsets.fromLTRB(20, 20, 20, 32), // More padding at bottom for safe area
+                      padding: const EdgeInsets.fromLTRB(20, 20, 20,
+                          32), // More padding at bottom for safe area
                       child: Column(
                         children: [
                           Row(
@@ -325,43 +357,60 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
                               Expanded(
                                 child: OutlinedButton(
                                   style: OutlinedButton.styleFrom(
-                                    side: const BorderSide(color: Colors.white24),
+                                    side:
+                                        const BorderSide(color: Colors.white24),
                                     foregroundColor: Colors.white,
-                                    padding: const EdgeInsets.symmetric(vertical: 16),
-                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 16),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(16)),
                                   ),
-                                  onPressed: exam.strictMode || exam.currentIndex == 0
-                                      ? null
-                                      : controller.previous,
-                                  child: Text('common.previous'.tr(), style: GoogleFonts.outfit()),
+                                  onPressed:
+                                      exam.strictMode || exam.currentIndex == 0
+                                          ? null
+                                          : controller.previous,
+                                  child: Text('common.previous'.tr(),
+                                      style: GoogleFonts.outfit()),
                                 ),
                               ),
                               const SizedBox(width: 16),
                               Expanded(
                                 child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: ModernTheme.secondary,
+                                    backgroundColor: ModernTheme.primary,
                                     foregroundColor: Colors.white,
-                                    padding: const EdgeInsets.symmetric(vertical: 16),
-                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 16),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(16)),
                                     elevation: 8,
-                                    shadowColor: ModernTheme.secondary.withValues(alpha: 0.5),
+                                    shadowColor: ModernTheme.primary
+                                        .withValues(alpha: 0.5),
                                   ),
                                   onPressed: () {
-                                    final settings = ref.read(appSettingsProvider);
-                                    if (settings.vibrationEnabled) HapticFeedback.mediumImpact();
-                                    if (settings.soundEnabled) SystemSound.play(SystemSoundType.click); 
-                                    if (exam.currentIndex + 1 == exam.questions.length) {
+                                    final settings =
+                                        ref.read(appSettingsProvider);
+                                    if (settings.vibrationEnabled)
+                                      HapticFeedback.mediumImpact();
+                                    if (settings.soundEnabled)
+                                      SystemSound.play(SystemSoundType.click);
+                                    if (exam.currentIndex + 1 ==
+                                        exam.questions.length) {
                                       controller.finish();
                                     } else {
                                       controller.next();
                                     }
                                   },
                                   child: Text(
-                                    exam.currentIndex + 1 == exam.questions.length 
-                                        ? 'exam.submit'.tr() 
+                                    exam.currentIndex + 1 ==
+                                            exam.questions.length
+                                        ? 'exam.submit'.tr()
                                         : 'common.next'.tr(),
-                                    style: GoogleFonts.outfit(fontWeight: FontWeight.bold, fontSize: 16),
+                                    style: GoogleFonts.outfit(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16),
                                   ),
                                 ),
                               ),
@@ -370,21 +419,27 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
                           if (!exam.strictMode || exam.isCompleted) ...[
                             const SizedBox(height: 12),
                             TextButton(
-                              onPressed: () => _showQuestionGrid(context, exam, controller),
+                              onPressed: () =>
+                                  _showQuestionGrid(context, exam, controller),
                               child: Text(
                                 'exam.reviewAnswers'.tr(),
-                                style: GoogleFonts.outfit(color: Colors.white70),
+                                style:
+                                    GoogleFonts.outfit(color: Colors.white70),
                               ),
                             ),
-                          ] else 
-                             Padding(
-                               padding: const EdgeInsets.only(top: 12),
-                               child: TextButton.icon(
-                                 onPressed: () => _showQuestionGrid(context, exam, controller),
-                                 icon: const Icon(Icons.grid_view_rounded, size: 16, color: Colors.white38),
-                                 label: Text('Overview', style: GoogleFonts.outfit(color: Colors.white38)),
-                               ),
-                             ),
+                          ] else
+                            Padding(
+                              padding: const EdgeInsets.only(top: 12),
+                              child: TextButton.icon(
+                                onPressed: () => _showQuestionGrid(
+                                    context, exam, controller),
+                                icon: const Icon(Icons.grid_view_rounded,
+                                    size: 16, color: Colors.white38),
+                                label: Text('Overview',
+                                    style: GoogleFonts.outfit(
+                                        color: Colors.white38)),
+                              ),
+                            ),
                         ],
                       ),
                     ),
@@ -401,7 +456,9 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
   void _finishExam(BuildContext context, WidgetRef ref, ExamState exam) {
     final total = exam.questions.length;
     final correct = exam.answers.entries
-        .where((e) => exam.questions.firstWhere((q) => q.id == e.key).correctIndex == e.value)
+        .where((e) =>
+            exam.questions.firstWhere((q) => q.id == e.key).correctIndex ==
+            e.value)
         .length;
     final wrong = exam.answers.length - correct;
     final skipped = total - exam.answers.length;
@@ -421,7 +478,9 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
           .map((e) => QuestionAnswer(
                 questionId: e.key,
                 userAnswerIndex: e.value,
-                correctAnswerIndex: exam.questions.firstWhere((q) => q.id == e.key).correctIndex,
+                correctAnswerIndex: exam.questions
+                    .firstWhere((q) => q.id == e.key)
+                    .correctIndex,
               ))
           .toList(),
     );
@@ -441,82 +500,83 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
     return scores;
   }
 
-  void _showQuestionGrid(BuildContext context, ExamState exam, ExamController controller) {
+  void _showQuestionGrid(
+      BuildContext context, ExamState exam, ExamController controller) {
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
       builder: (context) {
         return GlassContainer(
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
-            color: const Color(0xFF0F172A).withValues(alpha: 0.95),
-            padding: const EdgeInsets.all(24),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  width: 40,
-                  height: 4,
-                  decoration: BoxDecoration(
-                    color: Colors.white24,
-                    borderRadius: BorderRadius.circular(2),
-                  ),
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+          color: const Color(0xFF0F172A).withValues(alpha: 0.95),
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: Colors.white24,
+                  borderRadius: BorderRadius.circular(2),
                 ),
-                const SizedBox(height: 20),
-                Expanded(
-                  child: GridView.builder(
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 5,
-                      crossAxisSpacing: 12,
-                      mainAxisSpacing: 12,
-                    ),
-                    itemCount: exam.questions.length,
-                    itemBuilder: (context, index) {
-                      final question = exam.questions[index];
-                      final answered = exam.answers.containsKey(question.id);
-                      final flagged = exam.flagged.contains(question.id);
-                      final isCurrent = exam.currentIndex == index;
-                      
-                      Color color = Colors.white.withValues(alpha: 0.05);
-                      Color border = Colors.transparent;
-                      Color text = Colors.white70;
+              ),
+              const SizedBox(height: 20),
+              Expanded(
+                child: GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 5,
+                    crossAxisSpacing: 12,
+                    mainAxisSpacing: 12,
+                  ),
+                  itemCount: exam.questions.length,
+                  itemBuilder: (context, index) {
+                    final question = exam.questions[index];
+                    final answered = exam.answers.containsKey(question.id);
+                    final flagged = exam.flagged.contains(question.id);
+                    final isCurrent = exam.currentIndex == index;
 
-                      if (isCurrent) {
-                        border = ModernTheme.secondary;
-                        text = Colors.white;
-                      } else if (flagged) {
-                         color = AppColors.warning.withValues(alpha: 0.2);
-                         text = AppColors.warning;
-                      } else if (answered) {
-                        color = ModernTheme.secondary.withValues(alpha: 0.2);
-                        text = ModernTheme.secondary;
-                      }
+                    Color color = Colors.white.withValues(alpha: 0.05);
+                    Color border = Colors.transparent;
+                    Color text = Colors.white70;
 
-                      return InkWell(
-                        onTap: () {
-                          controller.goTo(index);
-                          Navigator.of(context).pop();
-                        },
-                        child: Container(
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            color: color,
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: border, width: 2),
-                          ),
-                          child: Text(
-                            '${index + 1}',
-                            style: GoogleFonts.outfit(
-                              color: text,
-                              fontWeight: FontWeight.bold,
-                            ),
+                    if (isCurrent) {
+                      border = ModernTheme.secondary;
+                      text = Colors.white;
+                    } else if (flagged) {
+                      color = AppColors.warning.withValues(alpha: 0.2);
+                      text = AppColors.warning;
+                    } else if (answered) {
+                      color = ModernTheme.secondary.withValues(alpha: 0.2);
+                      text = ModernTheme.secondary;
+                    }
+
+                    return InkWell(
+                      onTap: () {
+                        controller.goTo(index);
+                        Navigator.of(context).pop();
+                      },
+                      child: Container(
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: color,
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: border, width: 2),
+                        ),
+                        child: Text(
+                          '${index + 1}',
+                          style: GoogleFonts.outfit(
+                            color: text,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                      );
-                    },
-                  ),
+                      ),
+                    );
+                  },
                 ),
-              ],
-            ),
+              ),
+            ],
+          ),
         );
       },
     );
@@ -529,16 +589,24 @@ List<Question> _randomSubset(List<Question> questions, int count) {
   return items.take(safeCount).toList();
 }
 
-// ... (Copy _questionText and _options helpers from practice_screen or create a shared util? 
+// ... (Copy _questionText and _options helpers from practice_screen or create a shared util?
 // For now, I'll duplicate to keep file self-contained as requested, or import if they were public.
 // They are private in practice_screen. I will duplicate.)
 
 String _questionText(Question question, String locale) {
   switch (locale) {
-    case 'ar': if (question.questionTextAr != null) return question.questionTextAr!; break;
-    case 'ur': if (question.questionTextUr != null) return question.questionTextUr!; break;
-    case 'hi': if (question.questionTextHi != null) return question.questionTextHi!; break;
-    case 'bn': if (question.questionTextBn != null) return question.questionTextBn!; break;
+    case 'ar':
+      if (question.questionTextAr != null) return question.questionTextAr!;
+      break;
+    case 'ur':
+      if (question.questionTextUr != null) return question.questionTextUr!;
+      break;
+    case 'hi':
+      if (question.questionTextHi != null) return question.questionTextHi!;
+      break;
+    case 'bn':
+      if (question.questionTextBn != null) return question.questionTextBn!;
+      break;
   }
   if (question.questionText != null) return question.questionText!;
   return question.questionKey.tr();
@@ -547,13 +615,22 @@ String _questionText(Question question, String locale) {
 List<String> _options(Question question, String locale) {
   List<String>? localeOptions;
   switch (locale) {
-    case 'ar': localeOptions = question.optionsAr; break;
-    case 'ur': localeOptions = question.optionsUr; break;
-    case 'hi': localeOptions = question.optionsHi; break;
-    case 'bn': localeOptions = question.optionsBn; break;
+    case 'ar':
+      localeOptions = question.optionsAr;
+      break;
+    case 'ur':
+      localeOptions = question.optionsUr;
+      break;
+    case 'hi':
+      localeOptions = question.optionsHi;
+      break;
+    case 'bn':
+      localeOptions = question.optionsBn;
+      break;
   }
   if (localeOptions != null && localeOptions.isNotEmpty) return localeOptions;
-  if (question.options != null && question.options!.isNotEmpty) return question.options!;
+  if (question.options != null && question.options!.isNotEmpty)
+    return question.options!;
   return question.optionsKeys.map((key) => key.tr()).toList();
 }
 
@@ -574,7 +651,9 @@ class _ExamIntroState extends State<_ExamIntro> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: Text('exam.title'.tr(), style: GoogleFonts.outfit(fontWeight: FontWeight.bold, color: Colors.white)),
+        title: Text('exam.title'.tr(),
+            style: GoogleFonts.outfit(
+                fontWeight: FontWeight.bold, color: Colors.white)),
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
@@ -599,14 +678,18 @@ class _ExamIntroState extends State<_ExamIntro> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 6),
                       decoration: BoxDecoration(
                         color: Colors.white24,
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Text(
                         'exam.title'.tr(),
-                        style: GoogleFonts.outfit(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12),
+                        style: GoogleFonts.outfit(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12),
                       ),
                     ),
                     const SizedBox(height: 16),
@@ -640,7 +723,6 @@ class _ExamIntroState extends State<_ExamIntro> {
                 ),
               ),
               const SizedBox(height: 16),
-              
               _ModeGlassCard(
                 title: 'exam.modes.quick'.tr(),
                 questions: '20',
@@ -650,7 +732,7 @@ class _ExamIntroState extends State<_ExamIntro> {
                 onTap: () => _confirmStart(context, 20, 15),
               ),
               const SizedBox(height: 12),
-               _ModeGlassCard(
+              _ModeGlassCard(
                 title: 'exam.modes.standard'.tr(),
                 questions: '30',
                 minutes: '20',
@@ -660,7 +742,7 @@ class _ExamIntroState extends State<_ExamIntro> {
                 onTap: () => _confirmStart(context, 30, 20),
               ),
               const SizedBox(height: 12),
-               _ModeGlassCard(
+              _ModeGlassCard(
                 title: 'exam.modes.full'.tr(),
                 questions: '40',
                 minutes: '30',
@@ -675,33 +757,40 @@ class _ExamIntroState extends State<_ExamIntro> {
     );
   }
 
-  Future<void> _confirmStart(BuildContext context, int count, int minutes) async {
+  Future<void> _confirmStart(
+      BuildContext context, int count, int minutes) async {
     final shouldStart = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-          backgroundColor: const Color(0xFF1E293B),
-          title: Row(
-            children: [
-               Icon(Icons.timer_outlined, color: ModernTheme.secondary),
-               const SizedBox(width: 12),
-               Text('exam.title'.tr(), style: GoogleFonts.outfit(color: Colors.white, fontWeight: FontWeight.bold)),
-            ],
-          ),
-          content: Text(
-            'exam.disclaimer'.tr(),
-            style: GoogleFonts.outfit(color: Colors.white70),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context, false),
-              child: Text('common.cancel'.tr(), style: GoogleFonts.outfit(color: Colors.white54)),
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(backgroundColor: ModernTheme.secondary, foregroundColor: Colors.white),
-              onPressed: () => Navigator.pop(context, true),
-              child: Text('exam.startExam'.tr(), style: GoogleFonts.outfit(fontWeight: FontWeight.bold)),
-            ),
+        backgroundColor: const Color(0xFF1E293B),
+        title: Row(
+          children: [
+            Icon(Icons.timer_outlined, color: ModernTheme.secondary),
+            const SizedBox(width: 12),
+            Text('exam.title'.tr(),
+                style: GoogleFonts.outfit(
+                    color: Colors.white, fontWeight: FontWeight.bold)),
           ],
+        ),
+        content: Text(
+          'exam.disclaimer'.tr(),
+          style: GoogleFonts.outfit(color: Colors.white70),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text('common.cancel'.tr(),
+                style: GoogleFonts.outfit(color: Colors.white54)),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+                backgroundColor: ModernTheme.secondary,
+                foregroundColor: Colors.white),
+            onPressed: () => Navigator.pop(context, true),
+            child: Text('exam.startExam'.tr(),
+                style: GoogleFonts.outfit(fontWeight: FontWeight.bold)),
+          ),
+        ],
       ),
     );
 
@@ -734,15 +823,20 @@ class _ModeGlassCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        final settings = ProviderScope.containerOf(context).read(appSettingsProvider);
+        final settings =
+            ProviderScope.containerOf(context).read(appSettingsProvider);
         if (settings.vibrationEnabled) HapticFeedback.lightImpact();
         if (settings.soundEnabled) SystemSound.play(SystemSoundType.click);
         onTap();
       },
       child: GlassContainer(
-        color: isRecommended ? color.withValues(alpha: 0.15) : Colors.white.withValues(alpha: 0.05),
+        color: isRecommended
+            ? color.withValues(alpha: 0.15)
+            : Colors.white.withValues(alpha: 0.05),
         border: Border.all(
-          color: isRecommended ? color.withValues(alpha: 0.5) : Colors.white.withValues(alpha: 0.1),
+          color: isRecommended
+              ? color.withValues(alpha: 0.5)
+              : Colors.white.withValues(alpha: 0.1),
         ),
         padding: const EdgeInsets.all(20),
         child: Row(
@@ -773,18 +867,18 @@ class _ModeGlassCard extends StatelessWidget {
                       if (isRecommended) ...[
                         const SizedBox(width: 8),
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 2),
                           decoration: BoxDecoration(
                             color: color,
                             borderRadius: BorderRadius.circular(4),
                           ),
                           child: Text(
-                            'BEST', 
+                            'BEST',
                             style: GoogleFonts.outfit(
-                              color: Colors.white, 
-                              fontSize: 10, 
-                              fontWeight: FontWeight.bold
-                            ),
+                                color: Colors.white,
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold),
                           ),
                         ),
                       ]
@@ -793,19 +887,20 @@ class _ModeGlassCard extends StatelessWidget {
                   const SizedBox(height: 4),
                   Text(
                     '$questions Questions • $minutes Mins',
-                    style: GoogleFonts.outfit(color: Colors.white54, fontSize: 13),
+                    style:
+                        GoogleFonts.outfit(color: Colors.white54, fontSize: 13),
                   ),
                 ],
               ),
             ),
-            const Icon(Icons.arrow_forward_ios_rounded, color: Colors.white24, size: 16),
+            const Icon(Icons.arrow_forward_ios_rounded,
+                color: Colors.white24, size: 16),
           ],
         ),
       ),
     );
   }
 }
-
 
 class _TimerBanner extends StatelessWidget {
   const _TimerBanner({required this.timeLeftSeconds});
@@ -817,7 +912,7 @@ class _TimerBanner extends StatelessWidget {
     final minutes = (timeLeftSeconds ~/ 60).toString().padLeft(2, '0');
     final seconds = (timeLeftSeconds % 60).toString().padLeft(2, '0');
     final totalSeconds = timeLeftSeconds;
-    
+
     Color bg = ModernTheme.secondary.withValues(alpha: 0.2);
     Color text = ModernTheme.secondary;
 
@@ -843,7 +938,8 @@ class _TimerBanner extends StatelessWidget {
           const SizedBox(width: 6),
           Text(
             '$minutes:$seconds',
-            style: GoogleFonts.robotoMono( // Monospace for timer
+            style: GoogleFonts.robotoMono(
+              // Monospace for timer
               fontWeight: FontWeight.bold,
               color: text,
               fontSize: 14,
