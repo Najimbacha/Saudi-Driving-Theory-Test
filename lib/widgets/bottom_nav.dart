@@ -1,5 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+import '../core/theme/modern_theme.dart';
+import 'glass_container.dart';
 
 class BottomNav extends StatelessWidget {
   const BottomNav({
@@ -13,8 +17,7 @@ class BottomNav extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-    final isDark = scheme.brightness == Brightness.dark;
+
     final items = [
       _NavItem(
         icon: Icons.home_rounded,
@@ -37,28 +40,18 @@ class BottomNav extends StatelessWidget {
         label: 'nav.settings'.tr(),
       ),
     ];
+    
     return SafeArea(
       top: false,
-      child: Container(
+      child: GlassContainer(
         margin: const EdgeInsetsDirectional.fromSTEB(16, 0, 16, 16),
         padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
-        decoration: BoxDecoration(
-          color: isDark
-              ? scheme.surfaceContainerHighest
-              : scheme.surface,
-          borderRadius: BorderRadius.circular(28),
-          border: Border.all(
-            color: scheme.outline.withValues(alpha: isDark ? 0.3 : 0.2),
-            width: 1,
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: isDark ? 0.4 : 0.08),
-              blurRadius: 20,
-              offset: const Offset(0, -4),
-              spreadRadius: 0,
-            ),
-          ],
+        borderRadius: BorderRadius.circular(28),
+        blur: 20,
+        color: const Color(0xFF0F172A).withValues(alpha: 0.8),
+        border: Border.all(
+          color: Colors.white.withValues(alpha: 0.1),
+          width: 1,
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -81,7 +74,7 @@ class BottomNav extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
                       decoration: BoxDecoration(
                         color: selected
-                            ? scheme.primaryContainer.withValues(alpha: isDark ? 1 : 0.8)
+                            ? ModernTheme.primary.withValues(alpha: 0.15)
                             : Colors.transparent,
                         borderRadius: BorderRadius.circular(20),
                       ),
@@ -95,24 +88,24 @@ class BottomNav extends StatelessWidget {
                             child: Icon(
                               item.icon,
                               color: selected
-                                  ? scheme.primary
-                                  : scheme.onSurface.withValues(alpha: 0.6),
+                                  ? ModernTheme.primary
+                                  : Colors.white.withValues(alpha: 0.5),
                               size: 24,
                             ),
                           ),
                           const SizedBox(height: 4),
                           AnimatedDefaultTextStyle(
                             duration: const Duration(milliseconds: 200),
-                            style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                                  color: selected
-                                      ? scheme.primary
-                                      : scheme.onSurface.withValues(alpha: 0.6),
-                                  fontWeight: selected
-                                      ? FontWeight.w700
-                                      : FontWeight.w500,
-                                  fontSize: 11,
-                                  letterSpacing: 0.2,
-                                ),
+                            style: GoogleFonts.outfit(
+                              color: selected
+                                  ? ModernTheme.primary
+                                  : Colors.white.withValues(alpha: 0.5),
+                              fontWeight: selected
+                                  ? FontWeight.bold
+                                  : FontWeight.w500,
+                              fontSize: 11,
+                            ),
+
                             child: Text(
                               item.label,
                               maxLines: 1,
@@ -133,10 +126,10 @@ class BottomNav extends StatelessWidget {
     );
   }
 }
+
 class _NavItem {
   const _NavItem({required this.icon, required this.label});
 
   final IconData icon;
   final String label;
 }
-

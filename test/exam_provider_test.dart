@@ -1,10 +1,13 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:saudi_driving_theory_flutter/models/question.dart';
 import 'package:saudi_driving_theory_flutter/presentation/providers/exam_provider.dart';
 
 void main() {
-  test('ExamController starts and records answers', () {
-    final controller = ExamController();
+  test('ExamController starts and records answers', () async {
+    SharedPreferences.setMockInitialValues({});
+    final prefs = await SharedPreferences.getInstance();
+    final controller = ExamController(prefs);
     final questions = [
       const Question(
         id: 'q1',

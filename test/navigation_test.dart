@@ -15,7 +15,6 @@ void main() {
 
       await tester.pumpWidget(
         ProviderScope(
-          parent: container,
           child: EasyLocalization(
             supportedLocales: const [Locale('en')],
             path: 'assets/i18n',
@@ -57,7 +56,6 @@ void main() {
 
       await tester.pumpWidget(
         ProviderScope(
-          parent: container,
           child: EasyLocalization(
             supportedLocales: const [Locale('en')],
             path: 'assets/i18n',
@@ -113,7 +111,6 @@ void main() {
 
       await tester.pumpWidget(
         ProviderScope(
-          parent: container,
           child: EasyLocalization(
             supportedLocales: const [Locale('en')],
             path: 'assets/i18n',
@@ -154,12 +151,12 @@ void main() {
         timeTakenSeconds: 120,
         categoryScores: {},
         questionAnswers: [
-          QuestionAnswer(
+          const QuestionAnswer(
             questionId: 'q1',
             userAnswerIndex: 0,
             correctAnswerIndex: 0,
           ),
-          QuestionAnswer(
+          const QuestionAnswer(
             questionId: 'q2',
             userAnswerIndex: 1,
             correctAnswerIndex: 0,
@@ -169,7 +166,6 @@ void main() {
 
       await tester.pumpWidget(
         ProviderScope(
-          parent: container,
           child: EasyLocalization(
             supportedLocales: const [Locale('en')],
             path: 'assets/i18n',
@@ -196,7 +192,6 @@ void main() {
 
       await tester.pumpWidget(
         ProviderScope(
-          parent: container,
           child: EasyLocalization(
             supportedLocales: const [Locale('en')],
             path: 'assets/i18n',

@@ -74,7 +74,6 @@ class Favorites {
 
 class AppSettingsState {
   const AppSettingsState({
-    required this.languageCode,
     required this.themeMode,
     required this.hasSeenOnboarding,
     required this.favorites,
@@ -84,7 +83,8 @@ class AppSettingsState {
     required this.adsEnabled,
   });
 
-  final String languageCode;
+  // ROOT FIX: Removed languageCode - EasyLocalization is single source of truth
+  // Use context.locale.languageCode to read current language
   final ThemeMode themeMode;
   final bool hasSeenOnboarding;
   final Favorites favorites;
@@ -94,7 +94,6 @@ class AppSettingsState {
   final bool adsEnabled;
 
   AppSettingsState copyWith({
-    String? languageCode,
     ThemeMode? themeMode,
     bool? hasSeenOnboarding,
     Favorites? favorites,
@@ -104,7 +103,6 @@ class AppSettingsState {
     bool? adsEnabled,
   }) {
     return AppSettingsState(
-      languageCode: languageCode ?? this.languageCode,
       themeMode: themeMode ?? this.themeMode,
       hasSeenOnboarding: hasSeenOnboarding ?? this.hasSeenOnboarding,
       favorites: favorites ?? this.favorites,
@@ -120,7 +118,6 @@ class AppSettingsNotifier extends StateNotifier<AppSettingsState> {
   AppSettingsNotifier(this._prefs)
       : super(
           AppSettingsState(
-            languageCode: _prefs.getString('language') ?? 'en',
             themeMode: _parseTheme(_prefs.getString('theme')),
             hasSeenOnboarding: _prefs.getString('hasSeenOnboarding') == 'true',
             favorites: _loadFavorites(_prefs),
@@ -180,12 +177,10 @@ class AppSettingsNotifier extends StateNotifier<AppSettingsState> {
     }
   }
 
-  void setLanguage(String code) {
-    // Update SharedPreferences for non-localization use (e.g., analytics, logging)
-    // EasyLocalization handles its own persistence via saveLocale: true
-    _prefs.setString('language', code);
-    state = state.copyWith(languageCode: code);
-  }
+  // ROOT FIX: Removed setLanguage() method
+  // EasyLocalization handles language changes via context.setLocale()
+  // and persists automatically with saveLocale: true
+  // No need to duplicate this in Riverpod state
 
   void setThemeMode(ThemeMode mode) {
     final value = mode == ThemeMode.dark

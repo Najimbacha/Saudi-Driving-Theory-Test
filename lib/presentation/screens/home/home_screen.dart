@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../../../core/constants/app_colors.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+import '../../../core/theme/modern_theme.dart';
+import '../../../widgets/glass_container.dart';
 import '../../../widgets/home_shell.dart';
 import '../../../state/app_state.dart';
 import '../../../state/learning_state.dart';
@@ -14,7 +17,6 @@ class HomeDashboardScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    final scheme = theme.colorScheme;
     final stats = ref.watch(appSettingsProvider).stats;
     final learning = ref.watch(learningProvider);
 
@@ -26,247 +28,169 @@ class HomeDashboardScreen extends ConsumerWidget {
     final streak = learning.streak['current'] ?? 0;
 
     return Scaffold(
+      extendBodyBehindAppBar: true, // Allow glass effect to overlap content
       appBar: AppBar(
-        title: Text('home.explore'.tr()),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        title: Text(
+          'home.explore'.tr(),
+          style: GoogleFonts.outfit(
+            fontWeight: FontWeight.w700,
+            fontSize: 24,
+          ),
+        ),
         actions: [
           IconButton(
             icon: const Icon(Icons.person_outline_rounded),
             onPressed: () {
-              // Profile/settings action
+              // Profile action
             },
-            tooltip: 'home.profile'.tr(),
           ),
         ],
       ),
-      body: SafeArea(
-        child: CustomScrollView(
-          slivers: [
-            // Hero Banner Section
-            SliverPadding(
-              padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
-              sliver: SliverToBoxAdapter(
-                child: _HeroBanner(),
-              ),
-            ),
-
-            // Statistics Cards Row
-            SliverPadding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              sliver: SliverToBoxAdapter(
-                child: _StatsRow(
-                  totalAnswered: totalAnswered,
-                  accuracy: accuracy,
-                  streak: streak,
-                ),
-              ),
-            ),
-
-            // Quick Start Section
-            SliverPadding(
-              padding: const EdgeInsets.fromLTRB(20, 24, 20, 8),
-              sliver: SliverToBoxAdapter(
-                child: Text(
-                  'home.quickStart'.tr(),
-                  style: theme.textTheme.headlineSmall?.copyWith(
-                    fontWeight: FontWeight.w800,
-                    color: scheme.onSurface,
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: Theme.of(context).brightness == Brightness.dark
+              ? ModernTheme.darkGradient
+              : ModernTheme.lightGradient,
+        ),
+        child: SafeArea(
+          child: CustomScrollView(
+            slivers: [
+              // Hero Section with Greeting
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                  child: _GlassHeroSection(
+                    totalAnswered: totalAnswered,
+                    accuracy: accuracy,
+                    streak: streak,
                   ),
                 ),
               ),
-            ),
 
-            SliverPadding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              sliver: SliverToBoxAdapter(
-                child: _QuickActionsRow(
-                  onPractice: () {
-                    final shell = TabShellScope.maybeOf(context);
-                    if (shell != null) {
-                      shell.value = 2;
-                    } else {
-                      context.push('/practice');
-                    }
-                  },
-                  onExam: () {
-                    final shell = TabShellScope.maybeOf(context);
-                    if (shell != null) {
-                      shell.value = 3;
-                    } else {
-                      context.push('/exam');
-                    }
-                  },
-                ),
-              ),
-            ),
-
-            // Learning Paths Section
-            SliverPadding(
-              padding: const EdgeInsets.fromLTRB(20, 32, 20, 8),
-              sliver: SliverToBoxAdapter(
-                child: Text(
-                  'home.learningPaths'.tr(),
-                  style: theme.textTheme.headlineSmall?.copyWith(
-                    fontWeight: FontWeight.w800,
-                    color: scheme.onSurface,
+              // Quick Actions Header
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+                  child: Text(
+                    'home.quickStart'.tr(),
+                    style: theme.textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 0.5,
+                    ),
                   ),
                 ),
               ),
-            ),
 
-            SliverPadding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              sliver: SliverToBoxAdapter(
-                child: _LearningPathsList(
-                  onCategories: () => context.push('/categories'),
-                  onSigns: () {
-                    final shell = TabShellScope.maybeOf(context);
-                    if (shell != null) {
-                      shell.value = 1;
-                    } else {
-                      context.push('/signs');
-                    }
-                  },
-                  onProgress: () => context.push('/stats'),
-                  onHistory: () => context.push('/history'),
+              // Quick Actions Grid
+              SliverPadding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                sliver: SliverToBoxAdapter(
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: _GlassActionCard(
+                          title: 'home.practice'.tr(),
+                          subtitle: 'home.practiceSubtitle'.tr(),
+                          icon: Icons.play_circle_fill_rounded,
+                          color: ModernTheme.primary,
+                          gradient: ModernTheme.primaryGradient,
+                          onTap: () {
+                            final shell = TabShellScope.maybeOf(context);
+                            if (shell != null) shell.value = 2;
+                            else context.push('/practice');
+                          },
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: _GlassActionCard(
+                          title: 'home.mockExam'.tr(),
+                          subtitle: 'home.mockExamSubtitle'.tr(),
+                          icon: Icons.timer_rounded,
+                          color: ModernTheme.secondary,
+                          gradient: ModernTheme.accentGradient,
+                          onTap: () {
+                            final shell = TabShellScope.maybeOf(context);
+                            if (shell != null) shell.value = 3;
+                            else context.push('/exam');
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
 
-            const SliverPadding(
-              padding: EdgeInsets.only(bottom: 20),
-            ),
-          ],
+              // Learning Paths Header
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(24, 32, 24, 16),
+                  child: Text(
+                    'home.learningPaths'.tr(),
+                    style: theme.textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 0.5,
+                    ),
+                  ),
+                ),
+              ),
+
+              // Vertical List of Paths
+              SliverPadding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                sliver: SliverList(
+                  delegate: SliverChildListDelegate([
+                    _GlassListTile(
+                      title: 'home.practiceByCategory'.tr(),
+                      subtitle: 'home.practiceByCategoryDesc'.tr(),
+                      icon: Icons.category_rounded,
+                      color: Colors.blueAccent,
+                      onTap: () => context.push('/categories'),
+                    ),
+                    const SizedBox(height: 12),
+                    _GlassListTile(
+                      title: 'home.learnSigns'.tr(),
+                      subtitle: 'home.learnSignsDesc'.tr(),
+                      icon: Icons.traffic_rounded,
+                      color: Colors.amber,
+                      onTap: () {
+                        final shell = TabShellScope.maybeOf(context);
+                        if (shell != null) shell.value = 1;
+                        else context.push('/signs');
+                      },
+                    ),
+                    const SizedBox(height: 12),
+                    _GlassListTile(
+                      title: 'home.stats'.tr(),
+                      subtitle: 'home.statsDesc'.tr(),
+                      icon: Icons.bar_chart_rounded,
+                      color: ModernTheme.tertiary,
+                      onTap: () => context.push('/stats'),
+                    ),
+                    const SizedBox(height: 12),
+                    _GlassListTile(
+                      title: 'home.history'.tr(),
+                      subtitle: 'home.historyDesc'.tr(),
+                      icon: Icons.history_rounded,
+                      color: Colors.white70,
+                      onTap: () => context.push('/history'),
+                    ),
+                    const SizedBox(height: 120),
+                  ]),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 }
 
-/// Hero banner - simpler blue banner matching the image
-class _HeroBanner extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return Container(
-      padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        color: AppColors.primary,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.primary.withValues(alpha: 0.25),
-            blurRadius: 16,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'home.greeting'.tr(),
-                      style: theme.textTheme.displaySmall?.copyWith(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w900,
-                        height: 1.1,
-                        fontSize: 28,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'home.subtitle'.tr(),
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        color: Colors.white.withValues(alpha: 0.9),
-                        height: 1.4,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              // Car icon
-              Container(
-                width: 80,
-                height: 80,
-                decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.15),
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(
-                  Icons.directions_car_rounded,
-                  color: Colors.white,
-                  size: 40,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 20),
-          // Badge pills
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: [
-              _BadgePill(
-                icon: Icons.wifi_off_rounded,
-                label: 'home.badges.offline'.tr(),
-              ),
-              _BadgePill(
-                icon: Icons.lock_open_rounded,
-                label: 'home.badges.noLogin'.tr(),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-/// Badge pill component
-class _BadgePill extends StatelessWidget {
-  const _BadgePill({
-    required this.icon,
-    required this.label,
-  });
-
-  final IconData icon;
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.2),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, color: Colors.white, size: 14),
-          const SizedBox(width: 6),
-          Text(
-            label,
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: Colors.white,
-                  fontSize: 11,
-                  fontWeight: FontWeight.w600,
-                ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-/// Statistics row - white cards
-class _StatsRow extends StatelessWidget {
-  const _StatsRow({
+class _GlassHeroSection extends StatelessWidget {
+  const _GlassHeroSection({
     required this.totalAnswered,
     required this.accuracy,
     required this.streak,
@@ -277,94 +201,77 @@ class _StatsRow extends StatelessWidget {
   final int streak;
 
   @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: _StatCard(
-            icon: Icons.my_library_books_rounded,
-            value: totalAnswered.toString(),
-            label: 'home.statLabels.questions'.tr(),
-            iconColor: AppColors.primary,
-          ),
-        ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: _StatCard(
-            icon: Icons.trending_up_rounded,
-            value: '$accuracy%',
-            label: 'home.statLabels.accuracy'.tr(),
-            iconColor: AppColors.success,
-          ),
-        ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: _StatCard(
-            icon: Icons.local_fire_department_rounded,
-            value: streak.toString(),
-            label: 'home.statLabels.dayStreak'.tr(),
-            iconColor: AppColors.accent,
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-/// Individual stat card - white background
-class _StatCard extends StatelessWidget {
-  const _StatCard({
-    required this.icon,
-    required this.value,
-    required this.label,
-    required this.iconColor,
-  });
-
-  final IconData icon;
-  final String value;
-  final String label;
-  final Color iconColor;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final scheme = theme.colorScheme;
-
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: scheme.surface,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    return GlassContainer(
+      height: 200,
+      width: double.infinity,
+      gradient: isDark ? ModernTheme.glassGradient : LinearGradient(
+        colors: [Colors.black.withValues(alpha: 0.05), Colors.black.withValues(alpha: 0.02)],
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
+      border: Border.all(color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.1)),
+      child: Stack(
         children: [
-          Icon(icon, color: iconColor, size: 24),
-          const SizedBox(height: 12),
-          Text(
-            value,
-            style: theme.textTheme.headlineMedium?.copyWith(
-              color: scheme.onSurface,
-              fontWeight: FontWeight.w800,
-              height: 1,
-              fontSize: 24,
+          // Background decoration
+          Positioned(
+            right: -20,
+            top: -20,
+            child: Container(
+              width: 150,
+              height: 150,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: RadialGradient(
+                  colors: [
+                    ModernTheme.primary.withValues(alpha: 0.4),
+                    Colors.transparent
+                  ],
+                ),
+              ),
             ),
           ),
-          const SizedBox(height: 4),
-          Text(
-            label,
-            style: theme.textTheme.bodySmall?.copyWith(
-              color: scheme.onSurface.withValues(alpha: 0.7),
-              fontWeight: FontWeight.w500,
-              fontSize: 11,
+          
+          Padding(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'home.greeting'.tr(),
+                  style: GoogleFonts.outfit(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  'home.subtitle'.tr(),
+                  style: GoogleFonts.outfit(
+                    fontSize: 14,
+                    color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
+                  ),
+                ),
+                const Spacer(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    _StatBadge(
+                      label: 'Streak',
+                      value: '$streak 🔥',
+                    ),
+                    _StatBadge(
+                      label: 'Accuracy',
+                      value: '$accuracy%',
+                    ),
+                    _StatBadge(
+                      label: 'Done',
+                      value: '$totalAnswered',
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
         ],
@@ -373,54 +280,44 @@ class _StatCard extends StatelessWidget {
   }
 }
 
-/// Quick actions row - two large buttons
-class _QuickActionsRow extends StatelessWidget {
-  const _QuickActionsRow({
-    required this.onPractice,
-    required this.onExam,
-  });
+class _StatBadge extends StatelessWidget {
+  const _StatBadge({required this.label, required this.value});
 
-  final VoidCallback onPractice;
-  final VoidCallback onExam;
+  final String label;
+  final String value;
 
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            Expanded(
-              child: _QuickActionButton(
-                title: 'home.practice'.tr(),
-                subtitle: 'home.practiceSubtitle'.tr(),
-                icon: Icons.play_arrow_rounded,
-                gradient: AppColors.primaryGradient,
-                onTap: onPractice,
-              ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: _QuickActionButton(
-                title: 'home.mockExam'.tr(),
-                subtitle: 'home.mockExamSubtitle'.tr(),
-                icon: Icons.description_rounded,
-                gradient: AppColors.secondaryGradient,
-                onTap: onExam,
-              ),
-            ),
-          ],
+        Text(
+          value,
+          style: GoogleFonts.outfit(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.bold,
+            color: Theme.of(context).colorScheme.onSurface,
+          ),
+        ),
+        Text(
+          label,
+          style: GoogleFonts.outfit(
+            fontSize: 12,
+            color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
+          ),
         ),
       ],
     );
   }
 }
 
-/// Quick action button - larger, cleaner design
-class _QuickActionButton extends StatefulWidget {
-  const _QuickActionButton({
+class _GlassActionCard extends StatelessWidget {
+  const _GlassActionCard({
     required this.title,
     required this.subtitle,
     required this.icon,
+    required this.color,
     required this.gradient,
     required this.onTap,
   });
@@ -428,75 +325,68 @@ class _QuickActionButton extends StatefulWidget {
   final String title;
   final String subtitle;
   final IconData icon;
-  final List<Color> gradient;
+  final Color color;
+  final Gradient gradient;
   final VoidCallback onTap;
 
   @override
-  State<_QuickActionButton> createState() => _QuickActionButtonState();
-}
-
-class _QuickActionButtonState extends State<_QuickActionButton> {
-  bool _pressed = false;
-
-  @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return GestureDetector(
-      onTapDown: (_) {
-        HapticFeedback.lightImpact();
-        setState(() => _pressed = true);
-      },
-      onTapCancel: () => setState(() => _pressed = false),
-      onTapUp: (_) => setState(() => _pressed = false),
       onTap: () {
-        HapticFeedback.mediumImpact();
-        widget.onTap();
+        HapticFeedback.lightImpact();
+        onTap();
       },
-      child: AnimatedScale(
-        scale: _pressed ? 0.97 : 1.0,
-        duration: const Duration(milliseconds: 150),
-        curve: Curves.easeInOut,
+      child: GlassContainer(
+        height: 160,
+        borderRadius: BorderRadius.circular(24),
         child: Container(
-          padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: widget.gradient,
+              colors: [
+                color.withValues(alpha: 0.2),
+                color.withValues(alpha: 0.05),
+              ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
-            borderRadius: BorderRadius.circular(18),
-            boxShadow: [
-              BoxShadow(
-                color: widget.gradient.first.withValues(alpha: 0.3),
-                blurRadius: 12,
-                offset: const Offset(0, 4),
-              ),
-            ],
           ),
+          padding: const EdgeInsets.all(20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(
-                widget.icon,
-                color: Colors.white,
-                size: 32,
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: color,
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: color.withValues(alpha: 0.4),
+                      blurRadius: 12,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: Icon(icon, color: Colors.white, size: 24),
               ),
-              const SizedBox(height: 12),
+              const Spacer(),
               Text(
-                widget.title,
-                style: theme.textTheme.titleLarge?.copyWith(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w800,
-                  height: 1.2,
+                title,
+                style: GoogleFonts.outfit(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).colorScheme.onSurface,
                 ),
               ),
               const SizedBox(height: 4),
               Text(
-                widget.subtitle,
-                style: theme.textTheme.bodySmall?.copyWith(
-                  color: Colors.white.withValues(alpha: 0.9),
+                subtitle,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: GoogleFonts.outfit(
                   fontSize: 12,
+                  color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
+                  height: 1.2,
                 ),
               ),
             ],
@@ -507,169 +397,72 @@ class _QuickActionButtonState extends State<_QuickActionButton> {
   }
 }
 
-/// Learning paths list - vertical list cards
-class _LearningPathsList extends StatelessWidget {
-  const _LearningPathsList({
-    required this.onCategories,
-    required this.onSigns,
-    required this.onProgress,
-    required this.onHistory,
-  });
-
-  final VoidCallback onCategories;
-  final VoidCallback onSigns;
-  final VoidCallback onProgress;
-  final VoidCallback onHistory;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        _LearningPathCard(
-          title: 'home.practiceByCategory'.tr(),
-          subtitle: 'home.practiceByCategoryDesc'.tr(),
-          icon: Icons.folder_rounded,
-          iconColor: AppColors.primary,
-          onTap: onCategories,
-        ),
-        const SizedBox(height: 12),
-        _LearningPathCard(
-          title: 'home.learnSigns'.tr(),
-          subtitle: 'home.learnSignsDesc'.tr(),
-          icon: Icons.signpost_rounded,
-          iconColor: AppColors.success,
-          onTap: onSigns,
-        ),
-        const SizedBox(height: 12),
-        _LearningPathCard(
-          title: 'home.stats'.tr(),
-          subtitle: 'home.statsDesc'.tr(),
-          icon: Icons.insights_rounded,
-          iconColor: AppColors.tertiary,
-          onTap: onProgress,
-        ),
-        const SizedBox(height: 12),
-        _LearningPathCard(
-          title: 'home.history'.tr(),
-          subtitle: 'home.historyDesc'.tr(),
-          icon: Icons.history_rounded,
-          iconColor: AppColors.accent,
-          onTap: onHistory,
-        ),
-      ],
-    );
-  }
-}
-
-/// Learning path card - list style with icon, text, arrow
-class _LearningPathCard extends StatefulWidget {
-  const _LearningPathCard({
+class _GlassListTile extends StatelessWidget {
+  const _GlassListTile({
     required this.title,
     required this.subtitle,
     required this.icon,
-    required this.iconColor,
+    required this.color,
     required this.onTap,
   });
 
   final String title;
   final String subtitle;
   final IconData icon;
-  final Color iconColor;
+  final Color color;
   final VoidCallback onTap;
 
   @override
-  State<_LearningPathCard> createState() => _LearningPathCardState();
-}
-
-class _LearningPathCardState extends State<_LearningPathCard> {
-  bool _pressed = false;
-
-  @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final scheme = theme.colorScheme;
-
     return GestureDetector(
-      onTapDown: (_) {
-        HapticFeedback.lightImpact();
-        setState(() => _pressed = true);
-      },
-      onTapCancel: () => setState(() => _pressed = false),
-      onTapUp: (_) => setState(() => _pressed = false),
       onTap: () {
-        HapticFeedback.mediumImpact();
-        widget.onTap();
+        HapticFeedback.lightImpact();
+        onTap();
       },
-      child: AnimatedScale(
-        scale: _pressed ? 0.98 : 1.0,
-        duration: const Duration(milliseconds: 150),
-        curve: Curves.easeInOut,
-        child: Container(
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: scheme.surface,
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(
-              color: scheme.outline.withValues(alpha: 0.1),
-              width: 1,
+      child: GlassContainer(
+        height: 80,
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: color.withValues(alpha: 0.15),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(icon, color: color, size: 24),
             ),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.05),
-                blurRadius: 8,
-                offset: const Offset(0, 2),
-              ),
-            ],
-          ),
-          child: Row(
-            children: [
-              // Icon container
-              Container(
-                width: 48,
-                height: 48,
-                decoration: BoxDecoration(
-                  color: widget.iconColor.withValues(alpha: 0.15),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Icon(
-                  widget.icon,
-                  color: widget.iconColor,
-                  size: 24,
-                ),
-              ),
-              const SizedBox(width: 16),
-              // Text content
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      widget.title,
-                      style: theme.textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w700,
-                        color: scheme.onSurface,
-                      ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: GoogleFonts.outfit(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: Theme.of(context).colorScheme.onSurface,
                     ),
-                    const SizedBox(height: 4),
-                    Text(
-                      widget.subtitle,
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        color: scheme.onSurface.withValues(alpha: 0.7),
-                        fontSize: 12,
-                      ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    subtitle,
+                    style: GoogleFonts.outfit(
+                      fontSize: 12,
+                      color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-              // Arrow icon
-              Icon(
-                Icons.arrow_forward_ios_rounded,
-                color: scheme.onSurface.withValues(alpha: 0.4),
-                size: 16,
-              ),
-            ],
-          ),
+            ),
+            Icon(
+              Icons.arrow_forward_ios_rounded,
+              color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.3),
+              size: 16,
+            ),
+          ],
         ),
       ),
     );

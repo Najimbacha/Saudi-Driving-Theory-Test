@@ -94,6 +94,7 @@ class _HomeShellState extends ConsumerState<HomeShell> {
           valueListenable: _index,
           builder: (context, index, _) {
             return Scaffold(
+              extendBody: true,
               body: IndexedStack(
                 index: index,
                 children: [

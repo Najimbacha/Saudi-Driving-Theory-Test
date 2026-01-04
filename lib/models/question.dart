@@ -108,4 +108,43 @@ class Question {
       imageUrl: json['imageUrl'] as String?,
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'categoryId': categoryId,
+      'categoryKey': categoryKey,
+      'difficultyKey': difficultyKey,
+      'questionKey': questionKey,
+      'optionsKeys': optionsKeys,
+      'correctIndex': correctIndex,
+      'explanationKey': explanationKey,
+      'signId': signId,
+      'question': {
+        'en': questionText,
+        'ar': questionTextAr,
+        'ur': questionTextUr,
+        'hi': questionTextHi,
+        'bn': questionTextBn,
+      },
+      'options': [
+        for (int i = 0; i < (options?.length ?? 0); i++)
+          {
+            'en': options?[i],
+            'ar': optionsAr?[i],
+            'ur': optionsUr?[i],
+            'hi': optionsHi?[i],
+            'bn': optionsBn?[i],
+          }
+      ],
+      'explanation': {
+        'en': explanation,
+        'ar': explanationAr,
+        'ur': explanationUr,
+        'hi': explanationHi,
+        'bn': explanationBn,
+      },
+      'imageUrl': imageUrl,
+    };
+  }
 }
