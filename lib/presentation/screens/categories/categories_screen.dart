@@ -327,7 +327,8 @@ class _CategoryGlassCard extends StatelessWidget {
                           size: 14, color: Colors.white54),
                       const SizedBox(width: 4),
                       Text(
-                        '$total Questions',
+                        'categories.totalQuestions'
+                            .tr(namedArgs: {'value': total.toString()}),
                         style: GoogleFonts.outfit(
                             color: Colors.white54, fontSize: 12),
                       ),

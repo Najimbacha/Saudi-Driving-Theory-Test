@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 class NotFoundScreen extends StatelessWidget {
@@ -5,8 +6,8 @@ class NotFoundScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(child: Text('Page not found')),
+    return Scaffold(
+      body: Center(child: Text('notFound.message'.tr())),
     );
   }
 }

@@ -257,17 +257,17 @@ class _GlassHeroSection extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     _StatBadge(
-                      label: 'Streak',
+                      label: 'home.statLabels.streak'.tr(),
                       value: '$streak',
                       icon: Icons.local_fire_department_rounded,
                       iconColor: Colors.orangeAccent,
                     ),
                     _StatBadge(
-                      label: 'Accuracy',
+                      label: 'home.statLabels.accuracy'.tr(),
                       value: '$accuracy%',
                     ),
                     _StatBadge(
-                      label: 'Done',
+                      label: 'home.statLabels.done'.tr(),
                       value: '$totalAnswered',
                     ),
                   ],

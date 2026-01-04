@@ -121,7 +121,7 @@ class _SignsScreenState extends ConsumerState<SignsScreen> {
                                Icon(Icons.search_off_rounded, size: 64, color: Colors.white24),
                                const SizedBox(height: 16),
                                Text(
-                                 'No signs found', 
+                                 'signs.empty'.tr(), 
                                  style: GoogleFonts.outfit(color: Colors.white54, fontSize: 16),
                                ),
                              ],
@@ -182,7 +182,7 @@ class _SignsScreenState extends ConsumerState<SignsScreen> {
                     },
                     loading: () => const Center(child: CircularProgressIndicator()),
                     error: (_, __) => Center(
-                      child: Text('Failed to load signs', style: GoogleFonts.outfit(color: Colors.white)),
+                      child: Text('signs.loadError'.tr(), style: GoogleFonts.outfit(color: Colors.white)),
                     ),
                  ),
                ),

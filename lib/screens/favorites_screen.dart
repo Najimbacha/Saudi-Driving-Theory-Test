@@ -81,7 +81,8 @@ class FavoritesScreen extends ConsumerWidget {
                         title: Text(sign.titles[context.locale.languageCode] ??
                             sign.titles['en'] ??
                             ''),
-                        subtitle: Text(sign.category),
+                        subtitle:
+                            Text('signs.categories.${sign.category}'.tr()),
                         trailing: IconButton(
                           icon: const Icon(Icons.bookmark),
                           onPressed: () {

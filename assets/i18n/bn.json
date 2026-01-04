@@ -70,6 +70,8 @@
     "statLabels": {
       "questions": "প্রশ্ন",
       "accuracy": "নির্ভুলতা",
+      "streak": "স্ট্রিক",
+      "done": "সম্পন্ন",
       "dayStreak": "দৈনিক স্ট্রিক"
     },
     "practiceByCategory": "বিভাগভিত্তিক অনুশীলন",
@@ -163,6 +165,8 @@
   "signs": {
     "title": "ট্রাফিক সাইন",
     "search": "সাইন খুঁজুন...",
+    "empty": "কোনো সাইন পাওয়া যায়নি",
+    "loadError": "সাইন লোড করা যায়নি",
     "categories": {
       "all": "সমস্ত সাইন",
       "warning": "সতর্কতা",
@@ -191,6 +195,7 @@
     "selectCategory": "বিভাগ নির্বাচন করুন",
     "selectDifficulty": "কঠিনতা নির্বাচন করুন",
     "selectQuestions": "প্রশ্নের সংখ্যা",
+    "estimatedTime": "~{minutes} মিনিট",
     "difficulty": {
       "easy": "সহজ",
       "medium": "মাঝারি",
@@ -935,6 +940,7 @@
   },
   "exam": {
     "title": "প্র্যাকটিস টেস্ট",
+    "readyTitle": "আপনি কি আপনার জ্ঞান পরীক্ষা করতে প্রস্তুত?",
     "description": "থিওরি অনুশীলন সেশন",
     "duration": "সময়কাল",
     "minutes": "মিনিট",
@@ -964,11 +970,14 @@
     "failed": "আরও অনুশীলন করুন!",
     "correctAnswers": "সঠিক উত্তর",
     "reviewAnswers": "উত্তর দেখুন",
+    "overview": "সংক্ষিপ্ত বিবরণ",
     "reviewWithAd": "উত্তর দেখতে বিজ্ঞাপন দেখুন",
     "tryAgain": "আবার চেষ্টা করুন",
     "backToResults": "ফিরে যান",
     "explanation": "ব্যাখ্যা",
     "modeTitle": "{mode} {exam}",
+    "modeSummary": "{questions} প্রশ্ন • {minutes} মিনিট",
+    "bestBadge": "সেরা",
     "questionsCount_one": "{value} প্রশ্ন",
     "questionsCount_other": "{value} প্রশ্ন",
     "minutesCount_one": "{value} মিনিট",
@@ -1044,7 +1053,11 @@
   },
   "history": {
     "title": "পরীক্ষার ইতিহাস",
-    "empty": "আগের কোনো ফলাফল নেই"
+    "empty": "আগের কোনো ফলাফল নেই",
+    "examTypes": {
+      "exam": "পরীক্ষা",
+      "practice": "অনুশীলন"
+    }
   },
   "learn": {
     "title": "ড্রাইভিং থিওরি শিখুন",
@@ -1145,6 +1158,10 @@
   },
   "settings": {
     "title": "সেটিংস",
+    "sections": {
+      "general": "সাধারণ",
+      "preferences": "পছন্দসমূহ"
+    },
     "language": "ভাষা",
     "languages": {
       "en": "English",
@@ -1389,6 +1406,9 @@
   "common": {
     "loading": "লোড হচ্ছে...",
     "error": "কিছু ভুল হয়েছে",
+    "questionsLoadError": "প্রশ্নের ডেটা লোড করা যায়নি। অনুগ্রহ করে নিশ্চিত করুন সব প্রয়োজনীয় ফাইল আছে এবং আবার চেষ্টা করুন।",
+    "technicalDetails": "প্রযুক্তিগত বিবরণ",
+    "questionsLoadErrorDetails": "ত্রুটি: {error}\n\nঅনুগ্রহ করে নিশ্চিত করুন assets/data/ ডিরেক্টরিতে বৈধ প্রশ্ন JSON ফাইল রয়েছে।",
     "retry": "আবার চেষ্টা করুন",
     "cancel": "বাতিল",
     "confirm": "নিশ্চিত করুন",

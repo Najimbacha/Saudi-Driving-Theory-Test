@@ -92,7 +92,9 @@ class StatsScreen extends ConsumerWidget {
             ...history.take(3).map(
                   (result) => Card(
                     child: ListTile(
-                      title: Text('${result.examType.toUpperCase()} • ${result.scorePercentage.toStringAsFixed(0)}%'),
+                      title: Text(
+                        '${'history.examTypes.${result.examType}'.tr()} • ${result.scorePercentage.toStringAsFixed(0)}%',
+                      ),
                       subtitle: Text(DateFormat.yMMMd().add_jm().format(result.dateTime)),
                       trailing: Icon(result.passed ? Icons.check_circle : Icons.cancel,
                           color: result.passed ? AppColors.success : AppColors.error),

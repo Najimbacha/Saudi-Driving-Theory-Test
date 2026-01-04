@@ -71,6 +71,8 @@
     "statLabels": {
       "questions": "Questions",
       "accuracy": "Accuracy",
+      "streak": "Streak",
+      "done": "Done",
       "dayStreak": "Day Streak"
     },
     "practiceByCategory": "Practice by Category",
@@ -164,6 +166,8 @@
   "signs": {
     "title": "Traffic Signs",
     "search": "Search signs...",
+    "empty": "No signs found",
+    "loadError": "Failed to load signs",
     "categories": {
       "all": "All Signs",
       "warning": "Warning",
@@ -211,6 +215,7 @@
     "selectCategory": "Select Category",
     "selectDifficulty": "Select Difficulty",
     "selectQuestions": "Number of Questions",
+    "estimatedTime": "~{minutes} mins",
     "difficulty": {
       "easy": "Easy",
       "medium": "Medium",
@@ -955,6 +960,7 @@
   },
   "exam": {
     "title": "Practice Test",
+    "readyTitle": "Ready to test your knowledge?",
     "description": "Theory practice session",
     "duration": "Duration",
     "minutes": "minutes",
@@ -984,11 +990,14 @@
     "failed": "Keep Practicing!",
     "correctAnswers": "correct answers",
     "reviewAnswers": "Review Answers",
+    "overview": "Overview",
     "reviewWithAd": "Watch Ad to Review Answers",
     "tryAgain": "Try Again",
     "backToResults": "Back",
     "explanation": "Explanation",
     "modeTitle": "{mode} {exam}",
+    "modeSummary": "{questions} Questions • {minutes} Mins",
+    "bestBadge": "BEST",
     "questionsCount_one": "{value} question",
     "questionsCount_other": "{value} questions",
     "minutesCount_one": "{value} minute",
@@ -1064,7 +1073,11 @@
   },
   "history": {
     "title": "Exam History",
-    "empty": "No past results yet"
+    "empty": "No past results yet",
+    "examTypes": {
+      "exam": "Exam",
+      "practice": "Practice"
+    }
   },
   "learn": {
     "title": "Learn Driving Theory",
@@ -1165,6 +1178,10 @@
   },
   "settings": {
     "title": "Settings",
+    "sections": {
+      "general": "General",
+      "preferences": "Preferences"
+    },
     "language": "Language",
     "languages": {
       "en": "English",
@@ -1432,6 +1449,9 @@
   "common": {
     "loading": "Loading...",
     "error": "Something went wrong",
+    "questionsLoadError": "Unable to load question data. Please check that all required files are present and try again.",
+    "technicalDetails": "Technical Details",
+    "questionsLoadErrorDetails": "Error: {error}\n\nPlease ensure assets/data/ directory contains valid question JSON files.",
     "reload": "Reload",
     "retry": "Retry",
     "cancel": "Cancel",

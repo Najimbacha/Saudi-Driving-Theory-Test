@@ -67,7 +67,7 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
                 ),
                 const SizedBox(height: 12),
                 Text(
-                  'Unable to load question data. Please check that all required files are present and try again.',
+                  'common.questionsLoadError'.tr(),
                   style: Theme.of(context).textTheme.bodyMedium,
                   textAlign: TextAlign.center,
                 ),
@@ -78,19 +78,21 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
                     ref.invalidate(questionsProvider);
                   },
                   icon: const Icon(Icons.refresh),
-                  label: Text('Retry'.tr()),
+                  label: Text('common.retry'.tr()),
                 ),
                 const SizedBox(height: 16),
                 ExpansionTile(
                   title: Text(
-                    'Technical Details',
+                    'common.technicalDetails'.tr(),
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                   children: [
                     Padding(
                       padding: const EdgeInsets.all(16),
                       child: Text(
-                        'Error: $error\n\nPlease ensure assets/data/ directory contains valid question JSON files.',
+                        'common.questionsLoadErrorDetails'.tr(
+                          namedArgs: {'error': error.toString()},
+                        ),
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
                               fontFamily: 'monospace',
                             ),
@@ -912,11 +914,17 @@ class _PracticeSelectorState extends State<_PracticeSelector> {
                           children: [
                             _StatPill(
                                 icon: PhosphorIconsRegular.question,
-                                label: '$selectedCount Questions'),
+                                label: 'categories.totalQuestions'.tr(
+                                  namedArgs: {
+                                    'value': selectedCount.toString()
+                                  },
+                                )),
                             const SizedBox(width: 8),
                             _StatPill(
                                 icon: PhosphorIconsRegular.timer,
-                                label: '~$minutes mins'),
+                                label: 'quiz.estimatedTime'.tr(
+                                  namedArgs: {'minutes': minutes.toString()},
+                                )),
                           ],
                         ),
                       ],

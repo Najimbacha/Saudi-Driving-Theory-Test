@@ -71,6 +71,8 @@
     "statLabels": {
       "questions": "الأسئلة",
       "accuracy": "الدقة",
+      "streak": "السلسلة",
+      "done": "تم",
       "dayStreak": "السلسلة اليومية"
     },
     "practiceByCategory": "التدرب حسب الفئة",
@@ -164,6 +166,8 @@
   "signs": {
     "title": "إشارات المرور",
     "search": "ابحث عن الإشارات...",
+    "empty": "لا توجد إشارات",
+    "loadError": "فشل تحميل الإشارات",
     "categories": {
       "all": "جميع الإشارات",
       "warning": "تحذيرية",
@@ -192,6 +196,7 @@
     "selectCategory": "اختر الفئة",
     "selectDifficulty": "اختر الصعوبة",
     "selectQuestions": "عدد الأسئلة",
+    "estimatedTime": "~{minutes} دقيقة",
     "difficulty": {
       "easy": "سهل",
       "medium": "متوسط",
@@ -936,6 +941,7 @@
   },
   "exam": {
     "title": "Practice Test",
+    "readyTitle": "مستعد لاختبار معلوماتك؟",
     "description": "Theory practice session",
     "duration": "المدة",
     "minutes": "دقيقة",
@@ -965,11 +971,14 @@
     "failed": "Keep Practicing!",
     "correctAnswers": "إجابات صحيحة",
     "reviewAnswers": "مراجعة الإجابات",
+    "overview": "نظرة عامة",
     "reviewWithAd": "شاهد إعلانًا لمراجعة الإجابات",
     "tryAgain": "Try Again",
     "backToResults": "Back",
     "explanation": "التفسير",
     "modeTitle": "{mode} {exam}",
+    "modeSummary": "{questions} سؤال • {minutes} دقيقة",
+    "bestBadge": "الأفضل",
     "questionsCount_one": "{value} سؤال",
     "questionsCount_other": "{value} سؤالًا",
     "minutesCount_one": "{value} دقيقة",
@@ -1045,7 +1054,11 @@
   },
   "history": {
     "title": "سجل الاختبارات",
-    "empty": "لا توجد نتائج سابقة بعد"
+    "empty": "لا توجد نتائج سابقة بعد",
+    "examTypes": {
+      "exam": "اختبار",
+      "practice": "تدريب"
+    }
   },
   "learn": {
     "title": "Learn Driving Theory",
@@ -1146,6 +1159,10 @@
   },
   "settings": {
     "title": "الإعدادات",
+    "sections": {
+      "general": "عام",
+      "preferences": "التفضيلات"
+    },
     "language": "اللغة",
     "languages": {
       "en": "English",
@@ -1406,6 +1423,9 @@
   "common": {
     "loading": "جارٍ التحميل...",
     "error": "حدث خطأ ما",
+    "questionsLoadError": "تعذر تحميل بيانات الأسئلة. يرجى التأكد من وجود جميع الملفات المطلوبة ثم المحاولة مرة أخرى.",
+    "technicalDetails": "تفاصيل تقنية",
+    "questionsLoadErrorDetails": "الخطأ: {error}\n\nيرجى التأكد من أن مجلد assets/data/ يحتوي على ملفات أسئلة JSON صالحة.",
     "reload": "إعادة التحميل",
     "retry": "إعادة المحاولة",
     "cancel": "إلغاء",

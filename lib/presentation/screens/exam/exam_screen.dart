@@ -57,7 +57,7 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
                 ),
                 const SizedBox(height: 12),
                 Text(
-                  'Unable to load question data. Please check that all required files are present and try again.',
+                  'common.questionsLoadError'.tr(),
                   style: Theme.of(context).textTheme.bodyMedium,
                   textAlign: TextAlign.center,
                 ),
@@ -68,19 +68,21 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
                     ref.invalidate(questionsProvider);
                   },
                   icon: const Icon(Icons.refresh),
-                  label: Text('Retry'.tr()),
+                  label: Text('common.retry'.tr()),
                 ),
                 const SizedBox(height: 16),
                 ExpansionTile(
                   title: Text(
-                    'Technical Details',
+                    'common.technicalDetails'.tr(),
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                   children: [
                     Padding(
                       padding: const EdgeInsets.all(16),
                       child: Text(
-                        'Error: $error\n\nPlease ensure assets/data/ directory contains valid question JSON files.',
+                        'common.questionsLoadErrorDetails'.tr(
+                          namedArgs: {'error': error.toString()},
+                        ),
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
                               fontFamily: 'monospace',
                             ),
@@ -435,7 +437,7 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
                                     context, exam, controller),
                                 icon: const Icon(Icons.grid_view_rounded,
                                     size: 16, color: Colors.white38),
-                                label: Text('Overview',
+                                label: Text('exam.overview'.tr(),
                                     style: GoogleFonts.outfit(
                                         color: Colors.white38)),
                               ),
@@ -694,7 +696,7 @@ class _ExamIntroState extends State<_ExamIntro> {
                     ),
                     const SizedBox(height: 16),
                     Text(
-                      'Ready to test your knowledge?',
+                      'exam.readyTitle'.tr(),
                       style: GoogleFonts.outfit(
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
@@ -715,7 +717,7 @@ class _ExamIntroState extends State<_ExamIntro> {
               ),
               const SizedBox(height: 32),
               Text(
-                'Select Mode',
+                'exam.selectMode'.tr(),
                 style: GoogleFonts.outfit(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -874,7 +876,7 @@ class _ModeGlassCard extends StatelessWidget {
                             borderRadius: BorderRadius.circular(4),
                           ),
                           child: Text(
-                            'BEST',
+                            'exam.bestBadge'.tr(),
                             style: GoogleFonts.outfit(
                                 color: Colors.white,
                                 fontSize: 10,
@@ -886,7 +888,10 @@ class _ModeGlassCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    '$questions Questions • $minutes Mins',
+                    'exam.modeSummary'.tr(namedArgs: {
+                      'questions': questions,
+                      'minutes': minutes,
+                    }),
                     style:
                         GoogleFonts.outfit(color: Colors.white54, fontSize: 13),
                   ),

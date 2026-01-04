@@ -70,6 +70,8 @@
     "statLabels": {
       "questions": "سوالات",
       "accuracy": "درستگی",
+      "streak": "اسٹریک",
+      "done": "مکمل",
       "dayStreak": "یومیہ سلسلہ"
     },
     "practiceByCategory": "زمرہ وار مشق",
@@ -163,6 +165,8 @@
   "signs": {
     "title": "ٹریفک نشانیاں",
     "search": "اشاروں میں تلاش کریں",
+    "empty": "کوئی نشان نہیں ملا",
+    "loadError": "نشانات لوڈ نہیں ہو سکے",
     "categories": {
       "all": "تمام نشانیاں",
       "warning": "انتباہی",
@@ -191,6 +195,7 @@
     "selectCategory": "زمرہ منتخب کریں",
     "selectDifficulty": "سطح منتخب کریں",
     "selectQuestions": "سوالوں کی تعداد",
+    "estimatedTime": "~{minutes} منٹ",
     "difficulty": {
       "easy": "آسان",
       "medium": "درمیانہ",
@@ -935,6 +940,7 @@
   },
   "exam": {
     "title": "پریکٹس امتحان",
+    "readyTitle": "کیا آپ اپنے علم کو آزمانے کے لیے تیار ہیں؟",
     "description": "اپنی تیاری چیک کریں",
     "duration": "دورانیہ",
     "minutes": "منٹ",
@@ -964,11 +970,14 @@
     "failed": "اس بار کامیابی نہیں ہوئی",
     "correctAnswers": "صحیح جوابات",
     "reviewAnswers": "جوابات کا جائزہ",
+    "overview": "جائزہ",
     "reviewWithAd": "جوابات دیکھنے کے لیے اشتہار دیکھیں",
     "tryAgain": "دوبارہ کوشش کریں",
     "backToResults": "واپس",
     "explanation": "وضاحت",
     "modeTitle": "{mode} {exam}",
+    "modeSummary": "{questions} سوالات • {minutes} منٹ",
+    "bestBadge": "بہترین",
     "questionsCount_one": "{value} سوال",
     "questionsCount_other": "{value} سوالات",
     "minutesCount_one": "{value} منٹ",
@@ -1044,7 +1053,11 @@
   },
   "history": {
     "title": "ٹیسٹ ہسٹری",
-    "empty": "ابھی کوئی نتائج نہیں"
+    "empty": "ابھی کوئی نتائج نہیں",
+    "examTypes": {
+      "exam": "امتحان",
+      "practice": "پریکٹس"
+    }
   },
   "learn": {
     "title": "سیکھیں اور تیار ہوں",
@@ -1145,6 +1158,10 @@
   },
   "settings": {
     "title": "ترتیبات",
+    "sections": {
+      "general": "عمومی",
+      "preferences": "ترجیحات"
+    },
     "language": "زبان",
     "languages": {
       "en": "English",
@@ -1405,6 +1422,9 @@
   "common": {
     "loading": "لوڈ ہو رہا ہے",
     "error": "کچھ مسئلہ ہو گیا",
+    "questionsLoadError": "سوالات کا ڈیٹا لوڈ نہیں ہو سکا۔ براہ کرم یقینی بنائیں کہ تمام ضروری فائلیں موجود ہیں اور دوبارہ کوشش کریں۔",
+    "technicalDetails": "تکنیکی تفصیلات",
+    "questionsLoadErrorDetails": "خرابی: {error}\n\nبراہ کرم یقینی بنائیں کہ assets/data/ ڈائریکٹری میں درست سوالات کی JSON فائلیں موجود ہیں۔",
     "reload": "دوبارہ لوڈ کریں",
     "retry": "دوبارہ کوشش کریں",
     "cancel": "منسوخ",

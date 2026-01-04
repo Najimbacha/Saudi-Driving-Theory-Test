@@ -70,6 +70,8 @@
     "statLabels": {
       "questions": "प्रश्न",
       "accuracy": "सटीकता",
+      "streak": "स्ट्रीक",
+      "done": "पूर्ण",
       "dayStreak": "दैनिक स्ट्रीक"
     },
     "practiceByCategory": "श्रेणी के अनुसार अभ्यास",
@@ -163,6 +165,8 @@
   "signs": {
     "title": "ट्रैफ़िक साइन",
     "search": "संकेत खोजें...",
+    "empty": "कोई संकेत नहीं मिला",
+    "loadError": "संकेत लोड नहीं हो सके",
     "categories": {
       "all": "सभी साइन",
       "warning": "चेतावनी",
@@ -191,6 +195,7 @@
     "selectCategory": "श्रेणी चुनें",
     "selectDifficulty": "कठिनाई चुनें",
     "selectQuestions": "प्रश्नों की संख्या",
+    "estimatedTime": "~{minutes} मिनट",
     "difficulty": {
       "easy": "आसान",
       "medium": "मध्यम",
@@ -935,6 +940,7 @@
   },
   "exam": {
     "title": "प्रैक्टिस टेस्ट",
+    "readyTitle": "क्या आप अपना ज्ञान परखने के लिए तैयार हैं?",
     "description": "थ्योरी अभ्यास सत्र",
     "duration": "अवधि",
     "minutes": "मिनट",
@@ -964,11 +970,14 @@
     "failed": "अभ्यास जारी रखें!",
     "correctAnswers": "सही उत्तर",
     "reviewAnswers": "उत्तर देखें",
+    "overview": "अवलोकन",
     "reviewWithAd": "उत्तर देखने के लिए विज्ञापन देखें",
     "tryAgain": "फिर से प्रयास करें",
     "backToResults": "वापस",
     "explanation": "व्याख्या",
     "modeTitle": "{mode} {exam}",
+    "modeSummary": "{questions} प्रश्न • {minutes} मिनट",
+    "bestBadge": "सर्वश्रेष्ठ",
     "questionsCount_one": "{value} प्रश्न",
     "questionsCount_other": "{value} प्रश्न",
     "minutesCount_one": "{value} मिनट",
@@ -1044,7 +1053,11 @@
   },
   "history": {
     "title": "परीक्षा इतिहास",
-    "empty": "कोई पुराने परिणाम नहीं हैं"
+    "empty": "कोई पुराने परिणाम नहीं हैं",
+    "examTypes": {
+      "exam": "परीक्षा",
+      "practice": "अभ्यास"
+    }
   },
   "learn": {
     "title": "ड्राइविंग थ्योरी सीखें",
@@ -1145,6 +1158,10 @@
   },
   "settings": {
     "title": "सेटिंग्स",
+    "sections": {
+      "general": "सामान्य",
+      "preferences": "प्राथमिकताएँ"
+    },
     "language": "भाषा",
     "languages": {
       "en": "English",
@@ -1389,6 +1406,9 @@
   "common": {
     "loading": "लोड हो रहा है...",
     "error": "कुछ गलत हो गया",
+    "questionsLoadError": "प्रश्न डेटा लोड नहीं हो सका। कृपया सुनिश्चित करें कि सभी आवश्यक फ़ाइलें मौजूद हैं और फिर से प्रयास करें।",
+    "technicalDetails": "तकनीकी विवरण",
+    "questionsLoadErrorDetails": "त्रुटि: {error}\n\nकृपया सुनिश्चित करें कि assets/data/ निर्देशिका में मान्य प्रश्न JSON फ़ाइलें मौजूद हैं।",
     "reload": "रीलोड करें",
     "retry": "फिर से कोशिश करें",
     "cancel": "रद्द करें",

@@ -48,7 +48,7 @@ class SettingsScreen extends ConsumerWidget {
           child: ListView(
             padding: const EdgeInsets.fromLTRB(20, 20, 20, 100),
             children: [
-              _SectionHeader(title: 'General'),
+              _SectionHeader(title: 'settings.sections.general'.tr()),
               _SettingsGlassTile(
                 title: 'settings.language'.tr(),
                 subtitle: 'settings.languages.${context.locale.languageCode}'.tr(),
@@ -82,7 +82,7 @@ class SettingsScreen extends ConsumerWidget {
               ),
               
               const SizedBox(height: 24),
-              _SectionHeader(title: 'Preferences'),
+              _SectionHeader(title: 'settings.sections.preferences'.tr()),
               
               _SettingsSwitchTile(
                 title: 'settings.sound'.tr(),
@@ -121,7 +121,7 @@ class SettingsScreen extends ConsumerWidget {
               const SizedBox(height: 24),
               Center(
                 child: Text(
-                  'Version 1.0.0',
+                  'settings.versionLabel'.tr(namedArgs: {'version': '1.0.0'}),
                   style: GoogleFonts.outfit(color: Colors.white24, fontSize: 12),
                 ),
               ),

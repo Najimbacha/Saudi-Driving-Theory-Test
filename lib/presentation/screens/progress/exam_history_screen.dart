@@ -34,7 +34,9 @@ class ExamHistoryScreen extends ConsumerWidget {
                             result.passed ? AppColors.success : AppColors.error,
                       ),
                     ),
-                    title: Text('${result.examType.toUpperCase()} • $score%'),
+                    title: Text(
+                      '${'history.examTypes.${result.examType}'.tr()} • $score%',
+                    ),
                     subtitle: Text(
                         DateFormat.yMMMd().add_jm().format(result.dateTime)),
                   ),
