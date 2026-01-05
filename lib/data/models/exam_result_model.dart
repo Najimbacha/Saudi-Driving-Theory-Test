@@ -9,7 +9,8 @@ class QuestionAnswer {
   final int userAnswerIndex;
   final int correctAnswerIndex;
 
-  bool get isCorrect => userAnswerIndex == correctAnswerIndex;
+  bool get isSkipped => userAnswerIndex < 0;
+  bool get isCorrect => !isSkipped && userAnswerIndex == correctAnswerIndex;
 
   Map<String, dynamic> toJson() => {
         'questionId': questionId,

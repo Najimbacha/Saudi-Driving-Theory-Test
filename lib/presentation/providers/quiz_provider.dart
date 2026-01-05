@@ -9,6 +9,7 @@ class QuizState {
     required this.questions,
     required this.currentIndex,
     required this.selectedAnswers,
+    required this.skippedQuestions,
     required this.showAnswer,
     required this.correctCount,
     required this.startedAt,
@@ -17,6 +18,7 @@ class QuizState {
   final List<Question> questions;
   final int currentIndex;
   final Map<String, int> selectedAnswers;
+  final Set<String> skippedQuestions;
   final bool showAnswer;
   final int correctCount;
   final DateTime startedAt;
@@ -28,6 +30,7 @@ class QuizState {
     List<Question>? questions,
     int? currentIndex,
     Map<String, int>? selectedAnswers,
+    Set<String>? skippedQuestions,
     bool? showAnswer,
     int? correctCount,
     DateTime? startedAt,
@@ -36,6 +39,7 @@ class QuizState {
       questions: questions ?? this.questions,
       currentIndex: currentIndex ?? this.currentIndex,
       selectedAnswers: selectedAnswers ?? this.selectedAnswers,
+      skippedQuestions: skippedQuestions ?? this.skippedQuestions,
       showAnswer: showAnswer ?? this.showAnswer,
       correctCount: correctCount ?? this.correctCount,
       startedAt: startedAt ?? this.startedAt,
@@ -50,6 +54,7 @@ class QuizController extends StateNotifier<QuizState> {
             questions: const [],
             currentIndex: 0,
             selectedAnswers: const {},
+            skippedQuestions: const {},
             showAnswer: false,
             correctCount: 0,
             startedAt: DateTime.fromMillisecondsSinceEpoch(0),
@@ -61,6 +66,7 @@ class QuizController extends StateNotifier<QuizState> {
       questions: _shuffle(questions),
       currentIndex: 0,
       selectedAnswers: {},
+      skippedQuestions: {},
       showAnswer: false,
       correctCount: 0,
       startedAt: DateTime.now(),
@@ -69,14 +75,34 @@ class QuizController extends StateNotifier<QuizState> {
 
   void selectAnswer(int index) {
     final question = state.currentQuestion;
-    if (state.selectedAnswers.containsKey(question.id)) return;
     final nextAnswers = Map<String, int>.from(state.selectedAnswers);
+    final previous = nextAnswers[question.id];
+    final wasCorrect = previous != null && previous == question.correctIndex;
     nextAnswers[question.id] = index;
+    final nextSkipped = Set<String>.from(state.skippedQuestions)
+      ..remove(question.id);
     final isCorrect = question.correctIndex == index;
     state = state.copyWith(
       selectedAnswers: nextAnswers,
       showAnswer: true,
-      correctCount: state.correctCount + (isCorrect ? 1 : 0),
+      correctCount:
+          state.correctCount - (wasCorrect ? 1 : 0) + (isCorrect ? 1 : 0),
+      skippedQuestions: nextSkipped,
+    );
+  }
+
+  void skipCurrent() {
+    final question = state.currentQuestion;
+    final nextAnswers = Map<String, int>.from(state.selectedAnswers);
+    final previous = nextAnswers.remove(question.id);
+    final nextSkipped = Set<String>.from(state.skippedQuestions)
+      ..add(question.id);
+    final wasCorrect = previous != null && previous == question.correctIndex;
+    state = state.copyWith(
+      selectedAnswers: nextAnswers,
+      showAnswer: false,
+      correctCount: state.correctCount - (wasCorrect ? 1 : 0),
+      skippedQuestions: nextSkipped,
     );
   }
 
@@ -94,6 +120,7 @@ class QuizController extends StateNotifier<QuizState> {
       questions: const [],
       currentIndex: 0,
       selectedAnswers: const {},
+      skippedQuestions: const {},
       showAnswer: false,
       correctCount: 0,
       startedAt: DateTime.fromMillisecondsSinceEpoch(0),

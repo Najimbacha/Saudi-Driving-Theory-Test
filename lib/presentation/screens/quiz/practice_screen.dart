@@ -194,15 +194,72 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
             current.signId != null ? signMap[current.signId!] : null;
         final locale = context.locale.languageCode;
         final selected = quiz.selectedAnswers[current.id];
+        final isSkipped = quiz.skippedQuestions.contains(current.id);
         final isCorrect = selected != null && selected == current.correctIndex;
         final questionText = _questionText(current, locale);
         final options = _options(current, locale);
         final isActiveQuiz = quiz.questions.isNotEmpty && !quiz.isCompleted;
-        const isDark = true;
-        const primaryTextColor = Colors.white;
-        const secondaryTextColor = Colors.white70;
-        final defaultFill = Colors.white.withValues(alpha: 0.06);
-        final subtleFill = Colors.white.withValues(alpha: 0.04);
+        final canProceed = selected != null || isSkipped;
+        final scheme = Theme.of(context).colorScheme;
+        final isDark = Theme.of(context).brightness == Brightness.dark;
+        final primaryTextColor = scheme.onSurface;
+        final secondaryTextColor = scheme.onSurface.withValues(alpha: 0.7);
+        final defaultFill = isDark
+            ? Colors.white.withValues(alpha: 0.06)
+            : scheme.onSurface.withValues(alpha: 0.04);
+        final subtleFill = isDark
+            ? Colors.white.withValues(alpha: 0.04)
+            : scheme.onSurface.withValues(alpha: 0.03);
+        final defaultBorder = isDark
+            ? Colors.white10
+            : scheme.onSurface.withValues(alpha: 0.12);
+        Future<void> handleBack() async {
+          final shell = TabShellScope.maybeOf(context);
+          if (!isActiveQuiz) {
+            if (shell != null) {
+              shell.value = 0;
+            } else {
+              if (context.mounted) Navigator.of(context).maybePop();
+            }
+            return;
+          }
+          final shouldExit = await showDialog<bool>(
+            context: context,
+            builder: (context) => AlertDialog(
+              backgroundColor:
+                  isDark ? const Color(0xFF1E293B) : scheme.surface,
+              title: Text('exam.exitTitle'.tr(),
+                  style: GoogleFonts.outfit(
+                      fontWeight: FontWeight.bold,
+                      color: primaryTextColor)),
+              content: Text('exam.exitMessage'.tr(),
+                  style: GoogleFonts.outfit(color: secondaryTextColor)),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(false),
+                  child: Text('common.cancel'.tr(),
+                      style: GoogleFonts.outfit(
+                          color:
+                              scheme.onSurface.withValues(alpha: 0.6))),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(true),
+                  child: Text('exam.exitConfirm'.tr(),
+                      style:
+                          GoogleFonts.outfit(color: ModernTheme.secondary)),
+                ),
+              ],
+            ),
+          );
+          if (shouldExit == true && context.mounted) {
+            quizController.reset();
+            if (shell != null) {
+              shell.value = 0;
+            } else {
+              Navigator.of(context).maybePop();
+            }
+          }
+        }
 
         return PopScope(
           canPop: false,
@@ -222,17 +279,21 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
             final shouldExit = await showDialog<bool>(
               context: context,
               builder: (context) => AlertDialog(
-                backgroundColor: const Color(0xFF1E293B),
+                backgroundColor:
+                    isDark ? const Color(0xFF1E293B) : scheme.surface,
                 title: Text('exam.exitTitle'.tr(),
                     style: GoogleFonts.outfit(
-                        fontWeight: FontWeight.bold, color: Colors.white)),
+                        fontWeight: FontWeight.bold,
+                        color: primaryTextColor)),
                 content: Text('exam.exitMessage'.tr(),
-                    style: GoogleFonts.outfit(color: Colors.white70)),
+                    style: GoogleFonts.outfit(color: secondaryTextColor)),
                 actions: [
                   TextButton(
                     onPressed: () => Navigator.of(context).pop(false),
                     child: Text('common.cancel'.tr(),
-                        style: GoogleFonts.outfit(color: Colors.white54)),
+                        style: GoogleFonts.outfit(
+                            color: scheme.onSurface
+                                .withValues(alpha: 0.6))),
                   ),
                   TextButton(
                     onPressed: () => Navigator.of(context).pop(true),
@@ -257,7 +318,11 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
             appBar: AppBar(
               backgroundColor: Colors.transparent,
               elevation: 0,
-              iconTheme: const IconThemeData(color: Colors.white),
+              iconTheme: IconThemeData(color: primaryTextColor),
+              leading: IconButton(
+                onPressed: handleBack,
+                icon: const Icon(Icons.arrow_back),
+              ),
               title: Text(
                 'quiz.title'.tr(),
                 style: GoogleFonts.outfit(
@@ -282,12 +347,9 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
               ],
             ),
             body: Container(
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [Color(0xFF0F172A), Color(0xFF1E293B)],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                ),
+              decoration: BoxDecoration(
+                gradient:
+                    isDark ? ModernTheme.darkGradient : ModernTheme.lightGradient,
               ),
               child: SafeArea(
                 child: Column(
@@ -323,7 +385,9 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
                             child: LinearProgressIndicator(
                               value: (quiz.currentIndex + 1) /
                                   quiz.questions.length,
-                              backgroundColor: Colors.white10,
+                              backgroundColor: isDark
+                                  ? Colors.white10
+                                  : scheme.onSurface.withValues(alpha: 0.1),
                               color: ModernTheme.primary,
                               minHeight: 6,
                             ),
@@ -347,7 +411,7 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
                               style: GoogleFonts.outfit(
                                 fontSize: 22, // Larger text
                                 fontWeight: FontWeight.w600,
-                                color: Colors.white,
+                                color: primaryTextColor,
                                 height: 1.3,
                               ),
                             ),
@@ -360,7 +424,9 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
                               padding: const EdgeInsets.only(bottom: 24),
                               child: GlassContainer(
                                 padding: const EdgeInsets.all(20),
-                                color: Colors.white.withValues(alpha: 0.05),
+                                color: isDark
+                                    ? Colors.white.withValues(alpha: 0.05)
+                                    : scheme.onSurface.withValues(alpha: 0.04),
                                 child: SvgPicture.asset(
                                   'assets/$signPath',
                                   height: 140,
@@ -368,6 +434,31 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
                                 ),
                               ),
                             ),
+
+                          Align(
+                            alignment: AlignmentDirectional.centerEnd,
+                            child: TextButton(
+                              style: TextButton.styleFrom(
+                                foregroundColor:
+                                    scheme.onSurface.withValues(alpha: 0.7),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8, vertical: 4),
+                              ),
+                              onPressed: () {
+                                final settings =
+                                    ref.read(appSettingsProvider);
+                                if (settings.vibrationEnabled)
+                                  HapticFeedback.lightImpact();
+                                if (settings.soundEnabled)
+                                  SystemSound.play(SystemSoundType.click);
+                                quizController.skipCurrent();
+                                quizController.next();
+                              },
+                              child: Text('common.skip'.tr(),
+                                  style: GoogleFonts.outfit(fontSize: 13)),
+                            ),
+                          ),
+                          const SizedBox(height: 12),
 
                           // Options
                           AnimatedSwitcher(
@@ -377,7 +468,7 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
                               children: List.generate(options.length, (idx) {
                                 final optionText = options[idx];
                                 final wasSelected = selected == idx;
-                                Color borderColor = Colors.white10;
+                                Color borderColor = defaultBorder;
                                 Color? fillColor;
                                 List<BoxShadow> shadow = const [];
 
@@ -408,28 +499,25 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
                                     ];
                                   } else {
                                     fillColor = subtleFill;
-                                    borderColor = Colors.white10;
+                                    borderColor = defaultBorder;
                                   }
                                 } else {
                                   fillColor = defaultFill;
-                                  borderColor = Colors.white10;
+                                  borderColor = defaultBorder;
                                 }
 
                                 return Padding(
                                   padding: const EdgeInsets.only(bottom: 12),
                                   child: GestureDetector(
-                                    onTap: quiz.showAnswer
-                                        ? null
-                                        : () {
-                                            final settings =
-                                                ref.read(appSettingsProvider);
-                                            if (settings.vibrationEnabled)
-                                              HapticFeedback.lightImpact();
-                                            if (settings.soundEnabled)
-                                              SystemSound.play(
-                                                  SystemSoundType.click);
-                                            quizController.selectAnswer(idx);
-                                          },
+                                    onTap: () {
+                                      final settings =
+                                          ref.read(appSettingsProvider);
+                                      if (settings.vibrationEnabled)
+                                        HapticFeedback.lightImpact();
+                                      if (settings.soundEnabled)
+                                        SystemSound.play(SystemSoundType.click);
+                                      quizController.selectAnswer(idx);
+                                    },
                                     child: AnimatedContainer(
                                       duration:
                                           const Duration(milliseconds: 200),
@@ -465,7 +553,7 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
                                               optionText,
                                               style: GoogleFonts.outfit(
                                                 fontSize: 16,
-                                                color: Colors.white
+                                                color: scheme.onSurface
                                                     .withValues(alpha: 0.9),
                                               ),
                                             ),
@@ -522,7 +610,8 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
                                   Text(
                                     _explanation(current, locale),
                                     style: GoogleFonts.outfit(
-                                        color: Colors.white70),
+                                        color: scheme.onSurface
+                                            .withValues(alpha: 0.7)),
                                   ),
                                 ],
                               ),
@@ -537,7 +626,9 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
                     GlassContainer(
                       borderRadius:
                           const BorderRadius.vertical(top: Radius.circular(24)),
-                      color: Colors.black.withValues(alpha: 0.2),
+                      color: isDark
+                          ? Colors.black.withValues(alpha: 0.2)
+                          : Colors.white.withValues(alpha: 0.8),
                       blur: 10,
                       padding: const EdgeInsets.all(20),
                       child: Row(
@@ -545,8 +636,9 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
                           Expanded(
                             child: OutlinedButton(
                               style: OutlinedButton.styleFrom(
-                                side:
-                                    const BorderSide(color: Colors.white24),
+                                side: BorderSide(
+                                    color: scheme.onSurface
+                                        .withValues(alpha: 0.24)),
                                 foregroundColor: primaryTextColor,
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 16),
@@ -561,15 +653,16 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
                                   showDialog<bool>(
                                     context: context,
                                     builder: (context) => AlertDialog(
-                                      backgroundColor:
-                                          const Color(0xFF1E293B),
+                                      backgroundColor: isDark
+                                          ? const Color(0xFF1E293B)
+                                          : scheme.surface,
                                       title: Text('exam.exitTitle'.tr(),
                                           style: GoogleFonts.outfit(
                                               fontWeight: FontWeight.bold,
-                                              color: Colors.white)),
+                                              color: primaryTextColor)),
                                       content: Text('exam.exitMessage'.tr(),
                                           style: GoogleFonts.outfit(
-                                              color: Colors.white70)),
+                                              color: secondaryTextColor)),
                                       actions: [
                                         TextButton(
                                             onPressed: () =>
@@ -577,7 +670,9 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
                                                     .pop(false),
                                             child: Text('common.cancel'.tr(),
                                                 style: GoogleFonts.outfit(
-                                                    color: Colors.white54))),
+                                                    color: scheme.onSurface
+                                                        .withValues(
+                                                            alpha: 0.6)))),
                                         TextButton(
                                             onPressed: () =>
                                                 Navigator.of(context).pop(true),
@@ -640,7 +735,7 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
                                   return Colors.white;
                                 }),
                               ),
-                              onPressed: quiz.showAnswer
+                              onPressed: canProceed
                                   ? () {
                                       final settings =
                                           ref.read(appSettingsProvider);
@@ -678,7 +773,8 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
     // ... Copy exact logic from original file
     final total = quiz.questions.length;
     final correct = quiz.correctCount;
-    final wrong = total - correct;
+    final skipped = quiz.skippedQuestions.length;
+    final wrong = total - correct - skipped;
     final result = ExamResult(
       id: DateTime.now().millisecondsSinceEpoch.toString(),
       dateTime: DateTime.now(),
@@ -686,18 +782,16 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
       totalQuestions: total,
       correctAnswers: correct,
       wrongAnswers: wrong,
-      skippedAnswers: 0,
+      skippedAnswers: skipped,
       scorePercentage: total == 0 ? 0 : (correct / total) * 100,
       passed: total == 0 ? false : correct / total >= 0.7,
       timeTakenSeconds: DateTime.now().difference(quiz.startedAt).inSeconds,
       categoryScores: _categoryScores(quiz),
-      questionAnswers: quiz.selectedAnswers.entries
-          .map((e) => QuestionAnswer(
-                questionId: e.key,
-                userAnswerIndex: e.value,
-                correctAnswerIndex: quiz.questions
-                    .firstWhere((q) => q.id == e.key)
-                    .correctIndex,
+      questionAnswers: quiz.questions
+          .map((q) => QuestionAnswer(
+                questionId: q.id,
+                userAnswerIndex: quiz.selectedAnswers[q.id] ?? -1,
+                correctAnswerIndex: q.correctIndex,
               ))
           .toList(),
     );
@@ -843,6 +937,8 @@ class _PracticeSelectorState extends State<_PracticeSelector> {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final counts = _buildCounts(widget.questions, widget.categories);
     final selectedLabel = _selectedId == 'all'
         ? 'quiz.categories.all'.tr()
@@ -870,19 +966,27 @@ class _PracticeSelectorState extends State<_PracticeSelector> {
         appBar: AppBar(
           title: Text('quiz.selectCategory'.tr(),
               style: GoogleFonts.outfit(
-                  fontWeight: FontWeight.bold, color: Colors.white)),
+                  fontWeight: FontWeight.bold, color: scheme.onSurface)),
           backgroundColor: Colors.transparent,
           elevation: 0,
           centerTitle: true,
-          iconTheme: const IconThemeData(color: Colors.white),
+          iconTheme: IconThemeData(color: scheme.onSurface),
+          leading: IconButton(
+            onPressed: () {
+              final shell = TabShellScope.maybeOf(context);
+              if (shell != null) {
+                shell.value = 0;
+                return;
+              }
+              Navigator.of(context).maybePop();
+            },
+            icon: const Icon(Icons.arrow_back),
+          ),
         ),
         body: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Color(0xE60F172A), Color(0xE61E293B)],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-            ),
+          decoration: BoxDecoration(
+            gradient:
+                isDark ? ModernTheme.darkGradient : ModernTheme.lightGradient,
           ),
           child: SafeArea(
             child: Column(
@@ -893,8 +997,13 @@ class _PracticeSelectorState extends State<_PracticeSelector> {
                   child: GlassContainer(
                     padding: const EdgeInsets.all(26),
                     gradient: ModernTheme.primaryGradient,
-                    color: Colors.white.withValues(alpha: 0.06),
-                    border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
+                    color: isDark
+                        ? Colors.white.withValues(alpha: 0.06)
+                        : scheme.onSurface.withValues(alpha: 0.04),
+                    border: Border.all(
+                        color: isDark
+                            ? Colors.white.withValues(alpha: 0.12)
+                            : scheme.onSurface.withValues(alpha: 0.1)),
                     borderRadius: BorderRadius.circular(28),
                     blur: 12,
                     child: Column(
@@ -904,7 +1013,7 @@ class _PracticeSelectorState extends State<_PracticeSelector> {
                           style: GoogleFonts.outfit(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
-                            color: Colors.white,
+                            color: scheme.onSurface,
                           ),
                           textAlign: TextAlign.center,
                         ),
@@ -1033,8 +1142,11 @@ class _CategoryGlassTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final iconColor =
-        selected ? ModernTheme.secondary : Colors.white.withValues(alpha: 0.55);
+    final scheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final iconColor = selected
+        ? ModernTheme.secondary
+        : scheme.onSurface.withValues(alpha: isDark ? 0.55 : 0.65);
     return GestureDetector(
       onTap: () {
         final settings =
@@ -1052,13 +1164,17 @@ class _CategoryGlassTile extends StatelessWidget {
           height: 120,
           decoration: BoxDecoration(
             color: selected
-                ? Colors.white.withValues(alpha: 0.14)
-                : Colors.white.withValues(alpha: 0.08),
+                ? (isDark
+                    ? Colors.white.withValues(alpha: 0.14)
+                    : scheme.onSurface.withValues(alpha: 0.06))
+                : (isDark
+                    ? Colors.white.withValues(alpha: 0.08)
+                    : scheme.onSurface.withValues(alpha: 0.04)),
             borderRadius: BorderRadius.circular(18),
             border: Border.all(
               color: selected
                   ? ModernTheme.secondary.withValues(alpha: 0.45)
-                  : Colors.white.withValues(alpha: 0.12),
+                  : scheme.onSurface.withValues(alpha: 0.12),
               width: 1,
             ),
             boxShadow: selected
@@ -1089,7 +1205,7 @@ class _CategoryGlassTile extends StatelessWidget {
                     Text(
                       label,
                       style: GoogleFonts.outfit(
-                        color: Colors.white,
+                        color: scheme.onSurface,
                         fontWeight:
                             selected ? FontWeight.w600 : FontWeight.w500,
                         letterSpacing: 0.3,
@@ -1128,18 +1244,24 @@ class _StatPill extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        color: Colors.black.withValues(alpha: 0.2),
+        color: isDark
+            ? Colors.black.withValues(alpha: 0.2)
+            : scheme.onSurface.withValues(alpha: 0.06),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Row(
         children: [
-          Icon(icon, color: Colors.white70, size: 14),
+          Icon(icon,
+              color: scheme.onSurface.withValues(alpha: 0.7), size: 14),
           const SizedBox(width: 4),
           Text(label,
-              style: GoogleFonts.outfit(color: Colors.white, fontSize: 12)),
+              style:
+                  GoogleFonts.outfit(color: scheme.onSurface, fontSize: 12)),
         ],
       ),
     );
@@ -1159,10 +1281,13 @@ class _BookmarkButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     return IconButton(
       onPressed: onTap,
       style: IconButton.styleFrom(
-        foregroundColor: isBookmarked ? ModernTheme.secondary : Colors.white70,
+        foregroundColor: isBookmarked
+            ? ModernTheme.secondary
+            : scheme.onSurface.withValues(alpha: 0.7),
       ),
       icon: Icon(isBookmarked
           ? Icons.bookmark_rounded

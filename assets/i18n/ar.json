@@ -4,6 +4,9 @@
     "tagline": "أتقن نظرية القيادة بثقة",
     "offline": "يعمل بدون إنترنت 100%"
   },
+  "splash": {
+    "tagline": "تدرّب في أي مكان • لا حاجة للإنترنت"
+  },
   "nav": {
     "home": "الرئيسية",
     "signs": "الإشارات",
@@ -21,7 +24,13 @@
     "languageNote": "يمكنك تغيير هذا في أي وقت من الإعدادات",
     "getStarted": "ابدأ",
     "offlineReady": "جاهز للتعلم بدون إنترنت!",
-    "offlineDesc": "جميع المحتويات تعمل بدون اتصال بالإنترنت"
+    "offlineDesc": "جميع المحتويات تعمل بدون اتصال بالإنترنت",
+    "practiceTitle": "وضع التدريب",
+    "practiceDesc": "تعلم عبر اختبارات سريعة ونتائج فورية.",
+    "examTitle": "وضع الاختبار",
+    "examDesc": "حاكِ الاختبار الحقيقي بامتحانات مؤقتة.",
+    "offlineTitle": "بدون إنترنت + 5 لغات",
+    "offlineDesc2": "ادرس في أي مكان بالعربية، الإنجليزية، الأردية، الهندية، البنغالية."
   },
   "home": {
     "badges": {
@@ -490,12 +499,12 @@
         "explain": "النقطة العمياء هي منطقة حول سيارتك غير مرئية في المرايا. تحقق دائماً بتحريك رأسك."
       },
       "q34": {
-        "text": "What does 'BUS' written in a lane indicate?",
-        "a": "Bus stop ahead",
-        "b": "Lane reserved for buses only",
-        "c": "Buses have priority",
-        "d": "School zone",
-        "explain": "BUS marked on a lane means it is reserved for buses only during operating hours."
+        "text": "???? ???? ???? ?????? ???????? ??? ???????",
+        "a": "توقف الحافلة أمامك",
+        "b": "المسار مخصص للحافلات فقط",
+        "c": "الحافلات لها الأولوية",
+        "d": "منطقة المدرسة",
+        "explain": "علامة الحافلة على المسار تعني أنها مخصصة للحافلات فقط خلال ساعات العمل."
       },
       "q35": {
         "text": "ما هو حد السرعة النموذجي في المناطق المدرسية عند وجود الأطفال؟",
@@ -626,334 +635,334 @@
         "explain": "افحص ضغط الإطارات شهرياً على الأقل وقبل أي رحلة طويلة للسلامة وكفاءة الوقود."
       },
       "vp-001": {
-        "text": "According to traffic regulations, how many violation points can lead to license suspension within a Hijri year?",
-        "a": "12 violation points",
-        "b": "18 violation points",
-        "c": "24 violation points",
-        "d": "30 violation points",
-        "explain": "In general practice, accumulating 24 violation points can lead to suspension."
+        "text": "بحسب أنظمة المرور، كم عدد النقاط المخالفة التي تؤدي إلى تعليق الرخصة خلال عام هجري؟",
+        "a": "12 نقطة مخالفة",
+        "b": "18 نقطة مخالفة",
+        "c": "24 نقطة مخالفة",
+        "d": "30 نقطة مخالفة",
+        "explain": "في الممارسة العامة، تراكم 24 نقطة مخالفة يمكن أن يؤدي إلى الإيقاف."
       },
       "vp-002": {
-        "text": "What happens the first time a driver reaches 24 violation points within a Hijri year?",
-        "a": "Warning only",
-        "b": "License suspension for 3 months",
-        "c": "License suspension for 6 months",
-        "d": "Permanent revocation",
-        "explain": "First time reaching 24 violation points results in a 3-month suspension."
+        "text": "ماذا يحدث عندما يصل السائق إلى 24 نقطة مخالفة لأول مرة خلال عام هجري؟",
+        "a": "تحذير فقط",
+        "b": "تعليق الترخيص لمدة 3 أشهر",
+        "c": "تعليق الترخيص لمدة 6 أشهر",
+        "d": "الإلغاء الدائم",
+        "explain": "المرة الأولى التي يتم فيها الوصول إلى 24 نقطة مخالفة يؤدي إلى تعليق لمدة 3 أشهر."
       },
       "vp-003": {
-        "text": "What is the penalty the second time a driver reaches 24 violation points within a Hijri year?",
-        "a": "License suspension for 1 year",
-        "b": "License suspension for 6 months",
-        "c": "Permanent revocation",
-        "d": "Fine only",
-        "explain": "Second time reaching 24 violation points results in a 6-month suspension."
+        "text": "ما هي العقوبة في المرة الثانية التي يصل فيها السائق إلى 24 نقطة مخالفة خلال سنة هجرية؟",
+        "a": "تعليق الترخيص لمدة 1 سنة",
+        "b": "تعليق الترخيص لمدة 6 أشهر",
+        "c": "الإلغاء الدائم",
+        "d": "غرامة فقط",
+        "explain": "المرة الثانية، الوصول إلى 24 نقطة مخالفة يؤدي إلى الإيقاف لمدة 6 أشهر."
       },
       "vp-004": {
-        "text": "What is the penalty the third time a driver reaches 24 violation points within a Hijri year?",
-        "a": "License suspension for 1 year",
-        "b": "License suspension for 6 months",
-        "c": "License suspension for 3 months",
-        "d": "Permanent revocation",
-        "explain": "Third time reaching 24 violation points results in a 1-year suspension."
+        "text": "ما هي العقوبة في المرة الثالثة التي يصل فيها السائق إلى 24 نقطة مخالفة خلال عام هجري؟",
+        "a": "تعليق الترخيص لمدة 1 سنة",
+        "b": "تعليق الترخيص لمدة 6 أشهر",
+        "c": "تعليق الترخيص لمدة 3 أشهر",
+        "d": "الإلغاء الدائم",
+        "explain": "المرة الثالثة، الوصول إلى 24 نقطة مخالفة يؤدي إلى الإيقاف لمدة عام واحد."
       },
       "vp-005": {
-        "text": "What happens the fourth time a driver reaches 24 violation points within a Hijri year?",
-        "a": "License suspension for 6 months",
-        "b": "License suspension for 1 year",
-        "c": "Permanent revocation of the license",
-        "d": "Warning only",
-        "explain": "Fourth time reaching 24 violation points leads to permanent revocation."
+        "text": "ماذا يحدث في المرة الرابعة التي يصل فيها السائق إلى 24 نقطة مخالفة خلال عام هجري؟",
+        "a": "تعليق الترخيص لمدة 6 أشهر",
+        "b": "تعليق الترخيص لمدة 1 سنة",
+        "c": "إلغاء الترخيص نهائيا",
+        "d": "تحذير فقط",
+        "explain": "المرة الرابعة الوصول إلى 24 نقطة مخالفة يؤدي إلى الإلغاء الدائم."
       },
       "vp-006": {
-        "text": "In general practice, the 24-violation-point limit is calculated within which period?",
-        "a": "Calendar year (Gregorian)",
-        "b": "Hijri year",
-        "c": "Monthly cycle",
-        "d": "No time limit",
-        "explain": "The 24-violation-point limit is calculated within a Hijri year."
+        "text": "في الممارسة العامة، يتم احتساب حد الـ 24 نقطة مخالفة خلال أي فترة؟",
+        "a": "السنة التقويمية (الميلادية)",
+        "b": "سنة هجرية",
+        "c": "دورة شهرية",
+        "d": "لا يوجد حد زمني",
+        "explain": "يتم احتساب حد المخالفة البالغ 24 نقطة خلال سنة هجرية."
       },
       "vp-007": {
-        "text": "How many violation points are assigned for driving a vehicle under the influence (Alcohol/Drugs)?",
+        "text": "كم عدد نقاط المخالفة المخصصة لقيادة مركبة تحت تأثير (الكحول / المخدرات)؟",
         "a": "12",
         "b": "24",
         "c": "8",
         "d": "6",
-        "explain": "Driving under the influence carries 24 violation points."
+        "explain": "القيادة تحت تأثير الكحول تحمل 24 نقطة مخالفة."
       },
       "vp-008": {
-        "text": "How many violation points are assigned for drifting?",
+        "text": "كم عدد نقاط الانتهاك المخصصة للانجراف؟",
         "a": "24",
         "b": "12",
         "c": "8",
         "d": "6",
-        "explain": "Drifting carries 24 violation points."
+        "explain": "الانجراف يحمل 24 نقطة انتهاك."
       },
       "vp-009": {
-        "text": "How many violation points are assigned for running a red traffic light?",
+        "text": "كم عدد نقاط المخالفة المخصصة لتشغيل الإشارة الضوئية الحمراء؟",
         "a": "12",
         "b": "8",
         "c": "6",
         "d": "4",
-        "explain": "Running a red light carries 12 violation points."
+        "explain": "قطع الإشارة الحمراء يحمل 12 نقطة مخالفة."
       },
       "vp-010": {
-        "text": "How many violation points are assigned for driving in the opposite direction of traffic?",
+        "text": "كم عدد نقاط المخالفة المخصصة للقيادة في الاتجاه المعاكس لحركة المرور؟",
         "a": "12",
         "b": "8",
         "c": "6",
         "d": "4",
-        "explain": "Driving in the opposite direction carries 12 violation points."
+        "explain": "القيادة في الاتجاه المعاكس تحمل 12 نقطة مخالفة."
       },
       "vp-011": {
-        "text": "How many violation points are assigned for weaving through traffic on public roads?",
+        "text": "كم عدد نقاط المخالفة المخصصة لتجاوز حركة المرور على الطرق العامة؟",
         "a": "8",
         "b": "6",
         "c": "4",
         "d": "2",
-        "explain": "Weaving through traffic carries 8 violation points."
+        "explain": "النسيج من خلال حركة المرور يحمل 8 نقاط مخالفة."
       },
       "vp-012": {
-        "text": "How many violation points are assigned for not complying with a traffic officer’s manual signal?",
+        "text": "كم عدد نقاط المخالفة المخصصة لعدم الالتزام بالإشارة اليدوية لضابط المرور؟",
         "a": "8",
         "b": "6",
         "c": "4",
         "d": "2",
-        "explain": "Not complying with the officer’s signal carries 8 violation points."
+        "explain": "عدم الالتزام بإشارة الضابط يحمل 8 نقاط مخالفة."
       },
       "vp-013": {
-        "text": "How many violation points are assigned for driving a vehicle without brakes or lights?",
+        "text": "كم عدد نقاط المخالفة المخصصة لقيادة مركبة بدون فرامل أو أضواء؟",
         "a": "8",
         "b": "6",
         "c": "4",
         "d": "2",
-        "explain": "Driving without brakes or lights carries 8 violation points."
+        "explain": "القيادة بدون فرامل أو أضواء تحمل 8 نقاط مخالفة."
       },
       "vp-014": {
-        "text": "How many violation points are assigned for not stopping completely at a stop sign?",
+        "text": "كم عدد نقاط المخالفة المخصصة لعدم التوقف التام عند إشارة التوقف؟",
         "a": "6",
         "b": "4",
         "c": "2",
         "d": "8",
-        "explain": "Not stopping at a stop sign carries 6 violation points."
+        "explain": "عدم التوقف عند إشارة التوقف يحمل 6 نقاط مخالفة."
       },
       "vp-015": {
-        "text": "Failing to observe right-of-way rules results in how many violation points?",
+        "text": "يؤدي عدم مراعاة قواعد حق الطريق إلى كم عدد نقاط الانتهاك؟",
         "a": "6",
         "b": "4",
         "c": "2",
         "d": "8",
-        "explain": "Failing to observe right-of-way carries 6 violation points."
+        "explain": "عدم مراعاة حق الطريق يحمل 6 نقاط مخالفة."
       },
       "vp-016": {
-        "text": "Exceeding the speed limit by more than 25 km/h results in how many violation points?",
+        "text": "تجاوز السرعة المحددة بأكثر من 25 كم/ساعة يؤدي إلى كم عدد نقاط المخالفة؟",
         "a": "6",
         "b": "4",
         "c": "2",
         "d": "8",
-        "explain": "Speeding more than 25 km/h carries 6 violation points."
+        "explain": "السرعة أكثر من 25 كم/ساعة تحمل 6 نقاط مخالفة."
       },
       "vp-017": {
-        "text": "Not yielding to cars inside a roundabout results in how many violation points?",
+        "text": "عدم الاستسلام للسيارات داخل الدوار يؤدي إلى كم عدد نقاط المخالفة؟",
         "a": "6",
         "b": "4",
         "c": "2",
         "d": "8",
-        "explain": "Not yielding in roundabouts carries 6 violation points."
+        "explain": "عدم الاستسلام في الدوارات يحمل 6 نقاط مخالفة."
       },
       "vp-018": {
-        "text": "Overtaking in prohibited areas results in how many violation points?",
+        "text": "التجاوز في المناطق المحظورة يترتب عليه كم عدد نقاط المخالفة؟",
         "a": "6",
         "b": "4",
         "c": "2",
         "d": "8",
-        "explain": "Overtaking in prohibited areas carries 6 violation points."
+        "explain": "التجاوز في المناطق المحظورة يحمل 6 نقاط مخالفة."
       },
       "vp-019": {
-        "text": "Stopping on railway tracks results in how many violation points?",
+        "text": "التوقف على خطوط السكة الحديد يترتب عليه كم عدد نقاط المخالفة؟",
         "a": "6",
         "b": "4",
         "c": "2",
         "d": "8",
-        "explain": "Stopping on railway tracks carries 6 violation points."
+        "explain": "التوقف على خطوط السكة الحديد يحمل 6 نقاط مخالفة."
       },
       "vp-020": {
-        "text": "Exceeding the speed limit by up to 25 km/h results in how many violation points?",
+        "text": "تجاوز السرعة المحددة بما يصل إلى 25 كم/ساعة يؤدي إلى كم عدد نقاط المخالفة؟",
         "a": "4",
         "b": "6",
         "c": "2",
         "d": "8",
-        "explain": "Speeding up to 25 km/h carries 4 violation points."
+        "explain": "السرعة حتى 25 كم/ساعة تحمل 4 نقاط مخالفة."
       },
       "vp-021": {
-        "text": "Driving on lanes not designated for the vehicle results in how many violation points?",
+        "text": "القيادة على المسارات غير المخصصة للمركبة يترتب عليها كم عدد نقاط المخالفة؟",
         "a": "4",
         "b": "6",
         "c": "2",
         "d": "8",
-        "explain": "Driving on non-designated lanes carries 4 violation points."
+        "explain": "القيادة على المسارات غير المخصصة تحمل 4 نقاط مخالفة."
       },
       "vp-022": {
-        "text": "Overtaking school buses while students are boarding or disembarking results in how many violation points?",
+        "text": "التجاوز في الحافلات المدرسية أثناء صعود أو نزول الطلاب يؤدي إلى كم عدد نقاط المخالفة؟",
         "a": "4",
         "b": "6",
         "c": "2",
         "d": "8",
-        "explain": "Overtaking school buses carries 4 violation points."
+        "explain": "التجاوز على الحافلات المدرسية يحمل 4 نقاط مخالفة."
       },
       "vp-023": {
-        "text": "Not covering the load and cargo during transport results in how many violation points?",
+        "text": "عدم تغطية الحمولة والبضائع أثناء النقل يؤدي إلى كم عدد نقاط المخالفة؟",
         "a": "4",
         "b": "6",
         "c": "2",
         "d": "8",
-        "explain": "Uncovered load carries 4 violation points."
+        "explain": "الحمولة المكشوفة تحمل 4 نقاط مخالفة."
       },
       "vp-024": {
-        "text": "Modifying vehicle structure or body without proper authorization results in how many violation points?",
+        "text": "تعديل هيكل المركبة أو جسمها بدون تصريح مناسب يؤدي إلى كم عدد نقاط المخالفة؟",
         "a": "4",
         "b": "6",
         "c": "2",
         "d": "8",
-        "explain": "Unauthorized modification carries 4 violation points."
+        "explain": "التعديل غير المصرح به يحمل 4 نقاط مخالفة."
       },
       "vp-025": {
-        "text": "Not wearing a seatbelt results in how many violation points?",
+        "text": "عدم ارتداء حزام الأمان يؤدي إلى كم نقطة مخالفة؟",
         "a": "2",
         "b": "4",
         "c": "6",
         "d": "8",
-        "explain": "Not wearing a seatbelt carries 2 violation points."
+        "explain": "عدم ارتداء حزام الأمان يحمل نقطتي مخالفة."
       },
       "vp-026": {
-        "text": "Using a hand-held mobile phone while driving results in how many violation points?",
+        "text": "استخدام الهاتف المحمول أثناء القيادة يؤدي إلى كم عدد نقاط المخالفة؟",
         "a": "2",
         "b": "4",
         "c": "6",
         "d": "8",
-        "explain": "Using a hand-held mobile phone carries 2 violation points."
+        "explain": "استخدام الهاتف المحمول يحمل نقطتي مخالفة."
       },
       "vp-027": {
-        "text": "Not wearing a helmet while riding motorized bikes results in how many violation points?",
+        "text": "عدم ارتداء الخوذة أثناء ركوب الدراجات الآلية يؤدي إلى كم عدد نقاط المخالفة؟",
         "a": "2",
         "b": "4",
         "c": "6",
         "d": "8",
-        "explain": "Not wearing a helmet carries 2 violation points."
+        "explain": "عدم ارتداء الخوذة يحمل نقطتين مخالفة."
       },
       "tf-001": {
-        "text": "In general practice, what is the main purpose of traffic fines?",
-        "a": "To improve road safety and reduce accidents",
-        "b": "To increase vehicle sales",
-        "c": "To replace driving training",
-        "d": "To reward risky driving",
-        "explain": "Fines are intended to encourage safer driving habits."
+        "text": "بشكل عام، ما هو الغرض الرئيسي من المخالفات المرورية؟",
+        "a": "لتحسين السلامة على الطرق والحد من الحوادث",
+        "b": "لزيادة مبيعات المركبات",
+        "c": "ليحل محل التدريب على القيادة",
+        "d": "لمكافأة القيادة المحفوفة بالمخاطر",
+        "explain": "تهدف الغرامات إلى تشجيع عادات القيادة الأكثر أمانًا."
       },
       "tf-002": {
-        "text": "Which type of violation usually carries the highest fine?",
-        "a": "Very serious violations that endanger lives",
-        "b": "Minor parking issues",
-        "c": "Minor paperwork errors",
-        "d": "Temporary weather delays",
-        "explain": "Very serious violations typically carry the highest fines."
+        "text": "ما هو نوع المخالفة التي عادة ما تحمل أعلى غرامة؟",
+        "a": "انتهاكات خطيرة جداً تعرض حياة الناس للخطر",
+        "b": "قضايا وقوف السيارات البسيطة",
+        "c": "أخطاء طفيفة في الأوراق",
+        "d": "تأخيرات الطقس المؤقتة",
+        "explain": "عادةً ما تحمل الانتهاكات الخطيرة جدًا أعلى الغرامات."
       },
       "tf-003": {
-        "text": "Why can fines increase for repeated violations?",
-        "a": "To discourage repeated unsafe behavior",
-        "b": "To reduce road signs",
-        "c": "To shorten driving lessons",
-        "d": "To increase fuel use",
-        "explain": "Repeat violations usually lead to higher penalties to encourage compliance."
+        "text": "لماذا يمكن زيادة الغرامات في حالة تكرار المخالفات؟",
+        "a": "لتثبيط السلوك غير الآمن المتكرر",
+        "b": "لتقليل علامات الطريق",
+        "c": "لتقصير دروس القيادة",
+        "d": "لزيادة استخدام الوقود",
+        "explain": "يؤدي تكرار الانتهاكات عادة إلى فرض عقوبات أعلى لتشجيع الامتثال."
       },
       "tf-004": {
-        "text": "Are traffic fines intended to improve road safety?",
-        "a": "Yes, they encourage safer driving",
-        "b": "No, they are only for revenue",
-        "c": "No, they replace driver training",
-        "d": "No, they are optional",
-        "explain": "Fines are designed to promote safer driving."
+        "text": "هل الغرامات المرورية تهدف إلى تحسين السلامة على الطرق؟",
+        "a": "نعم، إنهم يشجعون على القيادة الآمنة",
+        "b": "لا، هم فقط من أجل الإيرادات",
+        "c": "لا، فهي تحل محل تدريب السائقين",
+        "d": "لا، فهي اختيارية",
+        "explain": "تم تصميم الغرامات لتعزيز القيادة الآمنة."
       },
       "tf-005": {
-        "text": "Minor traffic violations usually result in:",
-        "a": "Low fines",
-        "b": "Jail time",
-        "c": "License cancellation",
-        "d": "No action",
-        "explain": "Minor violations generally carry lower fines."
+        "text": "عادة ما تؤدي المخالفات المرورية البسيطة إلى:",
+        "a": "غرامات منخفضة",
+        "b": "وقت السجن",
+        "c": "إلغاء الترخيص",
+        "d": "لا يوجد إجراء",
+        "explain": "تحمل الانتهاكات البسيطة عمومًا غرامات أقل."
       },
       "tf-006": {
-        "text": "In practice, not wearing a seatbelt usually results in:",
-        "a": "A moderate fine",
-        "b": "No penalty",
-        "c": "Vehicle replacement",
-        "d": "License cancellation",
-        "explain": "Seatbelt violations are typically treated as moderate."
+        "text": "ومن الناحية العملية، يؤدي عدم ارتداء حزام الأمان عادةً إلى ما يلي:",
+        "a": "غرامة معتدلة",
+        "b": "لا عقوبة",
+        "c": "استبدال المركبة",
+        "d": "إلغاء الترخيص",
+        "explain": "عادة ما يتم التعامل مع انتهاكات حزام الأمان على أنها معتدلة."
       },
       "tf-007": {
-        "text": "Using a hand-held mobile phone while driving usually results in:",
-        "a": "A moderate to high fine",
-        "b": "No penalty",
-        "c": "Warning only",
-        "d": "Vehicle replacement",
-        "explain": "Phone use while driving is treated as more serious."
+        "text": "عادة ما يؤدي استخدام الهاتف المحمول أثناء القيادة إلى ما يلي:",
+        "a": "غرامة متوسطة إلى عالية",
+        "b": "لا عقوبة",
+        "c": "تحذير فقط",
+        "d": "استبدال المركبة",
+        "explain": "يتم التعامل مع استخدام الهاتف أثناء القيادة على أنه أكثر خطورة."
       },
       "tf-008": {
-        "text": "Serious violations like running a red light are usually punished with:",
-        "a": "Higher fines",
-        "b": "Verbal warning only",
-        "c": "Fuel penalty",
-        "d": "No consequence",
-        "explain": "Dangerous behavior usually carries higher fines."
+        "text": "عادةً ما يُعاقب على الانتهاكات الخطيرة مثل تجاوز الضوء الأحمر بما يلي:",
+        "a": "غرامات أعلى",
+        "b": "تحذير شفهي فقط",
+        "c": "عقوبة الوقود",
+        "d": "لا نتيجة",
+        "explain": "السلوك الخطير عادة ما يحمل غرامات أعلى."
       },
       "tf-009": {
-        "text": "Light speeding is generally categorized as:",
-        "a": "A moderate violation",
-        "b": "A very serious violation",
-        "c": "A minor parking issue",
-        "d": "No violation",
-        "explain": "Light speeding is typically treated as moderate."
+        "text": "يتم تصنيف السرعة الضوئية بشكل عام على النحو التالي:",
+        "a": "انتهاك معتدل",
+        "b": "انتهاك خطير جدا",
+        "c": "قضية وقوف السيارات البسيطة",
+        "d": "لا انتهاك",
+        "explain": "عادة ما يتم التعامل مع السرعة الخفيفة على أنها معتدلة."
       },
       "tf-010": {
-        "text": "Parking issues are generally considered:",
-        "a": "Minor violations with lower fines",
-        "b": "Very serious violations",
-        "c": "Always criminal offenses",
-        "d": "No violation",
-        "explain": "Parking issues are usually categorized as minor."
+        "text": "يتم النظر في قضايا وقوف السيارات بشكل عام:",
+        "a": "مخالفات بسيطة مع غرامات أقل",
+        "b": "انتهاكات خطيرة جداً",
+        "c": "دائما الجرائم الجنائية",
+        "d": "لا انتهاك",
+        "explain": "عادة ما يتم تصنيف مشكلات وقوف السيارات على أنها بسيطة."
       },
       "tf-011": {
-        "text": "Excessive speeding is generally considered:",
-        "a": "A serious violation with higher fines",
-        "b": "A minor violation",
-        "c": "No violation",
-        "d": "Only a warning",
-        "explain": "Excessive speeding is treated as serious."
+        "text": "تعتبر السرعة الزائدة بشكل عام:",
+        "a": "انتهاك خطير مع غرامات أعلى",
+        "b": "انتهاك بسيط",
+        "c": "لا انتهاك",
+        "d": "تحذير فقط",
+        "explain": "يتم التعامل مع السرعة المفرطة على أنها خطيرة."
       },
       "tf-012": {
-        "text": "Very serious violations usually lead to:",
-        "a": "Heavy fines and additional penalties",
-        "b": "No action",
-        "c": "Free training only",
-        "d": "Vehicle upgrades",
-        "explain": "Very serious violations can carry heavier fines and penalties."
+        "text": "عادة ما تؤدي الانتهاكات الخطيرة جدًا إلى:",
+        "a": "غرامات باهظة وعقوبات إضافية",
+        "b": "لا يوجد إجراء",
+        "c": "تدريب مجاني فقط",
+        "d": "ترقيات المركبات",
+        "explain": "يمكن أن تؤدي الانتهاكات الخطيرة جدًا إلى فرض غرامات وعقوبات أشد."
       }
     }
   },
   "exam": {
-    "title": "Practice Test",
+    "title": "اختبار الممارسة",
     "readyTitle": "مستعد لاختبار معلوماتك؟",
-    "description": "Theory practice session",
+    "description": "جلسة الممارسة النظرية",
     "duration": "المدة",
     "minutes": "دقيقة",
     "questions": "سؤال",
-    "passingScore": "Target Score",
-    "startExam": "Start Practice",
-    "endExam": "End Practice",
-    "confirmEnd": "Are you sure you want to end the practice session?",
+    "passingScore": "النتيجة المستهدفة",
+    "startExam": "ابدأ التدريب",
+    "endExam": "نهاية الممارسة",
+    "confirmEnd": "هل أنت متأكد أنك تريد إنهاء جلسة التدريب؟",
     "timeUp": "انتهى الوقت!",
-    "review": "Review Answers",
-    "selectMode": "Select Practice Mode",
-    "selectModeDesc": "Choose the practice format that suits your preparation level",
+    "review": "إجابات المراجعة",
+    "selectMode": "حدد وضع التدريب",
+    "selectModeDesc": "اختر تنسيق التدريب الذي يناسب مستوى إعدادك",
     "disclaimer": "هذه محاكاة تدريبية وليست اختبارًا رسميًا.",
     "modes": {
       "real": "الاختبار الحقيقي",
@@ -965,16 +974,16 @@
     "passThreshold": "المستهدف",
     "enableTimer": "تفعيل المؤقت",
     "timerDesc": "تدريب مع مؤقت",
-    "submit": "Submit Practice",
-    "results": "Practice Results",
-    "passed": "Great job! Practice complete.",
-    "failed": "Keep Practicing!",
+    "submit": "إرسال الممارسة",
+    "results": "نتائج الممارسة",
+    "passed": "عمل عظيم! الممارسة كاملة.",
+    "failed": "استمر في التدرب!",
     "correctAnswers": "إجابات صحيحة",
     "reviewAnswers": "مراجعة الإجابات",
     "overview": "نظرة عامة",
     "reviewWithAd": "شاهد إعلانًا لمراجعة الإجابات",
-    "tryAgain": "Try Again",
-    "backToResults": "Back",
+    "tryAgain": "حاول ثانية",
+    "backToResults": "خلف",
     "explanation": "التفسير",
     "modeTitle": "{mode} {exam}",
     "modeSummary": "{questions} سؤال • {minutes} دقيقة",
@@ -993,8 +1002,8 @@
     "strictModeDesc": "لا يمكنك الرجوع وتُقفل الإجابات بعد الاختيار"
   },
   "practice": {
-    "byMode": "By Mode",
-    "byCategory": "By Category",
+    "byMode": "حسب الوضع",
+    "byCategory": "حسب الفئة",
     "byModeHelper": "تدرّب حسب الهدف",
     "byCategoryHelper": "تدرّب حسب الموضوع",
     "helperDefault": "اختر طريقة التدريب المناسبة لك",
@@ -1011,17 +1020,17 @@
       "reviewDesc": "قائمة المراجعة المتكررة",
       "daily": "تدريب يومي",
       "dailyDesc": "مجموعة تدريب يومية سريعة",
-      "quick": "Quick 10",
-      "quickDesc": "A fast 10-question mix"
+      "quick": "سريع 10",
+      "quickDesc": "مزيج سريع من 10 أسئلة"
     },
-    "all": "All",
+    "all": "الجميع",
     "accuracy": "الدقة",
-    "learningStats": "Learning Stats",
-    "mistakeCount": "Mistakes",
-    "weakAreas": "Weak Areas",
-    "dueReviews": "Due Reviews",
-    "startDaily": "Start Daily",
-    "reviewMistakes": "Review Mistakes",
+    "learningStats": "إحصائيات التعلم",
+    "mistakeCount": "أخطاء",
+    "weakAreas": "المناطق الضعيفة",
+    "dueReviews": "المراجعات المستحقة",
+    "startDaily": "ابدأ يوميًا",
+    "reviewMistakes": "مراجعة الأخطاء",
     "startQuick": "ابدأ سريعًا",
     "startDailyCount": "ابدأ يوميًا ({value})",
     "startQuickCount": "ابدأ سريعًا ({value})",
@@ -1032,15 +1041,15 @@
     "progressCount": "{current} / {total}"
   },
   "results": {
-    "title": "Results",
-    "score": "Your Score",
-    "passed": "Great job! Practice complete.",
-    "failed": "Keep Practicing!",
+    "title": "نتائج",
+    "score": "درجاتك",
+    "passed": "عمل عظيم! الممارسة كاملة.",
+    "failed": "استمر في التدرب!",
     "correct": "إجابات صحيحة",
     "incorrect": "إجابات خاطئة",
     "accuracy": "الدقة",
     "time": "الوقت المستغرق",
-    "tryAgain": "Try Again",
+    "tryAgain": "حاول ثانية",
     "reviewAnswers": "مراجعة الإجابات",
     "backHome": "العودة للرئيسية",
     "scoreSummary": "{correct} / {total} إجابات صحيحة",
@@ -1050,7 +1059,8 @@
   "review": {
     "title": "مراجعة الإجابات",
     "explanation": "الشرح",
-    "missingQuestion": "تفاصيل السؤال غير متاحة"
+    "missingQuestion": "تفاصيل السؤال غير متاحة",
+    "skipped": "تم التخطي"
   },
   "history": {
     "title": "سجل الاختبارات",
@@ -1061,10 +1071,10 @@
     }
   },
   "learn": {
-    "title": "Learn Driving Theory",
+    "title": "تعلم نظرية القيادة",
     "lessons": "الدروس",
     "progress": "التقدم",
-    "continue": "Continue Learning",
+    "continue": "مواصلة التعلم",
     "completed": "مكتمل",
     "keyFact": {
       "speedLimit": "حد السرعة",
@@ -1136,8 +1146,8 @@
   },
   "favorites": {
     "title": "المفضلة",
-    "empty": "No favorites yet",
-    "emptyDesc": "Save questions and signs to review later",
+    "empty": "لا يوجد مفضلة بعد",
+    "emptyDesc": "احفظ الأسئلة والعلامات لمراجعتها لاحقًا",
     "questions": "الأسئلة",
     "signs": "الإشارات",
     "questionsCount_one": "{value} سؤال",
@@ -1154,8 +1164,8 @@
     "streakCount_one": "{value} يوم",
     "streakCount_other": "{value} أيام",
     "days": "يوم",
-    "noStats": "No statistics yet",
-    "noStatsDesc": "Complete quizzes to see your progress"
+    "noStats": "لا توجد إحصاءات حتى الآن",
+    "noStatsDesc": "مسابقات كاملة لمعرفة التقدم المحرز الخاص بك"
   },
   "settings": {
     "title": "الإعدادات",
@@ -1165,7 +1175,7 @@
     },
     "language": "اللغة",
     "languages": {
-      "en": "English",
+      "en": "إنجليزي",
       "ar": "العربية",
       "ur": "اردو",
       "hi": "हिन्दी",
@@ -1202,7 +1212,7 @@
     "restorePurchase": "استعادة الشراء",
     "privacy": "سياسة الخصوصية",
     "terms": "شروط الخدمة",
-    "about": "About",
+    "about": "عن",
     "version": "الإصدار"
   },
   "achievements": {
@@ -1318,7 +1328,7 @@
       "master": "ماهر",
       "champion": "بطل"
     },
-    "badgesLabel": "Badges"
+    "badgesLabel": "شارات"
   },
   "violationPoints": {
     "title": "نظام نقاط المخالفات المرورية",
@@ -1425,7 +1435,7 @@
     "error": "حدث خطأ ما",
     "questionsLoadError": "تعذر تحميل بيانات الأسئلة. يرجى التأكد من وجود جميع الملفات المطلوبة ثم المحاولة مرة أخرى.",
     "technicalDetails": "تفاصيل تقنية",
-    "questionsLoadErrorDetails": "الخطأ: {error}\n\nيرجى التأكد من أن مجلد assets/data/ يحتوي على ملفات أسئلة JSON صالحة.",
+    "questionsLoadErrorDetails": "?????: {error}\n\n???? ?????? ?? ?? ???? assets/data ????? ??? ????? JSON ????? ???????.",
     "reload": "إعادة التحميل",
     "retry": "إعادة المحاولة",
     "cancel": "إلغاء",
@@ -1559,7 +1569,7 @@
     "intro": "هذا التطبيق تعليمي ويعمل بدون إنترنت. معظم الميزات تعمل بالكامل دون اتصال.",
     "dataTitle": "البيانات التي نستخدمها",
     "dataLocal": "يتم حفظ تقدمك وإعداداتك والمفضلة محليًا على جهازك فقط.",
-    "dataAds": "يستخدم التطبيق إعلانات Google AdMob. عند الاتصال بالإنترنت قد تعالج AdMob مُعرفات الجهاز لعرض الإعلانات.",
+    "dataAds": "?????? ??????? ??????? Google AdMob. ??? ??????? ????????? ?? ????? AdMob ???????? ?????? ???? ?????????.",
     "offlineTitle": "الاستخدام دون اتصال",
     "offlineBody": "يعمل التطبيق دون إنترنت. الإعلانات اختيارية؛ وإذا لم تتوفر، تعمل الميزات الأساسية بشكل طبيعي.",
     "permissionsTitle": "الأذونات",

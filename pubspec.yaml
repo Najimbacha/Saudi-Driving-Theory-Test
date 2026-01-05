@@ -21,6 +21,7 @@ dependencies:
   easy_localization: ^3.0.7
   google_fonts: ^6.2.1
   phosphor_flutter: ^2.1.0
+  flutter_displaymode: ^0.6.0
 
 dev_dependencies:
   flutter_test:

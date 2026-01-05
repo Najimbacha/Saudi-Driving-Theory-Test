@@ -4,6 +4,9 @@
     "tagline": "Master driving theory with confidence",
     "offline": "Works 100% Offline"
   },
+  "splash": {
+    "tagline": "Practice anywhere • No internet needed"
+  },
   "nav": {
     "home": "Home",
     "signs": "Signs",
@@ -21,7 +24,13 @@
     "languageNote": "You can change this anytime in settings",
     "getStarted": "Get Started",
     "offlineReady": "Ready to learn offline!",
-    "offlineDesc": "All content works without internet connection"
+    "offlineDesc": "All content works without internet connection",
+    "practiceTitle": "Practice Mode",
+    "practiceDesc": "Learn with quick quizzes and instant feedback.",
+    "examTitle": "Exam Mode",
+    "examDesc": "Simulate the real test with timed exams.",
+    "offlineTitle": "Offline + 5 Languages",
+    "offlineDesc2": "Study anywhere in English, Arabic, Urdu, Hindi, Bengali."
   },
   "home": {
     "badges": {
@@ -1069,7 +1078,8 @@
   "review": {
     "title": "Answer Review",
     "explanation": "Explanation",
-    "missingQuestion": "Question details not available"
+    "missingQuestion": "Question details not available",
+    "skipped": "Skipped"
   },
   "history": {
     "title": "Exam History",

@@ -10,6 +10,7 @@ import '../core/theme/modern_theme.dart';
 import '../widgets/glass_container.dart';
 import '../models/sign.dart';
 import '../state/data_state.dart';
+import '../widgets/home_shell.dart';
 
 class SignsScreen extends ConsumerStatefulWidget {
   const SignsScreen({super.key});
@@ -26,6 +27,8 @@ class _SignsScreenState extends ConsumerState<SignsScreen> {
   Widget build(BuildContext context) {
     final signsAsync = ref.watch(signsProvider);
     final locale = context.locale.languageCode;
+    final scheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -35,6 +38,17 @@ class _SignsScreenState extends ConsumerState<SignsScreen> {
         elevation: 0,
         centerTitle: true,
         iconTheme: IconThemeData(color: Theme.of(context).colorScheme.onSurface),
+        leading: IconButton(
+          onPressed: () {
+            final shell = TabShellScope.maybeOf(context);
+            if (shell != null) {
+              shell.value = 0;
+              return;
+            }
+            Navigator.of(context).maybePop();
+          },
+          icon: const Icon(Icons.arrow_back),
+        ),
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -118,11 +132,17 @@ class _SignsScreenState extends ConsumerState<SignsScreen> {
                            child: Column(
                              mainAxisAlignment: MainAxisAlignment.center,
                              children: [
-                               Icon(Icons.search_off_rounded, size: 64, color: Colors.white24),
+                               Icon(Icons.search_off_rounded,
+                                   size: 64,
+                                   color:
+                                       scheme.onSurface.withValues(alpha: 0.2)),
                                const SizedBox(height: 16),
                                Text(
                                  'signs.empty'.tr(), 
-                                 style: GoogleFonts.outfit(color: Colors.white54, fontSize: 16),
+                                 style: GoogleFonts.outfit(
+                                     color: scheme.onSurface
+                                         .withValues(alpha: 0.6),
+                                     fontSize: 16),
                                ),
                              ],
                            ),
@@ -151,7 +171,9 @@ class _SignsScreenState extends ConsumerState<SignsScreen> {
                             },
                             child: GlassContainer(
                               padding: const EdgeInsets.all(12),
-                              color: Colors.white.withValues(alpha: 0.05),
+                              color: isDark
+                                  ? Colors.white.withValues(alpha: 0.05)
+                                  : scheme.onSurface.withValues(alpha: 0.04),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
@@ -182,7 +204,9 @@ class _SignsScreenState extends ConsumerState<SignsScreen> {
                     },
                     loading: () => const Center(child: CircularProgressIndicator()),
                     error: (_, __) => Center(
-                      child: Text('signs.loadError'.tr(), style: GoogleFonts.outfit(color: Colors.white)),
+                      child: Text('signs.loadError'.tr(),
+                          style:
+                              GoogleFonts.outfit(color: scheme.onSurface)),
                     ),
                  ),
                ),
@@ -199,14 +223,23 @@ class _SignsScreenState extends ConsumerState<SignsScreen> {
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
       builder: (context) {
+        final scheme = Theme.of(context).colorScheme;
+        final isDark = Theme.of(context).brightness == Brightness.dark;
         return GlassContainer(
            borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
-           color: const Color(0xFF0F172A).withValues(alpha: 0.95),
+           color: isDark
+               ? const Color(0xFF0F172A).withValues(alpha: 0.95)
+               : scheme.surface.withValues(alpha: 0.95),
            padding: const EdgeInsets.fromLTRB(25, 12, 25, 40),
            child: Column(
              mainAxisSize: MainAxisSize.min,
              children: [
-               Container(width: 40, height: 4, decoration: BoxDecoration(color: Colors.white24, borderRadius: BorderRadius.circular(2))),
+               Container(
+                   width: 40,
+                   height: 4,
+                   decoration: BoxDecoration(
+                       color: scheme.onSurface.withValues(alpha: 0.2),
+                       borderRadius: BorderRadius.circular(2))),
                const SizedBox(height: 30),
                SizedBox(
                   height: 180,
@@ -221,7 +254,7 @@ class _SignsScreenState extends ConsumerState<SignsScreen> {
                   style: GoogleFonts.outfit(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    color: scheme.onSurface,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -246,8 +279,11 @@ class _SignsScreenState extends ConsumerState<SignsScreen> {
                    width: double.infinity,
                    child: ElevatedButton(
                      style: ElevatedButton.styleFrom(
-                       backgroundColor: Colors.white.withValues(alpha: 0.1),
-                       foregroundColor: Colors.white,
+                       backgroundColor: isDark
+                           ? Colors.white.withValues(alpha: 0.1)
+                           : ModernTheme.primary.withValues(alpha: 0.12),
+                       foregroundColor:
+                           isDark ? Colors.white : ModernTheme.primary,
                        padding: const EdgeInsets.symmetric(vertical: 16),
                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                      ),

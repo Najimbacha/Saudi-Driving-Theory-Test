@@ -20,7 +20,6 @@ import '../../screens/stats_screen.dart';
 import '../../screens/traffic_fines_screen.dart';
 import '../../screens/traffic_violation_points_screen.dart';
 import '../../widgets/home_shell.dart';
-
 final appRouterProvider = Provider<GoRouter>((ref) {
   return GoRouter(
     initialLocation: '/splash',

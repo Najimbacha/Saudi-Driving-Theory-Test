@@ -14,6 +14,7 @@ class ExamState {
     required this.questions,
     required this.currentIndex,
     required this.answers,
+    required this.skipped,
     required this.flagged,
     required this.timeLeftSeconds,
     required this.originalDurationSeconds,
@@ -25,6 +26,7 @@ class ExamState {
   final List<Question> questions;
   final int currentIndex;
   final Map<String, int> answers;
+  final Set<String> skipped;
   final Set<String> flagged;
   final int timeLeftSeconds;
   final int originalDurationSeconds;
@@ -38,6 +40,7 @@ class ExamState {
     List<Question>? questions,
     int? currentIndex,
     Map<String, int>? answers,
+    Set<String>? skipped,
     Set<String>? flagged,
     int? timeLeftSeconds,
     int? originalDurationSeconds,
@@ -49,6 +52,7 @@ class ExamState {
       questions: questions ?? this.questions,
       currentIndex: currentIndex ?? this.currentIndex,
       answers: answers ?? this.answers,
+      skipped: skipped ?? this.skipped,
       flagged: flagged ?? this.flagged,
       timeLeftSeconds: timeLeftSeconds ?? this.timeLeftSeconds,
       originalDurationSeconds: originalDurationSeconds ?? this.originalDurationSeconds,
@@ -63,6 +67,7 @@ class ExamState {
       'questions': questions.map((q) => q.toJson()).toList(),
       'currentIndex': currentIndex,
       'answers': answers,
+      'skipped': skipped.toList(),
       'flagged': flagged.toList(),
       'timeLeftSeconds': timeLeftSeconds,
       'originalDurationSeconds': originalDurationSeconds,
@@ -79,6 +84,7 @@ class ExamState {
           .toList(),
       currentIndex: json['currentIndex'] as int,
       answers: Map<String, int>.from(json['answers'] ?? {}),
+      skipped: (json['skipped'] as List?)?.map((e) => e.toString()).toSet() ?? {},
       flagged: (json['flagged'] as List?)?.map((e) => e.toString()).toSet() ?? {},
       timeLeftSeconds: json['timeLeftSeconds'] as int,
       originalDurationSeconds: json['originalDurationSeconds'] as int? ?? 0,
@@ -96,6 +102,7 @@ class ExamController extends StateNotifier<ExamState> {
             questions: const [],
             currentIndex: 0,
             answers: const {},
+            skipped: const {},
             flagged: const {},
             timeLeftSeconds: 0,
             originalDurationSeconds: 0,
@@ -121,8 +128,8 @@ class ExamController extends StateNotifier<ExamState> {
       final restoredState = ExamState.fromJson(jsonMap);
 
       if (restoredState.isCompleted) {
-        // If completed, just load it but don't resume timer
-        state = restoredState;
+        // Completed exams shouldn't reopen results on app launch.
+        _prefs.remove(_storageKey);
         return;
       }
 
@@ -163,6 +170,7 @@ class ExamController extends StateNotifier<ExamState> {
       questions: _shuffle(questions),
       currentIndex: 0,
       answers: const {},
+      skipped: const {},
       flagged: const {},
       timeLeftSeconds: minutes * 60,
       originalDurationSeconds: minutes * 60,
@@ -204,12 +212,21 @@ class ExamController extends StateNotifier<ExamState> {
 
   void selectAnswer(int index) {
     final question = state.currentQuestion;
-    if (state.strictMode && state.answers.containsKey(question.id)) {
-      return;
-    }
     final next = Map<String, int>.from(state.answers);
     next[question.id] = index;
-    state = state.copyWith(answers: next);
+    final nextSkipped = Set<String>.from(state.skipped)
+      ..remove(question.id);
+    state = state.copyWith(answers: next, skipped: nextSkipped);
+    _saveState();
+  }
+
+  void skipCurrent() {
+    final question = state.currentQuestion;
+    final next = Map<String, int>.from(state.answers);
+    next.remove(question.id);
+    final nextSkipped = Set<String>.from(state.skipped)
+      ..add(question.id);
+    state = state.copyWith(answers: next, skipped: nextSkipped);
     _saveState();
   }
 
@@ -248,6 +265,7 @@ class ExamController extends StateNotifier<ExamState> {
       questions: const [],
       currentIndex: 0,
       answers: const {},
+      skipped: const {},
       flagged: const {},
       timeLeftSeconds: 0,
       originalDurationSeconds: 0,

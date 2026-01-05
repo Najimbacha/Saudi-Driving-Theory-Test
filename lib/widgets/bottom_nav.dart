@@ -17,6 +17,8 @@ class BottomNav extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     final items = [
       _NavItem(
@@ -35,10 +37,6 @@ class BottomNav extends StatelessWidget {
         icon: Icons.school_rounded,
         label: 'nav.exam'.tr(),
       ),
-      _NavItem(
-        icon: Icons.settings_rounded,
-        label: 'nav.settings'.tr(),
-      ),
     ];
     
     return SafeArea(
@@ -48,9 +46,13 @@ class BottomNav extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
         borderRadius: BorderRadius.circular(28),
         blur: 20,
-        color: const Color(0xFF0F172A).withValues(alpha: 0.8),
+        color: isDark
+            ? const Color(0xFF0F172A).withValues(alpha: 0.8)
+            : scheme.surface.withValues(alpha: 0.95),
         border: Border.all(
-          color: Colors.white.withValues(alpha: 0.1),
+          color: isDark
+              ? Colors.white.withValues(alpha: 0.1)
+              : scheme.onSurface.withValues(alpha: 0.08),
           width: 1,
         ),
         child: Row(
@@ -74,7 +76,7 @@ class BottomNav extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
                       decoration: BoxDecoration(
                         color: selected
-                            ? ModernTheme.primary.withValues(alpha: 0.15)
+                            ? ModernTheme.primary.withValues(alpha: isDark ? 0.15 : 0.12)
                             : Colors.transparent,
                         borderRadius: BorderRadius.circular(20),
                       ),
@@ -89,7 +91,7 @@ class BottomNav extends StatelessWidget {
                               item.icon,
                               color: selected
                                   ? ModernTheme.primary
-                                  : Colors.white.withValues(alpha: 0.5),
+                                  : scheme.onSurface.withValues(alpha: isDark ? 0.6 : 0.75),
                               size: 24,
                             ),
                           ),
@@ -99,7 +101,7 @@ class BottomNav extends StatelessWidget {
                             style: GoogleFonts.outfit(
                               color: selected
                                   ? ModernTheme.primary
-                                  : Colors.white.withValues(alpha: 0.5),
+                                  : scheme.onSurface.withValues(alpha: isDark ? 0.6 : 0.75),
                               fontWeight: selected
                                   ? FontWeight.bold
                                   : FontWeight.w500,

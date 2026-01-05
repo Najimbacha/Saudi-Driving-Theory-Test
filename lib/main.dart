@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'app.dart';
@@ -11,6 +12,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await EasyLocalization.ensureInitialized();
+  await _enableHighRefreshRate();
 
   // Get SharedPreferences for Riverpod state management
   // EasyLocalization handles locale persistence via saveLocale: true
@@ -45,4 +47,12 @@ void main() async {
       ),
     ),
   );
+}
+
+Future<void> _enableHighRefreshRate() async {
+  try {
+    await FlutterDisplayMode.setHighRefreshRate();
+  } catch (_) {
+    // Best-effort: ignore failures on unsupported devices.
+  }
 }

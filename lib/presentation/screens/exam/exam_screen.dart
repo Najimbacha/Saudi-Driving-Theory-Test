@@ -123,7 +123,31 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
         final questionText = _questionText(current, locale);
         final options = _options(current, locale);
         final selected = exam.answers[current.id];
+        final isSkipped = exam.skipped.contains(current.id);
         final inProgress = exam.questions.isNotEmpty && !exam.isCompleted;
+        final canProceed = selected != null || isSkipped;
+        final scheme = Theme.of(context).colorScheme;
+        final isDark = Theme.of(context).brightness == Brightness.dark;
+        Future<void> handleBack() async {
+          final shell = TabShellScope.maybeOf(context);
+          if (!inProgress) {
+            if (shell != null) {
+              shell.value = 0;
+            } else {
+              Navigator.of(context).maybePop();
+            }
+            return;
+          }
+          final shouldExit = await confirmExitExam(context);
+          if (shouldExit && context.mounted) {
+            if (shell != null) {
+              controller.reset();
+              shell.value = 0;
+            } else {
+              Navigator.of(context).maybePop();
+            }
+          }
+        }
 
         return PopScope(
           canPop: false,
@@ -155,18 +179,22 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
             appBar: AppBar(
               backgroundColor: Colors.transparent,
               elevation: 0,
-              iconTheme: const IconThemeData(color: Colors.white),
+              iconTheme: IconThemeData(color: scheme.onSurface),
+              leading: IconButton(
+                onPressed: handleBack,
+                icon: const Icon(Icons.arrow_back),
+              ),
               title: Text(
                 'exam.title'.tr(),
                 style: GoogleFonts.outfit(
-                    fontWeight: FontWeight.bold, color: Colors.white),
+                    fontWeight: FontWeight.bold, color: scheme.onSurface),
               ),
               centerTitle: true,
               actions: [
                 Container(
                   margin: const EdgeInsets.only(right: 8),
                   decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.1),
+                      color: scheme.onSurface.withValues(alpha: 0.1),
                       shape: BoxShape.circle),
                   child: IconButton(
                     onPressed: () {
@@ -184,19 +212,16 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
                           : Icons.flag_outlined,
                       color: exam.flagged.contains(current.id)
                           ? AppColors.warning
-                          : Colors.white70,
+                          : scheme.onSurface.withValues(alpha: 0.7),
                     ),
                   ),
                 ),
               ],
             ),
             body: Container(
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [Color(0xFF0F172A), Color(0xFF1E293B)],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                ),
+              decoration: BoxDecoration(
+                gradient:
+                    isDark ? ModernTheme.darkGradient : ModernTheme.lightGradient,
               ),
               child: SafeArea(
                 child: Column(
@@ -215,7 +240,8 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
                               Text(
                                 '${exam.currentIndex + 1}/${exam.questions.length}',
                                 style: GoogleFonts.outfit(
-                                  color: Colors.white70,
+                                  color:
+                                      scheme.onSurface.withValues(alpha: 0.7),
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
@@ -227,7 +253,9 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
                             child: LinearProgressIndicator(
                               value: (exam.currentIndex + 1) /
                                   exam.questions.length,
-                              backgroundColor: Colors.white10,
+                              backgroundColor: isDark
+                                  ? Colors.white10
+                                  : scheme.onSurface.withValues(alpha: 0.1),
                               color: ModernTheme.primary,
                               minHeight: 6,
                             ),
@@ -251,12 +279,42 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
                               style: GoogleFonts.outfit(
                                 fontSize: 22,
                                 fontWeight: FontWeight.w600,
-                                color: Colors.white,
+                                color: scheme.onSurface,
                                 height: 1.3,
                               ),
                             ),
                           ),
                           const SizedBox(height: 32),
+
+                          Align(
+                            alignment: AlignmentDirectional.centerEnd,
+                            child: TextButton(
+                              style: TextButton.styleFrom(
+                                foregroundColor:
+                                    scheme.onSurface.withValues(alpha: 0.7),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8, vertical: 4),
+                              ),
+                              onPressed: () {
+                                final settings =
+                                    ref.read(appSettingsProvider);
+                                if (settings.vibrationEnabled)
+                                  HapticFeedback.lightImpact();
+                                if (settings.soundEnabled)
+                                  SystemSound.play(SystemSoundType.click);
+                                controller.skipCurrent();
+                                if (exam.currentIndex + 1 ==
+                                    exam.questions.length) {
+                                  controller.finish();
+                                } else {
+                                  controller.next();
+                                }
+                              },
+                              child: Text('common.skip'.tr(),
+                                  style: GoogleFonts.outfit(fontSize: 13)),
+                            ),
+                          ),
+                          const SizedBox(height: 12),
 
                           // Options
                           AnimatedSwitcher(
@@ -286,13 +344,17 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
                                         color: isSelected
                                             ? ModernTheme.secondary
                                                 .withValues(alpha: 0.2)
-                                            : Colors.white
-                                                .withValues(alpha: 0.05),
+                                            : (isDark
+                                                ? Colors.white
+                                                    .withValues(alpha: 0.05)
+                                                : scheme.onSurface
+                                                    .withValues(alpha: 0.04)),
                                         borderRadius: BorderRadius.circular(16),
                                         border: Border.all(
                                           color: isSelected
                                               ? ModernTheme.secondary
-                                              : Colors.white10,
+                                              : scheme.onSurface
+                                                  .withValues(alpha: 0.12),
                                           width: isSelected ? 2 : 1,
                                         ),
                                         boxShadow: isSelected
@@ -320,7 +382,7 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
                                               optionText,
                                               style: GoogleFonts.outfit(
                                                 fontSize: 16,
-                                                color: Colors.white
+                                                color: scheme.onSurface
                                                     .withValues(alpha: 0.9),
                                                 fontWeight: isSelected
                                                     ? FontWeight.w600
@@ -348,7 +410,9 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
                     GlassContainer(
                       borderRadius:
                           const BorderRadius.vertical(top: Radius.circular(24)),
-                      color: Colors.black.withValues(alpha: 0.2),
+                      color: isDark
+                          ? Colors.black.withValues(alpha: 0.2)
+                          : Colors.white.withValues(alpha: 0.85),
                       blur: 10,
                       padding: const EdgeInsets.fromLTRB(20, 20, 20,
                           32), // More padding at bottom for safe area
@@ -359,9 +423,10 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
                               Expanded(
                                 child: OutlinedButton(
                                   style: OutlinedButton.styleFrom(
-                                    side:
-                                        const BorderSide(color: Colors.white24),
-                                    foregroundColor: Colors.white,
+                                    side: BorderSide(
+                                        color: scheme.onSurface
+                                            .withValues(alpha: 0.24)),
+                                    foregroundColor: scheme.onSurface,
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 16),
                                     shape: RoundedRectangleBorder(
@@ -391,20 +456,23 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
                                     shadowColor: ModernTheme.primary
                                         .withValues(alpha: 0.5),
                                   ),
-                                  onPressed: () {
-                                    final settings =
-                                        ref.read(appSettingsProvider);
-                                    if (settings.vibrationEnabled)
-                                      HapticFeedback.mediumImpact();
-                                    if (settings.soundEnabled)
-                                      SystemSound.play(SystemSoundType.click);
-                                    if (exam.currentIndex + 1 ==
-                                        exam.questions.length) {
-                                      controller.finish();
-                                    } else {
-                                      controller.next();
-                                    }
-                                  },
+                                  onPressed: canProceed
+                                      ? () {
+                                          final settings =
+                                              ref.read(appSettingsProvider);
+                                          if (settings.vibrationEnabled)
+                                            HapticFeedback.mediumImpact();
+                                          if (settings.soundEnabled)
+                                            SystemSound.play(
+                                                SystemSoundType.click);
+                                          if (exam.currentIndex + 1 ==
+                                              exam.questions.length) {
+                                            controller.finish();
+                                          } else {
+                                            controller.next();
+                                          }
+                                        }
+                                      : null,
                                   child: Text(
                                     exam.currentIndex + 1 ==
                                             exam.questions.length
@@ -426,7 +494,9 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
                               child: Text(
                                 'exam.reviewAnswers'.tr(),
                                 style:
-                                    GoogleFonts.outfit(color: Colors.white70),
+                                    GoogleFonts.outfit(
+                                        color: scheme.onSurface
+                                            .withValues(alpha: 0.7)),
                               ),
                             ),
                           ] else
@@ -435,11 +505,14 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
                               child: TextButton.icon(
                                 onPressed: () => _showQuestionGrid(
                                     context, exam, controller),
-                                icon: const Icon(Icons.grid_view_rounded,
-                                    size: 16, color: Colors.white38),
+                                icon: Icon(Icons.grid_view_rounded,
+                                    size: 16,
+                                    color: scheme.onSurface
+                                        .withValues(alpha: 0.45)),
                                 label: Text('exam.overview'.tr(),
                                     style: GoogleFonts.outfit(
-                                        color: Colors.white38)),
+                                        color: scheme.onSurface
+                                            .withValues(alpha: 0.45))),
                               ),
                             ),
                         ],
@@ -476,13 +549,11 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
       passed: total == 0 ? false : correct / total >= 0.7,
       timeTakenSeconds: DateTime.now().difference(exam.startedAt).inSeconds,
       categoryScores: _categoryScores(exam),
-      questionAnswers: exam.answers.entries
-          .map((e) => QuestionAnswer(
-                questionId: e.key,
-                userAnswerIndex: e.value,
-                correctAnswerIndex: exam.questions
-                    .firstWhere((q) => q.id == e.key)
-                    .correctIndex,
+      questionAnswers: exam.questions
+          .map((q) => QuestionAnswer(
+                questionId: q.id,
+                userAnswerIndex: exam.answers[q.id] ?? -1,
+                correctAnswerIndex: q.correctIndex,
               ))
           .toList(),
     );
@@ -508,9 +579,13 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
       context: context,
       backgroundColor: Colors.transparent,
       builder: (context) {
+        final scheme = Theme.of(context).colorScheme;
+        final isDark = Theme.of(context).brightness == Brightness.dark;
         return GlassContainer(
           borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
-          color: const Color(0xFF0F172A).withValues(alpha: 0.95),
+          color: isDark
+              ? const Color(0xFF0F172A).withValues(alpha: 0.95)
+              : scheme.surface.withValues(alpha: 0.95),
           padding: const EdgeInsets.all(24),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -519,7 +594,7 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
                 width: 40,
                 height: 4,
                 decoration: BoxDecoration(
-                  color: Colors.white24,
+                  color: scheme.onSurface.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
@@ -538,13 +613,15 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
                     final flagged = exam.flagged.contains(question.id);
                     final isCurrent = exam.currentIndex == index;
 
-                    Color color = Colors.white.withValues(alpha: 0.05);
+                    Color color = isDark
+                        ? Colors.white.withValues(alpha: 0.05)
+                        : scheme.onSurface.withValues(alpha: 0.04);
                     Color border = Colors.transparent;
-                    Color text = Colors.white70;
+                    Color text = scheme.onSurface.withValues(alpha: 0.7);
 
                     if (isCurrent) {
                       border = ModernTheme.secondary;
-                      text = Colors.white;
+                      text = scheme.onSurface;
                     } else if (flagged) {
                       color = AppColors.warning.withValues(alpha: 0.2);
                       text = AppColors.warning;
@@ -650,24 +727,34 @@ class _ExamIntroState extends State<_ExamIntro> {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         title: Text('exam.title'.tr(),
             style: GoogleFonts.outfit(
-                fontWeight: FontWeight.bold, color: Colors.white)),
+                fontWeight: FontWeight.bold, color: scheme.onSurface)),
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
-        iconTheme: const IconThemeData(color: Colors.white),
+        iconTheme: IconThemeData(color: scheme.onSurface),
+        leading: IconButton(
+          onPressed: () {
+            final shell = TabShellScope.maybeOf(context);
+            if (shell != null) {
+              shell.value = 0;
+              return;
+            }
+            Navigator.of(context).maybePop();
+          },
+          icon: const Icon(Icons.arrow_back),
+        ),
       ),
       body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Color(0xFF0F172A), Color(0xFF1E293B)],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
+        decoration: BoxDecoration(
+          gradient:
+              isDark ? ModernTheme.darkGradient : ModernTheme.lightGradient,
         ),
         child: SafeArea(
           child: ListView(
@@ -721,7 +808,7 @@ class _ExamIntroState extends State<_ExamIntro> {
                 style: GoogleFonts.outfit(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: Colors.white,
+                  color: scheme.onSurface,
                 ),
               ),
               const SizedBox(height: 16),
@@ -761,28 +848,33 @@ class _ExamIntroState extends State<_ExamIntro> {
 
   Future<void> _confirmStart(
       BuildContext context, int count, int minutes) async {
+    final scheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final shouldStart = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: const Color(0xFF1E293B),
+        backgroundColor:
+            isDark ? const Color(0xFF1E293B) : scheme.surface,
         title: Row(
           children: [
             Icon(Icons.timer_outlined, color: ModernTheme.secondary),
             const SizedBox(width: 12),
             Text('exam.title'.tr(),
                 style: GoogleFonts.outfit(
-                    color: Colors.white, fontWeight: FontWeight.bold)),
+                    color: scheme.onSurface, fontWeight: FontWeight.bold)),
           ],
         ),
         content: Text(
           'exam.disclaimer'.tr(),
-          style: GoogleFonts.outfit(color: Colors.white70),
+          style:
+              GoogleFonts.outfit(color: scheme.onSurface.withValues(alpha: 0.7)),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
             child: Text('common.cancel'.tr(),
-                style: GoogleFonts.outfit(color: Colors.white54)),
+                style: GoogleFonts.outfit(
+                    color: scheme.onSurface.withValues(alpha: 0.6))),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
@@ -823,6 +915,8 @@ class _ModeGlassCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return GestureDetector(
       onTap: () {
         final settings =
@@ -834,11 +928,13 @@ class _ModeGlassCard extends StatelessWidget {
       child: GlassContainer(
         color: isRecommended
             ? color.withValues(alpha: 0.15)
-            : Colors.white.withValues(alpha: 0.05),
+            : (isDark
+                ? Colors.white.withValues(alpha: 0.05)
+                : scheme.onSurface.withValues(alpha: 0.04)),
         border: Border.all(
           color: isRecommended
               ? color.withValues(alpha: 0.5)
-              : Colors.white.withValues(alpha: 0.1),
+              : scheme.onSurface.withValues(alpha: 0.1),
         ),
         padding: const EdgeInsets.all(20),
         child: Row(
@@ -863,7 +959,7 @@ class _ModeGlassCard extends StatelessWidget {
                         style: GoogleFonts.outfit(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
-                          color: Colors.white,
+                          color: scheme.onSurface,
                         ),
                       ),
                       if (isRecommended) ...[
@@ -893,13 +989,15 @@ class _ModeGlassCard extends StatelessWidget {
                       'minutes': minutes,
                     }),
                     style:
-                        GoogleFonts.outfit(color: Colors.white54, fontSize: 13),
+                        GoogleFonts.outfit(
+                            color: scheme.onSurface.withValues(alpha: 0.6),
+                            fontSize: 13),
                   ),
                 ],
               ),
             ),
-            const Icon(Icons.arrow_forward_ios_rounded,
-                color: Colors.white24, size: 16),
+            Icon(Icons.arrow_forward_ios_rounded,
+                color: scheme.onSurface.withValues(alpha: 0.3), size: 16),
           ],
         ),
       ),

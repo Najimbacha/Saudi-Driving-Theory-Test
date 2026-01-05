@@ -233,13 +233,35 @@ class _GlassHeroSection extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'home.greeting'.tr(),
-                  style: GoogleFonts.outfit(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).colorScheme.onSurface,
-                  ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        'home.greeting'.tr(),
+                        style: GoogleFonts.outfit(
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        final shell = TabShellScope.maybeOf(context);
+                        if (shell != null) {
+                          shell.value = 4;
+                        } else {
+                          context.push('/settings');
+                        }
+                      },
+                      icon: const Icon(Icons.settings_rounded),
+                      color: Theme.of(context)
+                          .colorScheme
+                          .onSurface
+                          .withValues(alpha: 0.8),
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 4),
                 Text(

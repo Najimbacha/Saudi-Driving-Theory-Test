@@ -247,12 +247,17 @@ class _CategoryGlassCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return GestureDetector(
       onTap: onTap,
       child: GlassContainer(
         padding: const EdgeInsets.all(20),
-        color: Colors.white.withValues(alpha: 0.06),
-        border: Border.all(color: Colors.white10),
+        color: isDark
+            ? Colors.white.withValues(alpha: 0.06)
+            : scheme.onSurface.withValues(alpha: 0.04),
+        border: Border.all(
+            color: scheme.onSurface.withValues(alpha: isDark ? 0.1 : 0.08)),
         child: Row(
           children: [
             Container(
@@ -285,7 +290,7 @@ class _CategoryGlassCard extends StatelessWidget {
                           style: GoogleFonts.outfit(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
-                            color: Colors.white,
+                            color: scheme.onSurface,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
@@ -314,7 +319,7 @@ class _CategoryGlassCard extends StatelessWidget {
                   Text(
                     subtitle,
                     style: GoogleFonts.outfit(
-                      color: Colors.white70,
+                      color: scheme.onSurface.withValues(alpha: 0.7),
                       fontSize: 13,
                     ),
                     maxLines: 2,
@@ -323,17 +328,20 @@ class _CategoryGlassCard extends StatelessWidget {
                   const SizedBox(height: 8),
                   Row(
                     children: [
-                      const Icon(Icons.quiz_rounded,
-                          size: 14, color: Colors.white54),
+                      Icon(Icons.quiz_rounded,
+                          size: 14,
+                          color: scheme.onSurface.withValues(alpha: 0.6)),
                       const SizedBox(width: 4),
                       Text(
                         'categories.totalQuestions'
                             .tr(namedArgs: {'value': total.toString()}),
                         style: GoogleFonts.outfit(
-                            color: Colors.white54, fontSize: 12),
+                            color: scheme.onSurface.withValues(alpha: 0.6),
+                            fontSize: 12),
                       ),
                       const Spacer(),
-                      const Icon(Icons.arrow_forward_rounded, size: 16, color: ModernTheme.secondary),
+                      const Icon(Icons.arrow_forward_rounded,
+                          size: 16, color: ModernTheme.secondary),
                     ],
                   ),
                 ],

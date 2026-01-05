@@ -160,7 +160,10 @@ class _ReviewCard extends StatelessWidget {
     final options = _options(question, locale);
     final correct = answer.correctAnswerIndex;
     final selected = answer.userAnswerIndex;
+    final isSkipped = answer.isSkipped;
     final isCorrect = answer.isCorrect;
+    final statusColor =
+        isSkipped ? AppColors.warning : (isCorrect ? AppColors.success : AppColors.error);
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -172,7 +175,7 @@ class _ReviewCard extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                   decoration: BoxDecoration(
-                    color: (isCorrect ? AppColors.success : AppColors.error).withValues(alpha: 0.12),
+                    color: statusColor.withValues(alpha: 0.12),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Text(
@@ -182,8 +185,8 @@ class _ReviewCard extends StatelessWidget {
                 ),
                 const Spacer(),
                 Icon(
-                  isCorrect ? Icons.check_circle : Icons.cancel,
-                  color: isCorrect ? AppColors.success : AppColors.error,
+                  isSkipped ? Icons.help_outline : (isCorrect ? Icons.check_circle : Icons.cancel),
+                  color: statusColor,
                 ),
               ],
             ),
@@ -195,6 +198,16 @@ class _ReviewCard extends StatelessWidget {
                   .bodySmall
                   ?.copyWith(color: AppColors.primary),
             ),
+            if (isSkipped) ...[
+              const SizedBox(height: 4),
+              Text(
+                'review.skipped'.tr(),
+                style: Theme.of(context)
+                    .textTheme
+                    .bodySmall
+                    ?.copyWith(color: AppColors.warning),
+              ),
+            ],
             const SizedBox(height: 6),
             Text(questionText, style: Theme.of(context).textTheme.titleMedium),
             const SizedBox(height: 12),
