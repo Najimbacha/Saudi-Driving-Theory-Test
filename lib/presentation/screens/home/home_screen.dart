@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 import '../../../core/theme/modern_theme.dart';
 import '../../../widgets/glass_container.dart';
@@ -76,7 +77,7 @@ class HomeDashboardScreen extends ConsumerWidget {
                         child: _GlassActionCard(
                           title: 'home.practice'.tr(),
                           subtitle: 'home.practiceSubtitle'.tr(),
-                          icon: Icons.play_circle_fill_rounded,
+                          icon: PhosphorIconsRegular.playCircle,
                           color: ModernTheme.primary,
                           gradient: ModernTheme.primaryGradient,
                           onTap: () {
@@ -93,7 +94,7 @@ class HomeDashboardScreen extends ConsumerWidget {
                         child: _GlassActionCard(
                           title: 'home.mockExam'.tr(),
                           subtitle: 'home.mockExamSubtitle'.tr(),
-                          icon: Icons.timer_rounded,
+                          icon: PhosphorIconsRegular.timer,
                           color: ModernTheme.secondary,
                           gradient: ModernTheme.accentGradient,
                           onTap: () {
@@ -132,7 +133,7 @@ class HomeDashboardScreen extends ConsumerWidget {
                     _GlassListTile(
                       title: 'home.practiceByCategory'.tr(),
                       subtitle: 'home.practiceByCategoryDesc'.tr(),
-                      icon: Icons.category_rounded,
+                      icon: PhosphorIconsRegular.gridFour,
                       color: Colors.blueAccent,
                       onTap: () => context.push('/categories'),
                     ),
@@ -140,7 +141,7 @@ class HomeDashboardScreen extends ConsumerWidget {
                     _GlassListTile(
                       title: 'home.learnSigns'.tr(),
                       subtitle: 'home.learnSignsDesc'.tr(),
-                      icon: Icons.traffic_rounded,
+                      icon: PhosphorIconsRegular.trafficSign,
                       color: Colors.amber,
                       onTap: () {
                         final shell = TabShellScope.maybeOf(context);
@@ -154,7 +155,7 @@ class HomeDashboardScreen extends ConsumerWidget {
                     _GlassListTile(
                       title: 'home.stats'.tr(),
                       subtitle: 'home.statsDesc'.tr(),
-                      icon: Icons.bar_chart_rounded,
+                      icon: PhosphorIconsRegular.chartBar,
                       color: ModernTheme.tertiary,
                       onTap: () => context.push('/stats'),
                     ),
@@ -162,7 +163,7 @@ class HomeDashboardScreen extends ConsumerWidget {
                     _GlassListTile(
                       title: 'home.history'.tr(),
                       subtitle: 'home.historyDesc'.tr(),
-                      icon: Icons.history_rounded,
+                      icon: PhosphorIconsRegular.clockCounterClockwise,
                       color: Colors.white70,
                       onTap: () => context.push('/history'),
                     ),
@@ -255,7 +256,7 @@ class _GlassHeroSection extends StatelessWidget {
                           context.push('/settings');
                         }
                       },
-                      icon: const Icon(Icons.settings_rounded),
+                      icon: const Icon(PhosphorIconsRegular.gear),
                       color: Theme.of(context)
                           .colorScheme
                           .onSurface

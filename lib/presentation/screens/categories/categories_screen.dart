@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 import '../../../core/constants/app_colors.dart';
 import '../../../core/theme/modern_theme.dart';
@@ -83,13 +84,13 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
                      controller: _controller,
                      style: GoogleFonts.outfit(color: Theme.of(context).colorScheme.onSurface),
                      decoration: InputDecoration(
-                       hintText: 'categories.search'.tr(),
-                       hintStyle: GoogleFonts.outfit(color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.5)),
-                       prefixIcon: Icon(Icons.search, color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.5)),
-                       border: InputBorder.none,
-                     ),
-                     onChanged: (_) => setState(() {}),
-                   ),
+                      hintText: 'categories.search'.tr(),
+                      hintStyle: GoogleFonts.outfit(color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.5)),
+                      prefixIcon: Icon(PhosphorIconsRegular.magnifyingGlass, color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.5)),
+                      border: InputBorder.none,
+                    ),
+                    onChanged: (_) => setState(() {}),
+                  ),
                  ),
                ),
                
@@ -160,19 +161,19 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
 
   static IconData _iconFor(String name) {
     switch (name) {
-      case 'traffic': return Icons.traffic_rounded;
-      case 'rules': return Icons.gavel_rounded;
-      case 'safety': return Icons.health_and_safety_rounded;
-      case 'signals': return Icons.traffic_rounded;
-      case 'markings': return Icons.add_road_rounded;
-      case 'parking': return Icons.local_parking_rounded;
-      case 'emergency': return Icons.warning_amber_rounded;
-      case 'pedestrians': return Icons.directions_walk_rounded;
-      case 'highway': return Icons.speed_rounded; // changed for visual variety
-      case 'weather': return Icons.wb_sunny_rounded;
-      case 'maintenance': return Icons.handyman_rounded;
-      case 'responsibilities': return Icons.badge_rounded;
-      default: return Icons.category_rounded;
+      case 'traffic': return PhosphorIconsRegular.trafficSign;
+      case 'rules': return PhosphorIconsRegular.gavel;
+      case 'safety': return PhosphorIconsRegular.shieldCheck;
+      case 'signals': return PhosphorIconsRegular.trafficSignal;
+      case 'markings': return PhosphorIconsRegular.roadHorizon;
+      case 'parking': return PhosphorIconsRegular.carSimple;
+      case 'emergency': return PhosphorIconsRegular.warning;
+      case 'pedestrians': return PhosphorIconsRegular.personSimpleWalk;
+      case 'highway': return PhosphorIconsRegular.roadHorizon;
+      case 'weather': return PhosphorIconsRegular.sunDim;
+      case 'maintenance': return PhosphorIconsRegular.wrench;
+      case 'responsibilities': return PhosphorIconsRegular.identificationBadge;
+      default: return PhosphorIconsRegular.gridFour;
     }
   }
 
@@ -328,7 +329,7 @@ class _CategoryGlassCard extends StatelessWidget {
                   const SizedBox(height: 8),
                   Row(
                     children: [
-                      Icon(Icons.quiz_rounded,
+                      Icon(PhosphorIconsRegular.question,
                           size: 14,
                           color: scheme.onSurface.withValues(alpha: 0.6)),
                       const SizedBox(width: 4),
@@ -340,7 +341,7 @@ class _CategoryGlassCard extends StatelessWidget {
                             fontSize: 12),
                       ),
                       const Spacer(),
-                      const Icon(Icons.arrow_forward_rounded,
+                      const Icon(PhosphorIconsRegular.caretRight,
                           size: 16, color: ModernTheme.secondary),
                     ],
                   ),

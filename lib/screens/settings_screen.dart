@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 import '../services/ad_service.dart';
 import '../state/app_state.dart';
@@ -52,7 +53,7 @@ class SettingsScreen extends ConsumerWidget {
               _SettingsGlassTile(
                 title: 'settings.language'.tr(),
                 subtitle: 'settings.languages.${context.locale.languageCode}'.tr(),
-                icon: Icons.language_rounded,
+                icon: PhosphorIconsRegular.translate,
                 iconColor: Colors.blueAccent,
                 onTap: () {
                    showModalBottomSheet<String>(
@@ -66,7 +67,7 @@ class SettingsScreen extends ConsumerWidget {
               _SettingsGlassTile(
                 title: 'settings.theme'.tr(),
                 subtitle: _getThemeName(context, settings.themeMode),
-                icon: Icons.brightness_6_rounded,
+                icon: PhosphorIconsRegular.palette,
                 iconColor: Colors.purpleAccent,
                 onTap: () async {
                   final mode = await showModalBottomSheet<ThemeMode>(
@@ -86,7 +87,7 @@ class SettingsScreen extends ConsumerWidget {
               
               _SettingsSwitchTile(
                 title: 'settings.sound'.tr(),
-                icon: Icons.volume_up_rounded,
+                icon: PhosphorIconsRegular.speakerHigh,
                 iconColor: Colors.tealAccent,
                 value: settings.soundEnabled,
                 onChanged: notifier.setSoundEnabled,
@@ -94,7 +95,7 @@ class SettingsScreen extends ConsumerWidget {
               const SizedBox(height: 12),
               _SettingsSwitchTile(
                 title: 'settings.vibration'.tr(),
-                icon: Icons.vibration_rounded,
+                icon: PhosphorIconsRegular.vibrate,
                 iconColor: Colors.orangeAccent,
                 value: settings.vibrationEnabled,
                 onChanged: notifier.setVibrationEnabled,
@@ -103,7 +104,7 @@ class SettingsScreen extends ConsumerWidget {
               _SettingsSwitchTile(
                 title: 'settings.ads'.tr(),
                 subtitle: 'settings.adsDesc'.tr(),
-                icon: Icons.ad_units_rounded,
+                icon: PhosphorIconsRegular.megaphone,
                 iconColor: Colors.greenAccent,
                 value: settings.adsEnabled,
                 onChanged: (value) async {
@@ -212,7 +213,7 @@ class _SettingsGlassTile extends StatelessWidget {
                 ],
               ),
             ),
-            Icon(Icons.arrow_forward_ios_rounded, color: Colors.white24, size: 16),
+            Icon(PhosphorIconsRegular.caretRight, color: Colors.white24, size: 16),
           ],
         ),
       ),
@@ -338,7 +339,7 @@ class _LanguageGlassSheet extends StatelessWidget {
                          ),
                        ),
                        const Spacer(),
-                       if (current == code) Icon(Icons.check_circle_rounded, color: ModernTheme.secondary),
+                       if (current == code) Icon(PhosphorIconsRegular.checkCircle, color: ModernTheme.secondary),
                     ],
                   ),
                 ),
@@ -394,7 +395,7 @@ class _ThemeGlassSheet extends StatelessWidget {
                          ),
                        ),
                        const Spacer(),
-                       if (current == mode) Icon(Icons.check_circle_rounded, color: ModernTheme.primary),
+                       if (current == mode) Icon(PhosphorIconsRegular.checkCircle, color: ModernTheme.primary),
                     ],
                   ),
                 ),

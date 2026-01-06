@@ -64,16 +64,16 @@
     "explore": "অন্বেষণ করুন",
     "greeting": "শিখতে প্রস্তুত?",
     "subtitle": "যেকোনো সময়, যেকোনো জায়গায় অনুশীলন করুন — ইন্টারনেট দরকার নেই",
-    "learnSigns": "ট্রাফিক সাইন",
-    "learnSignsDesc": "সব ট্রাফিক সাইন শিখুন",
+    "learnSigns": "ট্রাফিক সাইন শিখুন",
+    "learnSignsDesc": "ট্রাফিক সাইন পড়ুন",
     "learnRules": "নিয়ম ও প্রবিধান",
     "learnRulesDesc": "সড়ক নিয়ম ও নিরাপত্তা",
-    "practice": "প্র্যাকটিস",
+    "practice": "প্রশ্ন অনুশীলন",
     "practiceDesc": "আপনার জ্ঞান যাচাই করুন",
-    "practiceSubtitle": "এখনই অনুশীলন শুরু করুন",
-    "mockExam": "মক পরীক্ষা",
+    "practiceSubtitle": "দ্রুত অনুশীলন",
+    "mockExam": "সম্পূর্ণ অনুশীলন পরীক্ষা",
     "mockExamDesc": "পূর্ণ থিওরি অনুশীলন",
-    "mockExamSubtitle": "আপনার জ্ঞান যাচাই করুন",
+    "mockExamSubtitle": "সম্পূর্ণ পরীক্ষার অনুশীলন",
     "quickStart": "দ্রুত শুরু",
     "learningPaths": "শেখার পথ",
     "statLabels": {
@@ -83,14 +83,14 @@
       "done": "সম্পন্ন",
       "dayStreak": "দৈনিক স্ট্রিক"
     },
-    "practiceByCategory": "বিভাগভিত্তিক অনুশীলন",
-    "practiceByCategoryDesc": "বিষয় ধরে শিখুন",
+    "practiceByCategory": "বিষয়ের ভিত্তিতে অনুশীলন",
+    "practiceByCategoryDesc": "একটি বিষয় বেছে নিন",
     "favorites": "প্রিয়",
     "favoritesDesc": "আপনার সংরক্ষিত আইটেম",
-    "stats": "আপনার অগ্রগতি",
-    "statsDesc": "আপনার শেখা ট্র্যাক করুন",
-    "history": "পরীক্ষার ইতিহাস",
-    "historyDesc": "পূর্বের ফলাফল দেখুন",
+    "stats": "আমার অগ্রগতি",
+    "statsDesc": "আমার অগ্রগতি দেখুন",
+    "history": "আমার ফলাফল",
+    "historyDesc": "আগের টেস্ট ফলাফল",
     "violationPoints": "ট্রাফিক লঙ্ঘন পয়েন্ট",
     "violationPointsDesc": "লঙ্ঘন পয়েন্ট সিস্টেম শিখুন",
     "trafficFines": "ট্রাফিক জরিমানা ও দণ্ড",
@@ -1461,56 +1461,56 @@
     "totalQuestions": "{value} প্রশ্ন",
     "empty": "এই বিভাগে এখনও কোনো প্রশ্ন নেই",
     "signs": {
-      "title": "ট্রাফিক সাইন ও সংকেত",
-      "subtitle": "সাইন ও সংকেত শিখুন"
+      "title": "ট্রাফিক সাইন",
+      "subtitle": "সাইনের অর্থ"
     },
     "rules": {
-      "title": "ট্রাফিক নিয়ম",
-      "subtitle": "অগ্রাধিকার ও বিধি"
+      "title": "সড়ক নিয়ম",
+      "subtitle": "অগ্রাধিকার"
     },
     "safety": {
-      "title": "সড়ক নিরাপত্তা",
-      "subtitle": "নিরাপদ চালনার ভিত্তি"
+      "title": "নিরাপদ ড্রাইভিং",
+      "subtitle": "নিরাপদ থাকুন"
     },
     "signals": {
-      "title": "ট্রাফিক সিগন্যাল",
-      "subtitle": "লাইট ও হাতের সংকেত"
+      "title": "ট্রাফিক লাইট",
+      "subtitle": "লাইট ও সংকেত"
     },
     "markings": {
-      "title": "সড়ক চিহ্ন",
-      "subtitle": "লাইন ও লেন নির্দেশনা"
+      "title": "সড়ক রেখা",
+      "subtitle": "লেন রেখা"
     },
     "parking": {
-      "title": "পার্কিং নিয়ম",
-      "subtitle": "কোথায় এবং কীভাবে পার্ক করবেন"
+      "title": "পার্কিং",
+      "subtitle": "কোথায় পার্ক"
     },
     "emergency": {
-      "title": "জরুরি পরিস্থিতি",
-      "subtitle": "জরুরিতে কী করবেন"
+      "title": "জরুরি অবস্থা",
+      "subtitle": "কি করবেন"
     },
     "pedestrians": {
-      "title": "পথচারীর অধিকার",
-      "subtitle": "ক্রসিং ও অগ্রাধিকার"
+      "title": "পথচারী",
+      "subtitle": "ক্রসিং"
     },
     "highway": {
       "title": "হাইওয়ে ড্রাইভিং",
-      "subtitle": "দ্রুতগতির সড়কের নিয়ম"
+      "subtitle": "দ্রুত সড়ক"
     },
     "weather": {
-      "title": "আবহাওয়ার অবস্থা",
-      "subtitle": "বৃষ্টি ও ধুলোঝড়ে চালনা"
+      "title": "খারাপ আবহাওয়া",
+      "subtitle": "বৃষ্টি ও ধুলো"
     },
     "maintenance": {
-      "title": "যানবাহন রক্ষণাবেক্ষণ",
-      "subtitle": "গাড়িকে কার্যক্ষম রাখুন"
+      "title": "গাড়ির যত্ন",
+      "subtitle": "গাড়ি প্রস্তুত রাখুন"
     },
     "responsibilities": {
-      "title": "চালকের দায়িত্ব",
-      "subtitle": "আইনি ও নৈতিক দায়িত্ব"
+      "title": "ড্রাইভারের দায়িত্ব",
+      "subtitle": "মূল বিষয়"
     },
     "violation_points": {
-      "title": "ট্রাফিক লঙ্ঘন পয়েন্ট",
-      "subtitle": "পয়েন্ট সিস্টেমের সারাংশ"
+      "title": "লঙ্ঘন পয়েন্ট",
+      "subtitle": "পয়েন্ট সিস্টেম"
     },
     "traffic_fines": {
       "title": "ট্রাফিক জরিমানা",

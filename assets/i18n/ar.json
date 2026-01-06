@@ -65,16 +65,16 @@
     "greeting": "هل أنت مستعد للتعلم؟",
     "subtitle": "تمرّن في أي وقت وأي مكان - لا حاجة للإنترنت",
     "profile": "الملف الشخصي",
-    "learnSigns": "إشارات المرور",
-    "learnSignsDesc": "تعلم جميع إشارات المرور",
+    "learnSigns": "تعلم إشارات المرور",
+    "learnSignsDesc": "ادرس إشارات المرور",
     "learnRules": "القواعد واللوائح",
     "learnRulesDesc": "قواعد الطريق والسلامة",
-    "practice": "تدريب",
+    "practice": "تدريب على الأسئلة",
     "practiceDesc": "اختبر معرفتك",
-    "practiceSubtitle": "ابدأ الممارسة الآن",
-    "mockExam": "اختبار تجريبي",
+    "practiceSubtitle": "تدريب سريع",
+    "mockExam": "اختبار تجريبي كامل",
     "mockExamDesc": "تدريب نظري كامل",
-    "mockExamSubtitle": "اختبر معرفتك",
+    "mockExamSubtitle": "تدريب على الامتحان",
     "quickStart": "بدء سريع",
     "learningPaths": "مسارات التعلم",
     "statLabels": {
@@ -84,14 +84,14 @@
       "done": "تم",
       "dayStreak": "السلسلة اليومية"
     },
-    "practiceByCategory": "التدرب حسب الفئة",
-    "practiceByCategoryDesc": "تعلم موضوعاً تلو الآخر",
+    "practiceByCategory": "تدريب حسب الموضوع",
+    "practiceByCategoryDesc": "اختر موضوعاً",
     "favorites": "المفضلة",
     "favoritesDesc": "العناصر المحفوظة",
-    "stats": "تقدمك",
-    "statsDesc": "تتبع تعلّمك",
-    "history": "سجل الاختبارات",
-    "historyDesc": "راجع نتائجك السابقة",
+    "stats": "تقدمي",
+    "statsDesc": "تتبع تقدمي",
+    "history": "نتائجي",
+    "historyDesc": "نتائج الاختبارات السابقة",
     "violationPoints": "نقاط المخالفات المرورية",
     "violationPointsDesc": "تعرّف على نظام نقاط المخالفات",
     "trafficFines": "الغرامات والعقوبات المرورية",
@@ -1478,56 +1478,56 @@
     "totalQuestions": "{value} سؤال",
     "empty": "لا توجد أسئلة متاحة في هذه الفئة بعد",
     "signs": {
-      "title": "إشارات المرور والعلامات",
-      "subtitle": "تعلّم الإشارات والرموز"
+      "title": "إشارات المرور",
+      "subtitle": "معاني الإشارات"
     },
     "rules": {
-      "title": "قواعد المرور",
-      "subtitle": "الأولوية واللوائح"
+      "title": "قواعد الطريق",
+      "subtitle": "حق الأولوية"
     },
     "safety": {
-      "title": "السلامة على الطريق",
-      "subtitle": "أساسيات القيادة الآمنة"
+      "title": "قيادة آمنة",
+      "subtitle": "ابقَ آمناً"
     },
     "signals": {
       "title": "إشارات المرور الضوئية",
-      "subtitle": "الإشارات الضوئية واليدوية"
+      "subtitle": "الضوء والإشارات"
     },
     "markings": {
-      "title": "علامات الطريق",
-      "subtitle": "خطوط وحارات الطريق"
+      "title": "خطوط الطريق",
+      "subtitle": "خطوط المسارات"
     },
     "parking": {
-      "title": "قواعد الوقوف",
-      "subtitle": "أين وكيف تقف"
+      "title": "مواقف السيارات",
+      "subtitle": "أين تركن"
     },
     "emergency": {
-      "title": "الحالات الطارئة",
-      "subtitle": "ما يجب فعله في الطوارئ"
+      "title": "الطوارئ",
+      "subtitle": "ماذا تفعل"
     },
     "pedestrians": {
-      "title": "حقوق المشاة",
-      "subtitle": "المعابر والأولوية"
+      "title": "المشاة",
+      "subtitle": "المعابر"
     },
     "highway": {
-      "title": "القيادة على الطريق السريع",
-      "subtitle": "قواعد الطرق السريعة"
+      "title": "القيادة السريعة",
+      "subtitle": "طرق سريعة"
     },
     "weather": {
-      "title": "ظروف الطقس",
-      "subtitle": "القيادة في المطر والعواصف الرملية"
+      "title": "طقس سيئ",
+      "subtitle": "مطر ورمال"
     },
     "maintenance": {
-      "title": "صيانة المركبة",
-      "subtitle": "حافظ على مركبتك صالحة"
+      "title": "عناية السيارة",
+      "subtitle": "حافظ على السيارة"
     },
     "responsibilities": {
-      "title": "مسؤوليات السائق",
-      "subtitle": "الواجبات القانونية والأخلاقية"
+      "title": "واجبات السائق",
+      "subtitle": "أساسيات السائق"
     },
     "violation_points": {
-      "title": "نقاط المخالفات المرورية",
-      "subtitle": "نظرة عامة على نظام النقاط"
+      "title": "نقاط المخالفات",
+      "subtitle": "نظام النقاط"
     },
     "traffic_fines": {
       "title": "الغرامات المرورية",

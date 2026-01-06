@@ -123,14 +123,44 @@ class _HomeShellState extends ConsumerState<HomeShell> {
               bottomNavigationBar: (index == 2 || index == 3)
                   ? null
                   : BottomNav(
-                      currentIndex: index,
-                      onTap: (next) => _index.value = next,
+                      currentIndex: _navIndexForShell(index),
+                      onTap: (next) => _index.value = _shellIndexForNav(next),
                     ),
             );
           },
         ),
       ),
     );
+  }
+
+  int _navIndexForShell(int shellIndex) {
+    switch (shellIndex) {
+      case 0:
+        return 0;
+      case 1:
+        return 1;
+      case 3:
+        return 2;
+      case 4:
+        return 3;
+      default:
+        return 0;
+    }
+  }
+
+  int _shellIndexForNav(int navIndex) {
+    switch (navIndex) {
+      case 0:
+        return 0;
+      case 1:
+        return 1;
+      case 2:
+        return 3;
+      case 3:
+        return 4;
+      default:
+        return 0;
+    }
   }
 }
 

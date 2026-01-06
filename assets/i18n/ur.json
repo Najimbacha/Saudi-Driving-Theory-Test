@@ -64,16 +64,16 @@
     "explore": "تلاش کریں",
     "greeting": "آج کیا سیکھنا ہے؟",
     "subtitle": "کچھ منٹ مشق کریں، ہر دن بہتر ہوں",
-    "learnSigns": "ٹریفک نشانیاں",
-    "learnSignsDesc": "اہم نشانیاں سمجھیں",
+    "learnSigns": "ٹریفک نشانیاں سیکھیں",
+    "learnSignsDesc": "ٹریفک نشانیاں پڑھیں",
     "learnRules": "قواعد و ضوابط",
     "learnRulesDesc": "بنیادی قواعد سیکھیں",
-    "practice": "پریکٹس",
+    "practice": "سوالوں کی مشق",
     "practiceDesc": "اپنا علم پرکھیں",
-    "practiceSubtitle": "ابھی مشق شروع کریں",
-    "mockExam": "نمونہ امتحان",
+    "practiceSubtitle": "فوری مشق",
+    "mockExam": "مکمل پریکٹس امتحان",
     "mockExamDesc": "مکمل نظریاتی مشق",
-    "mockExamSubtitle": "اپنا علم پرکھیں",
+    "mockExamSubtitle": "امتحان کی مکمل مشق",
     "quickStart": "فوری آغاز",
     "learningPaths": "سیکھنے کے راستے",
     "statLabels": {
@@ -83,14 +83,14 @@
       "done": "مکمل",
       "dayStreak": "یومیہ سلسلہ"
     },
-    "practiceByCategory": "زمرہ وار مشق",
-    "practiceByCategoryDesc": "موضوع بہ موضوع سیکھیں",
+    "practiceByCategory": "موضوع کے حساب سے مشق",
+    "practiceByCategoryDesc": "کوئی موضوع چنیں",
     "favorites": "پسندیدہ",
     "favoritesDesc": "محفوظ سوالات",
-    "stats": "آپ کی پیشرفت",
+    "stats": "میری پیش رفت",
     "statsDesc": "اپنی پیش رفت دیکھیں",
-    "history": "ٹیسٹ ہسٹری",
-    "historyDesc": "پرانے نتائج دیکھیں",
+    "history": "میرے نتائج",
+    "historyDesc": "پچھلے ٹیسٹ نتائج",
     "violationPoints": "ٹریفک خلاف ورزی پوائنٹس",
     "violationPointsDesc": "خلاف ورزی پوائنٹس سسٹم سیکھیں",
     "trafficFines": "ٹریفک جرمانے اور سزائیں",
@@ -1477,56 +1477,56 @@
     "totalQuestions": "{value} سوالات",
     "empty": "اس زمرے میں ابھی کوئی سوالات دستیاب نہیں",
     "signs": {
-      "title": "ٹریفک اشارے اور علامات",
-      "subtitle": "اشاروں اور علامات کو سیکھیں"
+      "title": "ٹریفک نشانیاں",
+      "subtitle": "نشانوں کے معنی"
     },
     "rules": {
-      "title": "ٹریفک قواعد",
-      "subtitle": "حقِ راستہ اور ضوابط"
+      "title": "سڑک کے قواعد",
+      "subtitle": "حقِ راستہ"
     },
     "safety": {
-      "title": "سڑک کی حفاظت",
-      "subtitle": "محفوظ ڈرائیونگ کی بنیادی باتیں"
+      "title": "محفوظ ڈرائیونگ",
+      "subtitle": "محفوظ رہیں"
     },
     "signals": {
-      "title": "ٹریفک سگنلز",
-      "subtitle": "لائٹس اور ہاتھ کے اشارے"
+      "title": "ٹریفک لائٹس",
+      "subtitle": "لائٹس اور اشارے"
     },
     "markings": {
-      "title": "سڑک کی نشانیاں",
-      "subtitle": "لائنیں اور لین رہنمائی"
+      "title": "سڑک کی لکیریں",
+      "subtitle": "لین کی لکیریں"
     },
     "parking": {
-      "title": "پارکنگ قواعد",
-      "subtitle": "کہاں اور کیسے پارک کریں"
+      "title": "پارکنگ",
+      "subtitle": "کہاں پارک کریں"
     },
     "emergency": {
       "title": "ہنگامی حالات",
-      "subtitle": "ہنگامی صورت میں کیا کریں"
+      "subtitle": "کیا کریں"
     },
     "pedestrians": {
-      "title": "پیدل چلنے والوں کے حقوق",
-      "subtitle": "کراسنگ اور ترجیح"
+      "title": "پیدل چلنے والے",
+      "subtitle": "گزرگاہیں"
     },
     "highway": {
       "title": "ہائی وے ڈرائیونگ",
-      "subtitle": "تیز رفتار سڑکوں کے قواعد"
+      "subtitle": "تیز رفتار سڑکیں"
     },
     "weather": {
-      "title": "موسمی حالات",
-      "subtitle": "بارش اور ریت کے طوفان میں ڈرائیونگ"
+      "title": "خراب موسم",
+      "subtitle": "بارش اور ریت"
     },
     "maintenance": {
       "title": "گاڑی کی دیکھ بھال",
-      "subtitle": "گاڑی کو قابلِ استعمال رکھیں"
+      "subtitle": "گاڑی تیار رکھیں"
     },
     "responsibilities": {
       "title": "ڈرائیور کی ذمہ داریاں",
-      "subtitle": "قانونی اور اخلاقی فرائض"
+      "subtitle": "بنیادی باتیں"
     },
     "violation_points": {
       "title": "خلاف ورزی پوائنٹس",
-      "subtitle": "پوائنٹس سسٹم کا خلاصہ"
+      "subtitle": "پوائنٹ سسٹم"
     },
     "traffic_fines": {
       "title": "ٹریفک جرمانے",

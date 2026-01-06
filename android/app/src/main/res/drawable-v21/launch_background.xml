@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
-        <bitmap android:gravity="fill" android:src="@drawable/background"/>
+        <shape android:shape="rectangle">
+            <gradient
+                android:angle="135"
+                android:startColor="#E6F7EC"
+                android:endColor="#F8FBFF" />
+        </shape>
     </item>
-    <!-- Remove launch icon; keep only background to avoid icon flash -->
 </layer-list>

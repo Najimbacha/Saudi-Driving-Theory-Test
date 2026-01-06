@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 import '../core/theme/modern_theme.dart';
 import 'glass_container.dart';
@@ -22,28 +23,28 @@ class BottomNav extends StatelessWidget {
 
     final items = [
       _NavItem(
-        icon: Icons.home_rounded,
+        icon: PhosphorIconsRegular.house,
         label: 'nav.home'.tr(),
       ),
       _NavItem(
-        icon: Icons.book_rounded,
+        icon: PhosphorIconsRegular.trafficSign,
         label: 'nav.signs'.tr(),
       ),
       _NavItem(
-        icon: Icons.quiz_outlined,
-        label: 'nav.practice'.tr(),
+        icon: PhosphorIconsRegular.clipboardText,
+        label: 'nav.exam'.tr(),
       ),
       _NavItem(
-        icon: Icons.school_rounded,
-        label: 'nav.exam'.tr(),
+        icon: PhosphorIconsRegular.gear,
+        label: 'nav.settings'.tr(),
       ),
     ];
     
     return SafeArea(
       top: false,
       child: GlassContainer(
-        margin: const EdgeInsetsDirectional.fromSTEB(16, 0, 16, 16),
-        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+        margin: EdgeInsetsDirectional.zero,
+        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
         borderRadius: BorderRadius.circular(28),
         blur: 20,
         color: isDark
@@ -56,7 +57,7 @@ class BottomNav extends StatelessWidget {
           width: 1,
         ),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: List.generate(items.length, (index) {
             final item = items[index];
             final selected = index == currentIndex;
@@ -73,7 +74,7 @@ class BottomNav extends StatelessWidget {
                     child: AnimatedContainer(
                       duration: const Duration(milliseconds: 200),
                       curve: Curves.easeInOutCubic,
-                      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+                      padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 4),
                       decoration: BoxDecoration(
                         color: selected
                             ? ModernTheme.primary.withValues(alpha: isDark ? 0.15 : 0.12)
@@ -92,7 +93,7 @@ class BottomNav extends StatelessWidget {
                               color: selected
                                   ? ModernTheme.primary
                                   : scheme.onSurface.withValues(alpha: isDark ? 0.6 : 0.75),
-                              size: 24,
+                              size: 22,
                             ),
                           ),
                           const SizedBox(height: 4),
@@ -105,7 +106,7 @@ class BottomNav extends StatelessWidget {
                               fontWeight: selected
                                   ? FontWeight.bold
                                   : FontWeight.w500,
-                              fontSize: 11,
+                              fontSize: 10,
                             ),
 
                             child: Text(
