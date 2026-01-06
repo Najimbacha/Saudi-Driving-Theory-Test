@@ -215,7 +215,8 @@ class AppSettingsNotifier extends StateNotifier<AppSettingsState> {
   void toggleFavorite({required String type, required String id}) {
     final current = state.favorites;
     final list = type == 'questions' ? current.questions : current.signs;
-    final nextList = list.contains(id) ? list.where((i) => i != id).toList() : [...list, id];
+    final nextList =
+        list.contains(id) ? list.where((i) => i != id).toList() : [...list, id];
     final nextFavorites = type == 'questions'
         ? Favorites(questions: nextList, signs: current.signs)
         : Favorites(questions: current.questions, signs: nextList);
@@ -241,7 +242,8 @@ final sharedPrefsProvider = Provider<SharedPreferences>((ref) {
   throw UnimplementedError('sharedPrefsProvider must be overridden in main()');
 });
 
-final appSettingsProvider = StateNotifierProvider<AppSettingsNotifier, AppSettingsState>((ref) {
+final appSettingsProvider =
+    StateNotifierProvider<AppSettingsNotifier, AppSettingsState>((ref) {
   final prefs = ref.watch(sharedPrefsProvider);
   return AppSettingsNotifier(prefs);
 });

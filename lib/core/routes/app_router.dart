@@ -20,18 +20,31 @@ import '../../screens/stats_screen.dart';
 import '../../screens/traffic_fines_screen.dart';
 import '../../screens/traffic_violation_points_screen.dart';
 import '../../widgets/home_shell.dart';
+
 final appRouterProvider = Provider<GoRouter>((ref) {
   return GoRouter(
     initialLocation: '/splash',
     routes: [
       GoRoute(path: '/splash', builder: (context, _) => const SplashScreen()),
-      GoRoute(path: '/onboarding', builder: (context, _) => const OnboardingIntroScreen()),
+      GoRoute(
+          path: '/onboarding',
+          builder: (context, _) => const OnboardingIntroScreen()),
       GoRoute(path: '/home', builder: (context, _) => const HomeShell()),
-      GoRoute(path: '/categories', builder: (context, _) => const CategoriesScreen()),
-      GoRoute(path: '/signs', builder: (context, _) => const HomeShell(initialIndex: 1)),
-      GoRoute(path: '/flashcards', builder: (context, _) => const FlashcardsScreen()),
-      GoRoute(path: '/practice', builder: (context, _) => const HomeShell(initialIndex: 2)),
-      GoRoute(path: '/exam', builder: (context, _) => const HomeShell(initialIndex: 3)),
+      GoRoute(
+          path: '/categories',
+          builder: (context, _) => const CategoriesScreen()),
+      GoRoute(
+          path: '/signs',
+          builder: (context, _) => const HomeShell(initialIndex: 1)),
+      GoRoute(
+          path: '/flashcards',
+          builder: (context, _) => const FlashcardsScreen()),
+      GoRoute(
+          path: '/practice',
+          builder: (context, _) => const HomeShell(initialIndex: 2)),
+      GoRoute(
+          path: '/exam',
+          builder: (context, _) => const HomeShell(initialIndex: 3)),
       GoRoute(
         path: '/results',
         builder: (context, state) {
@@ -48,16 +61,28 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           return ReviewScreen(result: result);
         },
       ),
-      GoRoute(path: '/favorites', builder: (context, _) => const FavoritesScreen()),
+      GoRoute(
+          path: '/favorites', builder: (context, _) => const FavoritesScreen()),
       GoRoute(path: '/stats', builder: (context, _) => const StatsScreen()),
-      GoRoute(path: '/history', builder: (context, _) => const ExamHistoryScreen()),
+      GoRoute(
+          path: '/history', builder: (context, _) => const ExamHistoryScreen()),
       GoRoute(path: '/learn', builder: (context, _) => const LearnScreen()),
-      GoRoute(path: '/achievements', builder: (context, _) => const AchievementsScreen()),
-      GoRoute(path: '/settings', builder: (context, _) => const HomeShell(initialIndex: 4)),
+      GoRoute(
+          path: '/achievements',
+          builder: (context, _) => const AchievementsScreen()),
+      GoRoute(
+          path: '/settings',
+          builder: (context, _) => const HomeShell(initialIndex: 4)),
       GoRoute(path: '/credits', builder: (context, _) => const CreditsScreen()),
-      GoRoute(path: '/violation-points', builder: (context, _) => const TrafficViolationPointsScreen()),
-      GoRoute(path: '/traffic-fines', builder: (context, _) => const TrafficFinesScreen()),
-      GoRoute(path: '/license-guide', builder: (context, _) => const LicenseGuideScreen()),
+      GoRoute(
+          path: '/violation-points',
+          builder: (context, _) => const TrafficViolationPointsScreen()),
+      GoRoute(
+          path: '/traffic-fines',
+          builder: (context, _) => const TrafficFinesScreen()),
+      GoRoute(
+          path: '/license-guide',
+          builder: (context, _) => const LicenseGuideScreen()),
       GoRoute(path: '/privacy', builder: (context, _) => const PrivacyScreen()),
     ],
     errorBuilder: (context, _) => const NotFoundScreen(),

@@ -82,7 +82,8 @@ class ExamResult {
         timeTakenSeconds: json['timeTakenSeconds'] as int,
         categoryScores: Map<String, int>.from(json['categoryScores'] as Map),
         questionAnswers: (json['questionAnswers'] as List<dynamic>)
-            .map((e) => QuestionAnswer.fromJson(Map<String, dynamic>.from(e as Map)))
+            .map((e) =>
+                QuestionAnswer.fromJson(Map<String, dynamic>.from(e as Map)))
             .toList(),
       );
 }

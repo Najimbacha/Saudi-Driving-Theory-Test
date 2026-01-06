@@ -220,8 +220,9 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
             ),
             body: Container(
               decoration: BoxDecoration(
-                gradient:
-                    isDark ? ModernTheme.darkGradient : ModernTheme.lightGradient,
+                gradient: isDark
+                    ? ModernTheme.darkGradient
+                    : ModernTheme.lightGradient,
               ),
               child: SafeArea(
                 child: Column(
@@ -296,8 +297,7 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
                                     horizontal: 8, vertical: 4),
                               ),
                               onPressed: () {
-                                final settings =
-                                    ref.read(appSettingsProvider);
+                                final settings = ref.read(appSettingsProvider);
                                 if (settings.vibrationEnabled)
                                   HapticFeedback.lightImpact();
                                 if (settings.soundEnabled)
@@ -391,9 +391,10 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
                                             ),
                                           ),
                                           if (isSelected)
-                                            Icon(Icons.check_circle_rounded,
-                                                color: ModernTheme.secondary,
-                                                size: 20),
+                                            const SizedBox(
+                                              width: 20,
+                                              height: 20,
+                                            ),
                                         ],
                                       ),
                                     ),
@@ -493,10 +494,9 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
                                   _showQuestionGrid(context, exam, controller),
                               child: Text(
                                 'exam.reviewAnswers'.tr(),
-                                style:
-                                    GoogleFonts.outfit(
-                                        color: scheme.onSurface
-                                            .withValues(alpha: 0.7)),
+                                style: GoogleFonts.outfit(
+                                    color: scheme.onSurface
+                                        .withValues(alpha: 0.7)),
                               ),
                             ),
                           ] else
@@ -853,8 +853,7 @@ class _ExamIntroState extends State<_ExamIntro> {
     final shouldStart = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor:
-            isDark ? const Color(0xFF1E293B) : scheme.surface,
+        backgroundColor: isDark ? const Color(0xFF1E293B) : scheme.surface,
         title: Row(
           children: [
             Icon(Icons.timer_outlined, color: ModernTheme.secondary),
@@ -866,8 +865,8 @@ class _ExamIntroState extends State<_ExamIntro> {
         ),
         content: Text(
           'exam.disclaimer'.tr(),
-          style:
-              GoogleFonts.outfit(color: scheme.onSurface.withValues(alpha: 0.7)),
+          style: GoogleFonts.outfit(
+              color: scheme.onSurface.withValues(alpha: 0.7)),
         ),
         actions: [
           TextButton(
@@ -988,10 +987,9 @@ class _ModeGlassCard extends StatelessWidget {
                       'questions': questions,
                       'minutes': minutes,
                     }),
-                    style:
-                        GoogleFonts.outfit(
-                            color: scheme.onSurface.withValues(alpha: 0.6),
-                            fontSize: 13),
+                    style: GoogleFonts.outfit(
+                        color: scheme.onSurface.withValues(alpha: 0.6),
+                        fontSize: 13),
                   ),
                 ],
               ),

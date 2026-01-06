@@ -20,8 +20,12 @@ class StatsScreen extends ConsumerWidget {
     final history = ref.watch(examHistoryProvider);
 
     final totalAnswered = stats.totalAnswered;
-    final accuracy = totalAnswered == 0 ? 0 : (stats.totalCorrect / totalAnswered * 100).round();
-    final average = stats.quizzesTaken == 0 ? 0 : (stats.totalScore / stats.quizzesTaken).round();
+    final accuracy = totalAnswered == 0
+        ? 0
+        : (stats.totalCorrect / totalAnswered * 100).round();
+    final average = stats.quizzesTaken == 0
+        ? 0
+        : (stats.totalScore / stats.quizzesTaken).round();
 
     return Scaffold(
       appBar: AppBar(title: Text('stats.title'.tr())),
@@ -35,7 +39,8 @@ class StatsScreen extends ConsumerWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('stats.noStats'.tr(), style: Theme.of(context).textTheme.titleMedium),
+                    Text('stats.noStats'.tr(),
+                        style: Theme.of(context).textTheme.titleMedium),
                     const SizedBox(height: 6),
                     Text('stats.noStatsDesc'.tr()),
                   ],
@@ -52,18 +57,26 @@ class StatsScreen extends ConsumerWidget {
             const SizedBox(height: 16),
             _StatGrid(
               items: [
-                _StatTile(label: 'stats.quizzesTaken'.tr(), value: stats.quizzesTaken.toString()),
-                _StatTile(label: 'results.correct'.tr(), value: stats.totalCorrect.toString()),
-                _StatTile(label: 'quiz.question'.tr(), value: totalAnswered.toString()),
+                _StatTile(
+                    label: 'stats.quizzesTaken'.tr(),
+                    value: stats.quizzesTaken.toString()),
+                _StatTile(
+                    label: 'results.correct'.tr(),
+                    value: stats.totalCorrect.toString()),
+                _StatTile(
+                    label: 'quiz.question'.tr(),
+                    value: totalAnswered.toString()),
                 _StatTile(label: 'results.accuracy'.tr(), value: '$average%'),
               ],
             ),
           ],
           const SizedBox(height: 20),
-          Text('exam.topicBreakdown'.tr(), style: Theme.of(context).textTheme.titleMedium),
+          Text('exam.topicBreakdown'.tr(),
+              style: Theme.of(context).textTheme.titleMedium),
           const SizedBox(height: 8),
           if (learning.categoryStats.isEmpty)
-            Text('common.empty'.tr(), style: Theme.of(context).textTheme.bodySmall)
+            Text('common.empty'.tr(),
+                style: Theme.of(context).textTheme.bodySmall)
           else
             ...categories.map((cat) {
               final stat = learning.categoryStats[cat.id];
@@ -78,7 +91,8 @@ class StatsScreen extends ConsumerWidget {
           Row(
             children: [
               Expanded(
-                child: Text('history.title'.tr(), style: Theme.of(context).textTheme.titleMedium),
+                child: Text('history.title'.tr(),
+                    style: Theme.of(context).textTheme.titleMedium),
               ),
               TextButton(
                 onPressed: () => context.push('/history'),
@@ -87,7 +101,8 @@ class StatsScreen extends ConsumerWidget {
             ],
           ),
           if (history.isEmpty)
-            Text('history.empty'.tr(), style: Theme.of(context).textTheme.bodySmall)
+            Text('history.empty'.tr(),
+                style: Theme.of(context).textTheme.bodySmall)
           else
             ...history.take(3).map(
                   (result) => Card(
@@ -95,9 +110,13 @@ class StatsScreen extends ConsumerWidget {
                       title: Text(
                         '${'history.examTypes.${result.examType}'.tr()} • ${result.scorePercentage.toStringAsFixed(0)}%',
                       ),
-                      subtitle: Text(DateFormat.yMMMd().add_jm().format(result.dateTime)),
-                      trailing: Icon(result.passed ? Icons.check_circle : Icons.cancel,
-                          color: result.passed ? AppColors.success : AppColors.error),
+                      subtitle: Text(
+                          DateFormat.yMMMd().add_jm().format(result.dateTime)),
+                      trailing: Icon(
+                          result.passed ? Icons.check_circle : Icons.cancel,
+                          color: result.passed
+                              ? AppColors.success
+                              : AppColors.error),
                     ),
                   ),
                 ),
@@ -144,7 +163,8 @@ class _SummaryHero extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('stats.title'.tr(), style: Theme.of(context).textTheme.titleLarge),
+            Text('stats.title'.tr(),
+                style: Theme.of(context).textTheme.titleLarge),
             const SizedBox(height: 12),
             Text('$accuracy%',
                 style: Theme.of(context).textTheme.displaySmall?.copyWith(
@@ -166,7 +186,9 @@ class _SummaryHero extends StatelessWidget {
             const SizedBox(height: 12),
             Row(
               children: [
-                _MiniStat(label: 'quiz.question'.tr(), value: totalAnswered.toString()),
+                _MiniStat(
+                    label: 'quiz.question'.tr(),
+                    value: totalAnswered.toString()),
                 const SizedBox(width: 8),
                 _MiniStat(label: 'stats.bestScore'.tr(), value: '$bestScore%'),
                 const SizedBox(width: 8),
@@ -230,7 +252,8 @@ class _StatGrid extends StatelessWidget {
               children: [
                 Text(item.label, style: Theme.of(context).textTheme.bodySmall),
                 const SizedBox(height: 8),
-                Text(item.value, style: Theme.of(context).textTheme.titleMedium),
+                Text(item.value,
+                    style: Theme.of(context).textTheme.titleMedium),
               ],
             ),
           ),
@@ -265,7 +288,9 @@ class _CategoryStatTile extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         child: Row(
           children: [
-            Expanded(child: Text(title, style: Theme.of(context).textTheme.titleSmall)),
+            Expanded(
+                child:
+                    Text(title, style: Theme.of(context).textTheme.titleSmall)),
             Text('$accuracy%'),
             const SizedBox(width: 12),
             Text('${total.toString()} ${'exam.questions'.tr()}'),

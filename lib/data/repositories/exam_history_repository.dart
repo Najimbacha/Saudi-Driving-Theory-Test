@@ -27,6 +27,7 @@ class ExamHistoryRepository {
   void saveResult(ExamResult result) {
     final list = loadHistory();
     final updated = [result, ...list];
-    _prefs.setString(_storageKey, jsonEncode(updated.map((e) => e.toJson()).toList()));
+    _prefs.setString(
+        _storageKey, jsonEncode(updated.map((e) => e.toJson()).toList()));
   }
 }

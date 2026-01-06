@@ -1561,7 +1561,12 @@
     }
   },
   "ads": {
-    "rewardedRetry": "Watch ad for instant retry"
+    "rewardedRetry": "Watch ad for instant retry",
+    "unlockExamTitle": "Unlock another exam",
+    "unlockExamBody": "Watch a short ad to start a new full exam.",
+    "watchAd": "Watch Ad",
+    "notNow": "Not Now",
+    "unavailable": "Ad unavailable. Please try again."
   },
   "privacy": {
     "title": "Privacy Policy",

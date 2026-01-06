@@ -55,7 +55,8 @@ class ExamState {
       skipped: skipped ?? this.skipped,
       flagged: flagged ?? this.flagged,
       timeLeftSeconds: timeLeftSeconds ?? this.timeLeftSeconds,
-      originalDurationSeconds: originalDurationSeconds ?? this.originalDurationSeconds,
+      originalDurationSeconds:
+          originalDurationSeconds ?? this.originalDurationSeconds,
       startedAt: startedAt ?? this.startedAt,
       isCompleted: isCompleted ?? this.isCompleted,
       strictMode: strictMode ?? this.strictMode,
@@ -84,8 +85,10 @@ class ExamState {
           .toList(),
       currentIndex: json['currentIndex'] as int,
       answers: Map<String, int>.from(json['answers'] ?? {}),
-      skipped: (json['skipped'] as List?)?.map((e) => e.toString()).toSet() ?? {},
-      flagged: (json['flagged'] as List?)?.map((e) => e.toString()).toSet() ?? {},
+      skipped:
+          (json['skipped'] as List?)?.map((e) => e.toString()).toSet() ?? {},
+      flagged:
+          (json['flagged'] as List?)?.map((e) => e.toString()).toSet() ?? {},
       timeLeftSeconds: json['timeLeftSeconds'] as int,
       originalDurationSeconds: json['originalDurationSeconds'] as int? ?? 0,
       startedAt: DateTime.fromMillisecondsSinceEpoch(json['startedAt'] as int),
@@ -136,8 +139,10 @@ class ExamController extends StateNotifier<ExamState> {
       // Calculate elapsed time implementation
       if (restoredState.questions.isNotEmpty) {
         final now = DateTime.now();
-        final elapsedSeconds = now.difference(restoredState.startedAt).inSeconds;
-        final remaining = restoredState.originalDurationSeconds - elapsedSeconds;
+        final elapsedSeconds =
+            now.difference(restoredState.startedAt).inSeconds;
+        final remaining =
+            restoredState.originalDurationSeconds - elapsedSeconds;
 
         if (remaining <= 0) {
           // Time expired while offline
@@ -162,9 +167,8 @@ class ExamController extends StateNotifier<ExamState> {
     await _prefs.setString(_storageKey, jsonEncode(state.toJson()));
   }
 
-
-
-  void start(List<Question> questions, {required int minutes, required bool strictMode}) {
+  void start(List<Question> questions,
+      {required int minutes, required bool strictMode}) {
     _timer?.cancel();
     state = ExamState(
       questions: _shuffle(questions),
@@ -189,7 +193,7 @@ class ExamController extends StateNotifier<ExamState> {
         timer.cancel();
         return;
       }
-      
+
       // Robust timer: Calculate remaining based on wall-clock time
       // This handles backgrounding/app-kill gracefully
       final now = DateTime.now();
@@ -214,8 +218,7 @@ class ExamController extends StateNotifier<ExamState> {
     final question = state.currentQuestion;
     final next = Map<String, int>.from(state.answers);
     next[question.id] = index;
-    final nextSkipped = Set<String>.from(state.skipped)
-      ..remove(question.id);
+    final nextSkipped = Set<String>.from(state.skipped)..remove(question.id);
     state = state.copyWith(answers: next, skipped: nextSkipped);
     _saveState();
   }
@@ -224,8 +227,7 @@ class ExamController extends StateNotifier<ExamState> {
     final question = state.currentQuestion;
     final next = Map<String, int>.from(state.answers);
     next.remove(question.id);
-    final nextSkipped = Set<String>.from(state.skipped)
-      ..add(question.id);
+    final nextSkipped = Set<String>.from(state.skipped)..add(question.id);
     state = state.copyWith(answers: next, skipped: nextSkipped);
     _saveState();
   }
@@ -288,7 +290,7 @@ final examProvider = StateNotifierProvider<ExamController, ExamState>((ref) {
   final controller = ExamController(prefs);
   // Don't auto-reset on dispose to keep state while navigating
   // But DO stop timer on dispose? No, keep it running if implementation allows backgrounding
-  // But StateNotifier disposes when UI is destroyed. 
+  // But StateNotifier disposes when UI is destroyed.
   // With GoRouter and keepAlive/persistence, we might want to keep it.
   // Current app uses Shell, so provider stays alive.
   // We'll trust user to manually reset or start new exam.

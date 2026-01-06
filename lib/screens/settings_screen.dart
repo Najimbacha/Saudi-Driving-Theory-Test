@@ -10,16 +10,18 @@ import '../state/app_state.dart';
 import '../widgets/banner_ad_widget.dart';
 import '../core/theme/modern_theme.dart';
 import '../widgets/glass_container.dart';
-import '../core/constants/app_colors.dart';
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
 
   static String _getThemeName(BuildContext context, ThemeMode mode) {
     switch (mode) {
-      case ThemeMode.light: return 'settings.themes.light'.tr();
-      case ThemeMode.dark: return 'settings.themes.dark'.tr();
-      case ThemeMode.system: return 'settings.themes.system'.tr();
+      case ThemeMode.light:
+        return 'settings.themes.light'.tr();
+      case ThemeMode.dark:
+        return 'settings.themes.dark'.tr();
+      case ThemeMode.system:
+        return 'settings.themes.system'.tr();
     }
   }
 
@@ -27,11 +29,13 @@ class SettingsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final settings = ref.watch(appSettingsProvider);
     final notifier = ref.read(appSettingsProvider.notifier);
-    
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: Text('settings.title'.tr(), style: GoogleFonts.outfit(fontWeight: FontWeight.bold, color: Colors.white)),
+        title: Text('settings.title'.tr(),
+            style: GoogleFonts.outfit(
+                fontWeight: FontWeight.bold, color: Colors.white)),
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
@@ -52,14 +56,16 @@ class SettingsScreen extends ConsumerWidget {
               _SectionHeader(title: 'settings.sections.general'.tr()),
               _SettingsGlassTile(
                 title: 'settings.language'.tr(),
-                subtitle: 'settings.languages.${context.locale.languageCode}'.tr(),
+                subtitle:
+                    'settings.languages.${context.locale.languageCode}'.tr(),
                 icon: PhosphorIconsRegular.translate,
                 iconColor: Colors.blueAccent,
                 onTap: () {
-                   showModalBottomSheet<String>(
+                  showModalBottomSheet<String>(
                     context: context,
                     backgroundColor: Colors.transparent,
-                    builder: (context) => _LanguageGlassSheet(current: context.locale.languageCode),
+                    builder: (context) => _LanguageGlassSheet(
+                        current: context.locale.languageCode),
                   );
                 },
               ),
@@ -73,7 +79,8 @@ class SettingsScreen extends ConsumerWidget {
                   final mode = await showModalBottomSheet<ThemeMode>(
                     context: context,
                     backgroundColor: Colors.transparent,
-                    builder: (context) => _ThemeGlassSheet(current: settings.themeMode),
+                    builder: (context) =>
+                        _ThemeGlassSheet(current: settings.themeMode),
                   );
                   if (!context.mounted) return;
                   if (mode != null) {
@@ -81,10 +88,8 @@ class SettingsScreen extends ConsumerWidget {
                   }
                 },
               ),
-              
               const SizedBox(height: 24),
               _SectionHeader(title: 'settings.sections.preferences'.tr()),
-              
               _SettingsSwitchTile(
                 title: 'settings.sound'.tr(),
                 icon: PhosphorIconsRegular.speakerHigh,
@@ -114,16 +119,14 @@ class SettingsScreen extends ConsumerWidget {
                   notifier.setAdsEnabled(value);
                 },
               ),
-
               const SizedBox(height: 24),
-              if (settings.adsEnabled) 
-                const Center(child: BannerAdWidget()),
-                
+              if (settings.adsEnabled) const Center(child: BannerAdWidget()),
               const SizedBox(height: 24),
               Center(
                 child: Text(
                   'settings.versionLabel'.tr(namedArgs: {'version': '1.0.0'}),
-                  style: GoogleFonts.outfit(color: Colors.white24, fontSize: 12),
+                  style:
+                      GoogleFonts.outfit(color: Colors.white24, fontSize: 12),
                 ),
               ),
             ],
@@ -213,7 +216,8 @@ class _SettingsGlassTile extends StatelessWidget {
                 ],
               ),
             ),
-            Icon(PhosphorIconsRegular.caretRight, color: Colors.white24, size: 16),
+            Icon(PhosphorIconsRegular.caretRight,
+                color: Colors.white24, size: 16),
           ],
         ),
       ),
@@ -257,25 +261,25 @@ class _SettingsSwitchTile extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                 Text(
-                   title,
-                   style: GoogleFonts.outfit(
-                     color: Colors.white,
-                     fontSize: 16,
-                     fontWeight: FontWeight.w500,
-                   ),
-                 ),
-                 if (subtitle != null)
-                   Padding(
-                     padding: const EdgeInsets.only(top: 4),
-                     child: Text(
-                       subtitle!,
-                       style: GoogleFonts.outfit(
-                         color: Colors.white54,
-                         fontSize: 12,
-                       ),
-                     ),
-                   ),
+                Text(
+                  title,
+                  style: GoogleFonts.outfit(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                if (subtitle != null)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 4),
+                    child: Text(
+                      subtitle!,
+                      style: GoogleFonts.outfit(
+                        color: Colors.white54,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ),
               ],
             ),
           ),
@@ -313,39 +317,56 @@ class _LanguageGlassSheet extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-            Container(width: 40, height: 4, decoration: BoxDecoration(color: Colors.white24, borderRadius: BorderRadius.circular(2))),
-            const SizedBox(height: 24),
-            Text('settings.language'.tr(), style: GoogleFonts.outfit(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 24),
-            ...codes.map((code) => Padding(
-              padding: const EdgeInsets.only(bottom: 12),
-              child: InkWell(
-                onTap: () async {
-                  HapticFeedback.mediumImpact();
-                  await context.setLocale(Locale(code));
-                  if (context.mounted) Navigator.pop(context, code);
-                },
-                child: GlassContainer(
-                  color: current == code ? ModernTheme.secondary.withValues(alpha: 0.2) : Colors.white.withValues(alpha: 0.05),
-                  border: Border.all(color: current == code ? ModernTheme.secondary : Colors.white10),
-                  padding: const EdgeInsets.all(16),
-                  child: Row(
-                    children: [
-                       Text(
-                         'settings.languages.$code'.tr(),
-                         style: GoogleFonts.outfit(
-                           color: Colors.white, 
-                           fontWeight: current == code ? FontWeight.bold : FontWeight.normal
-                         ),
-                       ),
-                       const Spacer(),
-                       if (current == code) Icon(PhosphorIconsRegular.checkCircle, color: ModernTheme.secondary),
-                    ],
-                  ),
-                ),
-              ),
-            )),
-          ],
+              Container(
+                  width: 40,
+                  height: 4,
+                  decoration: BoxDecoration(
+                      color: Colors.white24,
+                      borderRadius: BorderRadius.circular(2))),
+              const SizedBox(height: 24),
+              Text('settings.language'.tr(),
+                  style: GoogleFonts.outfit(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold)),
+              const SizedBox(height: 24),
+              ...codes.map((code) => Padding(
+                    padding: const EdgeInsets.only(bottom: 12),
+                    child: InkWell(
+                      onTap: () async {
+                        HapticFeedback.mediumImpact();
+                        await context.setLocale(Locale(code));
+                        if (context.mounted) Navigator.pop(context, code);
+                      },
+                      child: GlassContainer(
+                        color: current == code
+                            ? ModernTheme.secondary.withValues(alpha: 0.2)
+                            : Colors.white.withValues(alpha: 0.05),
+                        border: Border.all(
+                            color: current == code
+                                ? ModernTheme.secondary
+                                : Colors.white10),
+                        padding: const EdgeInsets.all(16),
+                        child: Row(
+                          children: [
+                            Text(
+                              'settings.languages.$code'.tr(),
+                              style: GoogleFonts.outfit(
+                                  color: Colors.white,
+                                  fontWeight: current == code
+                                      ? FontWeight.bold
+                                      : FontWeight.normal),
+                            ),
+                            const Spacer(),
+                            if (current == code)
+                              Icon(PhosphorIconsRegular.checkCircle,
+                                  color: ModernTheme.secondary),
+                          ],
+                        ),
+                      ),
+                    ),
+                  )),
+            ],
           ),
         ),
       ),
@@ -370,38 +391,55 @@ class _ThemeGlassSheet extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-             Container(width: 40, height: 4, decoration: BoxDecoration(color: Colors.white24, borderRadius: BorderRadius.circular(2))),
-            const SizedBox(height: 24),
-            Text('settings.theme'.tr(), style: GoogleFonts.outfit(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 24),
-            ...modes.map((mode) => Padding(
-              padding: const EdgeInsets.only(bottom: 12),
-              child: InkWell(
-                onTap: () {
-                  HapticFeedback.lightImpact();
-                  Navigator.pop(context, mode);
-                },
-                child: GlassContainer(
-                  color: current == mode ? ModernTheme.primary.withValues(alpha: 0.2) : Colors.white.withValues(alpha: 0.05),
-                  border: Border.all(color: current == mode ? ModernTheme.primary : Colors.white10),
-                   padding: const EdgeInsets.all(16),
-                  child: Row(
-                    children: [
-                       Text(
-                         _getThemeName(context, mode),
-                         style: GoogleFonts.outfit(
-                           color: Colors.white, 
-                           fontWeight: current == mode ? FontWeight.bold : FontWeight.normal
-                         ),
-                       ),
-                       const Spacer(),
-                       if (current == mode) Icon(PhosphorIconsRegular.checkCircle, color: ModernTheme.primary),
-                    ],
-                  ),
-                ),
-              ),
-            )),
-          ],
+              Container(
+                  width: 40,
+                  height: 4,
+                  decoration: BoxDecoration(
+                      color: Colors.white24,
+                      borderRadius: BorderRadius.circular(2))),
+              const SizedBox(height: 24),
+              Text('settings.theme'.tr(),
+                  style: GoogleFonts.outfit(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold)),
+              const SizedBox(height: 24),
+              ...modes.map((mode) => Padding(
+                    padding: const EdgeInsets.only(bottom: 12),
+                    child: InkWell(
+                      onTap: () {
+                        HapticFeedback.lightImpact();
+                        Navigator.pop(context, mode);
+                      },
+                      child: GlassContainer(
+                        color: current == mode
+                            ? ModernTheme.primary.withValues(alpha: 0.2)
+                            : Colors.white.withValues(alpha: 0.05),
+                        border: Border.all(
+                            color: current == mode
+                                ? ModernTheme.primary
+                                : Colors.white10),
+                        padding: const EdgeInsets.all(16),
+                        child: Row(
+                          children: [
+                            Text(
+                              _getThemeName(context, mode),
+                              style: GoogleFonts.outfit(
+                                  color: Colors.white,
+                                  fontWeight: current == mode
+                                      ? FontWeight.bold
+                                      : FontWeight.normal),
+                            ),
+                            const Spacer(),
+                            if (current == mode)
+                              Icon(PhosphorIconsRegular.checkCircle,
+                                  color: ModernTheme.primary),
+                          ],
+                        ),
+                      ),
+                    ),
+                  )),
+            ],
           ),
         ),
       ),
@@ -410,9 +448,12 @@ class _ThemeGlassSheet extends StatelessWidget {
 
   String _getThemeName(BuildContext context, ThemeMode mode) {
     switch (mode) {
-      case ThemeMode.light: return 'settings.themes.light'.tr();
-      case ThemeMode.dark: return 'settings.themes.dark'.tr();
-      case ThemeMode.system: return 'settings.themes.system'.tr();
+      case ThemeMode.light:
+        return 'settings.themes.light'.tr();
+      case ThemeMode.dark:
+        return 'settings.themes.dark'.tr();
+      case ThemeMode.system:
+        return 'settings.themes.system'.tr();
     }
   }
 }

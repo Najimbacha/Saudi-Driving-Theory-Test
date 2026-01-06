@@ -9,7 +9,8 @@ final examHistoryRepositoryProvider = Provider<ExamHistoryRepository>((ref) {
   return ExamHistoryRepository(prefs);
 });
 
-final examHistoryProvider = StateNotifierProvider<ExamHistoryNotifier, List<ExamResult>>((ref) {
+final examHistoryProvider =
+    StateNotifierProvider<ExamHistoryNotifier, List<ExamResult>>((ref) {
   final repo = ref.watch(examHistoryRepositoryProvider);
   return ExamHistoryNotifier(repo);
 });

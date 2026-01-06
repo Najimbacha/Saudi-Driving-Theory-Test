@@ -74,6 +74,7 @@ class QuizController extends StateNotifier<QuizState> {
   }
 
   void selectAnswer(int index) {
+    if (state.showAnswer) return;
     final question = state.currentQuestion;
     final nextAnswers = Map<String, int>.from(state.selectedAnswers);
     final previous = nextAnswers[question.id];
@@ -84,11 +85,18 @@ class QuizController extends StateNotifier<QuizState> {
     final isCorrect = question.correctIndex == index;
     state = state.copyWith(
       selectedAnswers: nextAnswers,
-      showAnswer: true,
+      showAnswer: false,
       correctCount:
           state.correctCount - (wasCorrect ? 1 : 0) + (isCorrect ? 1 : 0),
       skippedQuestions: nextSkipped,
     );
+  }
+
+  void revealAnswer() {
+    final question = state.currentQuestion;
+    if (!state.selectedAnswers.containsKey(question.id)) return;
+    if (state.showAnswer) return;
+    state = state.copyWith(showAnswer: true);
   }
 
   void skipCurrent() {

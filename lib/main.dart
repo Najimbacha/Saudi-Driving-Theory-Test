@@ -19,10 +19,7 @@ void main() async {
   // We read prefs here for other app settings, not for locale
   final prefs = await SharedPreferences.getInstance();
 
-  final adsEnabled = prefs.getBool('adsEnabled') ?? false;
-  if (adsEnabled) {
-    await AdService.instance.init();
-  }
+  await AdService.instance.init();
 
   runApp(
     ProviderScope(

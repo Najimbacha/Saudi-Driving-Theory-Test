@@ -39,7 +39,8 @@ class PracticeSessionPayload {
         'selectedCategory': selectedCategory,
       };
 
-  static PracticeSessionPayload fromJson(Map<String, dynamic> json) => PracticeSessionPayload(
+  static PracticeSessionPayload fromJson(Map<String, dynamic> json) =>
+      PracticeSessionPayload(
         mode: json['mode'] as String,
         questions: List<String>.from(json['questions'] ?? const []),
         current: json['current'] as int? ?? 0,
@@ -47,7 +48,8 @@ class PracticeSessionPayload {
         showAnswer: json['showAnswer'] as bool? ?? false,
         score: json['score'] as int? ?? 0,
         sessionWrongIds: List<String>.from(json['sessionWrongIds'] ?? const []),
-        sessionResults: List<Map<String, dynamic>>.from(json['sessionResults'] ?? const []),
+        sessionResults:
+            List<Map<String, dynamic>>.from(json['sessionResults'] ?? const []),
         selectedCategory: json['selectedCategory'] as String?,
       );
 }
@@ -78,7 +80,8 @@ class ExamSessionPayload {
         'timerEnabled': timerEnabled,
       };
 
-  static ExamSessionPayload fromJson(Map<String, dynamic> json) => ExamSessionPayload(
+  static ExamSessionPayload fromJson(Map<String, dynamic> json) =>
+      ExamSessionPayload(
         selectedMode: json['selectedMode'] as String,
         questions: List<String>.from(json['questions'] ?? const []),
         currentIndex: json['currentIndex'] as int? ?? 0,
@@ -109,13 +112,15 @@ class TestSession {
     if (type == 'practice') {
       return TestSession.practice(
         json['updatedAt'] as int? ?? 0,
-        PracticeSessionPayload.fromJson(Map<String, dynamic>.from(json['payload'] as Map)),
+        PracticeSessionPayload.fromJson(
+            Map<String, dynamic>.from(json['payload'] as Map)),
       );
     }
     if (type == 'exam') {
       return TestSession.exam(
         json['updatedAt'] as int? ?? 0,
-        ExamSessionPayload.fromJson(Map<String, dynamic>.from(json['payload'] as Map)),
+        ExamSessionPayload.fromJson(
+            Map<String, dynamic>.from(json['payload'] as Map)),
       );
     }
     return null;

@@ -64,7 +64,6 @@ class ResultsScreen extends StatelessWidget {
       ),
     );
   }
-
 }
 
 class _HeroScore extends StatelessWidget {
@@ -129,4 +128,3 @@ class _HeroScore extends StatelessWidget {
     );
   }
 }
-

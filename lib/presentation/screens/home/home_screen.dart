@@ -7,6 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 import '../../../core/theme/modern_theme.dart';
+import '../../../services/ad_service.dart';
 import '../../../widgets/glass_container.dart';
 import '../../../widgets/home_shell.dart';
 import '../../../state/app_state.dart';
@@ -20,6 +21,7 @@ class HomeDashboardScreen extends ConsumerWidget {
     final theme = Theme.of(context);
     final stats = ref.watch(appSettingsProvider).stats;
     final learning = ref.watch(learningProvider);
+    final prefs = ref.read(sharedPrefsProvider);
 
     // Calculate stats
     final totalAnswered = stats.totalAnswered;
@@ -97,12 +99,325 @@ class HomeDashboardScreen extends ConsumerWidget {
                           icon: PhosphorIconsRegular.timer,
                           color: ModernTheme.secondary,
                           gradient: ModernTheme.accentGradient,
-                          onTap: () {
+                          onTap: () async {
                             final shell = TabShellScope.maybeOf(context);
-                            if (shell != null)
-                              shell.value = 3;
-                            else
-                              context.push('/exam');
+                            void startExam() {
+                              if (shell != null) {
+                                shell.value = 3;
+                              } else {
+                                context.push('/exam');
+                              }
+                            }
+
+                            final freeUsed =
+                                prefs.getBool('examFreeUsed') ?? false;
+                            final tokens =
+                                prefs.getInt('examRewardTokenCount') ?? 0;
+                            if (!freeUsed) {
+                              await prefs.setBool('examFreeUsed', true);
+                              startExam();
+                              return;
+                            }
+                            if (tokens > 0) {
+                              await prefs.setInt(
+                                  'examRewardTokenCount', tokens - 1);
+                              startExam();
+                              return;
+                            }
+
+                            if (!context.mounted) return;
+                            await showDialog<void>(
+                              context: context,
+                              builder: (dialogContext) {
+                                bool loading = false;
+                                String? errorMessage;
+                                bool didTriggerLoad = false;
+                                return StatefulBuilder(
+                                  builder: (context, setState) {
+                                    final scheme =
+                                        Theme.of(context).colorScheme;
+                                    final isDark =
+                                        Theme.of(context).brightness ==
+                                            Brightness.dark;
+                                    if (!didTriggerLoad) {
+                                      didTriggerLoad = true;
+                                      WidgetsBinding.instance
+                                          .addPostFrameCallback((_) async {
+                                        if (!context.mounted) return;
+                                        setState(() {
+                                          loading = true;
+                                          errorMessage = null;
+                                        });
+                                        final loaded = await AdService.instance
+                                            .loadRewarded();
+                                        if (!context.mounted) return;
+                                        setState(() {
+                                          loading = false;
+                                          if (!loaded) {
+                                            errorMessage =
+                                                'ads.unavailable'.tr();
+                                          }
+                                        });
+                                      });
+                                    }
+                                    return Dialog(
+                                      backgroundColor: Colors.transparent,
+                                      insetPadding: const EdgeInsets.symmetric(
+                                          horizontal: 24, vertical: 24),
+                                      child: GlassContainer(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            22, 22, 22, 18),
+                                        borderRadius: BorderRadius.circular(24),
+                                        color: isDark
+                                            ? Colors.white
+                                                .withValues(alpha: 0.08)
+                                            : scheme.surface
+                                                .withValues(alpha: 0.96),
+                                        gradient: LinearGradient(
+                                          colors: isDark
+                                              ? [
+                                                  Colors.white
+                                                      .withValues(alpha: 0.06),
+                                                  Colors.white
+                                                      .withValues(alpha: 0.02),
+                                                ]
+                                              : [
+                                                  scheme.surface,
+                                                  scheme.surface
+                                                      .withValues(alpha: 0.9),
+                                                ],
+                                          begin: Alignment.topLeft,
+                                          end: Alignment.bottomRight,
+                                        ),
+                                        border: Border.all(
+                                          color: scheme.onSurface
+                                              .withValues(alpha: 0.12),
+                                        ),
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Row(
+                                              children: [
+                                                Container(
+                                                  width: 46,
+                                                  height: 46,
+                                                  decoration: BoxDecoration(
+                                                    shape: BoxShape.circle,
+                                                    gradient: LinearGradient(
+                                                      colors: [
+                                                        ModernTheme.secondary
+                                                            .withValues(
+                                                                alpha: 0.9),
+                                                        ModernTheme.primary
+                                                            .withValues(
+                                                                alpha: 0.85),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  child: const Icon(
+                                                    PhosphorIconsRegular
+                                                        .lockKey,
+                                                    color: Colors.white,
+                                                    size: 22,
+                                                  ),
+                                                ),
+                                                const SizedBox(width: 12),
+                                                Expanded(
+                                                  child: Text(
+                                                    'ads.unlockExamTitle'.tr(),
+                                                    style: GoogleFonts.outfit(
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                      fontSize: 18,
+                                                      color: scheme.onSurface,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            const SizedBox(height: 10),
+                                            Text(
+                                              'ads.unlockExamBody'.tr(),
+                                              style: GoogleFonts.outfit(
+                                                color: scheme.onSurface
+                                                    .withValues(alpha: 0.7),
+                                                height: 1.4,
+                                              ),
+                                            ),
+                                            if (errorMessage != null) ...[
+                                              const SizedBox(height: 8),
+                                              Text(
+                                                errorMessage!,
+                                                style: GoogleFonts.outfit(
+                                                  color: scheme.error,
+                                                  fontSize: 12,
+                                                ),
+                                              ),
+                                            ],
+                                            const SizedBox(height: 18),
+                                            Row(
+                                              children: [
+                                                Expanded(
+                                                  child: OutlinedButton(
+                                                    style: OutlinedButton
+                                                        .styleFrom(
+                                                      foregroundColor:
+                                                          scheme.onSurface,
+                                                      side: BorderSide(
+                                                        color: scheme.onSurface
+                                                            .withValues(
+                                                                alpha: 0.2),
+                                                      ),
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                          vertical: 14),
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(14),
+                                                      ),
+                                                    ),
+                                                    onPressed: loading
+                                                        ? null
+                                                        : () => Navigator.of(
+                                                                context)
+                                                            .pop(),
+                                                    child: Text(
+                                                      'ads.notNow'.tr(),
+                                                      style:
+                                                          GoogleFonts.outfit(),
+                                                    ),
+                                                  ),
+                                                ),
+                                                const SizedBox(width: 12),
+                                                Expanded(
+                                                  child: ElevatedButton(
+                                                    style: ElevatedButton
+                                                        .styleFrom(
+                                                      backgroundColor:
+                                                          ModernTheme.primary,
+                                                      foregroundColor:
+                                                          Colors.white,
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                          vertical: 14),
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(14),
+                                                      ),
+                                                      elevation: 6,
+                                                      shadowColor: ModernTheme
+                                                          .primary
+                                                          .withValues(
+                                                              alpha: 0.35),
+                                                    ),
+                                                    onPressed: loading
+                                                        ? null
+                                                        : () async {
+                                                            setState(() =>
+                                                                loading = true);
+                                                            errorMessage = null;
+                                                            await AdService
+                                                                .instance
+                                                                .init();
+                                                            if (!AdService
+                                                                .instance
+                                                                .isRewardedReady) {
+                                                              final loaded =
+                                                                  await AdService
+                                                                      .instance
+                                                                      .loadRewarded();
+                                                              if (!loaded &&
+                                                                  context
+                                                                      .mounted) {
+                                                                setState(() {
+                                                                  loading =
+                                                                      false;
+                                                                  errorMessage =
+                                                                      'ads.unavailable'
+                                                                          .tr();
+                                                                });
+                                                                return;
+                                                              }
+                                                            }
+                                                            var rewardedHandled =
+                                                                false;
+                                                            final success =
+                                                                await AdService
+                                                                    .instance
+                                                                    .showRewarded(
+                                                              onReward: () {
+                                                                if (rewardedHandled) {
+                                                                  return;
+                                                                }
+                                                                rewardedHandled =
+                                                                    true;
+                                                                final current =
+                                                                    prefs.getInt(
+                                                                            'examRewardTokenCount') ??
+                                                                        0;
+                                                                final updated =
+                                                                    current + 1;
+                                                                prefs.setInt(
+                                                                    'examRewardTokenCount',
+                                                                    updated);
+                                                                prefs.setInt(
+                                                                    'examRewardTokenCount',
+                                                                    updated -
+                                                                        1);
+                                                                Navigator.of(
+                                                                        context)
+                                                                    .pop();
+                                                                startExam();
+                                                              },
+                                                            );
+                                                            if (!success &&
+                                                                context
+                                                                    .mounted) {
+                                                              setState(() {
+                                                                loading = false;
+                                                                errorMessage =
+                                                                    'ads.unavailable'
+                                                                        .tr();
+                                                              });
+                                                            }
+                                                          },
+                                                    child: loading
+                                                        ? const SizedBox(
+                                                            width: 16,
+                                                            height: 16,
+                                                            child:
+                                                                CircularProgressIndicator(
+                                                              strokeWidth: 2,
+                                                              color:
+                                                                  Colors.white,
+                                                            ),
+                                                          )
+                                                        : Text(
+                                                            'ads.watchAd'.tr(),
+                                                            style: GoogleFonts
+                                                                .outfit(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600),
+                                                          ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                );
+                              },
+                            );
                           },
                         ),
                       ),
@@ -339,7 +654,10 @@ class _StatBadge extends StatelessWidget {
                 icon,
                 size: 18,
                 color: iconColor ??
-                    Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.9),
+                    Theme.of(context)
+                        .colorScheme
+                        .onSurface
+                        .withValues(alpha: 0.9),
               ),
             ],
           ],

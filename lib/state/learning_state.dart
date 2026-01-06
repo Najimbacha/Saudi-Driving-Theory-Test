@@ -46,7 +46,8 @@ class MistakeRecord {
 }
 
 class CategoryStat {
-  CategoryStat({required this.correct, required this.total, required this.accuracy});
+  CategoryStat(
+      {required this.correct, required this.total, required this.accuracy});
 
   final int correct;
   final int total;
@@ -128,18 +129,22 @@ class LearningState {
 
   static LearningState fromJson(Map<String, dynamic> json) => LearningState(
         mistakes: (json['mistakes'] as List? ?? const [])
-            .map((m) => MistakeRecord.fromJson(Map<String, dynamic>.from(m as Map)))
+            .map((m) =>
+                MistakeRecord.fromJson(Map<String, dynamic>.from(m as Map)))
             .toList(),
         categoryStats: (json['categoryStats'] as Map? ?? const {})
             .map((key, value) => MapEntry(
                   key as String,
-                  CategoryStat.fromJson(Map<String, dynamic>.from(value as Map)),
+                  CategoryStat.fromJson(
+                      Map<String, dynamic>.from(value as Map)),
                 )),
         reviewQueue: (json['reviewQueue'] as List? ?? const [])
-            .map((r) => ReviewItem.fromJson(Map<String, dynamic>.from(r as Map)))
+            .map(
+                (r) => ReviewItem.fromJson(Map<String, dynamic>.from(r as Map)))
             .toList(),
         mastery: Map<String, String>.from(json['mastery'] ?? const {}),
-        streak: Map<String, dynamic>.from(json['streak'] ?? const {'current': 0, 'lastDate': '', 'longest': 0}),
+        streak: Map<String, dynamic>.from(json['streak'] ??
+            const {'current': 0, 'lastDate': '', 'longest': 0}),
         totalAnswered: json['totalAnswered'] as int? ?? 0,
         totalCorrect: json['totalCorrect'] as int? ?? 0,
       );
@@ -181,11 +186,13 @@ class LearningNotifier extends StateNotifier<LearningState> {
     required String difficulty,
   }) {
     final categoryStats = Map<String, CategoryStat>.from(state.categoryStats);
-    final stat = categoryStats[category] ?? CategoryStat(correct: 0, total: 0, accuracy: 0);
+    final stat = categoryStats[category] ??
+        CategoryStat(correct: 0, total: 0, accuracy: 0);
     final updatedStat = CategoryStat(
       correct: stat.correct + (isCorrect ? 1 : 0),
       total: stat.total + 1,
-      accuracy: ((stat.correct + (isCorrect ? 1 : 0)) / (stat.total + 1) * 100).round(),
+      accuracy: ((stat.correct + (isCorrect ? 1 : 0)) / (stat.total + 1) * 100)
+          .round(),
     );
     categoryStats[category] = updatedStat;
 
@@ -239,7 +246,8 @@ class LearningNotifier extends StateNotifier<LearningState> {
     final reviewQueue = List<ReviewItem>.from(state.reviewQueue);
     final reviewIdx = reviewQueue.indexWhere((r) => r.questionId == questionId);
     final existingReview = reviewIdx == -1 ? null : reviewQueue[reviewIdx];
-    final newReview = _calculateNextReview(existingReview, isCorrect, questionId);
+    final newReview =
+        _calculateNextReview(existingReview, isCorrect, questionId);
     if (reviewIdx == -1) {
       reviewQueue.add(newReview);
     } else {
@@ -248,7 +256,11 @@ class LearningNotifier extends StateNotifier<LearningState> {
 
     final streak = Map<String, dynamic>.from(state.streak);
     final today = DateTime.now().toIso8601String().split('T').first;
-    final yesterday = DateTime.now().subtract(const Duration(days: 1)).toIso8601String().split('T').first;
+    final yesterday = DateTime.now()
+        .subtract(const Duration(days: 1))
+        .toIso8601String()
+        .split('T')
+        .first;
     if (streak['lastDate'] != today) {
       if (streak['lastDate'] == yesterday) {
         streak['current'] = (streak['current'] as int? ?? 0) + 1;
@@ -274,7 +286,8 @@ class LearningNotifier extends StateNotifier<LearningState> {
     _persist();
   }
 
-  List<String> getMistakeQuestions() => state.mistakes.map((m) => m.questionId).toList();
+  List<String> getMistakeQuestions() =>
+      state.mistakes.map((m) => m.questionId).toList();
 
   List<String> getWeakCategories() {
     final entries = state.categoryStats.entries
@@ -286,7 +299,9 @@ class LearningNotifier extends StateNotifier<LearningState> {
 
   List<String> getDueReviews() {
     final now = DateTime.now().millisecondsSinceEpoch;
-    final items = state.reviewQueue.where((r) => r.nextReviewDate <= now).toList()
+    final items = state.reviewQueue
+        .where((r) => r.nextReviewDate <= now)
+        .toList()
       ..sort((a, b) => a.nextReviewDate.compareTo(b.nextReviewDate));
     return items.map((e) => e.questionId).toList();
   }
@@ -311,7 +326,8 @@ class LearningNotifier extends StateNotifier<LearningState> {
     return 'beginner';
   }
 
-  static ReviewItem _calculateNextReview(ReviewItem? item, bool isCorrect, String questionId) {
+  static ReviewItem _calculateNextReview(
+      ReviewItem? item, bool isCorrect, String questionId) {
     final now = DateTime.now().millisecondsSinceEpoch;
     if (item == null) {
       return ReviewItem(
@@ -350,7 +366,8 @@ class LearningNotifier extends StateNotifier<LearningState> {
   }
 }
 
-final learningProvider = StateNotifierProvider<LearningNotifier, LearningState>((ref) {
+final learningProvider =
+    StateNotifierProvider<LearningNotifier, LearningState>((ref) {
   final prefs = ref.watch(sharedPrefsProvider);
   return LearningNotifier(prefs);
 });

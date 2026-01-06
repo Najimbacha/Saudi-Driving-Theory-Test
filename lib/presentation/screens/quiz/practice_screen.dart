@@ -194,12 +194,12 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
             current.signId != null ? signMap[current.signId!] : null;
         final locale = context.locale.languageCode;
         final selected = quiz.selectedAnswers[current.id];
-        final isSkipped = quiz.skippedQuestions.contains(current.id);
         final isCorrect = selected != null && selected == current.correctIndex;
         final questionText = _questionText(current, locale);
         final options = _options(current, locale);
         final isActiveQuiz = quiz.questions.isNotEmpty && !quiz.isCompleted;
-        final canProceed = selected != null || isSkipped;
+        final canSkip = selected == null && !quiz.showAnswer;
+        final canPressNext = selected != null;
         final scheme = Theme.of(context).colorScheme;
         final isDark = Theme.of(context).brightness == Brightness.dark;
         final primaryTextColor = scheme.onSurface;
@@ -210,9 +210,8 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
         final subtleFill = isDark
             ? Colors.white.withValues(alpha: 0.04)
             : scheme.onSurface.withValues(alpha: 0.03);
-        final defaultBorder = isDark
-            ? Colors.white10
-            : scheme.onSurface.withValues(alpha: 0.12);
+        final defaultBorder =
+            isDark ? Colors.white10 : scheme.onSurface.withValues(alpha: 0.12);
         Future<void> handleBack() async {
           final shell = TabShellScope.maybeOf(context);
           if (!isActiveQuiz) {
@@ -230,8 +229,7 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
                   isDark ? const Color(0xFF1E293B) : scheme.surface,
               title: Text('exam.exitTitle'.tr(),
                   style: GoogleFonts.outfit(
-                      fontWeight: FontWeight.bold,
-                      color: primaryTextColor)),
+                      fontWeight: FontWeight.bold, color: primaryTextColor)),
               content: Text('exam.exitMessage'.tr(),
                   style: GoogleFonts.outfit(color: secondaryTextColor)),
               actions: [
@@ -239,14 +237,12 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
                   onPressed: () => Navigator.of(context).pop(false),
                   child: Text('common.cancel'.tr(),
                       style: GoogleFonts.outfit(
-                          color:
-                              scheme.onSurface.withValues(alpha: 0.6))),
+                          color: scheme.onSurface.withValues(alpha: 0.6))),
                 ),
                 TextButton(
                   onPressed: () => Navigator.of(context).pop(true),
                   child: Text('exam.exitConfirm'.tr(),
-                      style:
-                          GoogleFonts.outfit(color: ModernTheme.secondary)),
+                      style: GoogleFonts.outfit(color: ModernTheme.secondary)),
                 ),
               ],
             ),
@@ -283,8 +279,7 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
                     isDark ? const Color(0xFF1E293B) : scheme.surface,
                 title: Text('exam.exitTitle'.tr(),
                     style: GoogleFonts.outfit(
-                        fontWeight: FontWeight.bold,
-                        color: primaryTextColor)),
+                        fontWeight: FontWeight.bold, color: primaryTextColor)),
                 content: Text('exam.exitMessage'.tr(),
                     style: GoogleFonts.outfit(color: secondaryTextColor)),
                 actions: [
@@ -292,8 +287,7 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
                     onPressed: () => Navigator.of(context).pop(false),
                     child: Text('common.cancel'.tr(),
                         style: GoogleFonts.outfit(
-                            color: scheme.onSurface
-                                .withValues(alpha: 0.6))),
+                            color: scheme.onSurface.withValues(alpha: 0.6))),
                   ),
                   TextButton(
                     onPressed: () => Navigator.of(context).pop(true),
@@ -348,8 +342,9 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
             ),
             body: Container(
               decoration: BoxDecoration(
-                gradient:
-                    isDark ? ModernTheme.darkGradient : ModernTheme.lightGradient,
+                gradient: isDark
+                    ? ModernTheme.darkGradient
+                    : ModernTheme.lightGradient,
               ),
               child: SafeArea(
                 child: Column(
@@ -437,25 +432,34 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
 
                           Align(
                             alignment: AlignmentDirectional.centerEnd,
-                            child: TextButton(
-                              style: TextButton.styleFrom(
-                                foregroundColor:
-                                    scheme.onSurface.withValues(alpha: 0.7),
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 8, vertical: 4),
+                            child: Visibility(
+                              visible: canSkip,
+                              maintainSize: true,
+                              maintainAnimation: true,
+                              maintainState: true,
+                              child: TextButton(
+                                style: TextButton.styleFrom(
+                                  foregroundColor:
+                                      scheme.onSurface.withValues(alpha: 0.7),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8, vertical: 4),
+                                ),
+                                onPressed: canSkip
+                                    ? () {
+                                        final settings =
+                                            ref.read(appSettingsProvider);
+                                        if (settings.vibrationEnabled)
+                                          HapticFeedback.lightImpact();
+                                        if (settings.soundEnabled)
+                                          SystemSound.play(
+                                              SystemSoundType.click);
+                                        quizController.skipCurrent();
+                                        quizController.next();
+                                      }
+                                    : null,
+                                child: Text('common.skip'.tr(),
+                                    style: GoogleFonts.outfit(fontSize: 13)),
                               ),
-                              onPressed: () {
-                                final settings =
-                                    ref.read(appSettingsProvider);
-                                if (settings.vibrationEnabled)
-                                  HapticFeedback.lightImpact();
-                                if (settings.soundEnabled)
-                                  SystemSound.play(SystemSoundType.click);
-                                quizController.skipCurrent();
-                                quizController.next();
-                              },
-                              child: Text('common.skip'.tr(),
-                                  style: GoogleFonts.outfit(fontSize: 13)),
                             ),
                           ),
                           const SizedBox(height: 12),
@@ -510,6 +514,7 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
                                   padding: const EdgeInsets.only(bottom: 12),
                                   child: GestureDetector(
                                     onTap: () {
+                                      if (quiz.showAnswer) return;
                                       final settings =
                                           ref.read(appSettingsProvider);
                                       if (settings.vibrationEnabled)
@@ -735,7 +740,7 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
                                   return Colors.white;
                                 }),
                               ),
-                              onPressed: canProceed
+                              onPressed: canPressNext
                                   ? () {
                                       final settings =
                                           ref.read(appSettingsProvider);
@@ -743,7 +748,11 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
                                         HapticFeedback.lightImpact();
                                       if (settings.soundEnabled)
                                         SystemSound.play(SystemSoundType.click);
-                                      quizController.next();
+                                      if (!quiz.showAnswer) {
+                                        quizController.revealAnswer();
+                                      } else {
+                                        quizController.next();
+                                      }
                                     }
                                   : null,
                               child: Text(
@@ -1060,7 +1069,8 @@ class _PracticeSelectorState extends State<_PracticeSelector> {
                               selected: _selectedId == cat.id,
                               icon: _iconForCategoryId(cat.id),
                               onTap: () => setState(() => _selectedId = cat.id),
-                              width: (MediaQuery.of(context).size.width - 52) / 2,
+                              width:
+                                  (MediaQuery.of(context).size.width - 52) / 2,
                             )),
                       ],
                     ),
@@ -1096,8 +1106,8 @@ class _PracticeSelectorState extends State<_PracticeSelector> {
                           borderRadius: BorderRadius.circular(20),
                           boxShadow: [
                             BoxShadow(
-                              color: ModernTheme.secondary
-                                  .withValues(alpha: 0.25),
+                              color:
+                                  ModernTheme.secondary.withValues(alpha: 0.25),
                               blurRadius: 12,
                               offset: const Offset(0, 6),
                             ),
@@ -1256,12 +1266,10 @@ class _StatPill extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Icon(icon,
-              color: scheme.onSurface.withValues(alpha: 0.7), size: 14),
+          Icon(icon, color: scheme.onSurface.withValues(alpha: 0.7), size: 14),
           const SizedBox(width: 4),
           Text(label,
-              style:
-                  GoogleFonts.outfit(color: scheme.onSurface, fontSize: 12)),
+              style: GoogleFonts.outfit(color: scheme.onSurface, fontSize: 12)),
         ],
       ),
     );

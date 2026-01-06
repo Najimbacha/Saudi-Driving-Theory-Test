@@ -111,7 +111,8 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                 Positioned(
                   bottom: -120,
                   left: -60,
-                  child: _GlowOrb(color: glow.withValues(alpha: 0.6), size: 220),
+                  child:
+                      _GlowOrb(color: glow.withValues(alpha: 0.6), size: 220),
                 ),
                 Align(
                   alignment: Alignment.bottomCenter,
@@ -126,11 +127,11 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                 Align(
                   alignment: Alignment.center,
                   child: AnimatedBuilder(
-                    animation: Listenable.merge(
-                        [_introController, _loopController]),
+                    animation:
+                        Listenable.merge([_introController, _loopController]),
                     builder: (context, _) {
-                      final pulse =
-                          0.4 + 0.6 * (0.5 + 0.5 * sin(_headlightPulse.value * pi));
+                      final pulse = 0.4 +
+                          0.6 * (0.5 + 0.5 * sin(_headlightPulse.value * pi));
                       return SlideTransition(
                         position: _carSlide,
                         child: ScaleTransition(
@@ -246,9 +247,12 @@ class _CarIllustration extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final height = width * 0.52;
-    final bodyColor = isDark ? const Color(0xFFF1F5F9) : const Color(0xFF1F2937);
-    final trimColor = isDark ? const Color(0xFFCBD5F5) : const Color(0xFF0F172A);
-    final wheelColor = isDark ? const Color(0xFF0F172A) : const Color(0xFF111827);
+    final bodyColor =
+        isDark ? const Color(0xFFF1F5F9) : const Color(0xFF1F2937);
+    final trimColor =
+        isDark ? const Color(0xFFCBD5F5) : const Color(0xFF0F172A);
+    final wheelColor =
+        isDark ? const Color(0xFF0F172A) : const Color(0xFF111827);
     final glowColor = const Color(0xFFFACC15).withValues(alpha: glowOpacity);
 
     return Semantics(

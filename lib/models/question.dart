@@ -86,19 +86,24 @@ class Question {
       questionTextHi: questionMap?['hi'] as String?,
       questionTextBn: questionMap?['bn'] as String?,
       options: optionsList
-          ?.map((option) => (option as Map<String, dynamic>)['en'] as String? ?? '')
+          ?.map((option) =>
+              (option as Map<String, dynamic>)['en'] as String? ?? '')
           .toList(),
       optionsAr: optionsList
-          ?.map((option) => (option as Map<String, dynamic>)['ar'] as String? ?? '')
+          ?.map((option) =>
+              (option as Map<String, dynamic>)['ar'] as String? ?? '')
           .toList(),
       optionsUr: optionsList
-          ?.map((option) => (option as Map<String, dynamic>)['ur'] as String? ?? '')
+          ?.map((option) =>
+              (option as Map<String, dynamic>)['ur'] as String? ?? '')
           .toList(),
       optionsHi: optionsList
-          ?.map((option) => (option as Map<String, dynamic>)['hi'] as String? ?? '')
+          ?.map((option) =>
+              (option as Map<String, dynamic>)['hi'] as String? ?? '')
           .toList(),
       optionsBn: optionsList
-          ?.map((option) => (option as Map<String, dynamic>)['bn'] as String? ?? '')
+          ?.map((option) =>
+              (option as Map<String, dynamic>)['bn'] as String? ?? '')
           .toList(),
       explanation: explanationMap?['en'] as String?,
       explanationAr: explanationMap?['ar'] as String?,

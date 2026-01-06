@@ -4,7 +4,8 @@ import '../data/data_repository.dart';
 import '../models/question.dart';
 import '../models/sign.dart';
 
-final dataRepositoryProvider = Provider<DataRepository>((ref) => DataRepository());
+final dataRepositoryProvider =
+    Provider<DataRepository>((ref) => DataRepository());
 
 /// ROOT FIX: Removed locale watching from questionsProvider
 /// Questions don't need to reload when language changes because:

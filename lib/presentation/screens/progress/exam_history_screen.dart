@@ -24,10 +24,9 @@ class ExamHistoryScreen extends ConsumerWidget {
                 return Card(
                   child: ListTile(
                     leading: CircleAvatar(
-                      backgroundColor: (result.passed
-                              ? AppColors.success
-                              : AppColors.error)
-                          .withValues(alpha: 0.15),
+                      backgroundColor:
+                          (result.passed ? AppColors.success : AppColors.error)
+                              .withValues(alpha: 0.15),
                       child: Icon(
                         result.passed ? Icons.check_circle : Icons.cancel,
                         color:

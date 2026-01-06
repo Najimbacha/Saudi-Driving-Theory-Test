@@ -51,7 +51,8 @@ class ReviewScreen extends ConsumerWidget {
                 index: index,
                 question: question,
                 answer: answer,
-                signPath: question.signId == null ? null : signMap[question.signId!],
+                signPath:
+                    question.signId == null ? null : signMap[question.signId!],
               );
             },
           );
@@ -162,8 +163,9 @@ class _ReviewCard extends StatelessWidget {
     final selected = answer.userAnswerIndex;
     final isSkipped = answer.isSkipped;
     final isCorrect = answer.isCorrect;
-    final statusColor =
-        isSkipped ? AppColors.warning : (isCorrect ? AppColors.success : AppColors.error);
+    final statusColor = isSkipped
+        ? AppColors.warning
+        : (isCorrect ? AppColors.success : AppColors.error);
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -173,7 +175,8 @@ class _ReviewCard extends StatelessWidget {
             Row(
               children: [
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                   decoration: BoxDecoration(
                     color: statusColor.withValues(alpha: 0.12),
                     borderRadius: BorderRadius.circular(12),
@@ -185,7 +188,9 @@ class _ReviewCard extends StatelessWidget {
                 ),
                 const Spacer(),
                 Icon(
-                  isSkipped ? Icons.help_outline : (isCorrect ? Icons.check_circle : Icons.cancel),
+                  isSkipped
+                      ? Icons.help_outline
+                      : (isCorrect ? Icons.check_circle : Icons.cancel),
                   color: statusColor,
                 ),
               ],

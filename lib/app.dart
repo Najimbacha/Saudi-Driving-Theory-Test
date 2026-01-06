@@ -2,7 +2,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'core/constants/app_theme.dart';
 import 'core/theme/modern_theme.dart';
 import 'core/routes/app_router.dart';
 import 'state/app_state.dart';

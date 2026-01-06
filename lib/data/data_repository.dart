@@ -9,7 +9,8 @@ class DataRepository {
   Future<List<Question>> loadQuestions() async {
     final raw = await rootBundle.loadString('assets/data/questions.json');
     final jsonData = jsonDecode(raw) as Map<String, dynamic>;
-    final list = List<Map<String, dynamic>>.from(jsonData['questions'] ?? const []);
+    final list =
+        List<Map<String, dynamic>>.from(jsonData['questions'] ?? const []);
     return list.map(Question.fromJson).toList();
   }
 

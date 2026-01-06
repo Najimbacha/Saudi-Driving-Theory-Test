@@ -39,7 +39,7 @@ class BottomNav extends StatelessWidget {
         label: 'nav.settings'.tr(),
       ),
     ];
-    
+
     return SafeArea(
       top: false,
       child: GlassContainer(
@@ -74,10 +74,12 @@ class BottomNav extends StatelessWidget {
                     child: AnimatedContainer(
                       duration: const Duration(milliseconds: 200),
                       curve: Curves.easeInOutCubic,
-                      padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 4),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 6, horizontal: 4),
                       decoration: BoxDecoration(
                         color: selected
-                            ? ModernTheme.primary.withValues(alpha: isDark ? 0.15 : 0.12)
+                            ? ModernTheme.primary
+                                .withValues(alpha: isDark ? 0.15 : 0.12)
                             : Colors.transparent,
                         borderRadius: BorderRadius.circular(20),
                       ),
@@ -92,7 +94,8 @@ class BottomNav extends StatelessWidget {
                               item.icon,
                               color: selected
                                   ? ModernTheme.primary
-                                  : scheme.onSurface.withValues(alpha: isDark ? 0.6 : 0.75),
+                                  : scheme.onSurface
+                                      .withValues(alpha: isDark ? 0.6 : 0.75),
                               size: 22,
                             ),
                           ),
@@ -102,13 +105,12 @@ class BottomNav extends StatelessWidget {
                             style: GoogleFonts.outfit(
                               color: selected
                                   ? ModernTheme.primary
-                                  : scheme.onSurface.withValues(alpha: isDark ? 0.6 : 0.75),
-                              fontWeight: selected
-                                  ? FontWeight.bold
-                                  : FontWeight.w500,
+                                  : scheme.onSurface
+                                      .withValues(alpha: isDark ? 0.6 : 0.75),
+                              fontWeight:
+                                  selected ? FontWeight.bold : FontWeight.w500,
                               fontSize: 10,
                             ),
-
                             child: Text(
                               item.label,
                               maxLines: 1,

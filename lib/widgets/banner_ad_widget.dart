@@ -62,8 +62,9 @@ class _BannerAdWidgetState extends ConsumerState<BannerAdWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final adsEnabled = ref.watch(appSettingsProvider.select((state) => state.adsEnabled));
-    
+    final adsEnabled =
+        ref.watch(appSettingsProvider.select((state) => state.adsEnabled));
+
     // Handle changes to adsEnabled
     if (_previousAdsEnabled != adsEnabled) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -78,7 +79,7 @@ class _BannerAdWidgetState extends ConsumerState<BannerAdWidget> {
       });
       _previousAdsEnabled = adsEnabled;
     }
-    
+
     if (!adsEnabled) return const SizedBox.shrink();
     if (_banner == null) return const SizedBox.shrink();
     return SizedBox(

@@ -105,7 +105,8 @@ Widget _wrapWithApp({
   return ProviderScope(
     overrides: [
       sharedPrefsProvider.overrideWithValue(prefs),
-      dataRepositoryProvider.overrideWithValue(_FakeDataRepository(_fakeQuestions())),
+      dataRepositoryProvider
+          .overrideWithValue(_FakeDataRepository(_fakeQuestions())),
     ],
     child: EasyLocalization(
       supportedLocales: const [
@@ -149,7 +150,8 @@ Future<void> _pumpScreen(
   });
 
   await tester.pumpWidget(_wrapWithApp(child: child, prefs: prefs));
-  await tester.pumpAndSettle();
+  await tester.pump();
+  await tester.pump(const Duration(milliseconds: 100));
 }
 
 void main() {

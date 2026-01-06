@@ -18,7 +18,9 @@ class TabShellScope extends InheritedNotifier<ValueNotifier<int>> {
   }) : super(notifier: notifier);
 
   static ValueNotifier<int>? maybeOf(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<TabShellScope>()?.notifier;
+    return context
+        .dependOnInheritedWidgetOfExactType<TabShellScope>()
+        ?.notifier;
   }
 }
 

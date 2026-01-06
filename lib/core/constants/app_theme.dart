@@ -172,7 +172,8 @@ class AppTheme {
       margin: EdgeInsets.zero,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(18),
-        side: BorderSide(color: scheme.outline.withValues(alpha: isDark ? 0.9 : 0.8)),
+        side: BorderSide(
+            color: scheme.outline.withValues(alpha: isDark ? 0.9 : 0.8)),
       ),
     );
   }
@@ -213,7 +214,8 @@ class AppTheme {
         color: scheme.onSurface,
         fontWeight: FontWeight.w600,
       ),
-      side: BorderSide(color: scheme.outline.withValues(alpha: isDark ? 0.9 : 0.8)),
+      side: BorderSide(
+          color: scheme.outline.withValues(alpha: isDark ? 0.9 : 0.8)),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(999)),
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
     );

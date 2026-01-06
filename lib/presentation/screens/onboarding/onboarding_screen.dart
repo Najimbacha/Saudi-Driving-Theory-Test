@@ -94,7 +94,6 @@ class _OnboardingIntroScreenState extends ConsumerState<OnboardingIntroScreen>
   @override
   Widget build(BuildContext context) {
     final media = MediaQuery.of(context);
-    final scheme = Theme.of(context).colorScheme;
     final textScaler = media.textScaler.clamp(
       minScaleFactor: 1.0,
       maxScaleFactor: 1.15,
@@ -113,8 +112,7 @@ class _OnboardingIntroScreenState extends ConsumerState<OnboardingIntroScreen>
             child: Column(
               children: [
                 Padding(
-                  padding:
-                      const EdgeInsetsDirectional.fromSTEB(16, 8, 16, 0),
+                  padding: const EdgeInsetsDirectional.fromSTEB(16, 8, 16, 0),
                   child: Align(
                     alignment: AlignmentDirectional.centerEnd,
                     child: TextButton(
@@ -137,10 +135,10 @@ class _OnboardingIntroScreenState extends ConsumerState<OnboardingIntroScreen>
                           final pageOffset = _controller.hasClients
                               ? (_controller.page ?? _currentIndex) - index
                               : 0.0;
-                          final scale = (1 - pageOffset.abs() * 0.08)
-                              .clamp(0.92, 1.0);
-                          final opacity = (1 - pageOffset.abs() * 0.4)
-                              .clamp(0.4, 1.0);
+                          final scale =
+                              (1 - pageOffset.abs() * 0.08).clamp(0.92, 1.0);
+                          final opacity =
+                              (1 - pageOffset.abs() * 0.4).clamp(0.4, 1.0);
                           return Opacity(
                             opacity: opacity,
                             child: Transform.scale(
@@ -427,7 +425,8 @@ class _IllustrationContent extends StatelessWidget {
             ),
             Positioned(
               bottom: 64,
-              child: _PulseDot(size: 18, color: AppColors.tertiary, value: value),
+              child:
+                  _PulseDot(size: 18, color: AppColors.tertiary, value: value),
             ),
           ],
         );
