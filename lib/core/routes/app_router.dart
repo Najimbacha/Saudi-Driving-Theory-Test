@@ -50,6 +50,8 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         builder: (context, state) {
           final result = state.extra as ExamResult?;
           if (result == null) return const NotFoundScreen();
+          assert(result.examType == 'exam');
+          if (result.examType != 'exam') return const HomeShell();
           return ResultsScreen(result: result);
         },
       ),

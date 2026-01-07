@@ -54,7 +54,11 @@ class _HomeShellState extends ConsumerState<HomeShell> {
     final currentIndex = _index.value;
     final currentNav = _navKeys[currentIndex].currentState;
     final exam = ref.read(examProvider);
-    final examInProgress = exam.questions.isNotEmpty && !exam.isCompleted;
+    final examInProgress = exam.questions.isNotEmpty &&
+        !exam.isCompleted &&
+        (exam.answers.isNotEmpty ||
+            exam.currentIndex > 0 ||
+            (exam.originalDurationSeconds > 0 && exam.timeLeftSeconds > 0));
 
     if (currentIndex == 3 && examInProgress) {
       final shouldExit = await confirmExitExam(context);

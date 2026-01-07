@@ -1,7 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -30,6 +32,7 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
   @override
   Widget build(BuildContext context) {
     final questionsAsync = ref.watch(questionsProvider);
+    final signsAsync = ref.watch(signsProvider);
     final exam = ref.watch(examProvider);
     final controller = ref.read(examProvider.notifier);
 
@@ -70,7 +73,7 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
                   icon: const Icon(Icons.refresh),
                   label: Text('common.retry'.tr()),
                 ),
-                const SizedBox(height: 16),
+                          const SizedBox(height: 12),
                 ExpansionTile(
                   title: Text(
                     'common.technicalDetails'.tr(),
@@ -112,25 +115,39 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
           }
           return _ExamIntro(
             onStart: (count, minutes, strictMode) => controller.start(
-              (_randomSubset(questions, count)),
+              _buildExamQuestions(
+                questions,
+                count,
+                _minSignQuota(count),
+              ),
               minutes: minutes,
               strictMode: strictMode,
             ),
           );
         }
         final current = exam.currentQuestion;
+        final signMap = signsAsync.valueOrNull == null
+            ? <String, String>{}
+            : {for (final s in signsAsync.valueOrNull!) s.id: s.svgPath};
+        final signPath =
+            current.signId != null ? signMap[current.signId!] : null;
         final locale = context.locale.languageCode;
         final questionText = _questionText(current, locale);
         final options = _options(current, locale);
         final selected = exam.answers[current.id];
         final isSkipped = exam.skipped.contains(current.id);
-        final inProgress = exam.questions.isNotEmpty && !exam.isCompleted;
-        final canProceed = selected != null || isSkipped;
+        final examStarted = exam.questions.isNotEmpty &&
+            !exam.isCompleted &&
+            (exam.answers.isNotEmpty ||
+                exam.currentIndex > 0 ||
+                (exam.originalDurationSeconds > 0 &&
+                    exam.timeLeftSeconds > 0));
+        final canProceed = selected != null;
         final scheme = Theme.of(context).colorScheme;
         final isDark = Theme.of(context).brightness == Brightness.dark;
         Future<void> handleBack() async {
           final shell = TabShellScope.maybeOf(context);
-          if (!inProgress) {
+          if (!examStarted) {
             if (shell != null) {
               shell.value = 0;
             } else {
@@ -150,12 +167,12 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
         }
 
         return PopScope(
-          canPop: false,
+          canPop: !examStarted,
           onPopInvokedWithResult: (didPop, _) async {
-            if (didPop) return;
+            if (didPop || !examStarted) return;
 
             final shell = TabShellScope.maybeOf(context);
-            if (!inProgress) {
+            if (!examStarted) {
               if (shell != null) {
                 shell.value = 0;
               } else {
@@ -267,143 +284,166 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
 
                     // Content
                     Expanded(
-                      child: ListView(
+                      child: SingleChildScrollView(
+                        physics: const ClampingScrollPhysics(),
                         padding: const EdgeInsets.symmetric(
                             horizontal: 20, vertical: 10),
-                        children: [
-                          // Question Text
-                          AnimatedSwitcher(
-                            duration: const Duration(milliseconds: 300),
-                            child: Text(
-                              questionText,
-                              key: ValueKey(current.id),
-                              style: GoogleFonts.outfit(
-                                fontSize: 22,
-                                fontWeight: FontWeight.w600,
-                                color: scheme.onSurface,
-                                height: 1.3,
-                              ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            // Question Text
+                            AnimatedSwitcher(
+                              duration: const Duration(milliseconds: 300),
+                              child: Text(
+                                questionText,
+                                key: ValueKey(current.id),
+                                style: GoogleFonts.outfit(
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.w600,
+                                  color: scheme.onSurface,
+                                  height: 1.3,
+                                ),
                             ),
                           ),
-                          const SizedBox(height: 32),
+                            const SizedBox(height: 16),
+
+                          if (signPath != null)
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 16),
+                              child: GlassContainer(
+                                padding: const EdgeInsets.all(20),
+                                color: isDark
+                                    ? Colors.white.withValues(alpha: 0.05)
+                                    : scheme.onSurface.withValues(alpha: 0.04),
+                                child: SvgPicture.asset(
+                                  'assets/$signPath',
+                                  height: 140,
+                                  fit: BoxFit.contain,
+                                ),
+                              ),
+                            ),
 
                           Align(
                             alignment: AlignmentDirectional.centerEnd,
                             child: TextButton(
-                              style: TextButton.styleFrom(
-                                foregroundColor:
-                                    scheme.onSurface.withValues(alpha: 0.7),
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 8, vertical: 4),
+                                style: TextButton.styleFrom(
+                                  foregroundColor:
+                                      scheme.onSurface.withValues(alpha: 0.7),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8, vertical: 4),
+                                ),
+                                onPressed: () {
+                                  final settings =
+                                      ref.read(appSettingsProvider);
+                                  if (settings.vibrationEnabled)
+                                    HapticFeedback.lightImpact();
+                                  if (settings.soundEnabled)
+                                    SystemSound.play(SystemSoundType.click);
+                                  controller.skipCurrent();
+                                  if (exam.currentIndex + 1 ==
+                                      exam.questions.length) {
+                                    controller.finish();
+                                  } else {
+                                    controller.next();
+                                  }
+                                },
+                                child: Text('common.skip'.tr(),
+                                    style: GoogleFonts.outfit(fontSize: 13)),
                               ),
-                              onPressed: () {
-                                final settings = ref.read(appSettingsProvider);
-                                if (settings.vibrationEnabled)
-                                  HapticFeedback.lightImpact();
-                                if (settings.soundEnabled)
-                                  SystemSound.play(SystemSoundType.click);
-                                controller.skipCurrent();
-                                if (exam.currentIndex + 1 ==
-                                    exam.questions.length) {
-                                  controller.finish();
-                                } else {
-                                  controller.next();
-                                }
-                              },
-                              child: Text('common.skip'.tr(),
-                                  style: GoogleFonts.outfit(fontSize: 13)),
                             ),
-                          ),
-                          const SizedBox(height: 12),
+                            const SizedBox(height: 8),
 
-                          // Options
-                          AnimatedSwitcher(
-                            duration: const Duration(milliseconds: 300),
-                            child: Column(
-                              key: ValueKey('${current.id}-options'),
-                              children: List.generate(options.length, (idx) {
-                                final optionText = options[idx];
-                                final isSelected = selected == idx;
+                            // Options
+                            AnimatedSwitcher(
+                              duration: const Duration(milliseconds: 300),
+                              child: Column(
+                                key: ValueKey('${current.id}-options'),
+                                children: List.generate(options.length, (idx) {
+                                  final optionText = options[idx];
+                                  final isSelected = selected == idx;
 
-                                return Padding(
-                                  padding: const EdgeInsets.only(bottom: 12),
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      final settings =
-                                          ref.read(appSettingsProvider);
-                                      if (settings.vibrationEnabled)
-                                        HapticFeedback.lightImpact();
-                                      if (settings.soundEnabled)
-                                        SystemSound.play(SystemSoundType.click);
-                                      controller.selectAnswer(idx);
-                                    },
-                                    child: AnimatedContainer(
-                                      duration:
-                                          const Duration(milliseconds: 200),
-                                      decoration: BoxDecoration(
-                                        color: isSelected
-                                            ? ModernTheme.secondary
-                                                .withValues(alpha: 0.2)
-                                            : (isDark
-                                                ? Colors.white
-                                                    .withValues(alpha: 0.05)
-                                                : scheme.onSurface
-                                                    .withValues(alpha: 0.04)),
-                                        borderRadius: BorderRadius.circular(16),
-                                        border: Border.all(
+                                  return Padding(
+                                    padding: const EdgeInsets.only(bottom: 12),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        final settings =
+                                            ref.read(appSettingsProvider);
+                                        if (settings.vibrationEnabled)
+                                          HapticFeedback.lightImpact();
+                                        if (settings.soundEnabled)
+                                          SystemSound.play(
+                                              SystemSoundType.click);
+                                        controller.selectAnswer(idx);
+                                      },
+                                      child: AnimatedContainer(
+                                        duration:
+                                            const Duration(milliseconds: 200),
+                                        decoration: BoxDecoration(
                                           color: isSelected
                                               ? ModernTheme.secondary
-                                              : scheme.onSurface
-                                                  .withValues(alpha: 0.12),
-                                          width: isSelected ? 2 : 1,
-                                        ),
-                                        boxShadow: isSelected
-                                            ? [
-                                                BoxShadow(
-                                                  color: ModernTheme.secondary
-                                                      .withValues(alpha: 0.2),
-                                                  blurRadius: 8,
-                                                  offset: const Offset(0, 4),
-                                                )
-                                              ]
-                                            : [],
-                                      ),
-                                      padding: const EdgeInsets.all(16),
-                                      child: Row(
-                                        children: [
-                                          _OptionBadge(
-                                            label:
-                                                String.fromCharCode(65 + idx),
-                                            selected: isSelected,
+                                                  .withValues(alpha: 0.2)
+                                              : (isDark
+                                                  ? Colors.white
+                                                      .withValues(alpha: 0.05)
+                                                  : scheme.onSurface
+                                                      .withValues(alpha: 0.04)),
+                                          borderRadius:
+                                              BorderRadius.circular(16),
+                                          border: Border.all(
+                                            color: isSelected
+                                                ? ModernTheme.secondary
+                                                : scheme.onSurface
+                                                    .withValues(alpha: 0.12),
+                                            width: isSelected ? 2 : 1,
                                           ),
-                                          const SizedBox(width: 16),
-                                          Expanded(
-                                            child: Text(
-                                              optionText,
-                                              style: GoogleFonts.outfit(
-                                                fontSize: 16,
-                                                color: scheme.onSurface
-                                                    .withValues(alpha: 0.9),
-                                                fontWeight: isSelected
-                                                    ? FontWeight.w600
-                                                    : FontWeight.normal,
+                                          boxShadow: isSelected
+                                              ? [
+                                                  BoxShadow(
+                                                    color: ModernTheme.secondary
+                                                        .withValues(alpha: 0.2),
+                                                    blurRadius: 8,
+                                                    offset: const Offset(0, 4),
+                                                  )
+                                                ]
+                                              : [],
+                                        ),
+                                        padding: const EdgeInsets.all(16),
+                                        child: Row(
+                                          children: [
+                                            _OptionBadge(
+                                              label: String.fromCharCode(
+                                                  65 + idx),
+                                              selected: isSelected,
+                                            ),
+                                            const SizedBox(width: 16),
+                                            Expanded(
+                                              child: Text(
+                                                optionText,
+                                                style: GoogleFonts.outfit(
+                                                  fontSize: 16,
+                                                  color: scheme.onSurface
+                                                      .withValues(alpha: 0.9),
+                                                  fontWeight: isSelected
+                                                      ? FontWeight.w600
+                                                      : FontWeight.normal,
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                          if (isSelected)
-                                            const SizedBox(
-                                              width: 20,
-                                              height: 20,
-                                            ),
-                                        ],
+                                            if (isSelected)
+                                              const SizedBox(
+                                                width: 20,
+                                                height: 20,
+                                              ),
+                                          ],
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                );
-                              }),
+                                  );
+                                }),
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
 
@@ -459,6 +499,9 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
                                   ),
                                   onPressed: canProceed
                                       ? () {
+                                          if (selected == null) {
+                                            return;
+                                          }
                                           final settings =
                                               ref.read(appSettingsProvider);
                                           if (settings.vibrationEnabled)
@@ -662,10 +705,75 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
   }
 }
 
-List<Question> _randomSubset(List<Question> questions, int count) {
-  final items = List<Question>.from(questions)..shuffle();
-  final safeCount = count > items.length ? items.length : count;
-  return items.take(safeCount).toList();
+int _minSignQuota(int count) {
+  switch (count) {
+    case 20:
+      return 3;
+    case 30:
+      return 5;
+    case 40:
+      return 8;
+    default:
+      return 0;
+  }
+}
+
+List<Question> _buildExamQuestions(
+    List<Question> questions, int count, int minSigns) {
+  final signPool = questions
+      .where((q) => q.signId != null && q.signId!.isNotEmpty)
+      .toList();
+  final otherPool = questions
+      .where((q) => q.signId == null || q.signId!.isEmpty)
+      .toList();
+
+  signPool.shuffle();
+  otherPool.shuffle();
+
+  final selected = <Question>[];
+  final signPickCount =
+      signPool.length < minSigns ? signPool.length : minSigns;
+  selected.addAll(signPool.take(signPickCount));
+
+  if (signPool.length < minSigns && kDebugMode) {
+    debugPrint(
+      'Exam sign quota short: need=$minSigns, available=${signPool.length}',
+    );
+  }
+
+  var remaining = count - selected.length;
+  if (remaining > 0) {
+    final otherTake =
+        remaining > otherPool.length ? otherPool.length : remaining;
+    selected.addAll(otherPool.take(otherTake));
+    remaining = count - selected.length;
+  }
+
+  if (remaining > 0) {
+    selected.addAll(signPool.skip(signPickCount).take(remaining));
+    remaining = count - selected.length;
+  }
+
+  if (remaining > 0) {
+    final used = selected.map((q) => q.id).toSet();
+    final fallback = questions
+        .where((q) => !used.contains(q.id))
+        .toList()
+      ..shuffle();
+    selected.addAll(fallback.take(remaining));
+  }
+
+  selected.shuffle();
+
+  if (kDebugMode) {
+    final signCount =
+        selected.where((q) => q.signId != null && q.signId!.isNotEmpty).length;
+    debugPrint(
+      'Exam mix: total=${selected.length}, signs=$signCount, min=$minSigns',
+    );
+  }
+
+  return selected;
 }
 
 // ... (Copy _questionText and _options helpers from practice_screen or create a shared util?

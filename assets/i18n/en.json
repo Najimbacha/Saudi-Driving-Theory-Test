@@ -980,8 +980,8 @@
     "confirmEnd": "Are you sure you want to end the practice session?",
     "timeUp": "Time's Up!",
     "review": "Review Answers",
-    "selectMode": "Select Practice Mode",
-    "selectModeDesc": "Choose the practice format that suits your preparation level",
+    "selectMode": "Select Exam Mode",
+    "selectModeDesc": "Choose the exam format that suits your preparation level",
     "disclaimer": "This is a practice simulation, not an official exam.",
     "modes": {
       "real": "Real Exam",
@@ -1593,5 +1593,12 @@
   "exam.flag": "Flag question",
   "exam.exitTitle": "Exit exam?",
   "exam.exitMessage": "Your progress will be lost. Do you want to exit?",
-  "exam.exitConfirm": "Exit"
+  "exam.exitConfirm": "Exit",
+  "practice.exitTitle": "Exit practice?",
+  "practice.exitMessage": "Your progress will be lost. Do you want to exit?",
+  "practice.exitConfirm": "Exit",
+  "app.name": "Saudi Driving Theory Test",
+  "licenseGuide": {
+    "title": "How to apply for Driving license"
+  }
 }

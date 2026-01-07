@@ -214,97 +214,32 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
             isDark ? Colors.white10 : scheme.onSurface.withValues(alpha: 0.12);
         Future<void> handleBack() async {
           final shell = TabShellScope.maybeOf(context);
-          if (!isActiveQuiz) {
-            if (shell != null) {
-              shell.value = 0;
-            } else {
-              if (context.mounted) Navigator.of(context).maybePop();
-            }
-            return;
-          }
-          final shouldExit = await showDialog<bool>(
-            context: context,
-            builder: (context) => AlertDialog(
-              backgroundColor:
-                  isDark ? const Color(0xFF1E293B) : scheme.surface,
-              title: Text('exam.exitTitle'.tr(),
-                  style: GoogleFonts.outfit(
-                      fontWeight: FontWeight.bold, color: primaryTextColor)),
-              content: Text('exam.exitMessage'.tr(),
-                  style: GoogleFonts.outfit(color: secondaryTextColor)),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.of(context).pop(false),
-                  child: Text('common.cancel'.tr(),
-                      style: GoogleFonts.outfit(
-                          color: scheme.onSurface.withValues(alpha: 0.6))),
-                ),
-                TextButton(
-                  onPressed: () => Navigator.of(context).pop(true),
-                  child: Text('exam.exitConfirm'.tr(),
-                      style: GoogleFonts.outfit(color: ModernTheme.secondary)),
-                ),
-              ],
-            ),
-          );
-          if (shouldExit == true && context.mounted) {
+          if (isActiveQuiz) {
             quizController.reset();
-            if (shell != null) {
-              shell.value = 0;
-            } else {
-              Navigator.of(context).maybePop();
-            }
+          }
+          final didPop = await Navigator.of(context).maybePop();
+          if (!didPop && shell != null) {
+            shell.value = 0;
           }
         }
 
         return PopScope(
-          canPop: false,
+          canPop: true,
           onPopInvokedWithResult: (didPop, _) async {
-            if (didPop) return;
-
-            final shell = TabShellScope.maybeOf(context);
-            if (!isActiveQuiz) {
-              if (shell != null) {
-                shell.value = 0;
-              } else {
-                if (context.mounted) Navigator.of(context).pop();
+            if (didPop) {
+              if (isActiveQuiz) {
+                quizController.reset();
               }
               return;
             }
-            // Confirm exit during active quiz
-            final shouldExit = await showDialog<bool>(
-              context: context,
-              builder: (context) => AlertDialog(
-                backgroundColor:
-                    isDark ? const Color(0xFF1E293B) : scheme.surface,
-                title: Text('exam.exitTitle'.tr(),
-                    style: GoogleFonts.outfit(
-                        fontWeight: FontWeight.bold, color: primaryTextColor)),
-                content: Text('exam.exitMessage'.tr(),
-                    style: GoogleFonts.outfit(color: secondaryTextColor)),
-                actions: [
-                  TextButton(
-                    onPressed: () => Navigator.of(context).pop(false),
-                    child: Text('common.cancel'.tr(),
-                        style: GoogleFonts.outfit(
-                            color: scheme.onSurface.withValues(alpha: 0.6))),
-                  ),
-                  TextButton(
-                    onPressed: () => Navigator.of(context).pop(true),
-                    child: Text('exam.exitConfirm'.tr(),
-                        style:
-                            GoogleFonts.outfit(color: ModernTheme.secondary)),
-                  ),
-                ],
-              ),
-            );
-            if (shouldExit == true && context.mounted) {
+            final shell = TabShellScope.maybeOf(context);
+            if (isActiveQuiz) {
               quizController.reset();
-              if (shell != null) {
-                shell.value = 0;
-              } else {
-                Navigator.of(context).pop();
-              }
+            }
+            if (shell != null) {
+              shell.value = 0;
+            } else {
+              if (context.mounted) Navigator.of(context).maybePop();
             }
           },
           child: Scaffold(
@@ -391,12 +326,15 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
                       ),
                     ),
 
-                    // Scrollable Content
+                    // Content
                     Expanded(
-                      child: ListView(
+                      child: SingleChildScrollView(
+                        physics: const ClampingScrollPhysics(),
                         padding: const EdgeInsets.symmetric(
                             horizontal: 20, vertical: 10),
-                        children: [
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
                           // Question Text
                           AnimatedSwitcher(
                             duration: const Duration(milliseconds: 300),
@@ -411,12 +349,12 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
                               ),
                             ),
                           ),
-                          const SizedBox(height: 24),
+                          const SizedBox(height: 16),
 
                           // Sign Image
                           if (signPath != null)
                             Padding(
-                              padding: const EdgeInsets.only(bottom: 24),
+                              padding: const EdgeInsets.only(bottom: 16),
                               child: GlassContainer(
                                 padding: const EdgeInsets.all(20),
                                 color: isDark
@@ -462,7 +400,7 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
                               ),
                             ),
                           ),
-                          const SizedBox(height: 12),
+                          const SizedBox(height: 8),
 
                           // Options
                           AnimatedSwitcher(
@@ -584,7 +522,7 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
 
                           // Explanation
                           if (quiz.showAnswer) ...[
-                            const SizedBox(height: 20),
+                            const SizedBox(height: 16),
                             GlassContainer(
                               color: (isCorrect
                                       ? AppColors.success
@@ -622,8 +560,9 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
                               ),
                             ),
                           ],
-                          const SizedBox(height: 32),
-                        ],
+                          const SizedBox(height: 16),
+                          ],
+                        ),
                       ),
                     ),
 
@@ -661,11 +600,11 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
                                       backgroundColor: isDark
                                           ? const Color(0xFF1E293B)
                                           : scheme.surface,
-                                      title: Text('exam.exitTitle'.tr(),
+                                      title: Text('practice.exitTitle'.tr(),
                                           style: GoogleFonts.outfit(
                                               fontWeight: FontWeight.bold,
                                               color: primaryTextColor)),
-                                      content: Text('exam.exitMessage'.tr(),
+                                      content: Text('practice.exitMessage'.tr(),
                                           style: GoogleFonts.outfit(
                                               color: secondaryTextColor)),
                                       actions: [
@@ -681,7 +620,7 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
                                         TextButton(
                                             onPressed: () =>
                                                 Navigator.of(context).pop(true),
-                                            child: Text('exam.exitConfirm'.tr(),
+                                            child: Text('practice.exitConfirm'.tr(),
                                                 style: GoogleFonts.outfit(
                                                     color: ModernTheme
                                                         .secondary))),
@@ -742,6 +681,9 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
                               ),
                               onPressed: canPressNext
                                   ? () {
+                                      if (selected == null) {
+                                        return;
+                                      }
                                       final settings =
                                           ref.read(appSettingsProvider);
                                       if (settings.vibrationEnabled)
@@ -805,7 +747,6 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
           .toList(),
     );
     ref.read(examHistoryProvider.notifier).addResult(result);
-    context.push('/results', extra: result);
   }
 
   static Map<String, int> _categoryScores(QuizState quiz) {
@@ -960,7 +901,7 @@ class _PracticeSelectorState extends State<_PracticeSelector> {
     final minutes = ((selectedCount * 25) / 60).ceil();
 
     return PopScope(
-      canPop: false,
+      canPop: true,
       onPopInvokedWithResult: (didPop, _) {
         if (didPop) return;
         final shell = TabShellScope.maybeOf(context);

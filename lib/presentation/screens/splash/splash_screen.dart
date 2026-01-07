@@ -23,6 +23,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
   late final Animation<double> _laneShift;
   late final Animation<double> _headlightPulse;
   bool _navigated = false;
+  static const String _appNameFallback = 'Saudi Driving Theory Test';
 
   @override
   void initState() {
@@ -87,12 +88,14 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
     final bgTop = isDark ? const Color(0xFF06130C) : const Color(0xFFE6F7EC);
     final bgBottom = isDark ? const Color(0xFF0B1020) : const Color(0xFFF8FBFF);
     final glow = isDark ? const Color(0xFF22C55E) : const Color(0xFF16A34A);
+    final appName =
+        trExists('app.name') ? tr('app.name') : _appNameFallback;
 
     return PopScope(
       canPop: false,
       child: Scaffold(
         body: Semantics(
-          label: 'app.name'.tr(),
+          label: appName,
           child: Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(

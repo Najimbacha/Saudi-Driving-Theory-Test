@@ -13,6 +13,11 @@ import 'state/app_state.dart';
 class AppRoot extends ConsumerWidget {
   const AppRoot({super.key});
 
+  String _appTitle(BuildContext context) {
+    if (!trExists('app.name')) return 'Saudi Driving Theory Test';
+    return tr('app.name');
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     ref.watch(sharedPrefsProvider);
@@ -20,7 +25,7 @@ class AppRoot extends ConsumerWidget {
     final settings = ref.watch(appSettingsProvider);
 
     return MaterialApp.router(
-      title: 'app.name'.tr(),
+      title: _appTitle(context),
       debugShowCheckedModeBanner: false,
       routerConfig: router,
       theme: ModernTheme.lightTheme,
