@@ -6,7 +6,9 @@ import '../services/ad_service.dart';
 import '../state/app_state.dart';
 
 class BannerAdWidget extends ConsumerStatefulWidget {
-  const BannerAdWidget({super.key});
+  const BannerAdWidget({super.key, this.forceVisible = false});
+
+  final bool forceVisible;
 
   @override
   ConsumerState<BannerAdWidget> createState() => _BannerAdWidgetState();
@@ -44,6 +46,14 @@ class _BannerAdWidgetState extends ConsumerState<BannerAdWidget> {
   @override
   void initState() {
     super.initState();
+    if (widget.forceVisible) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          _loadBanner();
+        }
+      });
+      return;
+    }
     _previousAdsEnabled = ref.read(appSettingsProvider).adsEnabled;
     if (_previousAdsEnabled == true) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -62,25 +72,27 @@ class _BannerAdWidgetState extends ConsumerState<BannerAdWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final adsEnabled =
-        ref.watch(appSettingsProvider.select((state) => state.adsEnabled));
+    if (!widget.forceVisible) {
+      final adsEnabled =
+          ref.watch(appSettingsProvider.select((state) => state.adsEnabled));
 
-    // Handle changes to adsEnabled
-    if (_previousAdsEnabled != adsEnabled) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (!mounted) return;
-        if (adsEnabled) {
-          _loadBanner();
-        } else {
-          setState(() {
-            _disposeBanner();
-          });
-        }
-      });
-      _previousAdsEnabled = adsEnabled;
+      // Handle changes to adsEnabled
+      if (_previousAdsEnabled != adsEnabled) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (!mounted) return;
+          if (adsEnabled) {
+            _loadBanner();
+          } else {
+            setState(() {
+              _disposeBanner();
+            });
+          }
+        });
+        _previousAdsEnabled = adsEnabled;
+      }
+
+      if (!adsEnabled) return const SizedBox.shrink();
     }
-
-    if (!adsEnabled) return const SizedBox.shrink();
     if (_banner == null) return const SizedBox.shrink();
     return SizedBox(
       width: _banner!.size.width.toDouble(),

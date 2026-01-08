@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../data/models/exam_result_model.dart';
 import '../../../models/question.dart';
+import '../../../utils/app_feedback.dart';
 import '../../../state/data_state.dart';
 import '../../../utils/text_formatters.dart';
 
@@ -112,6 +113,7 @@ class _ReviewHeader extends StatelessWidget {
                 Expanded(
                   child: OutlinedButton(
                     onPressed: () {
+                      AppFeedback.tap(context);
                       // Navigate back, which will go to results screen, then user can navigate from there
                       if (context.canPop()) {
                         context.pop();
@@ -126,6 +128,7 @@ class _ReviewHeader extends StatelessWidget {
                 Expanded(
                   child: ElevatedButton(
                     onPressed: () {
+                      AppFeedback.tap(context);
                       // Navigate to exam, replacing the review screen
                       context.pushReplacement('/exam');
                     },

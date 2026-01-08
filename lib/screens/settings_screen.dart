@@ -1,14 +1,14 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
-import '../services/ad_service.dart';
 import '../state/app_state.dart';
 import '../widgets/banner_ad_widget.dart';
 import '../core/theme/modern_theme.dart';
+import '../utils/app_feedback.dart';
 import '../widgets/glass_container.dart';
 
 class SettingsScreen extends ConsumerWidget {
@@ -89,39 +89,39 @@ class SettingsScreen extends ConsumerWidget {
                 },
               ),
               const SizedBox(height: 24),
-              _SectionHeader(title: 'settings.sections.preferences'.tr()),
-              _SettingsSwitchTile(
-                title: 'settings.sound'.tr(),
-                icon: PhosphorIconsRegular.speakerHigh,
-                iconColor: Colors.tealAccent,
-                value: settings.soundEnabled,
-                onChanged: notifier.setSoundEnabled,
+              const Center(child: BannerAdWidget(forceVisible: true)),
+              const SizedBox(height: 12),
+              Center(
+                child: TextButton(
+                  onPressed: () => context.push('/support-development'),
+                  style: TextButton.styleFrom(
+                    foregroundColor: Colors.white38,
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    textStyle: GoogleFonts.outfit(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  child: Text('support.title'.tr()),
+                ),
+              ),
+              Center(
+                child: TextButton(
+                  onPressed: () => context.push('/credits'),
+                  style: TextButton.styleFrom(
+                    foregroundColor: Colors.white38,
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    textStyle: GoogleFonts.outfit(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  child: Text('settings.links.creditsTitle'.tr()),
+                ),
               ),
               const SizedBox(height: 12),
-              _SettingsSwitchTile(
-                title: 'settings.vibration'.tr(),
-                icon: PhosphorIconsRegular.vibrate,
-                iconColor: Colors.orangeAccent,
-                value: settings.vibrationEnabled,
-                onChanged: notifier.setVibrationEnabled,
-              ),
-              const SizedBox(height: 12),
-              _SettingsSwitchTile(
-                title: 'settings.ads'.tr(),
-                subtitle: 'settings.adsDesc'.tr(),
-                icon: PhosphorIconsRegular.megaphone,
-                iconColor: Colors.greenAccent,
-                value: settings.adsEnabled,
-                onChanged: (value) async {
-                  if (value) {
-                    await AdService.instance.init();
-                  }
-                  notifier.setAdsEnabled(value);
-                },
-              ),
-              const SizedBox(height: 24),
-              if (settings.adsEnabled) const Center(child: BannerAdWidget()),
-              const SizedBox(height: 24),
               Center(
                 child: Text(
                   'settings.versionLabel'.tr(namedArgs: {'version': '1.0.0'}),
@@ -177,7 +177,7 @@ class _SettingsGlassTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        HapticFeedback.lightImpact();
+        AppFeedback.tap(context);
         onTap();
       },
       child: GlassContainer(
@@ -225,81 +225,6 @@ class _SettingsGlassTile extends StatelessWidget {
   }
 }
 
-class _SettingsSwitchTile extends StatelessWidget {
-  const _SettingsSwitchTile({
-    required this.title,
-    this.subtitle,
-    required this.icon,
-    required this.iconColor,
-    required this.value,
-    required this.onChanged,
-  });
-
-  final String title;
-  final String? subtitle;
-  final IconData icon;
-  final Color iconColor;
-  final bool value;
-  final ValueChanged<bool> onChanged;
-
-  @override
-  Widget build(BuildContext context) {
-    return GlassContainer(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: iconColor.withValues(alpha: 0.1),
-              shape: BoxShape.circle,
-            ),
-            child: Icon(icon, color: iconColor, size: 24),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: GoogleFonts.outfit(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                if (subtitle != null)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 4),
-                    child: Text(
-                      subtitle!,
-                      style: GoogleFonts.outfit(
-                        color: Colors.white54,
-                        fontSize: 12,
-                      ),
-                    ),
-                  ),
-              ],
-            ),
-          ),
-          Switch.adaptive(
-            value: value,
-            onChanged: (v) {
-              HapticFeedback.lightImpact();
-              onChanged(v);
-            },
-            activeColor: ModernTheme.secondary,
-            activeTrackColor: ModernTheme.secondary.withValues(alpha: 0.3),
-            inactiveThumbColor: Colors.white70,
-            inactiveTrackColor: Colors.white10,
-          ),
-        ],
-      ),
-    );
-  }
-}
-
 class _LanguageGlassSheet extends StatelessWidget {
   const _LanguageGlassSheet({required this.current});
   final String current;
@@ -334,7 +259,7 @@ class _LanguageGlassSheet extends StatelessWidget {
                     padding: const EdgeInsets.only(bottom: 12),
                     child: InkWell(
                       onTap: () async {
-                        HapticFeedback.mediumImpact();
+                        AppFeedback.confirm(context);
                         await context.setLocale(Locale(code));
                         if (context.mounted) Navigator.pop(context, code);
                       },
@@ -408,7 +333,7 @@ class _ThemeGlassSheet extends StatelessWidget {
                     padding: const EdgeInsets.only(bottom: 12),
                     child: InkWell(
                       onTap: () {
-                        HapticFeedback.lightImpact();
+                        AppFeedback.tap(context);
                         Navigator.pop(context, mode);
                       },
                       child: GlassContainer(

@@ -78,8 +78,6 @@ class AppSettingsState {
     required this.hasSeenOnboarding,
     required this.favorites,
     required this.stats,
-    required this.soundEnabled,
-    required this.vibrationEnabled,
     required this.adsEnabled,
   });
 
@@ -89,8 +87,6 @@ class AppSettingsState {
   final bool hasSeenOnboarding;
   final Favorites favorites;
   final AppStats stats;
-  final bool soundEnabled;
-  final bool vibrationEnabled;
   final bool adsEnabled;
 
   AppSettingsState copyWith({
@@ -98,8 +94,6 @@ class AppSettingsState {
     bool? hasSeenOnboarding,
     Favorites? favorites,
     AppStats? stats,
-    bool? soundEnabled,
-    bool? vibrationEnabled,
     bool? adsEnabled,
   }) {
     return AppSettingsState(
@@ -107,8 +101,6 @@ class AppSettingsState {
       hasSeenOnboarding: hasSeenOnboarding ?? this.hasSeenOnboarding,
       favorites: favorites ?? this.favorites,
       stats: stats ?? this.stats,
-      soundEnabled: soundEnabled ?? this.soundEnabled,
-      vibrationEnabled: vibrationEnabled ?? this.vibrationEnabled,
       adsEnabled: adsEnabled ?? this.adsEnabled,
     );
   }
@@ -122,8 +114,6 @@ class AppSettingsNotifier extends StateNotifier<AppSettingsState> {
             hasSeenOnboarding: _prefs.getString('hasSeenOnboarding') == 'true',
             favorites: _loadFavorites(_prefs),
             stats: _loadStats(_prefs),
-            soundEnabled: _prefs.getString('soundEnabled') != 'false',
-            vibrationEnabled: _prefs.getString('vibrationEnabled') != 'false',
             adsEnabled: _prefs.getBool('adsEnabled') ?? false,
           ),
         );
@@ -195,16 +185,6 @@ class AppSettingsNotifier extends StateNotifier<AppSettingsState> {
   void setHasSeenOnboarding(bool seen) {
     _prefs.setString('hasSeenOnboarding', seen.toString());
     state = state.copyWith(hasSeenOnboarding: seen);
-  }
-
-  void setSoundEnabled(bool enabled) {
-    _prefs.setString('soundEnabled', enabled.toString());
-    state = state.copyWith(soundEnabled: enabled);
-  }
-
-  void setVibrationEnabled(bool enabled) {
-    _prefs.setString('vibrationEnabled', enabled.toString());
-    state = state.copyWith(vibrationEnabled: enabled);
   }
 
   void setAdsEnabled(bool enabled) {

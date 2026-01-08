@@ -4,6 +4,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../../state/app_state.dart';
 
@@ -18,10 +19,10 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
     with TickerProviderStateMixin {
   late final AnimationController _introController;
   late final AnimationController _loopController;
-  late final Animation<Offset> _carSlide;
-  late final Animation<double> _carScale;
+  late final Animation<Offset> _emblemSlide;
+  late final Animation<double> _emblemScale;
   late final Animation<double> _laneShift;
-  late final Animation<double> _headlightPulse;
+  late final Animation<double> _pulse;
   bool _navigated = false;
   static const String _appNameFallback = 'Saudi Driving Theory Test';
 
@@ -37,8 +38,8 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
       duration: const Duration(milliseconds: 1600),
     )..repeat(reverse: true);
 
-    _carSlide = Tween<Offset>(
-      begin: const Offset(-0.7, 0.04),
+    _emblemSlide = Tween<Offset>(
+      begin: const Offset(0.0, 0.08),
       end: Offset.zero,
     ).animate(
       CurvedAnimation(
@@ -46,15 +47,14 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
         curve: const Interval(0.0, 0.6, curve: Curves.easeOutCubic),
       ),
     );
-    _carScale = Tween<double>(begin: 0.96, end: 1.0).animate(
+    _emblemScale = Tween<double>(begin: 0.9, end: 1.0).animate(
       CurvedAnimation(
         parent: _introController,
-        curve: const Interval(0.4, 0.95, curve: Curves.easeOutBack),
+        curve: const Interval(0.35, 0.95, curve: Curves.easeOutBack),
       ),
     );
     _laneShift = CurvedAnimation(parent: _loopController, curve: Curves.linear);
-    _headlightPulse =
-        CurvedAnimation(parent: _loopController, curve: Curves.easeInOut);
+    _pulse = CurvedAnimation(parent: _loopController, curve: Curves.easeInOut);
 
     _introController.forward();
     Future<void>.delayed(const Duration(milliseconds: 2300), _handleNavigation);
@@ -82,14 +82,16 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
     final scheme = Theme.of(context).colorScheme;
     final size = media.size;
     final shortest = size.shortestSide;
-    final carWidth = (shortest * 0.7).clamp(220.0, 360.0);
-    final roadHeight = (size.height * 0.32).clamp(180.0, 280.0);
+    final emblemSize = (shortest * 0.56).clamp(190.0, 300.0);
+    final roadHeight = (size.height * 0.26).clamp(150.0, 220.0);
 
-    final bgTop = isDark ? const Color(0xFF06130C) : const Color(0xFFE6F7EC);
-    final bgBottom = isDark ? const Color(0xFF0B1020) : const Color(0xFFF8FBFF);
-    final glow = isDark ? const Color(0xFF22C55E) : const Color(0xFF16A34A);
+    final bgTop = isDark ? const Color(0xFF0B1220) : const Color(0xFFF2F7FF);
+    final bgBottom = isDark ? const Color(0xFF070B14) : const Color(0xFFE8F1FF);
+    final glowA = isDark ? const Color(0xFF38BDF8) : const Color(0xFF2563EB);
+    final glowB = isDark ? const Color(0xFFF59E0B) : const Color(0xFF0EA5E9);
     final appName =
         trExists('app.name') ? tr('app.name') : _appNameFallback;
+    final tagline = trExists('app.tagline') ? tr('app.tagline') : '';
 
     return PopScope(
       canPop: false,
@@ -109,13 +111,19 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                 Positioned(
                   top: -120,
                   right: -80,
-                  child: _GlowOrb(color: glow, size: 240),
+                  child: _GlowOrb(color: glowA, size: 260),
                 ),
                 Positioned(
                   bottom: -120,
                   left: -60,
                   child:
-                      _GlowOrb(color: glow.withValues(alpha: 0.6), size: 220),
+                      _GlowOrb(color: glowB.withValues(alpha: 0.7), size: 240),
+                ),
+                Positioned(
+                  top: size.height * 0.12,
+                  left: -80,
+                  child:
+                      _GlowOrb(color: glowA.withValues(alpha: 0.5), size: 180),
                 ),
                 Align(
                   alignment: Alignment.bottomCenter,
@@ -133,17 +141,55 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                     animation:
                         Listenable.merge([_introController, _loopController]),
                     builder: (context, _) {
-                      final pulse = 0.4 +
-                          0.6 * (0.5 + 0.5 * sin(_headlightPulse.value * pi));
+                      final pulse =
+                          0.35 + 0.65 * (0.5 + 0.5 * sin(_pulse.value * pi));
+                      final spin = _loopController.value * pi * 2;
                       return SlideTransition(
-                        position: _carSlide,
+                        position: _emblemSlide,
                         child: ScaleTransition(
-                          scale: _carScale,
-                          child: _CarIllustration(
-                            width: carWidth,
-                            glowOpacity: pulse,
-                            scheme: scheme,
-                            isDark: isDark,
+                          scale: _emblemScale,
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 24),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                _SplashEmblem(
+                                  size: emblemSize,
+                                  glowOpacity: pulse,
+                                  spin: spin,
+                                  isDark: isDark,
+                                ),
+                                const SizedBox(height: 24),
+                                Text(
+                                  appName,
+                                  textAlign: TextAlign.center,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: GoogleFonts.syne(
+                                    fontSize: 30,
+                                    fontWeight: FontWeight.w700,
+                                    color: scheme.onSurface,
+                                    letterSpacing: 0.6,
+                                  ),
+                                ),
+                                if (tagline.isNotEmpty) ...[
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    tagline,
+                                    textAlign: TextAlign.center,
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: GoogleFonts.dmSans(
+                                      fontSize: 14,
+                                      color: scheme.onSurface
+                                          .withValues(alpha: 0.7),
+                                      height: 1.4,
+                                    ),
+                                  ),
+                                ],
+                              ],
+                            ),
                           ),
                         ),
                       );
@@ -195,16 +241,27 @@ class _RoadLanes extends StatelessWidget {
         final laneColor = isDark
             ? Colors.white.withValues(alpha: 0.6)
             : scheme.onSurface.withValues(alpha: 0.35);
-        final roadColor = isDark
+        final roadTop = isDark
             ? const Color(0xFF0F172A).withValues(alpha: 0.85)
-            : const Color(0xFFE5E7EB);
+            : const Color(0xFFE2E8F0);
+        final roadBottom = isDark
+            ? const Color(0xFF111827).withValues(alpha: 0.95)
+            : const Color(0xFFF8FAFC);
         final shift = animation.value * 32;
 
         return ClipRRect(
           borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
           child: Stack(
             children: [
-              Container(color: roadColor),
+              Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [roadTop, roadBottom],
+                  ),
+                ),
+              ),
               Positioned.fill(
                 child: Transform.translate(
                   offset: Offset(0, shift),
@@ -234,110 +291,124 @@ class _RoadLanes extends StatelessWidget {
   }
 }
 
-class _CarIllustration extends StatelessWidget {
-  const _CarIllustration({
-    required this.width,
+class _SplashEmblem extends StatelessWidget {
+  const _SplashEmblem({
+    required this.size,
     required this.glowOpacity,
-    required this.scheme,
+    required this.spin,
     required this.isDark,
   });
 
-  final double width;
+  final double size;
   final double glowOpacity;
-  final ColorScheme scheme;
+  final double spin;
   final bool isDark;
 
   @override
   Widget build(BuildContext context) {
-    final height = width * 0.52;
-    final bodyColor =
-        isDark ? const Color(0xFFF1F5F9) : const Color(0xFF1F2937);
-    final trimColor =
-        isDark ? const Color(0xFFCBD5F5) : const Color(0xFF0F172A);
-    final wheelColor =
-        isDark ? const Color(0xFF0F172A) : const Color(0xFF111827);
-    final glowColor = const Color(0xFFFACC15).withValues(alpha: glowOpacity);
+    final ringColor = isDark ? const Color(0xFF38BDF8) : const Color(0xFF1D4ED8);
+    final accentColor =
+        isDark ? const Color(0xFFF59E0B) : const Color(0xFF0EA5E9);
+    final innerColor =
+        isDark ? const Color(0xFF0F172A) : const Color(0xFFF8FAFC);
+    final softGlow =
+        ringColor.withValues(alpha: 0.12 + glowOpacity * 0.28);
+    final warmGlow =
+        accentColor.withValues(alpha: 0.1 + glowOpacity * 0.2);
 
-    return Semantics(
-      label: 'onboarding.practiceTitle'.tr(),
-      child: SizedBox(
-        width: width,
-        height: height,
-        child: Stack(
-          clipBehavior: Clip.none,
-          children: [
-            Positioned(
-              bottom: height * 0.1,
-              left: width * 0.12,
-              right: width * 0.12,
-              child: Container(
-                height: height * 0.46,
-                decoration: BoxDecoration(
-                  color: bodyColor,
-                  borderRadius: BorderRadius.circular(height * 0.2),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.25),
-                      blurRadius: 18,
-                      offset: const Offset(0, 10),
-                    ),
+    return SizedBox(
+      width: size,
+      height: size,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Container(
+            width: size * 0.92,
+            height: size * 0.92,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              boxShadow: [
+                BoxShadow(color: softGlow, blurRadius: 42, spreadRadius: 6),
+                BoxShadow(color: warmGlow, blurRadius: 60, spreadRadius: 10),
+              ],
+            ),
+          ),
+          Transform.rotate(
+            angle: spin,
+            child: Container(
+              width: size,
+              height: size,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: SweepGradient(
+                  colors: [
+                    ringColor.withValues(alpha: 0.08),
+                    ringColor.withValues(alpha: 0.6),
+                    accentColor.withValues(alpha: 0.4),
+                    ringColor.withValues(alpha: 0.12),
                   ],
                 ),
               ),
             ),
-            Positioned(
-              bottom: height * 0.32,
-              left: width * 0.22,
-              right: width * 0.22,
-              child: Container(
-                height: height * 0.28,
-                decoration: BoxDecoration(
-                  color: trimColor,
-                  borderRadius: BorderRadius.circular(height * 0.18),
+          ),
+          Container(
+            width: size * 0.76,
+            height: size * 0.76,
+            decoration: BoxDecoration(
+              color: innerColor,
+              shape: BoxShape.circle,
+              border:
+                  Border.all(color: ringColor.withValues(alpha: 0.4), width: 2),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: isDark ? 0.35 : 0.12),
+                  blurRadius: 16,
+                  offset: const Offset(0, 8),
                 ),
-              ),
+              ],
             ),
-            Positioned(
-              bottom: height * 0.12,
-              left: width * 0.18,
-              child: _Wheel(color: wheelColor, size: width * 0.18),
+          ),
+          Container(
+            width: size * 0.54,
+            height: size * 0.54,
+            decoration: BoxDecoration(
+              color: isDark
+                  ? Colors.white.withValues(alpha: 0.06)
+                  : Colors.white,
+              shape: BoxShape.circle,
+              border:
+                  Border.all(color: ringColor.withValues(alpha: 0.2), width: 1),
             ),
-            Positioned(
-              bottom: height * 0.12,
-              right: width * 0.18,
-              child: _Wheel(color: wheelColor, size: width * 0.18),
+            child: Icon(
+              Icons.directions_car_rounded,
+              color: accentColor,
+              size: size * 0.24,
             ),
-            Positioned(
-              bottom: height * 0.28,
-              left: width * 0.08,
-              child: _Headlight(glow: glowColor, isDark: isDark),
-            ),
-            Positioned(
-              bottom: height * 0.28,
-              right: width * 0.08,
-              child: _Headlight(glow: glowColor, isDark: isDark),
-            ),
-            Positioned(
-              bottom: height * 0.26,
-              left: width * 0.32,
-              right: width * 0.32,
-              child: Container(
-                height: height * 0.08,
-                decoration: BoxDecoration(
-                  color: scheme.primary.withValues(alpha: 0.6),
-                  borderRadius: BorderRadius.circular(14),
-                ),
-              ),
-            ),
-          ],
-        ),
+          ),
+          Positioned(
+            top: size * 0.1,
+            child: _EmblemDot(color: accentColor, size: size * 0.06),
+          ),
+          Positioned(
+            right: size * 0.14,
+            top: size * 0.62,
+            child: _EmblemDot(
+                color: ringColor.withValues(alpha: 0.8), size: size * 0.05),
+          ),
+          Positioned(
+            left: size * 0.18,
+            bottom: size * 0.18,
+            child: _EmblemDot(
+                color: ringColor.withValues(alpha: 0.7), size: size * 0.04),
+          ),
+        ],
       ),
     );
   }
 }
 
-class _Wheel extends StatelessWidget {
-  const _Wheel({required this.color, required this.size});
+class _EmblemDot extends StatelessWidget {
+  const _EmblemDot({required this.color, required this.size});
 
   final Color color;
   final double size;
@@ -352,45 +423,9 @@ class _Wheel extends StatelessWidget {
         shape: BoxShape.circle,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.3),
-            blurRadius: 10,
-            offset: const Offset(0, 6),
-          ),
-        ],
-      ),
-      child: Center(
-        child: Container(
-          width: size * 0.45,
-          height: size * 0.45,
-          decoration: BoxDecoration(
-            color: Colors.white.withValues(alpha: 0.2),
-            shape: BoxShape.circle,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _Headlight extends StatelessWidget {
-  const _Headlight({required this.glow, required this.isDark});
-
-  final Color glow;
-  final bool isDark;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 28,
-      height: 12,
-      decoration: BoxDecoration(
-        color: isDark ? Colors.white : const Color(0xFFF9FAFB),
-        borderRadius: BorderRadius.circular(6),
-        boxShadow: [
-          BoxShadow(
-            color: glow,
-            blurRadius: 18,
-            spreadRadius: 2,
+            color: color.withValues(alpha: 0.4),
+            blurRadius: 8,
+            spreadRadius: 1,
           ),
         ],
       ),

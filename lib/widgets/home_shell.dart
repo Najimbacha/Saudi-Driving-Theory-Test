@@ -145,10 +145,8 @@ class _HomeShellState extends ConsumerState<HomeShell> {
         return 0;
       case 1:
         return 1;
-      case 3:
-        return 2;
       case 4:
-        return 3;
+        return 2;
       default:
         return 0;
     }
@@ -161,8 +159,6 @@ class _HomeShellState extends ConsumerState<HomeShell> {
       case 1:
         return 1;
       case 2:
-        return 3;
-      case 3:
         return 4;
       default:
         return 0;

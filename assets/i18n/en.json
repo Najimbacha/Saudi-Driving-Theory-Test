@@ -2,10 +2,10 @@
   "app": {
     "name": "Saudi Driving Theory Test",
     "tagline": "Master driving theory with confidence",
-    "offline": "Works 100% Offline"
+    "offline": "No constant internet required. Learn anytime, anywhere."
   },
   "splash": {
-    "tagline": "Practice anywhere • No internet needed"
+    "tagline": "No constant internet required. Learn anytime, anywhere."
   },
   "nav": {
     "home": "Home",
@@ -23,27 +23,27 @@
     "selectLanguage": "Select Your Language",
     "languageNote": "You can change this anytime in settings",
     "getStarted": "Get Started",
-    "offlineReady": "Ready to learn offline!",
-    "offlineDesc": "All content works without internet connection",
+    "offlineReady": "No constant internet required. Learn anytime, anywhere.",
+    "offlineDesc": "No constant internet required. Learn anytime, anywhere.",
     "practiceTitle": "Practice Mode",
     "practiceDesc": "Learn with quick quizzes and instant feedback.",
     "examTitle": "Exam Mode",
     "examDesc": "Simulate the real test with timed exams.",
-    "offlineTitle": "Offline + 5 Languages",
+    "offlineTitle": "No constant internet required. Learn anytime, anywhere.",
     "offlineDesc2": "Study anywhere in English, Arabic, Urdu, Hindi, Bengali."
   },
   "home": {
     "badges": {
-      "offline": "100% Offline",
+      "offline": "No constant internet required. Learn anytime, anywhere.",
       "noLogin": "No login required",
-      "noInternet": "No internet needed"
+      "noInternet": "No constant internet required. Learn anytime, anywhere."
     },
     "hero": {
       "startPractice": "Start Practice",
       "startExam": "Start Exam",
       "trafficSigns": "Traffic Signs",
       "learnTheory": "Learn Theory",
-      "pickMode": "Pick a mode to begin (offline)",
+      "pickMode": "No constant internet required. Learn anytime, anywhere.",
       "continue": {
         "practice": "Practice quiz",
         "exam": "Exam session"
@@ -63,7 +63,7 @@
     },
     "explore": "Explore",
     "greeting": "Ready to Learn?",
-    "subtitle": "Practice anytime, anywhere - no internet needed",
+    "subtitle": "No constant internet required. Learn anytime, anywhere.",
     "profile": "Profile",
     "learnSigns": "Learn Traffic Signs",
     "learnSignsDesc": "Study traffic signs",
@@ -1205,8 +1205,8 @@
     "soundDesc": "Play sounds for correct/incorrect answers",
     "vibrationDesc": "Haptic feedback on answers",
     "versionLabel": "Version {version}",
-    "aboutDesc": "Educational app for learning driving theory. All content works offline.",
-    "offlineNote": "100% Offline: no internet connection is required.",
+    "aboutDesc": "No constant internet required. Learn anytime, anywhere.",
+    "offlineNote": "No constant internet required. Learn anytime, anywhere.",
     "disclaimer": "Disclaimer: This app is not affiliated with any government entity and is intended for educational practice only.",
     "links": {
       "trafficFinesTitle": "Traffic Fines & Penalties",
@@ -1351,10 +1351,10 @@
   },
   "pwa": {
     "installTitle": "Install App",
-    "installDescription": "Install for offline access and a better experience",
+    "installDescription": "No constant internet required. Learn anytime, anywhere.",
     "install": "Install",
     "notNow": "Not now",
-    "offline": "You are offline. Some features may be limited."
+    "offline": "No constant internet required. Learn anytime, anywhere."
   },
   "violationPoints": {
     "title": "Traffic Violation Point System",
@@ -1452,9 +1452,21 @@
     "sourceLabel": "Source:",
     "sourceName": "Wikimedia Commons – Saudi Arabia Road Signs",
     "signsLine3": "Individual images may be subject to their respective Creative Commons licenses as specified on Wikimedia Commons.",
+    "filesTitle": "Per-file attributions",
+    "filesLine1": "Each file below links to its Wikimedia Commons source page.",
     "signsLine4": "No affiliation with any government authority is implied.",
     "disclaimerLabel": "Disclaimer:",
     "disclaimerBody": "This application is not affiliated with any government entity and is intended for educational practice only."
+  },
+  "support": {
+    "title": "Support Development (Optional)",
+    "disclaimer": "Donations are completely optional and do not affect any app features or content.",
+    "sectionTitle": "Bank Transfer (Optional)",
+    "bankLabel": "Bank",
+    "accountNumberLabel": "Account Number",
+    "ibanLabel": "IBAN",
+    "copy": "Copy",
+    "copied": "Copied"
   },
   "common": {
     "loading": "Loading...",
@@ -1571,12 +1583,12 @@
   "privacy": {
     "title": "Privacy Policy",
     "updated": "Last updated: 2025-12-30",
-    "intro": "This app is an educational, offline-first driving theory tool. Most features work fully offline.",
+    "intro": "No constant internet required. Learn anytime, anywhere.",
     "dataTitle": "Data We Use",
     "dataLocal": "Your progress, settings, and favorites are stored locally on your device only.",
     "dataAds": "Ads use Google AdMob. When online, AdMob may process device identifiers to serve ads.",
-    "offlineTitle": "Offline Use",
-    "offlineBody": "The app works without internet. Ads are optional; if ads are unavailable, core features still work.",
+    "offlineTitle": "No constant internet required. Learn anytime, anywhere.",
+    "offlineBody": "No constant internet required. Learn anytime, anywhere.",
     "permissionsTitle": "Permissions",
     "permissionsBody": "The app uses only required system permissions (such as internet for ads when available).",
     "disclaimerTitle": "Educational Use",

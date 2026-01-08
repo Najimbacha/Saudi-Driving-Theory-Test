@@ -1,6 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -10,6 +9,7 @@ import '../../../core/constants/app_colors.dart';
 import '../../../core/theme/modern_theme.dart';
 import '../../../widgets/glass_container.dart';
 import '../../../state/learning_state.dart';
+import '../../../utils/app_feedback.dart';
 import '../../providers/category_provider.dart';
 
 class CategoriesScreen extends ConsumerStatefulWidget {
@@ -158,7 +158,7 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
                         total: total,
                         accuracy: accuracy,
                         onTap: () {
-                          HapticFeedback.lightImpact();
+                          AppFeedback.tap(context);
                           context.push('/practice?category=${category.id}');
                         },
                       ),

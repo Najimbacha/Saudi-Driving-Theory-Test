@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 import '../core/theme/modern_theme.dart';
+import '../utils/app_feedback.dart';
 import 'glass_container.dart';
 
 class BottomNav extends StatelessWidget {
@@ -29,10 +30,6 @@ class BottomNav extends StatelessWidget {
       _NavItem(
         icon: PhosphorIconsRegular.trafficSign,
         label: 'nav.signs'.tr(),
-      ),
-      _NavItem(
-        icon: PhosphorIconsRegular.clipboardText,
-        label: 'nav.exam'.tr(),
       ),
       _NavItem(
         icon: PhosphorIconsRegular.gear,
@@ -69,7 +66,12 @@ class BottomNav extends StatelessWidget {
                 child: Material(
                   color: Colors.transparent,
                   child: InkWell(
-                    onTap: () => onTap(index),
+                    onTap: () {
+                      if (!selected) {
+                        AppFeedback.tap(context);
+                      }
+                      onTap(index);
+                    },
                     borderRadius: BorderRadius.circular(20),
                     child: AnimatedContainer(
                       duration: const Duration(milliseconds: 200),

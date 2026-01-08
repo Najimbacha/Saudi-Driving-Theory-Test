@@ -40,36 +40,6 @@
     "svg": "/ksa-signs/SA_road_sign_-_Bicycle_crossing.svg"
   },
   {
-    "id": "branch_road_2222",
-    "name_en": "Branch Road 2222",
-    "name_ar": "فرعي طريق 2222",
-    "name_ur": "شاخ سڑک 2222",
-    "name_hi": "शाखा सड़क 2222",
-    "name_bn": "শাখা রাস্তা 2222",
-    "category": "guide",
-    "svg": "/ksa-signs/Saudi_Arabia_-_Branch_Road-2222.svg"
-  },
-  {
-    "id": "branch_road_5018",
-    "name_en": "Branch Road 5018",
-    "name_ar": "فرعي طريق 5018",
-    "name_ur": "شاخ سڑک 5018",
-    "name_hi": "शाखा सड़क 5018",
-    "name_bn": "শাখা রাস্তা 5018",
-    "category": "guide",
-    "svg": "/ksa-signs/Saudi_Arabia_-_Branch_Road-5018.svg"
-  },
-  {
-    "id": "branch_road_blank",
-    "name_en": "Branch Road Blank",
-    "name_ar": "فرعي طريق فارغ",
-    "name_ur": "شاخ سڑک خالی",
-    "name_hi": "शाखा सड़क खाली",
-    "name_bn": "শাখা রাস্তা খালি",
-    "category": "guide",
-    "svg": "/ksa-signs/Saudi_Arabia_-_Branch_Road_Blank.svg"
-  },
-  {
     "id": "camels_crossing",
     "name_en": "Camels Crossing",
     "name_ar": "جمال عبور",

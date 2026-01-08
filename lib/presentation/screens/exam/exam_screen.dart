@@ -1,7 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
@@ -17,6 +16,8 @@ import '../../../presentation/providers/exam_history_provider.dart';
 import '../../../presentation/providers/exam_provider.dart';
 import '../../../state/data_state.dart';
 import '../../../state/app_state.dart';
+import '../../../services/ad_service.dart';
+import '../../../utils/app_feedback.dart';
 import '../../../utils/back_guard.dart';
 
 class ExamFlowScreen extends ConsumerStatefulWidget {
@@ -208,29 +209,29 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
               ),
               centerTitle: true,
               actions: [
-                Container(
-                  margin: const EdgeInsets.only(right: 8),
-                  decoration: BoxDecoration(
+                Center(
+                  child: Container(
+                    margin: const EdgeInsetsDirectional.only(end: 8),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                    decoration: BoxDecoration(
                       color: scheme.onSurface.withValues(alpha: 0.1),
-                      shape: BoxShape.circle),
-                  child: IconButton(
-                    onPressed: () {
-                      final settings = ref.read(appSettingsProvider);
-                      if (settings.vibrationEnabled)
-                        HapticFeedback.lightImpact();
-                      if (settings.soundEnabled)
-                        SystemSound.play(SystemSoundType.click);
-                      controller.toggleFlag();
-                    },
-                    tooltip: 'exam.flag'.tr(),
-                    icon: Icon(
-                      exam.flagged.contains(current.id)
-                          ? Icons.flag_rounded
-                          : Icons.flag_outlined,
-                      color: exam.flagged.contains(current.id)
-                          ? AppColors.warning
-                          : scheme.onSurface.withValues(alpha: 0.7),
+                      borderRadius: BorderRadius.circular(14),
                     ),
+                    child: Text(
+                      '${exam.currentIndex + 1}/${exam.questions.length}',
+                      style: GoogleFonts.outfit(
+                        color: scheme.onSurface.withValues(alpha: 0.8),
+                        fontWeight: FontWeight.w600,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ),
+                ),
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsetsDirectional.only(end: 8),
+                    child: _TimerBanner(timeLeftSeconds: exam.timeLeftSeconds),
                   ),
                 ),
               ],
@@ -244,28 +245,12 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
               child: SafeArea(
                 child: Column(
                   children: [
-                    // Timer & Progress Header
+                    // Progress Header
                     Padding(
                       padding:
-                          const EdgeInsetsDirectional.fromSTEB(20, 10, 20, 10),
+                          const EdgeInsetsDirectional.fromSTEB(20, 0, 20, 8),
                       child: Column(
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              _TimerBanner(
-                                  timeLeftSeconds: exam.timeLeftSeconds),
-                              Text(
-                                '${exam.currentIndex + 1}/${exam.questions.length}',
-                                style: GoogleFonts.outfit(
-                                  color:
-                                      scheme.onSurface.withValues(alpha: 0.7),
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 12),
                           ClipRRect(
                             borderRadius: BorderRadius.circular(10),
                             child: LinearProgressIndicator(
@@ -323,9 +308,10 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
                               ),
                             ),
 
-                          Align(
-                            alignment: AlignmentDirectional.centerEnd,
-                            child: TextButton(
+                          if (!exam.strictMode)
+                            Align(
+                              alignment: AlignmentDirectional.centerEnd,
+                              child: TextButton(
                                 style: TextButton.styleFrom(
                                   foregroundColor:
                                       scheme.onSurface.withValues(alpha: 0.7),
@@ -335,10 +321,7 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
                                 onPressed: () {
                                   final settings =
                                       ref.read(appSettingsProvider);
-                                  if (settings.vibrationEnabled)
-                                    HapticFeedback.lightImpact();
-                                  if (settings.soundEnabled)
-                                    SystemSound.play(SystemSoundType.click);
+                                  AppFeedback.tap(context);
                                   controller.skipCurrent();
                                   if (exam.currentIndex + 1 ==
                                       exam.questions.length) {
@@ -351,7 +334,7 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
                                     style: GoogleFonts.outfit(fontSize: 13)),
                               ),
                             ),
-                            const SizedBox(height: 8),
+                          if (!exam.strictMode) const SizedBox(height: 8),
 
                             // Options
                             AnimatedSwitcher(
@@ -368,11 +351,7 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
                                       onTap: () {
                                         final settings =
                                             ref.read(appSettingsProvider);
-                                        if (settings.vibrationEnabled)
-                                          HapticFeedback.lightImpact();
-                                        if (settings.soundEnabled)
-                                          SystemSound.play(
-                                              SystemSoundType.click);
+                                        AppFeedback.tap(context);
                                         controller.selectAnswer(idx);
                                       },
                                       child: AnimatedContainer(
@@ -504,11 +483,7 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
                                           }
                                           final settings =
                                               ref.read(appSettingsProvider);
-                                          if (settings.vibrationEnabled)
-                                            HapticFeedback.mediumImpact();
-                                          if (settings.soundEnabled)
-                                            SystemSound.play(
-                                                SystemSoundType.click);
+                                          AppFeedback.confirm(context);
                                           if (exam.currentIndex + 1 ==
                                               exam.questions.length) {
                                             controller.finish();
@@ -542,22 +517,7 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
                                         .withValues(alpha: 0.7)),
                               ),
                             ),
-                          ] else
-                            Padding(
-                              padding: const EdgeInsets.only(top: 12),
-                              child: TextButton.icon(
-                                onPressed: () => _showQuestionGrid(
-                                    context, exam, controller),
-                                icon: Icon(Icons.grid_view_rounded,
-                                    size: 16,
-                                    color: scheme.onSurface
-                                        .withValues(alpha: 0.45)),
-                                label: Text('exam.overview'.tr(),
-                                    style: GoogleFonts.outfit(
-                                        color: scheme.onSurface
-                                            .withValues(alpha: 0.45))),
-                              ),
-                            ),
+                          ],
                         ],
                       ),
                     ),
@@ -600,6 +560,9 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
               ))
           .toList(),
     );
+    ref
+        .read(appSettingsProvider.notifier)
+        .updateStats(correct: correct, total: total);
     ref.read(examHistoryProvider.notifier).addResult(result);
     context.push('/results', extra: result);
   }
@@ -954,50 +917,246 @@ class _ExamIntroState extends State<_ExamIntro> {
     );
   }
 
-  Future<void> _confirmStart(
+  Future<void> _handleExamStart(
       BuildContext context, int count, int minutes) async {
-    final scheme = Theme.of(context).colorScheme;
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final shouldStart = await showDialog<bool>(
-      context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: isDark ? const Color(0xFF1E293B) : scheme.surface,
-        title: Row(
-          children: [
-            Icon(Icons.timer_outlined, color: ModernTheme.secondary),
-            const SizedBox(width: 12),
-            Text('exam.title'.tr(),
-                style: GoogleFonts.outfit(
-                    color: scheme.onSurface, fontWeight: FontWeight.bold)),
-          ],
-        ),
-        content: Text(
-          'exam.disclaimer'.tr(),
-          style: GoogleFonts.outfit(
-              color: scheme.onSurface.withValues(alpha: 0.7)),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: Text('common.cancel'.tr(),
-                style: GoogleFonts.outfit(
-                    color: scheme.onSurface.withValues(alpha: 0.6))),
-          ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-                backgroundColor: ModernTheme.secondary,
-                foregroundColor: Colors.white),
-            onPressed: () => Navigator.pop(context, true),
-            child: Text('exam.startExam'.tr(),
-                style: GoogleFonts.outfit(fontWeight: FontWeight.bold)),
-          ),
-        ],
-      ),
-    );
-
-    if (shouldStart == true) {
+    final prefs = ProviderScope.containerOf(context).read(sharedPrefsProvider);
+    final freeUsed = prefs.getBool('examFreeUsed') ?? false;
+    final tokens = prefs.getInt('examRewardTokenCount') ?? 0;
+    if (!freeUsed) {
+      await prefs.setBool('examFreeUsed', true);
+      widget.onStart(count, minutes, _strictMode);
+      return;
+    }
+    if (tokens > 0) {
+      await prefs.setInt('examRewardTokenCount', tokens - 1);
+      widget.onStart(count, minutes, _strictMode);
+      return;
+    }
+    final unlocked = await _showRewardedUnlock(context);
+    if (unlocked) {
       widget.onStart(count, minutes, _strictMode);
     }
+  }
+
+  Future<bool> _showRewardedUnlock(BuildContext context) async {
+    final result = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) {
+        bool loading = false;
+        String? errorMessage;
+        bool didTriggerLoad = false;
+        return StatefulBuilder(
+          builder: (context, setState) {
+            final scheme = Theme.of(context).colorScheme;
+            final isDark = Theme.of(context).brightness == Brightness.dark;
+            if (!didTriggerLoad) {
+              didTriggerLoad = true;
+              WidgetsBinding.instance.addPostFrameCallback((_) async {
+                if (!context.mounted) return;
+                setState(() {
+                  loading = true;
+                  errorMessage = null;
+                });
+                await AdService.instance.init();
+                final loaded = await AdService.instance.loadRewarded();
+                if (!context.mounted) return;
+                setState(() {
+                  loading = false;
+                  if (!loaded) {
+                    errorMessage = 'ads.unavailable'.tr();
+                  }
+                });
+              });
+            }
+            return Dialog(
+              backgroundColor: Colors.transparent,
+              insetPadding:
+                  const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+              child: GlassContainer(
+                padding: const EdgeInsets.fromLTRB(22, 22, 22, 18),
+                borderRadius: BorderRadius.circular(24),
+                color: isDark
+                    ? Colors.white.withValues(alpha: 0.08)
+                    : scheme.surface.withValues(alpha: 0.96),
+                gradient: LinearGradient(
+                  colors: isDark
+                      ? [
+                          Colors.white.withValues(alpha: 0.06),
+                          Colors.white.withValues(alpha: 0.02),
+                        ]
+                      : [
+                          scheme.surface,
+                          scheme.surface.withValues(alpha: 0.9),
+                        ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                border: Border.all(
+                  color: scheme.onSurface.withValues(alpha: 0.12),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                          width: 46,
+                          height: 46,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            gradient: LinearGradient(
+                              colors: [
+                                ModernTheme.secondary.withValues(alpha: 0.9),
+                                ModernTheme.primary.withValues(alpha: 0.85),
+                              ],
+                            ),
+                          ),
+                          child: const Icon(
+                            Icons.lock_rounded,
+                            color: Colors.white,
+                            size: 22,
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Text(
+                            'ads.unlockExamTitle'.tr(),
+                            style: GoogleFonts.outfit(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 18,
+                              color: scheme.onSurface,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      'ads.unlockExamBody'.tr(),
+                      style: GoogleFonts.outfit(
+                        color: scheme.onSurface.withValues(alpha: 0.7),
+                        height: 1.4,
+                      ),
+                    ),
+                    if (errorMessage != null) ...[
+                      const SizedBox(height: 8),
+                      Text(
+                        errorMessage!,
+                        style: GoogleFonts.outfit(
+                          color: scheme.error,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
+                    const SizedBox(height: 18),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: OutlinedButton(
+                            style: OutlinedButton.styleFrom(
+                              foregroundColor: scheme.onSurface,
+                              side: BorderSide(
+                                color:
+                                    scheme.onSurface.withValues(alpha: 0.2),
+                              ),
+                              padding: const EdgeInsets.symmetric(vertical: 14),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(14),
+                              ),
+                            ),
+                            onPressed: loading
+                                ? null
+                                : () => Navigator.of(context).pop(false),
+                            child: Text(
+                              'ads.notNow'.tr(),
+                              style: GoogleFonts.outfit(),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: ModernTheme.primary,
+                              foregroundColor: Colors.white,
+                              padding: const EdgeInsets.symmetric(vertical: 14),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(14),
+                              ),
+                              elevation: 6,
+                              shadowColor:
+                                  ModernTheme.primary.withValues(alpha: 0.35),
+                            ),
+                            onPressed: loading
+                                ? null
+                                : () async {
+                                    setState(() => loading = true);
+                                    errorMessage = null;
+                                    await AdService.instance.init();
+                                    if (!AdService.instance.isRewardedReady) {
+                                      final loaded = await AdService.instance
+                                          .loadRewarded();
+                                      if (!loaded && context.mounted) {
+                                        setState(() {
+                                          loading = false;
+                                          errorMessage =
+                                              'ads.unavailable'.tr();
+                                        });
+                                        return;
+                                      }
+                                    }
+                                    var rewardedHandled = false;
+                                    final success =
+                                        await AdService.instance.showRewarded(
+                                      onReward: () {
+                                        if (rewardedHandled) {
+                                          return;
+                                        }
+                                        rewardedHandled = true;
+                                        Navigator.of(context).pop(true);
+                                      },
+                                    );
+                                    if (!success && context.mounted) {
+                                      setState(() {
+                                        loading = false;
+                                        errorMessage =
+                                            'ads.unavailable'.tr();
+                                      });
+                                    }
+                                  },
+                            child: loading
+                                ? const SizedBox(
+                                    width: 16,
+                                    height: 16,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      color: Colors.white,
+                                    ),
+                                  )
+                                : Text(
+                                    'ads.watchAd'.tr(),
+                                    style: GoogleFonts.outfit(
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+    return result ?? false;
+  }
+
+  Future<void> _confirmStart(
+      BuildContext context, int count, int minutes) async {
+    await _handleExamStart(context, count, minutes);
   }
 }
 
@@ -1028,8 +1187,7 @@ class _ModeGlassCard extends StatelessWidget {
       onTap: () {
         final settings =
             ProviderScope.containerOf(context).read(appSettingsProvider);
-        if (settings.vibrationEnabled) HapticFeedback.lightImpact();
-        if (settings.soundEnabled) SystemSound.play(SystemSoundType.click);
+        AppFeedback.tap(context);
         onTap();
       },
       child: GlassContainer(

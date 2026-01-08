@@ -1,6 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
@@ -18,6 +17,7 @@ import '../../../presentation/providers/exam_history_provider.dart';
 import '../../../presentation/providers/quiz_provider.dart';
 import '../../../state/data_state.dart';
 import '../../../state/app_state.dart';
+import '../../../utils/app_feedback.dart';
 import '../../providers/category_provider.dart';
 
 class PracticeFlowScreen extends ConsumerStatefulWidget {
@@ -263,10 +263,7 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
                   isBookmarked: favorites.questions.contains(current.id),
                   count: favorites.questions.length,
                   onTap: () {
-                    final settings = ref.read(appSettingsProvider);
-                    if (settings.vibrationEnabled) HapticFeedback.lightImpact();
-                    if (settings.soundEnabled)
-                      SystemSound.play(SystemSoundType.click);
+                    AppFeedback.tap(context);
                     ref.read(appSettingsProvider.notifier).toggleFavorite(
                           type: 'questions',
                           id: current.id,
@@ -384,13 +381,7 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
                                 ),
                                 onPressed: canSkip
                                     ? () {
-                                        final settings =
-                                            ref.read(appSettingsProvider);
-                                        if (settings.vibrationEnabled)
-                                          HapticFeedback.lightImpact();
-                                        if (settings.soundEnabled)
-                                          SystemSound.play(
-                                              SystemSoundType.click);
+                                        AppFeedback.tap(context);
                                         quizController.skipCurrent();
                                         quizController.next();
                                       }
@@ -453,12 +444,7 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
                                   child: GestureDetector(
                                     onTap: () {
                                       if (quiz.showAnswer) return;
-                                      final settings =
-                                          ref.read(appSettingsProvider);
-                                      if (settings.vibrationEnabled)
-                                        HapticFeedback.lightImpact();
-                                      if (settings.soundEnabled)
-                                        SystemSound.play(SystemSoundType.click);
+                                      AppFeedback.tap(context);
                                       quizController.selectAnswer(idx);
                                     },
                                     child: AnimatedContainer(
@@ -684,12 +670,7 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
                                       if (selected == null) {
                                         return;
                                       }
-                                      final settings =
-                                          ref.read(appSettingsProvider);
-                                      if (settings.vibrationEnabled)
-                                        HapticFeedback.lightImpact();
-                                      if (settings.soundEnabled)
-                                        SystemSound.play(SystemSoundType.click);
+                                      AppFeedback.confirm(context);
                                       if (!quiz.showAnswer) {
                                         quizController.revealAnswer();
                                       } else {
@@ -746,6 +727,9 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
               ))
           .toList(),
     );
+    ref
+        .read(appSettingsProvider.notifier)
+        .updateStats(correct: correct, total: total);
     ref.read(examHistoryProvider.notifier).addResult(result);
   }
 
@@ -1100,10 +1084,7 @@ class _CategoryGlassTile extends StatelessWidget {
         : scheme.onSurface.withValues(alpha: isDark ? 0.55 : 0.65);
     return GestureDetector(
       onTap: () {
-        final settings =
-            ProviderScope.containerOf(context).read(appSettingsProvider);
-        if (settings.vibrationEnabled) HapticFeedback.lightImpact();
-        if (settings.soundEnabled) SystemSound.play(SystemSoundType.click);
+        AppFeedback.tap(context);
         onTap();
       },
       child: AnimatedScale(

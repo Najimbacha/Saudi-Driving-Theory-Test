@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/constants/app_colors.dart';
 import '../../../data/models/exam_result_model.dart';
+import '../../../utils/app_feedback.dart';
 import '../../../utils/text_formatters.dart';
 
 class ResultsScreen extends StatelessWidget {
@@ -34,6 +35,7 @@ class ResultsScreen extends StatelessWidget {
               Expanded(
                 child: OutlinedButton(
                   onPressed: () {
+                    AppFeedback.tap(context);
                     // Navigate to home, replacing current screen to allow back button to work properly
                     context.pushReplacement('/home');
                   },
@@ -43,7 +45,10 @@ class ResultsScreen extends StatelessWidget {
               const SizedBox(width: 12),
               Expanded(
                 child: ElevatedButton(
-                  onPressed: () => context.push('/review', extra: result),
+                  onPressed: () {
+                    AppFeedback.tap(context);
+                    context.push('/review', extra: result);
+                  },
                   child: Text('results.reviewAnswers'.tr()),
                 ),
               ),
@@ -54,6 +59,7 @@ class ResultsScreen extends StatelessWidget {
             width: double.infinity,
             child: ElevatedButton(
               onPressed: () {
+                AppFeedback.tap(context);
                 // Navigate to exam screen, replacing current screen
                 context.pushReplacement('/exam');
               },

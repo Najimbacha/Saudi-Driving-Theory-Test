@@ -2,12 +2,12 @@ import 'dart:math';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/constants/app_colors.dart';
 import '../../../state/app_state.dart';
+import '../../../utils/app_feedback.dart';
 
 class OnboardingIntroScreen extends ConsumerStatefulWidget {
   const OnboardingIntroScreen({super.key});
@@ -159,7 +159,7 @@ class _OnboardingIntroScreenState extends ConsumerState<OnboardingIntroScreen>
                   currentIndex: _currentIndex,
                   total: _pages.length,
                   onNext: () {
-                    HapticFeedback.selectionClick();
+                    AppFeedback.selection(context);
                     if (_currentIndex == _pages.length - 1) {
                       _complete();
                       return;

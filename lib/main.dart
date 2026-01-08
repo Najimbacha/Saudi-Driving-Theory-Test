@@ -20,6 +20,7 @@ void main() async {
   final prefs = await SharedPreferences.getInstance();
 
   await AdService.instance.init();
+  AdService.instance.loadRewarded();
 
   runApp(
     ProviderScope(

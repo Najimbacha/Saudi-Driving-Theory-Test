@@ -1,11 +1,11 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../core/theme/modern_theme.dart';
+import '../utils/app_feedback.dart';
 import '../widgets/glass_container.dart';
 import '../models/sign.dart';
 import '../state/data_state.dart';
@@ -185,7 +185,7 @@ class _SignsScreenState extends ConsumerState<SignsScreen> {
                             sign.titles[locale] ?? sign.titles['en'] ?? '';
                         return GestureDetector(
                           onTap: () {
-                            HapticFeedback.lightImpact();
+                            AppFeedback.tap(context);
                             _showSignDetails(context, sign, title);
                           },
                           child: GlassContainer(
@@ -197,11 +197,26 @@ class _SignsScreenState extends ConsumerState<SignsScreen> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Expanded(
-                                  child: Hero(
-                                    tag: 'sign_${sign.id}',
-                                    child: SvgPicture.asset(
-                                        'assets/${sign.svgPath}',
-                                        fit: BoxFit.contain),
+                                  child: LayoutBuilder(
+                                    builder: (context, constraints) {
+                                      final iconSize = (constraints.maxWidth *
+                                              0.72)
+                                          .clamp(48.0, 90.0);
+                                      return Center(
+                                        child: Hero(
+                                          tag: 'sign_${sign.id}',
+                                          child: SizedBox(
+                                            width: iconSize,
+                                            height: iconSize,
+                                            child: SvgPicture.asset(
+                                              'assets/${sign.svgPath}',
+                                              fit: BoxFit.contain,
+                                              alignment: Alignment.center,
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
                                   ),
                                 ),
                                 const SizedBox(height: 8),
@@ -249,6 +264,8 @@ class _SignsScreenState extends ConsumerState<SignsScreen> {
       builder: (context) {
         final scheme = Theme.of(context).colorScheme;
         final isDark = Theme.of(context).brightness == Brightness.dark;
+        final iconSize =
+            (MediaQuery.of(context).size.width * 0.55).clamp(200.0, 300.0);
         return GlassContainer(
           borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
           color: isDark
@@ -266,11 +283,14 @@ class _SignsScreenState extends ConsumerState<SignsScreen> {
                       borderRadius: BorderRadius.circular(2))),
               const SizedBox(height: 30),
               SizedBox(
-                height: 180,
+                width: iconSize,
+                height: iconSize,
                 child: Hero(
                   tag: 'sign_${sign.id}',
-                  child: SvgPicture.asset('assets/${sign.svgPath}',
-                      fit: BoxFit.contain),
+                  child: SvgPicture.asset(
+                    'assets/${sign.svgPath}',
+                    fit: BoxFit.contain,
+                  ),
                 ),
               ),
               const SizedBox(height: 24),
@@ -343,7 +363,7 @@ class _GlassFilterChip extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        HapticFeedback.lightImpact();
+        AppFeedback.tap(context);
         onTap();
       },
       child: AnimatedContainer(
