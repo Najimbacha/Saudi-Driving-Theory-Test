@@ -4,6 +4,10 @@ import 'package:flutter/material.dart';
 Future<bool> confirmExitExam(BuildContext context) async {
   final theme = Theme.of(context);
   final scheme = theme.colorScheme;
+  assert(() {
+    debugPrint('Back: confirm exit exam');
+    return true;
+  }());
   final result = await showDialog<bool>(
     context: context,
     builder: (context) => AlertDialog(
@@ -59,5 +63,9 @@ Future<bool> confirmExitExam(BuildContext context) async {
       ],
     ),
   );
+  assert(() {
+    debugPrint('Back: confirm exit exam result=${result == true}');
+    return true;
+  }());
   return result ?? false;
 }

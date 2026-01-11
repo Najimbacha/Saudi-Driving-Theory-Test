@@ -2,14 +2,14 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import '../core/theme/modern_theme.dart';
 import '../utils/app_feedback.dart';
+import '../utils/app_fonts.dart';
+import '../utils/navigation_utils.dart';
 import '../widgets/glass_container.dart';
 import '../models/sign.dart';
 import '../state/data_state.dart';
-import '../widgets/home_shell.dart';
 
 class SignsScreen extends ConsumerStatefulWidget {
   const SignsScreen({super.key});
@@ -19,7 +19,6 @@ class SignsScreen extends ConsumerStatefulWidget {
 }
 
 class _SignsScreenState extends ConsumerState<SignsScreen> {
-  String query = '';
   String category = 'all';
 
   @override
@@ -28,12 +27,17 @@ class _SignsScreenState extends ConsumerState<SignsScreen> {
     final locale = context.locale.languageCode;
     final scheme = Theme.of(context).colorScheme;
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final surfaceFill = isDark
+        ? Colors.white.withValues(alpha: 0.05)
+        : Colors.white.withValues(alpha: 0.9);
+    final borderColor = scheme.onSurface.withValues(alpha: 0.08);
+    final mutedText = scheme.onSurface.withValues(alpha: 0.6);
 
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         title: Text('signs.title'.tr(),
-            style: GoogleFonts.outfit(
+            style: AppFonts.outfit(context,
                 fontWeight: FontWeight.bold,
                 color: Theme.of(context).colorScheme.onSurface)),
         backgroundColor: Colors.transparent,
@@ -42,14 +46,7 @@ class _SignsScreenState extends ConsumerState<SignsScreen> {
         iconTheme:
             IconThemeData(color: Theme.of(context).colorScheme.onSurface),
         leading: IconButton(
-          onPressed: () {
-            final shell = TabShellScope.maybeOf(context);
-            if (shell != null) {
-              shell.value = 0;
-              return;
-            }
-            Navigator.of(context).maybePop();
-          },
+          onPressed: () => handleAppBack(context),
           icon: const Icon(Icons.arrow_back),
         ),
       ),
@@ -62,39 +59,10 @@ class _SignsScreenState extends ConsumerState<SignsScreen> {
         child: SafeArea(
           child: Column(
             children: [
-              // Search Bar
-              Padding(
-                padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-                child: GlassContainer(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: TextField(
-                    style: GoogleFonts.outfit(
-                        color: Theme.of(context).colorScheme.onSurface),
-                    decoration: InputDecoration(
-                      hintText: 'signs.search'.tr(),
-                      hintStyle: GoogleFonts.outfit(
-                          color: Theme.of(context)
-                              .colorScheme
-                              .onSurface
-                              .withValues(alpha: 0.5)),
-                      prefixIcon: Icon(Icons.search,
-                          color: Theme.of(context)
-                              .colorScheme
-                              .onSurface
-                              .withValues(alpha: 0.5)),
-                      border: InputBorder.none,
-                    ),
-                    onChanged: (value) =>
-                        setState(() => query = value.toLowerCase()),
-                  ),
-                ),
-              ),
-
               // Filters
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                padding: const EdgeInsets.fromLTRB(20, 6, 20, 12),
                 child: Row(
                   children: [
                     _GlassFilterChip(
@@ -135,11 +103,9 @@ class _SignsScreenState extends ConsumerState<SignsScreen> {
                 child: signsAsync.when(
                   data: (signs) {
                     final filtered = signs.where((s) {
-                      final title = s.titles[locale] ?? s.titles['en'] ?? '';
-                      final matchQuery = title.toLowerCase().contains(query);
                       final matchCategory =
                           category == 'all' || s.category == category;
-                      return matchQuery && matchCategory;
+                      return matchCategory;
                     }).toList();
 
                     if (filtered.isEmpty) {
@@ -153,7 +119,7 @@ class _SignsScreenState extends ConsumerState<SignsScreen> {
                             const SizedBox(height: 16),
                             Text(
                               'signs.empty'.tr(),
-                              style: GoogleFonts.outfit(
+                              style: AppFonts.outfit(context,
                                   color:
                                       scheme.onSurface.withValues(alpha: 0.6),
                                   fontSize: 16),
@@ -171,12 +137,13 @@ class _SignsScreenState extends ConsumerState<SignsScreen> {
                             : 3; // Dense grid
 
                     return GridView.builder(
-                      padding: const EdgeInsets.fromLTRB(20, 20, 20, 100),
+                      padding: const EdgeInsets.fromLTRB(20, 12, 20, 100),
+                      cacheExtent: 900,
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: columns,
                         crossAxisSpacing: 12,
                         mainAxisSpacing: 12,
-                        childAspectRatio: 0.8,
+                        childAspectRatio: 0.88,
                       ),
                       itemCount: filtered.length,
                       itemBuilder: (context, idx) {
@@ -190,9 +157,10 @@ class _SignsScreenState extends ConsumerState<SignsScreen> {
                           },
                           child: GlassContainer(
                             padding: const EdgeInsets.all(12),
-                            color: isDark
-                                ? Colors.white.withValues(alpha: 0.05)
-                                : scheme.onSurface.withValues(alpha: 0.04),
+                            blur: isDark ? 10 : 6,
+                            color: surfaceFill,
+                            border: Border.all(color: borderColor),
+                            borderRadius: BorderRadius.circular(20),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -200,18 +168,30 @@ class _SignsScreenState extends ConsumerState<SignsScreen> {
                                   child: LayoutBuilder(
                                     builder: (context, constraints) {
                                       final iconSize = (constraints.maxWidth *
-                                              0.72)
-                                          .clamp(48.0, 90.0);
-                                      return Center(
+                                              0.6)
+                                          .clamp(46.0, 86.0);
+                                      return Container(
+                                        alignment: Alignment.center,
+                                        decoration: BoxDecoration(
+                                          color: isDark
+                                              ? Colors.white
+                                                  .withValues(alpha: 0.04)
+                                              : scheme.onSurface
+                                                  .withValues(alpha: 0.03),
+                                          borderRadius:
+                                              BorderRadius.circular(16),
+                                        ),
                                         child: Hero(
                                           tag: 'sign_${sign.id}',
                                           child: SizedBox(
                                             width: iconSize,
                                             height: iconSize,
-                                            child: SvgPicture.asset(
-                                              'assets/${sign.svgPath}',
-                                              fit: BoxFit.contain,
-                                              alignment: Alignment.center,
+                                            child: RepaintBoundary(
+                                              child: SvgPicture.asset(
+                                                'assets/${sign.svgPath}',
+                                                fit: BoxFit.contain,
+                                                alignment: Alignment.center,
+                                              ),
                                             ),
                                           ),
                                         ),
@@ -219,17 +199,14 @@ class _SignsScreenState extends ConsumerState<SignsScreen> {
                                     },
                                   ),
                                 ),
-                                const SizedBox(height: 8),
+                                const SizedBox(height: 10),
                                 Text(
                                   title,
                                   textAlign: TextAlign.center,
-                                  style: GoogleFonts.outfit(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onSurface
-                                        .withValues(alpha: 0.7),
+                                  style: AppFonts.outfit(context,
+                                    color: mutedText,
                                     fontSize: 12,
-                                    fontWeight: FontWeight.w500,
+                                    fontWeight: FontWeight.w600,
                                   ),
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
@@ -245,7 +222,7 @@ class _SignsScreenState extends ConsumerState<SignsScreen> {
                       const Center(child: CircularProgressIndicator()),
                   error: (_, __) => Center(
                     child: Text('signs.loadError'.tr(),
-                        style: GoogleFonts.outfit(color: scheme.onSurface)),
+                        style: AppFonts.outfit(context,color: scheme.onSurface)),
                   ),
                 ),
               ),
@@ -261,6 +238,7 @@ class _SignsScreenState extends ConsumerState<SignsScreen> {
       context: context,
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
+      useRootNavigator: true,
       builder: (context) {
         final scheme = Theme.of(context).colorScheme;
         final isDark = Theme.of(context).brightness == Brightness.dark;
@@ -296,7 +274,7 @@ class _SignsScreenState extends ConsumerState<SignsScreen> {
               const SizedBox(height: 24),
               Text(
                 title,
-                style: GoogleFonts.outfit(
+                style: AppFonts.outfit(context,
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
                   color: scheme.onSurface,
@@ -315,7 +293,7 @@ class _SignsScreenState extends ConsumerState<SignsScreen> {
                 ),
                 child: Text(
                   'signs.categories.${sign.category}'.tr(),
-                  style: GoogleFonts.outfit(
+                  style: AppFonts.outfit(context,
                     color: ModernTheme.primary,
                     fontWeight: FontWeight.bold,
                   ),
@@ -337,7 +315,7 @@ class _SignsScreenState extends ConsumerState<SignsScreen> {
                   ),
                   onPressed: () => Navigator.pop(context),
                   child: Text('common.close'.tr(),
-                      style: GoogleFonts.outfit(fontWeight: FontWeight.bold)),
+                      style: AppFonts.outfit(context,fontWeight: FontWeight.bold)),
                 ),
               ),
             ],
@@ -361,6 +339,8 @@ class _GlassFilterChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return GestureDetector(
       onTap: () {
         AppFeedback.tap(context);
@@ -368,28 +348,26 @@ class _GlassFilterChip extends StatelessWidget {
       },
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
         decoration: BoxDecoration(
           color: selected
-              ? ModernTheme.primary
-              : Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.05),
-          borderRadius: BorderRadius.circular(20),
+              ? null
+              : scheme.onSurface.withValues(alpha: isDark ? 0.06 : 0.05),
+          gradient: selected ? ModernTheme.primaryGradient : null,
+          borderRadius: BorderRadius.circular(18),
           border: Border.all(
             color: selected
-                ? ModernTheme.primary
-                : Theme.of(context)
-                    .colorScheme
-                    .onSurface
-                    .withValues(alpha: 0.1),
+                ? Colors.transparent
+                : scheme.onSurface.withValues(alpha: 0.12),
           ),
         ),
         child: Text(
           label,
-          style: GoogleFonts.outfit(
+          style: AppFonts.outfit(context,
             color: selected
                 ? Colors.white
-                : Theme.of(context).colorScheme.onSurface,
-            fontWeight: selected ? FontWeight.bold : FontWeight.w500,
+                : scheme.onSurface.withValues(alpha: 0.8),
+            fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
             fontSize: 13,
           ),
         ),
@@ -397,3 +375,4 @@ class _GlassFilterChip extends StatelessWidget {
     );
   }
 }
+

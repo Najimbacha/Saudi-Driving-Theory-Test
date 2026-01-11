@@ -12,7 +12,7 @@ class GlassContainer extends StatelessWidget {
     this.borderRadius = const BorderRadius.all(Radius.circular(24)),
     this.color,
     this.border,
-    this.blur = 16.0,
+    this.blur = 12.0,
     this.gradient,
   });
 
@@ -29,25 +29,27 @@ class GlassContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: width,
-      height: height,
-      margin: margin,
-      child: ClipRRect(
-        borderRadius: borderRadius,
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: blur, sigmaY: blur),
-          child: Container(
-            padding: padding,
-            decoration: BoxDecoration(
-              borderRadius: borderRadius,
-              border: border ??
-                  Border.all(
-                      color: Colors.white.withValues(alpha: 0.1), width: 1),
-              color: color ?? Colors.white.withValues(alpha: 0.05),
-              gradient: gradient,
+    return RepaintBoundary(
+      child: Container(
+        width: width,
+        height: height,
+        margin: margin,
+        child: ClipRRect(
+          borderRadius: borderRadius,
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: blur, sigmaY: blur),
+            child: Container(
+              padding: padding,
+              decoration: BoxDecoration(
+                borderRadius: borderRadius,
+                border: border ??
+                    Border.all(
+                        color: Colors.white.withValues(alpha: 0.1), width: 1),
+                color: color ?? Colors.white.withValues(alpha: 0.05),
+                gradient: gradient,
+              ),
+              child: child,
             ),
-            child: child,
           ),
         ),
       ),

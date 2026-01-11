@@ -8,6 +8,7 @@ import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../state/app_state.dart';
 import '../../../utils/app_feedback.dart';
+import '../../../utils/navigation_utils.dart';
 
 class OnboardingIntroScreen extends ConsumerStatefulWidget {
   const OnboardingIntroScreen({super.key});
@@ -87,7 +88,7 @@ class _OnboardingIntroScreenState extends ConsumerState<OnboardingIntroScreen>
       return;
     }
     if (mounted) {
-      Navigator.of(context).maybePop();
+      await handleAppBack(context, fromPopScope: true);
     }
   }
 
@@ -103,9 +104,9 @@ class _OnboardingIntroScreenState extends ConsumerState<OnboardingIntroScreen>
       data: media.copyWith(textScaler: textScaler),
       child: PopScope(
         canPop: false,
-        onPopInvokedWithResult: (didPop, _) {
+        onPopInvokedWithResult: (didPop, _) async {
           if (didPop) return;
-          _handleBack();
+          await _handleBack();
         },
         child: Scaffold(
           body: SafeArea(
@@ -356,8 +357,8 @@ class _IllustrationContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
-    final primary = AppColors.primary;
-    final secondary = AppColors.secondary;
+    const primary = AppColors.primary;
+    const secondary = AppColors.secondary;
 
     switch (type) {
       case _OnboardingArtType.practice:
@@ -376,11 +377,11 @@ class _IllustrationContent extends StatelessWidget {
               bottom: 56,
               child: Transform.scale(
                 scale: 0.9 + value * 0.1,
-                child: Icon(
-                  Icons.check_circle_rounded,
-                  size: 40,
-                  color: secondary,
-                ),
+              child: const Icon(
+                Icons.check_circle_rounded,
+                size: 40,
+                color: secondary,
+              ),
               ),
             ),
           ],
@@ -397,7 +398,7 @@ class _IllustrationContent extends StatelessWidget {
                 track: scheme.onSurface.withValues(alpha: 0.15),
               ),
             ),
-            Icon(
+            const Icon(
               Icons.timer_rounded,
               size: 72,
               color: primary,
@@ -408,7 +409,7 @@ class _IllustrationContent extends StatelessWidget {
         return Stack(
           alignment: Alignment.center,
           children: [
-            Icon(
+            const Icon(
               Icons.language_rounded,
               size: 110,
               color: primary,
@@ -480,7 +481,7 @@ class _ProgressRingPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final center = Offset(size.width / 2, size.height / 2);
     final radius = size.width / 2;
-    final stroke = 10.0;
+    const stroke = 10.0;
     final trackPaint = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = stroke

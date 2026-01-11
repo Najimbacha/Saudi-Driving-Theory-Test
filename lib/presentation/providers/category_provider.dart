@@ -21,6 +21,12 @@ final categoryQuestionCountsProvider = Provider<Map<String, int>>((ref) {
   final counts = <String, int>{};
 
   for (final question in questions) {
+    if (question.categoryId == 'signs') {
+      final signId = question.signId;
+      if (signId == null || signId.isEmpty) {
+        continue;
+      }
+    }
     counts.update(
       question.categoryId,
       (value) => value + 1,

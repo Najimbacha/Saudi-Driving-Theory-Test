@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 import '../../../core/constants/app_colors.dart';
@@ -18,6 +17,8 @@ import '../../../presentation/providers/quiz_provider.dart';
 import '../../../state/data_state.dart';
 import '../../../state/app_state.dart';
 import '../../../utils/app_feedback.dart';
+import '../../../utils/app_fonts.dart';
+import '../../../utils/navigation_utils.dart';
 import '../../providers/category_provider.dart';
 
 class PracticeFlowScreen extends ConsumerStatefulWidget {
@@ -38,7 +39,6 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
     final quiz = ref.watch(quizProvider);
     final quizController = ref.read(quizProvider.notifier);
     final categories = ref.watch(categoriesProvider);
-    final favorites = ref.watch(appSettingsProvider).favorites;
     final categoryParam =
         GoRouterState.of(context).uri.queryParameters['category'];
 
@@ -198,7 +198,8 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
         final questionText = _questionText(current, locale);
         final options = _options(current, locale);
         final isActiveQuiz = quiz.questions.isNotEmpty && !quiz.isCompleted;
-        final canSkip = selected == null && !quiz.showAnswer;
+        final shell = TabShellScope.maybeOf(context);
+        final isActiveTab = shell == null || shell.value == 2;
         final canPressNext = selected != null;
         final scheme = Theme.of(context).colorScheme;
         final isDark = Theme.of(context).brightness == Brightness.dark;
@@ -212,35 +213,29 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
             : scheme.onSurface.withValues(alpha: 0.03);
         final defaultBorder =
             isDark ? Colors.white10 : scheme.onSurface.withValues(alpha: 0.12);
-        Future<void> handleBack() async {
-          final shell = TabShellScope.maybeOf(context);
+        Future<void> handleBack({required bool fromPopScope}) async {
           if (isActiveQuiz) {
+            final shouldExit = await _confirmExitPractice(
+              context,
+              isDark: isDark,
+              scheme: scheme,
+              primaryTextColor: primaryTextColor,
+              secondaryTextColor: secondaryTextColor,
+            );
+            if (!shouldExit || !context.mounted) return;
             quizController.reset();
+            await handleAppBack(context, fromPopScope: true);
+            return;
           }
-          final didPop = await Navigator.of(context).maybePop();
-          if (!didPop && shell != null) {
-            shell.value = 0;
-          }
+          await handleAppBack(context, fromPopScope: fromPopScope);
         }
 
         return PopScope(
-          canPop: true,
+          canPop: isActiveTab ? !isActiveQuiz : true,
           onPopInvokedWithResult: (didPop, _) async {
-            if (didPop) {
-              if (isActiveQuiz) {
-                quizController.reset();
-              }
-              return;
-            }
-            final shell = TabShellScope.maybeOf(context);
-            if (isActiveQuiz) {
-              quizController.reset();
-            }
-            if (shell != null) {
-              shell.value = 0;
-            } else {
-              if (context.mounted) Navigator.of(context).maybePop();
-            }
+            if (!isActiveTab) return;
+            if (didPop) return;
+            await handleBack(fromPopScope: true);
           },
           child: Scaffold(
             extendBodyBehindAppBar: true,
@@ -249,26 +244,34 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
               elevation: 0,
               iconTheme: IconThemeData(color: primaryTextColor),
               leading: IconButton(
-                onPressed: handleBack,
+                onPressed: () => handleBack(fromPopScope: false),
                 icon: const Icon(Icons.arrow_back),
               ),
               title: Text(
                 'quiz.title'.tr(),
-                style: GoogleFonts.outfit(
+                style: AppFonts.outfit(context,
                     fontWeight: FontWeight.bold, color: primaryTextColor),
               ),
               centerTitle: true,
               actions: [
-                _BookmarkButton(
-                  isBookmarked: favorites.questions.contains(current.id),
-                  count: favorites.questions.length,
-                  onTap: () {
-                    AppFeedback.tap(context);
-                    ref.read(appSettingsProvider.notifier).toggleFavorite(
-                          type: 'questions',
-                          id: current.id,
-                        );
-                  },
+                Center(
+                  child: Container(
+                    margin: const EdgeInsetsDirectional.only(end: 8),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                    decoration: BoxDecoration(
+                      color: scheme.onSurface.withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                    child: Text(
+                      '${'quiz.question'.tr()} ${quiz.currentIndex + 1}/${quiz.questions.length}',
+                      style: AppFonts.outfit(context,
+                        color: scheme.onSurface.withValues(alpha: 0.8),
+                        fontWeight: FontWeight.w600,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -287,26 +290,6 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
                           const EdgeInsetsDirectional.fromSTEB(20, 10, 20, 10),
                       child: Column(
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                '${'quiz.question'.tr()} ${quiz.currentIndex + 1}/${quiz.questions.length}',
-                                style: GoogleFonts.outfit(
-                                  color: secondaryTextColor,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              Text(
-                                current.categoryKey.tr(),
-                                style: GoogleFonts.outfit(
-                                  color: ModernTheme.tertiary,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 12),
                           ClipRRect(
                             borderRadius: BorderRadius.circular(10),
                             child: LinearProgressIndicator(
@@ -338,7 +321,7 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
                             child: Text(
                               questionText,
                               key: ValueKey(current.id),
-                              style: GoogleFonts.outfit(
+                              style: AppFonts.outfit(context,
                                 fontSize: 22, // Larger text
                                 fontWeight: FontWeight.w600,
                                 color: primaryTextColor,
@@ -364,34 +347,6 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
                                 ),
                               ),
                             ),
-
-                          Align(
-                            alignment: AlignmentDirectional.centerEnd,
-                            child: Visibility(
-                              visible: canSkip,
-                              maintainSize: true,
-                              maintainAnimation: true,
-                              maintainState: true,
-                              child: TextButton(
-                                style: TextButton.styleFrom(
-                                  foregroundColor:
-                                      scheme.onSurface.withValues(alpha: 0.7),
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 8, vertical: 4),
-                                ),
-                                onPressed: canSkip
-                                    ? () {
-                                        AppFeedback.tap(context);
-                                        quizController.skipCurrent();
-                                        quizController.next();
-                                      }
-                                    : null,
-                                child: Text('common.skip'.tr(),
-                                    style: GoogleFonts.outfit(fontSize: 13)),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 8),
 
                           // Options
                           AnimatedSwitcher(
@@ -480,7 +435,7 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
                                           Expanded(
                                             child: Text(
                                               optionText,
-                                              style: GoogleFonts.outfit(
+                                              style: AppFonts.outfit(context,
                                                 fontSize: 16,
                                                 color: scheme.onSurface
                                                     .withValues(alpha: 0.9),
@@ -527,7 +482,7 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
                                     isCorrect
                                         ? 'quiz.correct'.tr()
                                         : 'quiz.incorrect'.tr(),
-                                    style: GoogleFonts.outfit(
+                                    style: AppFonts.outfit(context,
                                       fontWeight: FontWeight.bold,
                                       color: isCorrect
                                           ? AppColors.success
@@ -538,7 +493,7 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
                                   const SizedBox(height: 8),
                                   Text(
                                     _explanation(current, locale),
-                                    style: GoogleFonts.outfit(
+                                    style: AppFonts.outfit(context,
                                         color: scheme.onSurface
                                             .withValues(alpha: 0.7)),
                                   ),
@@ -575,66 +530,28 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(16)),
                               ),
-                              onPressed: () {
-                                // Logic remains same
+                              onPressed: () async {
                                 if (quiz.questions.isNotEmpty &&
                                     !quiz.isCompleted) {
-                                  // ... Confirm exit logic
-                                  showDialog<bool>(
-                                    context: context,
-                                    builder: (context) => AlertDialog(
-                                      backgroundColor: isDark
-                                          ? const Color(0xFF1E293B)
-                                          : scheme.surface,
-                                      title: Text('practice.exitTitle'.tr(),
-                                          style: GoogleFonts.outfit(
-                                              fontWeight: FontWeight.bold,
-                                              color: primaryTextColor)),
-                                      content: Text('practice.exitMessage'.tr(),
-                                          style: GoogleFonts.outfit(
-                                              color: secondaryTextColor)),
-                                      actions: [
-                                        TextButton(
-                                            onPressed: () =>
-                                                Navigator.of(context)
-                                                    .pop(false),
-                                            child: Text('common.cancel'.tr(),
-                                                style: GoogleFonts.outfit(
-                                                    color: scheme.onSurface
-                                                        .withValues(
-                                                            alpha: 0.6)))),
-                                        TextButton(
-                                            onPressed: () =>
-                                                Navigator.of(context).pop(true),
-                                            child: Text('practice.exitConfirm'.tr(),
-                                                style: GoogleFonts.outfit(
-                                                    color: ModernTheme
-                                                        .secondary))),
-                                      ],
-                                    ),
-                                  ).then((shouldExit) {
-                                    if (shouldExit == true && context.mounted) {
-                                      quizController.reset();
-                                      final shell =
-                                          TabShellScope.maybeOf(context);
-                                      if (shell != null) {
-                                        shell.value = 0;
-                                      } else {
-                                        Navigator.of(context).pop();
-                                      }
-                                    }
-                                  });
+                                  final shouldExit = await _confirmExitPractice(
+                                    context,
+                                    isDark: isDark,
+                                    scheme: scheme,
+                                    primaryTextColor: primaryTextColor,
+                                    secondaryTextColor: secondaryTextColor,
+                                  );
+                                  if (!shouldExit || !context.mounted) return;
+                                  quizController.reset();
+                                }
+                                final shell = TabShellScope.maybeOf(context);
+                                if (shell != null) {
+                                  shell.value = 0;
                                 } else {
-                                  final shell = TabShellScope.maybeOf(context);
-                                  if (shell != null) {
-                                    shell.value = 0;
-                                  } else {
-                                    Navigator.of(context).pop();
-                                  }
+                                  Navigator.of(context).pop();
                                 }
                               },
                               child: Text('common.cancel'.tr(),
-                                  style: GoogleFonts.outfit()),
+                                  style: AppFonts.outfit(context,)),
                             ),
                           ),
                           const SizedBox(width: 16),
@@ -652,24 +569,23 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
                                     ModernTheme.primary.withValues(alpha: 0.5),
                               ).copyWith(
                                 backgroundColor:
-                                    MaterialStateProperty.resolveWith((states) {
-                                  if (states.contains(MaterialState.disabled))
+                                    WidgetStateProperty.resolveWith((states) {
+                                  if (states.contains(WidgetState.disabled)) {
                                     return ModernTheme.primary
-                                        .withOpacity(0.45);
+                                        .withValues(alpha: 0.45);
+                                  }
                                   return ModernTheme.primary;
                                 }),
                                 foregroundColor:
-                                    MaterialStateProperty.resolveWith((states) {
-                                  if (states.contains(MaterialState.disabled))
+                                    WidgetStateProperty.resolveWith((states) {
+                                  if (states.contains(WidgetState.disabled)) {
                                     return Colors.white60;
+                                  }
                                   return Colors.white;
                                 }),
                               ),
                               onPressed: canPressNext
                                   ? () {
-                                      if (selected == null) {
-                                        return;
-                                      }
                                       AppFeedback.confirm(context);
                                       if (!quiz.showAnswer) {
                                         quizController.revealAnswer();
@@ -682,7 +598,7 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
                                 quiz.currentIndex + 1 == quiz.questions.length
                                     ? 'quiz.submit'.tr()
                                     : 'common.next'.tr(),
-                                style: GoogleFonts.outfit(
+                                style: AppFonts.outfit(context,
                                     fontWeight: FontWeight.bold, fontSize: 16),
                               ),
                             ),
@@ -701,6 +617,52 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
   }
 
   // ... (Helper methods for finish, scoring, filtering - implementation remains same but hidden for brevity if not changed, but I will include them to avoid compilation errors)
+  Future<bool> _confirmExitPractice(
+    BuildContext context, {
+    required bool isDark,
+    required ColorScheme scheme,
+    required Color primaryTextColor,
+    required Color secondaryTextColor,
+  }) async {
+    final result = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor:
+            isDark ? const Color(0xFF1E293B) : scheme.surface,
+        title: Text(
+          'practice.exitTitle'.tr(),
+          style: AppFonts.outfit(context,
+            fontWeight: FontWeight.bold,
+            color: primaryTextColor,
+          ),
+        ),
+        content: Text(
+          'practice.exitMessage'.tr(),
+          style: AppFonts.outfit(context,color: secondaryTextColor),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: Text(
+              'common.cancel'.tr(),
+              style: AppFonts.outfit(context,
+                color: scheme.onSurface.withValues(alpha: 0.6),
+              ),
+            ),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: Text(
+              'practice.exitConfirm'.tr(),
+              style: AppFonts.outfit(context,color: ModernTheme.secondary),
+            ),
+          ),
+        ],
+      ),
+    );
+    return result ?? false;
+  }
+
   void _finishPractice(BuildContext context, WidgetRef ref, QuizState quiz) {
     // ... Copy exact logic from original file
     final total = quiz.questions.length;
@@ -748,6 +710,12 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
   static List<Question> _filterByCategory(
       List<Question> questions, String categoryId) {
     if (categoryId == 'all') return questions;
+    if (categoryId == 'signs') {
+      return questions
+          .where((q) =>
+              q.categoryId == categoryId && _isSignQuestion(q))
+          .toList();
+    }
     return questions.where((q) => q.categoryId == categoryId).toList();
   }
 }
@@ -789,8 +757,9 @@ List<String> _options(Question question, String locale) {
       break;
   }
   if (localeOptions != null && localeOptions.isNotEmpty) return localeOptions;
-  if (question.options != null && question.options!.isNotEmpty)
+  if (question.options != null && question.options!.isNotEmpty) {
     return question.options!;
+  }
   return question.optionsKeys.map((key) => key.tr()).toList();
 }
 
@@ -871,6 +840,8 @@ class _PracticeSelectorState extends State<_PracticeSelector> {
 
   @override
   Widget build(BuildContext context) {
+    final shell = TabShellScope.maybeOf(context);
+    final isActiveTab = shell == null || shell.value == 2;
     final scheme = Theme.of(context).colorScheme;
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final counts = _buildCounts(widget.questions, widget.categories);
@@ -886,34 +857,23 @@ class _PracticeSelectorState extends State<_PracticeSelector> {
 
     return PopScope(
       canPop: true,
-      onPopInvokedWithResult: (didPop, _) {
+      onPopInvokedWithResult: (didPop, _) async {
+        if (!isActiveTab) return;
         if (didPop) return;
-        final shell = TabShellScope.maybeOf(context);
-        if (shell != null) {
-          shell.value = 0;
-          return;
-        }
-        Navigator.of(context).maybePop();
+        await handleAppBack(context, fromPopScope: true);
       },
       child: Scaffold(
         extendBodyBehindAppBar: true,
         appBar: AppBar(
           title: Text('quiz.selectCategory'.tr(),
-              style: GoogleFonts.outfit(
+              style: AppFonts.outfit(context,
                   fontWeight: FontWeight.bold, color: scheme.onSurface)),
           backgroundColor: Colors.transparent,
           elevation: 0,
           centerTitle: true,
           iconTheme: IconThemeData(color: scheme.onSurface),
           leading: IconButton(
-            onPressed: () {
-              final shell = TabShellScope.maybeOf(context);
-              if (shell != null) {
-                shell.value = 0;
-                return;
-              }
-              Navigator.of(context).maybePop();
-            },
+            onPressed: () => handleAppBack(context),
             icon: const Icon(Icons.arrow_back),
           ),
         ),
@@ -944,7 +904,7 @@ class _PracticeSelectorState extends State<_PracticeSelector> {
                       children: [
                         Text(
                           selectedLabel,
-                          style: GoogleFonts.outfit(
+                          style: AppFonts.outfit(context,
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
                             color: scheme.onSurface,
@@ -1043,7 +1003,7 @@ class _PracticeSelectorState extends State<_PracticeSelector> {
                           alignment: Alignment.center,
                           child: Text(
                             'quiz.start'.tr(),
-                            style: GoogleFonts.outfit(
+                            style: AppFonts.outfit(context,
                                 fontSize: 18, fontWeight: FontWeight.bold),
                           ),
                         ),
@@ -1136,7 +1096,7 @@ class _CategoryGlassTile extends StatelessWidget {
                     const SizedBox(height: 4),
                     Text(
                       label,
-                      style: GoogleFonts.outfit(
+                      style: AppFonts.outfit(context,
                         color: scheme.onSurface,
                         fontWeight:
                             selected ? FontWeight.w600 : FontWeight.w500,
@@ -1151,7 +1111,7 @@ class _CategoryGlassTile extends StatelessWidget {
                 ),
               ),
               if (selected)
-                Positioned(
+                const Positioned(
                   top: 6,
                   right: 6,
                   child: Icon(
@@ -1191,37 +1151,9 @@ class _StatPill extends StatelessWidget {
           Icon(icon, color: scheme.onSurface.withValues(alpha: 0.7), size: 14),
           const SizedBox(width: 4),
           Text(label,
-              style: GoogleFonts.outfit(color: scheme.onSurface, fontSize: 12)),
+              style: AppFonts.outfit(context,color: scheme.onSurface, fontSize: 12)),
         ],
       ),
-    );
-  }
-}
-
-class _BookmarkButton extends StatelessWidget {
-  const _BookmarkButton({
-    required this.isBookmarked,
-    required this.count,
-    required this.onTap,
-  });
-
-  final bool isBookmarked;
-  final int count;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-    return IconButton(
-      onPressed: onTap,
-      style: IconButton.styleFrom(
-        foregroundColor: isBookmarked
-            ? ModernTheme.secondary
-            : scheme.onSurface.withValues(alpha: 0.7),
-      ),
-      icon: Icon(isBookmarked
-          ? Icons.bookmark_rounded
-          : Icons.bookmark_border_rounded),
     );
   }
 }
@@ -1243,7 +1175,7 @@ class _OptionBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color bg = isDark ? Colors.white10 : Colors.black.withOpacity(0.06);
+    Color bg = isDark ? Colors.white10 : Colors.black.withValues(alpha: 0.06);
     Color border = isDark ? Colors.white24 : Colors.black12;
 
     if (active) {
@@ -1272,7 +1204,7 @@ class _OptionBadge extends StatelessWidget {
       ),
       child: Text(
         label,
-        style: GoogleFonts.outfit(
+        style: AppFonts.outfit(context,
           color: text,
           fontWeight: FontWeight.bold,
         ),
@@ -1290,7 +1222,16 @@ Map<String, int> _buildCounts(
     counts[category.id] = 0;
   }
   for (final question in questions) {
+    if (question.categoryId == 'signs' && !_isSignQuestion(question)) {
+      continue;
+    }
     counts[question.categoryId] = (counts[question.categoryId] ?? 0) + 1;
   }
   return counts;
 }
+
+bool _isSignQuestion(Question question) {
+  final signId = question.signId;
+  return signId != null && signId.isNotEmpty;
+}
+

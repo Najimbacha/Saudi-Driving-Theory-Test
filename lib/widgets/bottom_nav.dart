@@ -1,10 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 import '../core/theme/modern_theme.dart';
 import '../utils/app_feedback.dart';
+import '../utils/app_fonts.dart';
 import 'glass_container.dart';
 
 class BottomNav extends StatelessWidget {
@@ -43,16 +43,9 @@ class BottomNav extends StatelessWidget {
         margin: EdgeInsetsDirectional.zero,
         padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
         borderRadius: BorderRadius.circular(28),
-        blur: 20,
-        color: isDark
-            ? const Color(0xFF0F172A).withValues(alpha: 0.8)
-            : scheme.surface.withValues(alpha: 0.95),
-        border: Border.all(
-          color: isDark
-              ? Colors.white.withValues(alpha: 0.1)
-              : scheme.onSurface.withValues(alpha: 0.08),
-          width: 1,
-        ),
+        blur: 0,
+        color: Colors.transparent,
+        border: Border.all(color: Colors.transparent, width: 1),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: List.generate(items.length, (index) {
@@ -104,7 +97,8 @@ class BottomNav extends StatelessWidget {
                           const SizedBox(height: 4),
                           AnimatedDefaultTextStyle(
                             duration: const Duration(milliseconds: 200),
-                            style: GoogleFonts.outfit(
+                            style: AppFonts.outfit(
+                              context,
                               color: selected
                                   ? ModernTheme.primary
                                   : scheme.onSurface

@@ -1468,6 +1468,21 @@
     "copy": "Copy",
     "copied": "Copied"
   },
+  "about": {
+    "title": "About Us",
+    "description1": "Saudi Driving Theory Test is a focused learning app designed to help users understand Saudi traffic rules, road signs, and exam patterns with clarity and efficiency.",
+    "description2": "The app is built to support learners preparing for the Saudi driving theory test through structured practice, clear explanations, and exam-style questions.",
+    "goal": "The goal is simple: help users pass the theory test confidently by learning the rules correctly, not by memorization alone.",
+    "support": "The app supports multiple languages to serve a wide range of users and is designed to work smoothly with a clean, distraction-free experience.",
+    "developerTitle": "Developer Information",
+    "developerLabel": "Developer",
+    "emailLabel": "Email",
+    "contactLabel": "Contact",
+    "socialTitle": "Social Links",
+    "instagramLabel": "Instagram",
+    "linkedinLabel": "LinkedIn",
+    "xLabel": "X (Twitter)"
+  },
   "common": {
     "loading": "Loading...",
     "error": "Something went wrong",

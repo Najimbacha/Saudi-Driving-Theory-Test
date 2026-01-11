@@ -2,7 +2,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 import '../../../core/constants/app_colors.dart';
@@ -10,6 +9,7 @@ import '../../../core/theme/modern_theme.dart';
 import '../../../widgets/glass_container.dart';
 import '../../../state/learning_state.dart';
 import '../../../utils/app_feedback.dart';
+import '../../../utils/app_fonts.dart';
 import '../../providers/category_provider.dart';
 
 class CategoriesScreen extends ConsumerStatefulWidget {
@@ -20,48 +20,24 @@ class CategoriesScreen extends ConsumerStatefulWidget {
 }
 
 class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
-  final TextEditingController _controller = TextEditingController();
-  int _selectedFilter = 0;
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     final categories = ref.watch(categoriesProvider);
     final learning = ref.watch(learningProvider);
-    final query = _controller.text.trim().toLowerCase();
+    final scheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     // Optimize: Read pre-calculated counts instead of looping in build
     final questionCounts = ref.watch(categoryQuestionCountsProvider);
     final hasQuestionData = questionCounts.isNotEmpty;
 
-    final visible = categories.where((cat) {
-      final title = cat.titleKey.tr().toLowerCase();
-      if (query.isNotEmpty && !title.contains(query)) return false;
-      if (!hasQuestionData) return true;
-      if (_selectedFilter == 0) return true;
-
-      final stat = learning.categoryStats[cat.id];
-      final total = questionCounts[cat.id] ?? 0;
-      final answered = stat?.total ?? 0;
-
-      if (_selectedFilter == 1)
-        return answered > 0 && answered < total; // In Progress
-      if (_selectedFilter == 2)
-        return answered == total && total > 0; // Completed
-
-      return (questionCounts[cat.id] ?? 0) > 0;
-    }).toList();
+    final visible = categories;
 
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         title: Text('categories.title'.tr(),
-            style: GoogleFonts.outfit(
+            style: AppFonts.outfit(context,
                 fontWeight: FontWeight.bold,
                 color: Theme.of(context).colorScheme.onSurface)),
         backgroundColor: Colors.transparent,
@@ -79,69 +55,28 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
         child: SafeArea(
           child: Column(
             children: [
-              // Search Bar
-              Padding(
-                padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-                child: GlassContainer(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: TextField(
-                    controller: _controller,
-                    style: GoogleFonts.outfit(
-                        color: Theme.of(context).colorScheme.onSurface),
-                    decoration: InputDecoration(
-                      hintText: 'categories.search'.tr(),
-                      hintStyle: GoogleFonts.outfit(
-                          color: Theme.of(context)
-                              .colorScheme
-                              .onSurface
-                              .withValues(alpha: 0.5)),
-                      prefixIcon: Icon(PhosphorIconsRegular.magnifyingGlass,
-                          color: Theme.of(context)
-                              .colorScheme
-                              .onSurface
-                              .withValues(alpha: 0.5)),
-                      border: InputBorder.none,
-                    ),
-                    onChanged: (_) => setState(() {}),
-                  ),
-                ),
-              ),
-
-              // Filters
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                child: Row(
-                  children: [
-                    _GlassFilterChip(
-                      label: 'categories.filterAll'.tr(),
-                      selected: _selectedFilter == 0,
-                      onTap: () => setState(() => _selectedFilter = 0),
-                    ),
-                    const SizedBox(width: 12),
-                    _GlassFilterChip(
-                      label: 'categories.filterInProgress'.tr(),
-                      selected: _selectedFilter == 1,
-                      onTap: () => setState(() => _selectedFilter = 1),
-                    ),
-                    const SizedBox(width: 12),
-                    _GlassFilterChip(
-                      label: 'categories.filterCompleted'.tr(),
-                      selected: _selectedFilter == 2,
-                      onTap: () => setState(() => _selectedFilter = 2),
-                    ),
-                  ],
-                ),
-              ),
-
               // List
               Expanded(
                 child: ListView.builder(
-                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 100),
-                  itemCount: visible.length,
+                  padding: const EdgeInsets.fromLTRB(20, 8, 20, 100),
+                  cacheExtent: 800,
+                  itemCount: visible.length + 1,
                   itemBuilder: (context, index) {
-                    final category = visible[index];
+                    final trafficIndex = visible.isEmpty ? 0 : 1;
+                    if (index == trafficIndex) {
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 16),
+                        child: _TrafficViolationCard(
+                          title: 'home.violationPoints'.tr(),
+                          subtitle: 'home.violationPointsDesc'.tr(),
+                          onTap: () => context.push('/violation-points'),
+                        ),
+                      );
+                    }
+
+                    final categoryIndex =
+                        index < trafficIndex ? index : index - 1;
+                    final category = visible[categoryIndex];
                     final stat = learning.categoryStats[category.id];
                     final accuracy = stat?.accuracy;
                     final total = hasQuestionData
@@ -227,53 +162,6 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
   }
 }
 
-class _GlassFilterChip extends StatelessWidget {
-  const _GlassFilterChip({
-    required this.label,
-    required this.selected,
-    required this.onTap,
-  });
-
-  final String label;
-  final bool selected;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        decoration: BoxDecoration(
-          color: selected
-              ? ModernTheme.primary
-              : Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.05),
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(
-            color: selected
-                ? ModernTheme.primary
-                : Theme.of(context)
-                    .colorScheme
-                    .onSurface
-                    .withValues(alpha: 0.1),
-          ),
-        ),
-        child: Text(
-          label,
-          style: GoogleFonts.outfit(
-            color: selected
-                ? Colors.white
-                : Theme.of(context).colorScheme.onSurface,
-            fontWeight: selected ? FontWeight.bold : FontWeight.w500,
-            fontSize: 13,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
 class _CategoryGlassCard extends StatelessWidget {
   const _CategoryGlassCard({
     required this.title,
@@ -300,101 +188,165 @@ class _CategoryGlassCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: GlassContainer(
-        padding: const EdgeInsets.all(20),
+        padding: EdgeInsetsDirectional.zero,
+        borderRadius: BorderRadius.circular(22),
+        blur: isDark ? 10 : 6,
         color: isDark
-            ? Colors.white.withValues(alpha: 0.06)
-            : scheme.onSurface.withValues(alpha: 0.04),
+            ? Colors.white.withValues(alpha: 0.04)
+            : Colors.white.withValues(alpha: 0.9),
         border: Border.all(
-            color: scheme.onSurface.withValues(alpha: isDark ? 0.1 : 0.08)),
-        child: Row(
+          color: scheme.onSurface.withValues(alpha: isDark ? 0.12 : 0.08),
+        ),
+        child: Stack(
           children: [
-            Container(
-              width: 56,
-              height: 56,
-              decoration: BoxDecoration(
-                gradient: gradient,
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  BoxShadow(
-                    color: gradient.colors.first.withValues(alpha: 0.4),
-                    blurRadius: 12,
-                    offset: const Offset(0, 4),
+            Positioned(
+              left: 0,
+              top: 0,
+              bottom: 0,
+              child: Container(
+                width: 6,
+                decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.horizontal(
+                    left: Radius.circular(22),
                   ),
-                ],
+                  gradient: LinearGradient(
+                    colors: [
+                      gradient.colors.first.withValues(alpha: 0.9),
+                      gradient.colors.last.withValues(alpha: 0.4),
+                    ],
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                  ),
+                ),
               ),
-              child: Icon(icon, color: Colors.white, size: 28),
             ),
-            const SizedBox(width: 20),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+            Positioned(
+              right: -28,
+              top: -34,
+              child: Container(
+                width: 140,
+                height: 140,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  gradient: RadialGradient(
+                    colors: [
+                      gradient.colors.first
+                          .withValues(alpha: isDark ? 0.2 : 0.12),
+                      Colors.transparent
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsetsDirectional.fromSTEB(16, 14, 16, 14),
+              child: Row(
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: Text(
-                          title,
-                          style: GoogleFonts.outfit(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: scheme.onSurface,
+                  Container(
+                    width: 52,
+                    height: 52,
+                    decoration: BoxDecoration(
+                      gradient: gradient,
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Icon(icon, color: Colors.white, size: 26),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                title,
+                                style: AppFonts.outfit(
+                                  context,
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.w700,
+                                  color: scheme.onSurface,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                            if (accuracy != null)
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8, vertical: 2),
+                                decoration: BoxDecoration(
+                                  color: _accuracyColor(accuracy!)
+                                      .withValues(alpha: 0.18),
+                                  borderRadius: BorderRadius.circular(10),
+                                  border: Border.all(
+                                    color: _accuracyColor(accuracy!)
+                                        .withValues(alpha: 0.45),
+                                  ),
+                                ),
+                                child: Text(
+                                  '$accuracy%',
+                                  style: AppFonts.outfit(
+                                    context,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 11,
+                                    color: _accuracyColor(accuracy!),
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ),
+                        const SizedBox(height: 6),
+                        Text(
+                          subtitle,
+                          style: AppFonts.outfit(
+                            context,
+                            color: scheme.onSurface.withValues(alpha: 0.7),
+                            fontSize: 13,
                           ),
-                          maxLines: 1,
+                          maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
-                      ),
-                      if (accuracy != null)
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 8, vertical: 2),
-                          decoration: BoxDecoration(
-                            color: _accuracyColor(accuracy!)
-                                .withValues(alpha: 0.2),
-                            borderRadius: BorderRadius.circular(8),
-                            border: Border.all(
-                                color: _accuracyColor(accuracy!)
-                                    .withValues(alpha: 0.5)),
-                          ),
-                          child: Text(
-                            '$accuracy%',
-                            style: GoogleFonts.outfit(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 12,
-                              color: _accuracyColor(accuracy!),
+                        const SizedBox(height: 8),
+                        Row(
+                          children: [
+                            Icon(
+                              PhosphorIconsRegular.question,
+                              size: 14,
+                              color: scheme.onSurface.withValues(alpha: 0.6),
                             ),
-                          ),
+                            const SizedBox(width: 4),
+                            Text(
+                              'categories.totalQuestions'.tr(
+                                namedArgs: {'value': total.toString()},
+                              ),
+                              style: AppFonts.outfit(
+                                context,
+                                color:
+                                    scheme.onSurface.withValues(alpha: 0.6),
+                                fontSize: 12,
+                              ),
+                            ),
+                            const Spacer(),
+                            Container(
+                              width: 28,
+                              height: 28,
+                              decoration: BoxDecoration(
+                                color:
+                                    scheme.onSurface.withValues(alpha: 0.08),
+                                shape: BoxShape.circle,
+                              ),
+                              child: Icon(
+                                PhosphorIconsRegular.caretRight,
+                                size: 14,
+                                color:
+                                    scheme.onSurface.withValues(alpha: 0.6),
+                              ),
+                            ),
+                          ],
                         ),
-                    ],
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    subtitle,
-                    style: GoogleFonts.outfit(
-                      color: scheme.onSurface.withValues(alpha: 0.7),
-                      fontSize: 13,
+                      ],
                     ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 8),
-                  Row(
-                    children: [
-                      Icon(PhosphorIconsRegular.question,
-                          size: 14,
-                          color: scheme.onSurface.withValues(alpha: 0.6)),
-                      const SizedBox(width: 4),
-                      Text(
-                        'categories.totalQuestions'
-                            .tr(namedArgs: {'value': total.toString()}),
-                        style: GoogleFonts.outfit(
-                            color: scheme.onSurface.withValues(alpha: 0.6),
-                            fontSize: 12),
-                      ),
-                      const Spacer(),
-                      const Icon(PhosphorIconsRegular.caretRight,
-                          size: 16, color: ModernTheme.secondary),
-                    ],
                   ),
                 ],
               ),
@@ -409,5 +361,147 @@ class _CategoryGlassCard extends StatelessWidget {
     if (accuracy >= 80) return AppColors.success;
     if (accuracy >= 60) return AppColors.warning;
     return AppColors.error;
+  }
+}
+
+class _TrafficViolationCard extends StatelessWidget {
+  const _TrafficViolationCard({
+    required this.title,
+    required this.subtitle,
+    required this.onTap,
+  });
+
+  final String title;
+  final String subtitle;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final gradient = ModernTheme.accentGradient;
+    return GestureDetector(
+      onTap: () {
+        AppFeedback.tap(context);
+        onTap();
+      },
+      child: GlassContainer(
+        padding: EdgeInsetsDirectional.zero,
+        borderRadius: BorderRadius.circular(22),
+        blur: isDark ? 10 : 6,
+        color: isDark
+            ? Colors.white.withValues(alpha: 0.04)
+            : Colors.white.withValues(alpha: 0.9),
+        border: Border.all(
+          color: scheme.onSurface.withValues(alpha: isDark ? 0.12 : 0.08),
+        ),
+        child: Stack(
+          children: [
+            Positioned(
+              left: 0,
+              top: 0,
+              bottom: 0,
+              child: Container(
+                width: 6,
+                decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.horizontal(
+                    left: Radius.circular(22),
+                  ),
+                  gradient: LinearGradient(
+                    colors: [
+                      gradient.colors.first.withValues(alpha: 0.9),
+                      gradient.colors.last.withValues(alpha: 0.4),
+                    ],
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                  ),
+                ),
+              ),
+            ),
+            Positioned(
+              right: -28,
+              top: -34,
+              child: Container(
+                width: 140,
+                height: 140,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  gradient: RadialGradient(
+                    colors: [
+                      gradient.colors.first
+                          .withValues(alpha: isDark ? 0.2 : 0.12),
+                      Colors.transparent
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsetsDirectional.fromSTEB(16, 14, 16, 14),
+              child: Row(
+                children: [
+                  Container(
+                    width: 52,
+                    height: 52,
+                    decoration: BoxDecoration(
+                      gradient: gradient,
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: const Icon(
+                      PhosphorIconsRegular.warningDiamond,
+                      color: Colors.white,
+                      size: 26,
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          title,
+                          style: AppFonts.outfit(
+                            context,
+                            fontSize: 17,
+                            fontWeight: FontWeight.w700,
+                            color: scheme.onSurface,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        const SizedBox(height: 6),
+                        Text(
+                          subtitle,
+                          style: AppFonts.outfit(
+                            context,
+                            color: scheme.onSurface.withValues(alpha: 0.7),
+                            fontSize: 13,
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    width: 28,
+                    height: 28,
+                    decoration: BoxDecoration(
+                      color: scheme.onSurface.withValues(alpha: 0.08),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      PhosphorIconsRegular.caretRight,
+                      size: 14,
+                      color: scheme.onSurface.withValues(alpha: 0.6),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

@@ -8,6 +8,7 @@ import '../presentation/screens/quiz/practice_screen.dart';
 import '../screens/settings_screen.dart';
 import '../screens/signs_screen.dart';
 import '../utils/back_guard.dart';
+import '../utils/navigation_utils.dart';
 import 'bottom_nav.dart';
 
 class TabShellScope extends InheritedNotifier<ValueNotifier<int>> {
@@ -54,6 +55,7 @@ class _HomeShellState extends ConsumerState<HomeShell> {
     final currentIndex = _index.value;
     final currentNav = _navKeys[currentIndex].currentState;
     final exam = ref.read(examProvider);
+    final examController = ref.read(examProvider.notifier);
     final examInProgress = exam.questions.isNotEmpty &&
         !exam.isCompleted &&
         (exam.answers.isNotEmpty ||
@@ -62,44 +64,49 @@ class _HomeShellState extends ConsumerState<HomeShell> {
 
     if (currentIndex == 3 && examInProgress) {
       final shouldExit = await confirmExitExam(context);
+      if (!mounted) return;
       if (!shouldExit) return;
-      if (currentNav != null && currentNav.canPop()) {
-        currentNav.pop();
-        return;
-      }
-      _index.value = 0;
+      examController.reset();
+      if (!mounted) return;
+      await handleAppBack(context, fromPopScope: true);
       return;
     }
-
-    if (currentNav != null && currentNav.canPop()) {
-      currentNav.pop();
-      return;
-    }
-
-    if (currentIndex != 0) {
-      _index.value = 0;
-      return;
-    }
-
-    if (mounted) {
-      Navigator.of(context).maybePop();
-    }
+    if (!mounted) return;
+    await handleAppBack(
+      context,
+      nestedNavigator: currentNav,
+      fromPopScope: true,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    final exam = ref.watch(examProvider);
+    final examInProgress = exam.questions.isNotEmpty &&
+        !exam.isCompleted &&
+        (exam.answers.isNotEmpty ||
+            exam.currentIndex > 0 ||
+            (exam.originalDurationSeconds > 0 && exam.timeLeftSeconds > 0));
+
     return TabShellScope(
       notifier: _index,
-      child: PopScope(
-        canPop: false,
-        onPopInvokedWithResult: (didPop, _) {
-          if (didPop) return;
-          _handleBack();
-        },
-        child: ValueListenableBuilder<int>(
-          valueListenable: _index,
-          builder: (context, index, _) {
-            return Scaffold(
+      child: ValueListenableBuilder<int>(
+        valueListenable: _index,
+        builder: (context, index, _) {
+          final currentNav = _navKeys[index].currentState;
+          final canPopNested = currentNav?.canPop() ?? false;
+          final canPopRoot =
+              Navigator.of(context, rootNavigator: true).canPop();
+          final canPopRoute =
+              canPopRoot && !examInProgress && !canPopNested;
+
+          return PopScope(
+            canPop: canPopRoute,
+            onPopInvokedWithResult: (didPop, _) async {
+              if (didPop) return;
+              await _handleBack();
+            },
+            child: Scaffold(
               extendBody: true,
               body: IndexedStack(
                 index: index,
@@ -132,9 +139,9 @@ class _HomeShellState extends ConsumerState<HomeShell> {
                       currentIndex: _navIndexForShell(index),
                       onTap: (next) => _index.value = _shellIndexForNav(next),
                     ),
-            );
-          },
-        ),
+            ),
+          );
+        },
       ),
     );
   }

@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../state/app_state.dart';
+import '../../../utils/navigation_utils.dart';
 
 class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
@@ -95,6 +96,10 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
 
     return PopScope(
       canPop: false,
+      onPopInvokedWithResult: (didPop, _) async {
+        if (didPop) return;
+        await handleAppBack(context, fromPopScope: true);
+      },
       child: Scaffold(
         body: Semantics(
           label: appName,

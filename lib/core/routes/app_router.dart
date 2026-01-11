@@ -7,6 +7,7 @@ import '../../presentation/screens/onboarding/onboarding_screen.dart';
 import '../../presentation/screens/splash/splash_screen.dart';
 import '../../data/models/exam_result_model.dart';
 import '../../screens/achievements_screen.dart';
+import '../../screens/about_screen.dart';
 import '../../screens/credits_screen.dart';
 import '../../screens/favorites_screen.dart';
 import '../../screens/flashcards_screen.dart';
@@ -32,7 +33,7 @@ CustomTransitionPage<void> _fadeSlidePage({
     key: state.pageKey,
     child: child,
     transitionDuration: duration,
-    reverseTransitionDuration: Duration(milliseconds: 220),
+    reverseTransitionDuration: const Duration(milliseconds: 220),
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
       final curve = CurvedAnimation(
         parent: animation,
@@ -160,6 +161,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: '/credits',
         pageBuilder: (context, state) =>
             _fadeSlidePage(state: state, child: const CreditsScreen()),
+      ),
+      GoRoute(
+        path: '/about',
+        pageBuilder: (context, state) =>
+            _fadeSlidePage(state: state, child: const AboutScreen()),
       ),
       GoRoute(
         path: '/support-development',

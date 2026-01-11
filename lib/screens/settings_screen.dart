@@ -2,13 +2,13 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 import '../state/app_state.dart';
 import '../widgets/banner_ad_widget.dart';
 import '../core/theme/modern_theme.dart';
 import '../utils/app_feedback.dart';
+import '../utils/app_fonts.dart';
 import '../widgets/glass_container.dart';
 
 class SettingsScreen extends ConsumerWidget {
@@ -29,29 +29,29 @@ class SettingsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final settings = ref.watch(appSettingsProvider);
     final notifier = ref.read(appSettingsProvider.notifier);
+    final scheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         title: Text('settings.title'.tr(),
-            style: GoogleFonts.outfit(
-                fontWeight: FontWeight.bold, color: Colors.white)),
+            style: AppFonts.outfit(context,
+                fontWeight: FontWeight.bold, color: scheme.onSurface)),
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
-        iconTheme: const IconThemeData(color: Colors.white),
+        iconTheme: IconThemeData(color: scheme.onSurface),
       ),
       body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Color(0xFF0F172A), Color(0xFF1E293B)],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
+        decoration: BoxDecoration(
+          gradient:
+              isDark ? ModernTheme.darkGradient : ModernTheme.lightGradient,
         ),
         child: SafeArea(
           child: ListView(
-            padding: const EdgeInsets.fromLTRB(20, 20, 20, 100),
+            padding: const EdgeInsets.fromLTRB(20, 16, 20, 100),
+            cacheExtent: 600,
             children: [
               _SectionHeader(title: 'settings.sections.general'.tr()),
               _SettingsGlassTile(
@@ -89,16 +89,26 @@ class SettingsScreen extends ConsumerWidget {
                 },
               ),
               const SizedBox(height: 24),
-              const Center(child: BannerAdWidget(forceVisible: true)),
-              const SizedBox(height: 12),
+              GlassContainer(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                blur: isDark ? 10 : 6,
+                color: isDark
+                    ? Colors.white.withValues(alpha: 0.04)
+                    : Colors.white.withValues(alpha: 0.9),
+                border: Border.all(
+                  color: scheme.onSurface.withValues(alpha: 0.08),
+                ),
+                child: const Center(child: BannerAdWidget(forceVisible: true)),
+              ),
+              const SizedBox(height: 14),
               Center(
                 child: TextButton(
                   onPressed: () => context.push('/support-development'),
                   style: TextButton.styleFrom(
-                    foregroundColor: Colors.white38,
+                    foregroundColor: scheme.onSurface.withValues(alpha: 0.45),
                     padding:
                         const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    textStyle: GoogleFonts.outfit(
+                    textStyle: AppFonts.outfit(context,
                       fontSize: 12,
                       fontWeight: FontWeight.w500,
                     ),
@@ -108,12 +118,27 @@ class SettingsScreen extends ConsumerWidget {
               ),
               Center(
                 child: TextButton(
-                  onPressed: () => context.push('/credits'),
+                  onPressed: () => context.push('/about'),
                   style: TextButton.styleFrom(
-                    foregroundColor: Colors.white38,
+                    foregroundColor: scheme.onSurface.withValues(alpha: 0.45),
                     padding:
                         const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    textStyle: GoogleFonts.outfit(
+                    textStyle: AppFonts.outfit(context,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  child: Text('about.title'.tr()),
+                ),
+              ),
+              Center(
+                child: TextButton(
+                  onPressed: () => context.push('/credits'),
+                  style: TextButton.styleFrom(
+                    foregroundColor: scheme.onSurface.withValues(alpha: 0.45),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    textStyle: AppFonts.outfit(context,
                       fontSize: 12,
                       fontWeight: FontWeight.w500,
                     ),
@@ -121,12 +146,14 @@ class SettingsScreen extends ConsumerWidget {
                   child: Text('settings.links.creditsTitle'.tr()),
                 ),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 10),
               Center(
                 child: Text(
                   'settings.versionLabel'.tr(namedArgs: {'version': '1.0.0'}),
-                  style:
-                      GoogleFonts.outfit(color: Colors.white24, fontSize: 12),
+                  style: AppFonts.outfit(context,
+                    color: scheme.onSurface.withValues(alpha: 0.25),
+                    fontSize: 12,
+                  ),
                 ),
               ),
             ],
@@ -143,12 +170,13 @@ class _SectionHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     return Padding(
       padding: const EdgeInsets.only(bottom: 12, left: 4),
       child: Text(
         title.toUpperCase(),
-        style: GoogleFonts.outfit(
-          color: Colors.white54,
+        style: AppFonts.outfit(context,
+          color: scheme.onSurface.withValues(alpha: 0.5),
           fontSize: 12,
           fontWeight: FontWeight.bold,
           letterSpacing: 1.2,
@@ -175,6 +203,8 @@ class _SettingsGlassTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return GestureDetector(
       onTap: () {
         AppFeedback.tap(context);
@@ -182,12 +212,19 @@ class _SettingsGlassTile extends StatelessWidget {
       },
       child: GlassContainer(
         padding: const EdgeInsets.all(16),
+        blur: isDark ? 10 : 6,
+        color: isDark
+            ? Colors.white.withValues(alpha: 0.05)
+            : Colors.white.withValues(alpha: 0.92),
+        border: Border.all(
+          color: scheme.onSurface.withValues(alpha: 0.08),
+        ),
         child: Row(
           children: [
             Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color: iconColor.withValues(alpha: 0.1),
+                color: iconColor.withValues(alpha: isDark ? 0.18 : 0.12),
                 shape: BoxShape.circle,
               ),
               child: Icon(icon, color: iconColor, size: 24),
@@ -199,25 +236,28 @@ class _SettingsGlassTile extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: GoogleFonts.outfit(
-                      color: Colors.white,
+                    style: AppFonts.outfit(context,
+                      color: scheme.onSurface,
                       fontSize: 16,
-                      fontWeight: FontWeight.w500,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                   const SizedBox(height: 4),
                   Text(
                     subtitle,
-                    style: GoogleFonts.outfit(
-                      color: Colors.white54,
+                    style: AppFonts.outfit(context,
+                      color: scheme.onSurface.withValues(alpha: 0.6),
                       fontSize: 13,
                     ),
                   ),
                 ],
               ),
             ),
-            Icon(PhosphorIconsRegular.caretRight,
-                color: Colors.white24, size: 16),
+            Icon(
+              PhosphorIconsRegular.caretRight,
+              color: scheme.onSurface.withValues(alpha: 0.35),
+              size: 16,
+            ),
           ],
         ),
       ),
@@ -250,7 +290,7 @@ class _LanguageGlassSheet extends StatelessWidget {
                       borderRadius: BorderRadius.circular(2))),
               const SizedBox(height: 24),
               Text('settings.language'.tr(),
-                  style: GoogleFonts.outfit(
+                  style: AppFonts.outfit(context,
                       color: Colors.white,
                       fontSize: 20,
                       fontWeight: FontWeight.bold)),
@@ -276,7 +316,7 @@ class _LanguageGlassSheet extends StatelessWidget {
                           children: [
                             Text(
                               'settings.languages.$code'.tr(),
-                              style: GoogleFonts.outfit(
+                              style: AppFonts.outfit(context,
                                   color: Colors.white,
                                   fontWeight: current == code
                                       ? FontWeight.bold
@@ -284,7 +324,7 @@ class _LanguageGlassSheet extends StatelessWidget {
                             ),
                             const Spacer(),
                             if (current == code)
-                              Icon(PhosphorIconsRegular.checkCircle,
+                              const Icon(PhosphorIconsRegular.checkCircle,
                                   color: ModernTheme.secondary),
                           ],
                         ),
@@ -324,7 +364,7 @@ class _ThemeGlassSheet extends StatelessWidget {
                       borderRadius: BorderRadius.circular(2))),
               const SizedBox(height: 24),
               Text('settings.theme'.tr(),
-                  style: GoogleFonts.outfit(
+                  style: AppFonts.outfit(context,
                       color: Colors.white,
                       fontSize: 20,
                       fontWeight: FontWeight.bold)),
@@ -349,7 +389,7 @@ class _ThemeGlassSheet extends StatelessWidget {
                           children: [
                             Text(
                               _getThemeName(context, mode),
-                              style: GoogleFonts.outfit(
+                              style: AppFonts.outfit(context,
                                   color: Colors.white,
                                   fontWeight: current == mode
                                       ? FontWeight.bold
@@ -357,7 +397,7 @@ class _ThemeGlassSheet extends StatelessWidget {
                             ),
                             const Spacer(),
                             if (current == mode)
-                              Icon(PhosphorIconsRegular.checkCircle,
+                              const Icon(PhosphorIconsRegular.checkCircle,
                                   color: ModernTheme.primary),
                           ],
                         ),
@@ -382,3 +422,5 @@ class _ThemeGlassSheet extends StatelessWidget {
     }
   }
 }
+
+

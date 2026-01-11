@@ -57,7 +57,6 @@ class ModernTheme {
         secondary: secondary,
         tertiary: tertiary,
         surface: Colors.white,
-        background: Colors.white,
         onSurface: const Color(0xFF0F172A),
         brightness: Brightness.light,
       ),
@@ -69,6 +68,7 @@ class ModernTheme {
         backgroundColor: Colors.white,
         elevation: 0,
         centerTitle: true,
+        toolbarHeight: 48,
         iconTheme: IconThemeData(color: Colors.black87),
         titleTextStyle: TextStyle(
             color: Colors.black87, fontSize: 20, fontWeight: FontWeight.bold),
@@ -101,7 +101,7 @@ class ModernTheme {
         contentPadding:
             const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
         labelStyle: const TextStyle(color: Colors.black87),
-        hintStyle: TextStyle(color: Colors.black45),
+        hintStyle: const TextStyle(color: Colors.black45),
         border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
             borderSide: BorderSide(color: Colors.grey.shade300)),
@@ -109,7 +109,7 @@ class ModernTheme {
             borderRadius: BorderRadius.circular(8),
             borderSide: BorderSide(color: Colors.grey.shade300)),
       ),
-      bottomNavigationBarTheme: BottomNavigationBarThemeData(
+      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
         backgroundColor: Colors.white,
         selectedItemColor: primary,
         unselectedItemColor: Colors.black54,
@@ -135,6 +135,7 @@ class ModernTheme {
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
+        toolbarHeight: 48,
       ),
       cardTheme: CardThemeData(
         color: surface,

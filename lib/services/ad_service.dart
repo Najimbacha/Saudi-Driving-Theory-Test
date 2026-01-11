@@ -10,15 +10,17 @@ class AdService {
 
   static const Duration _rewardedMaxAge = Duration(minutes: 50);
   // Toggle to force test ads during development.
-  static const bool useTestAds = true;
+  static const bool useTestAds = false;
   static const String testBannerId = 'ca-app-pub-3940256099942544/6300978111';
   static const String testRewardedIdAndroid =
       'ca-app-pub-3940256099942544/5224354917';
   static const String testRewardedIdIos =
       'ca-app-pub-3940256099942544/1712485313';
-  static const String productionBannerId = '';
-  static const String productionRewardedIdAndroid = '';
-  static const String productionRewardedIdIos = '';
+  static const String productionBannerId = 'ca-app-pub-9095390056353710/7128481632';
+  static const String productionRewardedIdAndroid =
+      'ca-app-pub-9095390056353710/1917367616';
+  static const String productionRewardedIdIos =
+      'ca-app-pub-9095390056353710/1917367616';
   bool _initialized = false;
 
   Future<void> init() async {

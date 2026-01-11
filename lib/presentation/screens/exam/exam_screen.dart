@@ -18,7 +18,9 @@ import '../../../state/data_state.dart';
 import '../../../state/app_state.dart';
 import '../../../services/ad_service.dart';
 import '../../../utils/app_feedback.dart';
+import '../../../utils/app_fonts.dart';
 import '../../../utils/back_guard.dart';
+import '../../../utils/navigation_utils.dart';
 
 class ExamFlowScreen extends ConsumerStatefulWidget {
   const ExamFlowScreen({super.key});
@@ -34,7 +36,20 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
   Widget build(BuildContext context) {
     final questionsAsync = ref.watch(questionsProvider);
     final signsAsync = ref.watch(signsProvider);
-    final exam = ref.watch(examProvider);
+    final exam = ref.watch(
+      examProvider.select(
+        (state) => (
+          questions: state.questions,
+          currentIndex: state.currentIndex,
+          answers: state.answers,
+          skipped: state.skipped,
+          flagged: state.flagged,
+          isCompleted: state.isCompleted,
+          strictMode: state.strictMode,
+          originalDurationSeconds: state.originalDurationSeconds,
+        ),
+      ),
+    );
     final controller = ref.read(examProvider.notifier);
 
     return questionsAsync.when(
@@ -108,7 +123,7 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
             if (!_handledCompletion) {
               _handledCompletion = true;
               WidgetsBinding.instance.addPostFrameCallback((_) {
-                _finishExam(context, ref, exam);
+                _finishExam(context, ref, ref.read(examProvider));
                 controller.reset();
               });
             }
@@ -126,7 +141,7 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
             ),
           );
         }
-        final current = exam.currentQuestion;
+        final current = exam.questions[exam.currentIndex];
         final signMap = signsAsync.valueOrNull == null
             ? <String, String>{}
             : {for (final s in signsAsync.valueOrNull!) s.id: s.svgPath};
@@ -136,61 +151,49 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
         final questionText = _questionText(current, locale);
         final options = _options(current, locale);
         final selected = exam.answers[current.id];
-        final isSkipped = exam.skipped.contains(current.id);
+        final shell = TabShellScope.maybeOf(context);
+        final isActiveTab = shell == null || shell.value == 3;
         final examStarted = exam.questions.isNotEmpty &&
             !exam.isCompleted &&
             (exam.answers.isNotEmpty ||
                 exam.currentIndex > 0 ||
-                (exam.originalDurationSeconds > 0 &&
-                    exam.timeLeftSeconds > 0));
+                exam.originalDurationSeconds > 0);
         final canProceed = selected != null;
         final scheme = Theme.of(context).colorScheme;
         final isDark = Theme.of(context).brightness == Brightness.dark;
+        Future<void> exitExam() async {
+          controller.reset();
+          if (!context.mounted) return;
+          if (shell != null) {
+            shell.value = 0;
+            return;
+          }
+          context.go('/home');
+        }
         Future<void> handleBack() async {
-          final shell = TabShellScope.maybeOf(context);
           if (!examStarted) {
-            if (shell != null) {
-              shell.value = 0;
-            } else {
-              Navigator.of(context).maybePop();
-            }
+            await handleAppBack(context);
             return;
           }
           final shouldExit = await confirmExitExam(context);
-          if (shouldExit && context.mounted) {
-            if (shell != null) {
-              controller.reset();
-              shell.value = 0;
-            } else {
-              Navigator.of(context).maybePop();
-            }
-          }
+          if (!shouldExit || !context.mounted) return;
+          await exitExam();
         }
 
         return PopScope(
-          canPop: !examStarted,
+          canPop: isActiveTab ? !examStarted : true,
           onPopInvokedWithResult: (didPop, _) async {
-            if (didPop || !examStarted) return;
-
-            final shell = TabShellScope.maybeOf(context);
+            if (!isActiveTab) return;
             if (!examStarted) {
-              if (shell != null) {
-                shell.value = 0;
-              } else {
-                Navigator.of(context).pop();
+              if (!didPop) {
+                await handleAppBack(context, fromPopScope: true);
               }
               return;
             }
-
+            if (didPop) return;
             final shouldExit = await confirmExitExam(context);
-            if (shouldExit && context.mounted) {
-              if (shell != null) {
-                controller.reset();
-                shell.value = 0;
-              } else {
-                Navigator.of(context).pop();
-              }
-            }
+            if (!shouldExit || !context.mounted) return;
+            await exitExam();
           },
           child: Scaffold(
             extendBodyBehindAppBar: true,
@@ -204,7 +207,7 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
               ),
               title: Text(
                 'exam.title'.tr(),
-                style: GoogleFonts.outfit(
+                style: AppFonts.outfit(context,
                     fontWeight: FontWeight.bold, color: scheme.onSurface),
               ),
               centerTitle: true,
@@ -220,7 +223,7 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
                     ),
                     child: Text(
                       '${exam.currentIndex + 1}/${exam.questions.length}',
-                      style: GoogleFonts.outfit(
+                      style: AppFonts.outfit(context,
                         color: scheme.onSurface.withValues(alpha: 0.8),
                         fontWeight: FontWeight.w600,
                         fontSize: 12,
@@ -231,7 +234,18 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
                 Center(
                   child: Padding(
                     padding: const EdgeInsetsDirectional.only(end: 8),
-                    child: _TimerBanner(timeLeftSeconds: exam.timeLeftSeconds),
+                    child: Consumer(
+                      builder: (context, ref, _) {
+                        final timeLeftSeconds = ref.watch(
+                          examProvider.select(
+                            (state) => state.timeLeftSeconds,
+                          ),
+                        );
+                        return _TimerBanner(
+                          timeLeftSeconds: timeLeftSeconds,
+                        );
+                      },
+                    ),
                   ),
                 ),
               ],
@@ -282,7 +296,7 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
                               child: Text(
                                 questionText,
                                 key: ValueKey(current.id),
-                                style: GoogleFonts.outfit(
+                                style: AppFonts.outfit(context,
                                   fontSize: 22,
                                   fontWeight: FontWeight.w600,
                                   color: scheme.onSurface,
@@ -308,34 +322,6 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
                               ),
                             ),
 
-                          if (!exam.strictMode)
-                            Align(
-                              alignment: AlignmentDirectional.centerEnd,
-                              child: TextButton(
-                                style: TextButton.styleFrom(
-                                  foregroundColor:
-                                      scheme.onSurface.withValues(alpha: 0.7),
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 8, vertical: 4),
-                                ),
-                                onPressed: () {
-                                  final settings =
-                                      ref.read(appSettingsProvider);
-                                  AppFeedback.tap(context);
-                                  controller.skipCurrent();
-                                  if (exam.currentIndex + 1 ==
-                                      exam.questions.length) {
-                                    controller.finish();
-                                  } else {
-                                    controller.next();
-                                  }
-                                },
-                                child: Text('common.skip'.tr(),
-                                    style: GoogleFonts.outfit(fontSize: 13)),
-                              ),
-                            ),
-                          if (!exam.strictMode) const SizedBox(height: 8),
-
                             // Options
                             AnimatedSwitcher(
                               duration: const Duration(milliseconds: 300),
@@ -349,8 +335,6 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
                                     padding: const EdgeInsets.only(bottom: 12),
                                     child: GestureDetector(
                                       onTap: () {
-                                        final settings =
-                                            ref.read(appSettingsProvider);
                                         AppFeedback.tap(context);
                                         controller.selectAnswer(idx);
                                       },
@@ -398,7 +382,7 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
                                             Expanded(
                                               child: Text(
                                                 optionText,
-                                                style: GoogleFonts.outfit(
+                                                style: AppFonts.outfit(context,
                                                   fontSize: 16,
                                                   color: scheme.onSurface
                                                       .withValues(alpha: 0.9),
@@ -458,7 +442,7 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
                                           ? null
                                           : controller.previous,
                                   child: Text('common.previous'.tr(),
-                                      style: GoogleFonts.outfit()),
+                                      style: AppFonts.outfit(context,)),
                                 ),
                               ),
                               const SizedBox(width: 16),
@@ -478,11 +462,6 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
                                   ),
                                   onPressed: canProceed
                                       ? () {
-                                          if (selected == null) {
-                                            return;
-                                          }
-                                          final settings =
-                                              ref.read(appSettingsProvider);
                                           AppFeedback.confirm(context);
                                           if (exam.currentIndex + 1 ==
                                               exam.questions.length) {
@@ -497,7 +476,7 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
                                             exam.questions.length
                                         ? 'exam.submit'.tr()
                                         : 'common.next'.tr(),
-                                    style: GoogleFonts.outfit(
+                                    style: AppFonts.outfit(context,
                                         fontWeight: FontWeight.bold,
                                         fontSize: 16),
                                   ),
@@ -508,11 +487,14 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
                           if (!exam.strictMode || exam.isCompleted) ...[
                             const SizedBox(height: 12),
                             TextButton(
-                              onPressed: () =>
-                                  _showQuestionGrid(context, exam, controller),
+                              onPressed: () => _showQuestionGrid(
+                                context,
+                                ref.read(examProvider),
+                                controller,
+                              ),
                               child: Text(
                                 'exam.reviewAnswers'.tr(),
-                                style: GoogleFonts.outfit(
+                                style: AppFonts.outfit(context,
                                     color: scheme.onSurface
                                         .withValues(alpha: 0.7)),
                               ),
@@ -650,7 +632,7 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
                         ),
                         child: Text(
                           '${index + 1}',
-                          style: GoogleFonts.outfit(
+                          style: AppFonts.outfit(context,
                             color: text,
                             fontWeight: FontWeight.bold,
                           ),
@@ -779,8 +761,9 @@ List<String> _options(Question question, String locale) {
       break;
   }
   if (localeOptions != null && localeOptions.isNotEmpty) return localeOptions;
-  if (question.options != null && question.options!.isNotEmpty)
+  if (question.options != null && question.options!.isNotEmpty) {
     return question.options!;
+  }
   return question.optionsKeys.map((key) => key.tr()).toList();
 }
 
@@ -804,21 +787,14 @@ class _ExamIntroState extends State<_ExamIntro> {
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         title: Text('exam.title'.tr(),
-            style: GoogleFonts.outfit(
+            style: AppFonts.outfit(context,
                 fontWeight: FontWeight.bold, color: scheme.onSurface)),
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
         iconTheme: IconThemeData(color: scheme.onSurface),
         leading: IconButton(
-          onPressed: () {
-            final shell = TabShellScope.maybeOf(context);
-            if (shell != null) {
-              shell.value = 0;
-              return;
-            }
-            Navigator.of(context).maybePop();
-          },
+          onPressed: () => handleAppBack(context),
           icon: const Icon(Icons.arrow_back),
         ),
       ),
@@ -846,7 +822,7 @@ class _ExamIntroState extends State<_ExamIntro> {
                       ),
                       child: Text(
                         'exam.title'.tr(),
-                        style: GoogleFonts.outfit(
+                        style: AppFonts.outfit(context,
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
                             fontSize: 12),
@@ -855,7 +831,7 @@ class _ExamIntroState extends State<_ExamIntro> {
                     const SizedBox(height: 16),
                     Text(
                       'exam.readyTitle'.tr(),
-                      style: GoogleFonts.outfit(
+                      style: AppFonts.outfit(context,
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
@@ -865,7 +841,7 @@ class _ExamIntroState extends State<_ExamIntro> {
                     const SizedBox(height: 12),
                     Text(
                       'exam.description'.tr(),
-                      style: GoogleFonts.outfit(
+                      style: AppFonts.outfit(context,
                         fontSize: 16,
                         color: Colors.white70,
                       ),
@@ -876,7 +852,7 @@ class _ExamIntroState extends State<_ExamIntro> {
               const SizedBox(height: 32),
               Text(
                 'exam.selectMode'.tr(),
-                style: GoogleFonts.outfit(
+                style: AppFonts.outfit(context,
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                   color: scheme.onSurface,
@@ -1022,7 +998,7 @@ class _ExamIntroState extends State<_ExamIntro> {
                         Expanded(
                           child: Text(
                             'ads.unlockExamTitle'.tr(),
-                            style: GoogleFonts.outfit(
+                            style: AppFonts.outfit(context,
                               fontWeight: FontWeight.w700,
                               fontSize: 18,
                               color: scheme.onSurface,
@@ -1034,7 +1010,7 @@ class _ExamIntroState extends State<_ExamIntro> {
                     const SizedBox(height: 10),
                     Text(
                       'ads.unlockExamBody'.tr(),
-                      style: GoogleFonts.outfit(
+                      style: AppFonts.outfit(context,
                         color: scheme.onSurface.withValues(alpha: 0.7),
                         height: 1.4,
                       ),
@@ -1043,7 +1019,7 @@ class _ExamIntroState extends State<_ExamIntro> {
                       const SizedBox(height: 8),
                       Text(
                         errorMessage!,
-                        style: GoogleFonts.outfit(
+                        style: AppFonts.outfit(context,
                           color: scheme.error,
                           fontSize: 12,
                         ),
@@ -1070,7 +1046,7 @@ class _ExamIntroState extends State<_ExamIntro> {
                                 : () => Navigator.of(context).pop(false),
                             child: Text(
                               'ads.notNow'.tr(),
-                              style: GoogleFonts.outfit(),
+                              style: AppFonts.outfit(context,),
                             ),
                           ),
                         ),
@@ -1136,7 +1112,7 @@ class _ExamIntroState extends State<_ExamIntro> {
                                   )
                                 : Text(
                                     'ads.watchAd'.tr(),
-                                    style: GoogleFonts.outfit(
+                                    style: AppFonts.outfit(context,
                                         fontWeight: FontWeight.w600),
                                   ),
                           ),
@@ -1185,8 +1161,6 @@ class _ModeGlassCard extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return GestureDetector(
       onTap: () {
-        final settings =
-            ProviderScope.containerOf(context).read(appSettingsProvider);
         AppFeedback.tap(context);
         onTap();
       },
@@ -1221,7 +1195,7 @@ class _ModeGlassCard extends StatelessWidget {
                     children: [
                       Text(
                         title,
-                        style: GoogleFonts.outfit(
+                        style: AppFonts.outfit(context,
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                           color: scheme.onSurface,
@@ -1238,7 +1212,7 @@ class _ModeGlassCard extends StatelessWidget {
                           ),
                           child: Text(
                             'exam.bestBadge'.tr(),
-                            style: GoogleFonts.outfit(
+                            style: AppFonts.outfit(context,
                                 color: Colors.white,
                                 fontSize: 10,
                                 fontWeight: FontWeight.bold),
@@ -1253,7 +1227,7 @@ class _ModeGlassCard extends StatelessWidget {
                       'questions': questions,
                       'minutes': minutes,
                     }),
-                    style: GoogleFonts.outfit(
+                    style: AppFonts.outfit(context,
                         color: scheme.onSurface.withValues(alpha: 0.6),
                         fontSize: 13),
                   ),
@@ -1336,7 +1310,7 @@ class _OptionBadge extends StatelessWidget {
       ),
       child: Text(
         label,
-        style: GoogleFonts.outfit(
+        style: AppFonts.outfit(context,
           color: Colors.white,
           fontWeight: FontWeight.bold,
         ),
@@ -1344,3 +1318,4 @@ class _OptionBadge extends StatelessWidget {
     );
   }
 }
+
