@@ -1,7 +1,7 @@
-import 'dart:async';
-import 'dart:io';
+﻿import 'dart:async';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class AdService {
@@ -9,29 +9,46 @@ class AdService {
   AdService._();
 
   static const Duration _rewardedMaxAge = Duration(minutes: 50);
-  // Toggle to force test ads during development.
-  static const bool useTestAds = false;
-  static const String testBannerId = 'ca-app-pub-3940256099942544/6300978111';
-  static const String testRewardedIdAndroid =
-      'ca-app-pub-3940256099942544/5224354917';
-  static const String testRewardedIdIos =
-      'ca-app-pub-3940256099942544/1712485313';
-  static const String productionBannerId =
-      'ca-app-pub-9095390056353710/7128481632';
-  static const String productionRewardedIdAndroid =
-      'ca-app-pub-9095390056353710/1917367616';
-  static const String productionRewardedIdIos =
+  // Retry in the background indefinitely (capped backoff) so an ad is always
+  // being prepared. Max delay between attempts.
+  static const Duration _rewardedMaxRetryDelay = Duration(seconds: 60);
+  // How long before expiry to preload a replacement in the background.
+  static const Duration _rewardedRefreshLead = Duration(minutes: 2);
+
+  // Production AdMob ad unit IDs (Android).
+  static const String bannerId = 'ca-app-pub-9095390056353710/7128481632';
+  static const String rewardedId =
       'ca-app-pub-9095390056353710/1917367616';
   bool _initialized = false;
+  Timer? _expiryRefreshTimer;
+  bool _lifecycleListening = false;
 
   /// Reactive notifier — UI can listen for rewarded ad readiness changes.
   final ValueNotifier<bool> rewardedReadyNotifier = ValueNotifier(false);
 
+  /// Logs only in debug builds (keeps release output clean).
+  static void _log(String message) {
+    if (kDebugMode) {
+      debugPrint('[AdService] $message');
+    }
+  }
+
+  /// Starts background lifecycle watching + a continuous "keep ready" loop.
+  void startBackgroundPrefetch() {
+    if (!_lifecycleListening) {
+      _lifecycleListening = true;
+      WidgetsBinding.instance.addObserver(_AppLifecycleObserver());
+    }
+    // Kick off / keep alive the preload chain.
+    loadRewarded();
+  }
+
   Future<void> init() async {
     if (_initialized) return;
-    debugPrint('[AdService] initialize');
+    _log('initialize');
     await MobileAds.instance.initialize();
     _initialized = true;
+    _maybeScheduleExpiryRefresh();
   }
 
   BannerAd? createBanner({
@@ -39,18 +56,17 @@ class AdService {
     VoidCallback? onFailed,
   }) {
     if (!_initialized) return null;
-    const bannerId = useTestAds ? testBannerId : productionBannerId;
     if (bannerId.isEmpty) return null;
     return BannerAd(
       size: AdSize.banner,
       adUnitId: bannerId,
       listener: BannerAdListener(
         onAdLoaded: (ad) {
-          debugPrint('[AdService] banner loaded');
+          _log('banner loaded');
           onLoaded?.call();
         },
         onAdFailedToLoad: (ad, error) {
-          debugPrint('[AdService] banner failed: ${error.message}');
+          _log('banner failed: ${error.message}');
           ad.dispose();
           onFailed?.call();
         },
@@ -80,41 +96,62 @@ class AdService {
     _rewarded?.dispose();
     _rewarded = null;
     _rewardedLoadedAt = null;
+    _expiryRefreshTimer?.cancel();
+    _expiryRefreshTimer = null;
     rewardedReadyNotifier.value = false;
+  }
+
+  /// Schedules a background reload shortly before the loaded ad expires, so a
+  /// fresh ad is ready whenever the user wants to watch.
+  void _maybeScheduleExpiryRefresh() {
+    _expiryRefreshTimer?.cancel();
+    _expiryRefreshTimer = null;
+    if (_rewarded == null || _rewardedLoadedAt == null) return;
+    final elapsed = DateTime.now().difference(_rewardedLoadedAt!);
+    final remaining = _rewardedMaxAge - elapsed;
+    if (remaining <= Duration.zero) {
+      _disposeRewarded();
+      loadRewarded();
+      return;
+    }
+    final delay = remaining - _rewardedRefreshLead;
+    final safeDelay = delay > Duration.zero ? delay : _rewardedRefreshLead;
+    _expiryRefreshTimer = Timer(safeDelay, () {
+      _expiryRefreshTimer = null;
+      _log('rewarded nearing expiry, reloading in background');
+      _disposeRewarded();
+      loadRewarded();
+    });
   }
 
   void _scheduleRewardedRetry() {
     if (_rewardedRetryTimer != null) return;
-    // Shorter initial delay (2s) with exponential backoff capped at 30s.
+    // Keep retrying in the background with capped exponential backoff so an ad
+    // is always being prepared (e.g. after a transient failure).
     final delaySeconds = 2 * (1 << _rewardedRetryAttempt);
-    final cappedDelay = delaySeconds > 30 ? 30 : delaySeconds;
-    if (_rewardedRetryAttempt < 5) {
-      _rewardedRetryAttempt += 1;
-    }
+    final cappedDelay = delaySeconds > _rewardedMaxRetryDelay.inSeconds
+        ? _rewardedMaxRetryDelay.inSeconds
+        : delaySeconds;
+    _rewardedRetryAttempt += 1;
     _rewardedRetryTimer = Timer(Duration(seconds: cappedDelay), () {
       _rewardedRetryTimer = null;
       loadRewarded();
     });
-    debugPrint('[AdService] rewarded retry scheduled in ${cappedDelay}s');
+    _log('rewarded retry scheduled in ${cappedDelay}s');
   }
 
   /// Preload a rewarded ad in the background. Returns true when ready.
   Future<bool> loadRewarded() async {
     if (!_initialized) return false;
     if (_rewarded != null && _isRewardedExpired) {
-      debugPrint('[AdService] rewarded expired, reloading');
+      _log('rewarded expired, reloading');
       _disposeRewarded();
     }
     if (_rewarded != null) return true;
     final inFlight = _rewardedLoadCompleter;
     if (inFlight != null) return inFlight.future;
-    final rewardedId = useTestAds
-        ? (Platform.isIOS ? testRewardedIdIos : testRewardedIdAndroid)
-        : (Platform.isIOS
-            ? productionRewardedIdIos
-            : productionRewardedIdAndroid);
     if (rewardedId.isEmpty) {
-      debugPrint('[AdService] rewarded id missing');
+      _log('rewarded id missing');
       return false;
     }
     _loadingRewarded = true;
@@ -122,7 +159,7 @@ class AdService {
     _rewardedLoadCompleter = completer;
     _rewardedRetryTimer?.cancel();
     _rewardedRetryTimer = null;
-    debugPrint('[AdService] rewarded load start');
+    _log('rewarded load start');
     RewardedAd.load(
       adUnitId: rewardedId,
       request: const AdRequest(),
@@ -134,7 +171,8 @@ class AdService {
           _rewardedLoadCompleter = null;
           _rewardedRetryAttempt = 0;
           rewardedReadyNotifier.value = true;
-          debugPrint('[AdService] rewarded load success');
+          _log('rewarded load success');
+          _maybeScheduleExpiryRefresh();
           if (!completer.isCompleted) {
             completer.complete(true);
           }
@@ -143,7 +181,7 @@ class AdService {
           _disposeRewarded();
           _loadingRewarded = false;
           _rewardedLoadCompleter = null;
-          debugPrint('[AdService] rewarded load failed: ${error.message}');
+          _log('rewarded load failed: ${error.message}');
           _scheduleRewardedRetry();
           if (!completer.isCompleted) {
             completer.complete(false);
@@ -174,29 +212,29 @@ class AdService {
   Future<bool> showRewarded({required VoidCallback onReward}) async {
     if (!_initialized) return false;
     if (_rewarded != null && _isRewardedExpired) {
-      debugPrint('[AdService] rewarded expired before show, reloading');
+      _log('rewarded expired before show, reloading');
       _disposeRewarded();
     }
     if (_rewarded == null) {
       final loaded = await loadRewarded();
       if (!loaded) {
-        debugPrint('[AdService] rewarded show aborted (load failed)');
+        _log('rewarded show aborted (load failed)');
         return false;
       }
     }
     final ad = _rewarded;
     if (ad == null) {
-      debugPrint('[AdService] rewarded show skipped (no ad loaded)');
+      _log('rewarded show skipped (no ad loaded)');
       return false;
     }
     final completer = Completer<bool>();
     var rewardEarned = false;
     ad.fullScreenContentCallback = FullScreenContentCallback(
       onAdShowedFullScreenContent: (_) {
-        debugPrint('[AdService] rewarded shown');
+        _log('rewarded shown');
       },
       onAdDismissedFullScreenContent: (_) {
-        debugPrint('[AdService] rewarded dismissed');
+        _log('rewarded dismissed');
         _disposeRewarded();
         // Immediately preload next rewarded ad in background.
         loadRewarded();
@@ -205,19 +243,34 @@ class AdService {
         }
       },
       onAdFailedToShowFullScreenContent: (_, __) {
-        debugPrint('[AdService] rewarded failed to show');
+        _log('rewarded failed to show');
         _disposeRewarded();
         loadRewarded();
         if (!completer.isCompleted) completer.complete(false);
       },
     );
     ad.show(onUserEarnedReward: (_, __) {
-      debugPrint('[AdService] rewarded earned');
+      _log('rewarded earned');
       if (!rewardEarned) {
         rewardEarned = true;
         onReward();
       }
     });
     return completer.future;
+  }
+}
+
+/// Reloads the rewarded ad when the app returns to the foreground, so a ready
+/// ad is always available after coming back from background.
+class _AppLifecycleObserver with WidgetsBindingObserver {
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      final service = AdService.instance;
+      // Refresh if the current ad is stale or missing.
+      if (!service.isRewardedReady) {
+        service.loadRewarded();
+      }
+    }
   }
 }

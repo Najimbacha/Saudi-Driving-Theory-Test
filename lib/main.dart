@@ -19,8 +19,19 @@ void main() async {
   // We read prefs here for other app settings, not for locale
   final prefs = await SharedPreferences.getInstance();
 
+  // Keep the Riverpod languageCode in sync with EasyLocalization's saved
+  // locale so background providers (handbook data, etc.) load in the same
+  // language the user last chose.
+  final savedLocale = prefs.getString('locale');
+  if (savedLocale != null && savedLocale.isNotEmpty) {
+    final code = savedLocale.split('_').first.split('-').first;
+    if (prefs.getString('languageCode') != code) {
+      await prefs.setString('languageCode', code);
+    }
+  }
+
   await AdService.instance.init();
-  AdService.instance.loadRewarded();
+  AdService.instance.startBackgroundPrefetch();
 
   runApp(
     ProviderScope(

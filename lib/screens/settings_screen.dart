@@ -9,6 +9,7 @@ import '../widgets/banner_ad_widget.dart';
 import '../core/theme/modern_theme.dart';
 import '../utils/app_feedback.dart';
 import '../utils/app_fonts.dart';
+import '../utils/navigation_utils.dart';
 import '../widgets/glass_container.dart';
 
 class SettingsScreen extends ConsumerWidget {
@@ -42,6 +43,11 @@ class SettingsScreen extends ConsumerWidget {
         elevation: 0,
         centerTitle: true,
         iconTheme: IconThemeData(color: scheme.onSurface),
+        leading: IconButton(
+          key: const Key('settings_back'),
+          onPressed: () => handleAppBack(context),
+          icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 20),
+        ),
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -98,7 +104,7 @@ class SettingsScreen extends ConsumerWidget {
                 border: Border.all(
                   color: scheme.onSurface.withValues(alpha: 0.08),
                 ),
-                child: const Center(child: BannerAdWidget(forceVisible: true)),
+                child: const Center(child: BannerAdWidget()),
               ),
               const SizedBox(height: 14),
               Center(
@@ -272,12 +278,12 @@ class _SettingsGlassTile extends StatelessWidget {
   }
 }
 
-class _LanguageGlassSheet extends StatelessWidget {
+class _LanguageGlassSheet extends ConsumerWidget {
   const _LanguageGlassSheet({required this.current});
   final String current;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final scheme = Theme.of(context).colorScheme;
     final isDark = Theme.of(context).brightness == Brightness.dark;
     const codes = ['en', 'ar', 'ur', 'hi', 'bn'];
@@ -329,6 +335,11 @@ class _LanguageGlassSheet extends StatelessWidget {
                     onTap: () async {
                       AppFeedback.confirm(context);
                       await context.setLocale(Locale(code));
+                      // Keep the Riverpod app state in sync so background
+                      // providers (e.g. handbook data) load in the new locale.
+                      ref
+                          .read(appSettingsProvider.notifier)
+                          .setLanguageCode(code);
                       if (context.mounted) Navigator.pop(context, code);
                     },
                     child: AnimatedContainer(

@@ -1,5 +1,7 @@
 {
   "app": {
+    "nameShort": "اختبار القيادة",
+    "taglineAbr": "نظرية ببساطة",
     "name": "اختبار نظرية القيادة السعودية",
     "tagline": "أتقن نظرية القيادة بثقة",
     "offline": "لا يتطلب اتصال إنترنت دائم. تعلّم في أي وقت وأي مكان."
@@ -65,7 +67,7 @@
     "greeting": "هل أنت مستعد للتعلم؟",
     "subtitle": "لا يتطلب اتصال إنترنت دائم. تعلّم في أي وقت وأي مكان.",
     "profile": "الملف الشخصي",
-    "learnSigns": "تعلم إشارات المرور",
+    "learnSigns": "إشارات المرور",
     "learnSignsDesc": "ادرس إشارات المرور",
     "learnRules": "القواعد واللوائح",
     "learnRulesDesc": "قواعد الطريق والسلامة",
@@ -84,6 +86,13 @@
     "examQuestions": "٤٠ سؤالاً",
     "examDuration": "٤٠ دقيقة",
     "learningPaths": "مسارات التعلم",
+    "levels": {
+      "start": "سائق جديد",
+      "begun": "على الطريق",
+      "learner": "متعلم",
+      "proficient": "متمكن",
+      "expert": "سائق محترف"
+    },
     "statLabels": {
       "questions": "الأسئلة",
       "accuracy": "الدقة",
@@ -113,8 +122,14 @@
       "title": "تابع التعلم",
       "lessonLabel": "الدرس: {lesson}",
       "progressLabel": "التقدم: {value}٪",
-      "cta": "متابعة"
+      "cta": "متابعة",
+      "journeyComplete": "رحلة مكتملة!",
+      "journeyCompleteDesc": "انتهت جميع الدروس. خض الاختبار التجريبي!",
+      "continueLesson": "التالي: {min} دقيقة"
     },
+      "journeyComplete": "رحلة مكتملة!",
+      "journeyCompleteDesc": "انتهت جميع الدروس. خض الاختبار التجريبي!",
+      "continueLesson": "التالي: {min} دقيقة",
     "continueTest": {
       "title": "متابعة الاختبار",
       "practiceLabel": "استئناف اختبار التدريب",
@@ -1421,6 +1436,7 @@
     "strictModeDesc": "لا يمكنك الرجوع وتُقفل الإجابات بعد الاختيار"
   },
   "practice": {
+    "tryAgain": "تمرّن مرة أخرى",
     "byMode": "حسب الوضع",
     "byCategory": "حسب الفئة",
     "byModeHelper": "تدرّب حسب الهدف",
@@ -1460,6 +1476,12 @@
     "progressCount": "{current} / {total}"
   },
   "results": {
+    "practiceTitle": "نتيجة التمرين",
+    "encouragement": "عمل رائع! واصل التقدم.",
+    "tryAgainHint": "اقتربت — راجع وحاول مرة أخرى!",
+    "categoryBreakdown": "توزيع الفئات",
+    "certificateShared": "تم التحقق من الشهادة وجاهزة للمشاركة!",
+    "certificate": "عرض شهادة الجاهزية",
     "title": "نتائج المحاكاة",
     "score": "درجاتك",
     "passed": "تم اجتياز المحاكاة",
@@ -2349,6 +2371,9 @@
     }
   },
   "ads": {
+    "revealTitle": "إظهار الإجابة",
+    "revealBody": "شاهد إعلاناً قصيراً لإظهار الإجابة الصحيحة وشرحها.",
+    "revealCta": "إظهار الإجابة",
     "rewardedRetry": "شاهد الإعلان لإعادة المحاولة فوراً",
     "unlockExamTitle": "افتح اختبارًا جديدًا",
     "unlockExamBody": "شاهد إعلانًا قصيرًا لبدء اختبار كامل جديد.",
@@ -2483,6 +2508,69 @@
       "turn_off_engine_if_idle_seconds": "إطفاء المحرك (ثانية)",
       "drifting_speed_range_kmh": "سرعة التفحيط",
       "stop_sign_hold_seconds": "علامة التوقف (ثانية)"
+    }
+  }
+  ,
+  "journey": {
+    "title": "رحلة التعلّم",
+    "errorLoading": "تعذّر تحميل رحلة التعلّم",
+    "reset": "إعادة تعيين التقدم",
+    "resetConfirm": "سيؤدي هذا إلى مسح جميع الدروس المكتملة ونتائج الاختبارات. هل تريد المتابعة؟",
+    "heroTitle": "طريقك نحو إتقان القيادة",
+    "heroSubtitle": "{lessons} من {total} درس مكتمل",
+    "heroModules": "{count} وحدات إجمالاً",
+    "continueTitle": "متابعة التعلّم",
+    "continueSubtitle": "قراءة {min} دقيقة",
+    "lessonCount": "{done}/{total} درس",
+    "quizPassed": "اجتزت الاختبار",
+    "quizPending": "اختبار",
+    "unitLabel": "الوحدة {id}",
+    "lessonsHeader": "الدروس",
+    "openHandbook": "فتح مرجع الدليل",
+    "quizTitle": "اختبار الوحدة",
+    "quizPassedDesc": "أفضل نتيجة: {score}%",
+    "quizReadyDesc": "{count} سؤال جاهز. اجتز بنسبة 70% أو أكثر لإكمال هذه الوحدة.",
+    "quizLockedDesc": "أكمل جميع الدروس أولاً لفتح الاختبار.",
+    "lessonLabel": "الدرس {id}",
+    "completed": "مكتمل",
+    "completeLesson": "إكمال الدرس",
+    "nextLesson": "التالي: {title}",
+    "lessonCompleteMsg": "تم إكمال الدرس!",
+    "quizProgress": "السؤال {current} من {total}",
+    "quizPassLabel": "النجاح: 70%",
+    "quizScore": "{correct}/{total} إجابة صحيحة",
+    "quizResultPass": "ممتاز!",
+    "quizResultFail": "ليس بعد",
+    "quizResultPassDesc": "لقد اجتزت اختبار استيعاب هذه الوحدة.",
+    "quizResultFailDesc": "حصلت على أقل من {threshold}%. راجع الدروس وحاول مرة أخرى.",
+    "quizNext": "التالي",
+    "quizFinish": "إنهاء",
+    "quizExplanation": "الشرح",
+    "quizDone": "تم",
+    "quizTryAgain": "إعادة المحاولة",
+    "quizSecondChance": "شاهد إعلاناً لفرصة ثانية",
+    "quizBackToModule": "العودة إلى الوحدة",
+    "allComplete": "رحلة مكتملة!",
+    "allCompleteDesc": "أتقنت جميع الدروس. هل أنت مستعد للاختبار التجريبي؟",
+    "stage1": {
+      "title": "ابدأ من هنا",
+      "subtitle": "الرخص والمخالفات ونقاط المرور"
+    },
+    "stage2": {
+      "title": "السلوك على الطريق",
+      "subtitle": "كيف تتصرف مع مستخدمي الطريق الآخرين"
+    },
+    "stage3": {
+      "title": "المرور والتقاطعات",
+      "subtitle": "القواعد والمسارات والتقاطعات والأولوية"
+    },
+    "stage4": {
+      "title": "السرعة والتحكم",
+      "subtitle": "حدود السرعة ومسافة الأمان والقيادة الاقتصادية"
+    },
+    "stage5": {
+      "title": "القيادة المتقدمة",
+      "subtitle": "التجاوز والتوقف والإضاءات والعناية بالمركبة"
     }
   }
 }

@@ -1,5 +1,7 @@
 {
   "app": {
+    "nameShort": "ড্রাইভিং টেস্ট",
+    "taglineAbr": "থিওরি সহজ",
     "name": "সৌদি ড্রাইভিং থিওরি টেস্ট",
     "tagline": "আত্মবিশ্বাসের সঙ্গে ড্রাইভিং থিওরি শিখুন",
     "offline": "নিরবচ্ছিন্ন ইন্টারনেটের প্রয়োজন নেই। যেকোনো সময়, যেকোনো জায়গায় শিখুন।"
@@ -65,7 +67,7 @@
     "greeting": "শিখতে প্রস্তুত?",
     "subtitle": "নিরবচ্ছিন্ন ইন্টারনেটের প্রয়োজন নেই। যেকোনো সময়, যেকোনো জায়গায় শিখুন।",
     "profile": "প্রোফাইল",
-    "learnSigns": "ট্রাফিক সাইন শিখুন",
+    "learnSigns": "ট্রাফিক চিহ্ন",
     "learnSignsDesc": "ট্রাফিক সাইন পড়ুন",
     "learnRules": "নিয়ম ও প্রবিধান",
     "learnRulesDesc": "সড়ক নিয়ম ও নিরাপত্তা",
@@ -84,6 +86,13 @@
     "examQuestions": "৪০টি প্রশ্ন",
     "examDuration": "৪০ মিনিট",
     "learningPaths": "শেখার পথ",
+    "levels": {
+      "start": "নতুন চালক",
+      "begun": "রাস্তায়",
+      "learner": "শিক্ষার্থী",
+      "proficient": "দক্ষ",
+      "expert": "মাস্টার চালক"
+    },
     "statLabels": {
       "questions": "প্রশ্ন",
       "accuracy": "নির্ভুলতা",
@@ -111,7 +120,10 @@
       },
       "title": "আজকের মিশন",
       "time": "~৫ মিনিট",
-      "cta": "মিশন শুরু করুন"
+      "cta": "মিশন শুরু করুন",
+      "journeyComplete": "যাত্রা সম্পন্ন!",
+      "journeyCompleteDesc": "সব পাঠ শেষ। মক পরীক্ষা দিন!",
+      "continueLesson": "পরবর্তী: {min} মিনিট"
     },
     "focus": {
       "title": "আজকের ফোকাস",
@@ -136,6 +148,9 @@
       "progressLabel": "অগ্রগতি: {value}%",
       "cta": "চালিয়ে যান"
     },
+      "journeyComplete": "যাত্রা সম্পন্ন!",
+      "journeyCompleteDesc": "সব পাঠ শেষ। মক পরীক্ষা দিন!",
+      "continueLesson": "পরবর্তী: {min} মিনিট",
     "continueTest": {
       "title": "পরীক্ষা চালিয়ে যান",
       "practiceLabel": "অনুশীলন চালিয়ে যান",
@@ -1418,6 +1433,7 @@
     "strictModeDesc": "পিছনে যাওয়া যাবে না এবং উত্তর লক হয়ে যায়"
   },
   "practice": {
+    "tryAgain": "আবার অনুশীলন করুন",
     "byMode": "মোড অনুযায়ী",
     "byCategory": "বিভাগ অনুযায়ী",
     "byModeHelper": "উদ্দেশ্য অনুযায়ী অনুশীলন",
@@ -1457,6 +1473,12 @@
     "progressCount": "{current} / {total}"
   },
   "results": {
+    "practiceTitle": "অনুশীলনের ফলাফল",
+    "encouragement": "দারুণ কাজ! এভাবেই চালিয়ে যান।",
+    "tryAgainHint": "প্রায় পৌঁছে গেছেন — পর্যালোচনা করুন এবং আবার চেষ্টা করুন!",
+    "categoryBreakdown": "বিভাগের বিবরণ",
+    "certificateShared": "সার্টিফিকেট যাচাই হয়েছে এবং শেয়ার করার জন্য প্রস্তুত!",
+    "certificate": "প্রস্তুতি সার্টিফিকেট দেখুন",
     "title": "সিমুলেশন ফলাফল",
     "score": "আপনার স্কোর",
     "passed": "সিমুলেশনে সফল",
@@ -2295,6 +2317,9 @@
     }
   },
   "ads": {
+    "revealTitle": "উত্তর দেখান",
+    "revealBody": "সঠিক উত্তর এবং ব্যাখ্যা দেখাতে একটি সংক্ষিপ্ত বিজ্ঞাপন দেখুন।",
+    "revealCta": "উত্তর দেখান",
     "rewardedRetry": "তাৎক্ষণিকভাবে আবার চেষ্টা করতে বিজ্ঞাপন দেখুন",
     "unlockExamTitle": "আরও একটি পরীক্ষা আনলক করুন",
     "unlockExamBody": "নতুন পূর্ণ পরীক্ষা শুরু করতে একটি ছোট বিজ্ঞাপন দেখুন।",
@@ -2475,6 +2500,69 @@
       "turn_off_engine_if_idle_seconds": "ইঞ্জিন বন্ধ (সেকেন্ড)",
       "drifting_speed_range_kmh": "ড্রিফটিং গতি",
       "stop_sign_hold_seconds": "স্টপ সাইন (সেকেন্ড)"
+    }
+  }
+  ,
+  "journey": {
+    "title": "শেখার যাত্রা",
+    "errorLoading": "আপনার শেখার যাত্রা লোড করা যায়নি",
+    "reset": "অগ্রগতি রিসেট করুন",
+    "resetConfirm": "এতে সম্পন্ন করা পাঠ ও কুইজ স্কোর মুছে যাবে। কি আপনি চালিয়ে যেতে চান?",
+    "heroTitle": "ড্রাইভিং দক্ষতার পথে আপনার যাত্রা",
+    "heroSubtitle": "{total}-এর মধ্যে {lessons} পাঠ সম্পন্ন",
+    "heroModules": "মোট {count} মডিউল",
+    "continueTitle": "শেখা চালিয়ে যান",
+    "continueSubtitle": "{min} মিনিট পড়ুন",
+    "lessonCount": "{done}/{total} পাঠ",
+    "quizPassed": "কুইজ পাস",
+    "quizPending": "কুইজ",
+    "unitLabel": "মডিউল {id}",
+    "lessonsHeader": "পাঠসমূহ",
+    "openHandbook": "হ্যান্ডবুক রেফারেন্স খুলুন",
+    "quizTitle": "মডিউল কুইজ",
+    "quizPassedDesc": "সেরা স্কোর: {score}%",
+    "quizReadyDesc": "{count}টি প্রশ্ন প্রস্তুত। এই মডিউল সম্পন্ন করতে 70% বা তার বেশি পাস করুন।",
+    "quizLockedDesc": "কুইজ খুলতে আগে সব পাঠ শেষ করুন।",
+    "lessonLabel": "পাঠ {id}",
+    "completed": "সম্পন্ন",
+    "completeLesson": "পাঠ সম্পন্ন করুন",
+    "nextLesson": "পরবর্তী: {title}",
+    "lessonCompleteMsg": "পাঠ সম্পন্ন হয়েছে!",
+    "quizProgress": "প্রশ্ন {current}/{total}",
+    "quizPassLabel": "পাস: 70%",
+    "quizScore": "{correct}/{total} সঠিক",
+    "quizResultPass": "চমৎকার!",
+    "quizResultFail": "এখনও নয়",
+    "quizResultPassDesc": "আপনি এই মডিউলের বুঝ যাচাই পাস করেছেন।",
+    "quizResultFailDesc": "আপনার স্কোর {threshold}%-এর নিচে। পাঠগুলো পুনরায় দেখুন এবং চেষ্টা করুন।",
+    "quizNext": "পরবর্তী",
+    "quizFinish": "শেষ করুন",
+    "quizExplanation": "ব্যাখ্যা",
+    "quizDone": "সম্পন্ন",
+    "quizTryAgain": "আবার চেষ্টা করুন",
+    "quizSecondChance": "দ্বিতীয় সুযোগের জন্য বিজ্ঞাপন দেখুন",
+    "quizBackToModule": "মডিউলে ফিরুন",
+    "allComplete": "যাত্রা সম্পন্ন!",
+    "allCompleteDesc": "আপনি প্রতিটি পাঠে দক্ষ হয়েছেন। মক পরীক্ষার জন্য প্রস্তুত?",
+    "stage1": {
+      "title": "এখান থেকে শুরু করুন",
+      "subtitle": "লাইসেন্স, অপরাধ ও ট্রাফিক পয়েন্ট"
+    },
+    "stage2": {
+      "title": "রাস্তার আচরণ",
+      "subtitle": "অন্যান্য রাস্তা ব্যবহারকারীদের সাথে আচরণ"
+    },
+    "stage3": {
+      "title": "ট্রাফিক ও ক্রসিং",
+      "subtitle": "নিয়ম, লেন, মোড় ও অগ্রাধিকার"
+    },
+    "stage4": {
+      "title": "গতি ও নিয়ন্ত্রণ",
+      "subtitle": "গতিসীমা, নিরাপদ দূরত্ব ও ইকো-ড্রাইভিং"
+    },
+    "stage5": {
+      "title": "উন্নত ড্রাইভিং",
+      "subtitle": "ওভারটেকিং, থামা, লাইট ও গাড়ির যত্ন"
     }
   }
 }

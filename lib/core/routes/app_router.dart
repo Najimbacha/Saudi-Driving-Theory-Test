@@ -23,7 +23,12 @@ import '../../screens/priority_guide_screen.dart';
 import '../../screens/traffic_fines_screen.dart';
 import '../../screens/traffic_violation_points_screen.dart';
 import '../../screens/signs_flashcards_screen.dart';
+import '../../screens/journey/journey_screen.dart';
+import '../../screens/journey/module_screen.dart';
+import '../../screens/journey/lesson_reader_screen.dart';
+import '../../screens/journey/module_quiz_screen.dart';
 import '../../widgets/home_shell.dart';
+import 'journey_payloads.dart';
 
 CustomTransitionPage<void> _fadeSlidePage({
   required GoRouterState state,
@@ -115,10 +120,6 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             return _fadeSlidePage(
                 state: state, child: const NotFoundScreen());
           }
-          assert(result.examType == 'exam');
-          if (result.examType != 'exam') {
-            return _fadeSlidePage(state: state, child: const HomeShell());
-          }
           return _fadeSlidePage(
               state: state, child: ResultsScreen(result: result));
         },
@@ -170,6 +171,50 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           }
           return _fadeSlidePage(
               state: state, child: HandbookSubtopicScreen(topic: topic));
+        },
+      ),
+      GoRoute(
+        path: '/journey',
+        pageBuilder: (context, state) =>
+            _fadeSlidePage(state: state, child: const JourneyScreen()),
+      ),
+      GoRoute(
+        path: '/journey/module',
+        pageBuilder: (context, state) {
+          final payload = state.extra as ModuleRoutePayload?;
+          if (payload == null) {
+            return _fadeSlidePage(state: state, child: const NotFoundScreen());
+          }
+          return _fadeSlidePage(
+              state: state,
+              child: ModuleScreen(stage: payload.stage, module: payload.module));
+        },
+      ),
+      GoRoute(
+        path: '/journey/lesson',
+        pageBuilder: (context, state) {
+          final payload = state.extra as LessonRoutePayload?;
+          if (payload == null) {
+            return _fadeSlidePage(state: state, child: const NotFoundScreen());
+          }
+          return _fadeSlidePage(
+              state: state,
+              child: LessonReaderScreen(
+                  module: payload.module,
+                  stage: payload.stage,
+                  lesson: payload.lesson));
+        },
+      ),
+      GoRoute(
+        path: '/journey/quiz',
+        pageBuilder: (context, state) {
+          final payload = state.extra as ModuleRoutePayload?;
+          if (payload == null) {
+            return _fadeSlidePage(state: state, child: const NotFoundScreen());
+          }
+          return _fadeSlidePage(
+              state: state,
+              child: ModuleQuizScreen(module: payload.module));
         },
       ),
       GoRoute(

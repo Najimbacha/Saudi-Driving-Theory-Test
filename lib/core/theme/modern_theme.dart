@@ -239,13 +239,17 @@ class ModernTheme {
       ),
       snackBarTheme: SnackBarThemeData(
         behavior: SnackBarBehavior.floating,
-        backgroundColor: scheme.inverseSurface,
+        backgroundColor: const Color(0xFF1E293B),
         contentTextStyle: textTheme.bodyMedium?.copyWith(
-          color: scheme.onInverseSurface,
+          color: Colors.white,
+          fontWeight: FontWeight.w600,
+          fontSize: 14,
         ),
+        elevation: 6,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(_expressiveRadius),
+          borderRadius: BorderRadius.circular(14),
         ),
+        insetPadding: const EdgeInsets.fromLTRB(20, 0, 20, 16),
       ),
       dividerTheme: DividerThemeData(
         color: scheme.outlineVariant,
@@ -390,13 +394,17 @@ class ModernTheme {
       ),
       snackBarTheme: SnackBarThemeData(
         behavior: SnackBarBehavior.floating,
-        backgroundColor: scheme.inverseSurface,
+        backgroundColor: const Color(0xFF1E293B),
         contentTextStyle: textTheme.bodyMedium?.copyWith(
-          color: scheme.onInverseSurface,
+          color: Colors.white,
+          fontWeight: FontWeight.w600,
+          fontSize: 14,
         ),
+        elevation: 6,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(_expressiveRadius),
+          borderRadius: BorderRadius.circular(14),
         ),
+        insetPadding: const EdgeInsets.fromLTRB(20, 0, 20, 16),
       ),
       dividerTheme: DividerThemeData(
         color: scheme.outlineVariant,

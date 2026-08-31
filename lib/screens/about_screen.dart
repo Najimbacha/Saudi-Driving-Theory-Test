@@ -4,6 +4,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../core/theme/modern_theme.dart';
 import '../utils/app_fonts.dart';
+import '../utils/app_toast.dart';
 import '../widgets/glass_container.dart';
 
 class AboutScreen extends StatelessWidget {
@@ -16,9 +17,7 @@ class AboutScreen extends StatelessWidget {
     final ok = await launchUrl(url, mode: LaunchMode.externalApplication);
     if (!context.mounted) return;
     if (!ok) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('common.error'.tr())),
-      );
+      showAppToast(context, 'common.error'.tr(), error: true);
     }
   }
 

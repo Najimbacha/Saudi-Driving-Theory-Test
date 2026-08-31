@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 
 import '../core/theme/modern_theme.dart';
 import '../utils/app_fonts.dart';
+import '../utils/app_toast.dart';
 import '../widgets/glass_container.dart';
 
 class SupportDevelopmentScreen extends StatelessWidget {
@@ -14,9 +15,7 @@ class SupportDevelopmentScreen extends StatelessWidget {
 
   void _copyToClipboard(BuildContext context, String value) {
     Clipboard.setData(ClipboardData(text: value));
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('support.copied'.tr())),
-    );
+    showAppToast(context, 'support.copied'.tr(), success: true);
   }
 
   @override

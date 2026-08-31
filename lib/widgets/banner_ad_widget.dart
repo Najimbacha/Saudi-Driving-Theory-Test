@@ -1,24 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import '../services/ad_service.dart';
-import '../state/app_state.dart';
 
-class BannerAdWidget extends ConsumerStatefulWidget {
-  const BannerAdWidget({super.key, this.forceVisible = false});
-
-  final bool forceVisible;
+class BannerAdWidget extends StatefulWidget {
+  const BannerAdWidget({super.key});
 
   @override
-  ConsumerState<BannerAdWidget> createState() => _BannerAdWidgetState();
+  State<BannerAdWidget> createState() => _BannerAdWidgetState();
 }
 
-class _BannerAdWidgetState extends ConsumerState<BannerAdWidget> {
+class _BannerAdWidgetState extends State<BannerAdWidget> {
   BannerAd? _banner;
   bool _isAdLoaded = false;
   bool _loading = false;
-  bool? _previousAdsEnabled;
 
   void _disposeBanner() {
     _banner?.dispose();
@@ -59,22 +54,11 @@ class _BannerAdWidgetState extends ConsumerState<BannerAdWidget> {
   @override
   void initState() {
     super.initState();
-    if (widget.forceVisible) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted) {
-          _loadBanner();
-        }
-      });
-      return;
-    }
-    _previousAdsEnabled = ref.read(appSettingsProvider).adsEnabled;
-    if (_previousAdsEnabled == true) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted) {
-          _loadBanner();
-        }
-      });
-    }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        _loadBanner();
+      }
+    });
   }
 
   @override
@@ -85,27 +69,6 @@ class _BannerAdWidgetState extends ConsumerState<BannerAdWidget> {
 
   @override
   Widget build(BuildContext context) {
-    if (!widget.forceVisible) {
-      final adsEnabled =
-          ref.watch(appSettingsProvider.select((state) => state.adsEnabled));
-
-      // Handle changes to adsEnabled
-      if (_previousAdsEnabled != adsEnabled) {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (!mounted) return;
-          if (adsEnabled) {
-            _loadBanner();
-          } else {
-            setState(() {
-              _disposeBanner();
-            });
-          }
-        });
-        _previousAdsEnabled = adsEnabled;
-      }
-
-      if (!adsEnabled) return const SizedBox.shrink();
-    }
     // Only show when the ad has actually loaded content.
     if (_banner == null || !_isAdLoaded) return const SizedBox.shrink();
     return SizedBox(

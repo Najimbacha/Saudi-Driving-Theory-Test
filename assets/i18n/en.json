@@ -1,5 +1,7 @@
 {
   "app": {
+    "nameShort": "Driving Test",
+    "taglineAbr": "Theory made simple",
     "name": "Saudi Driving Theory Test",
     "tagline": "Master driving theory with confidence",
     "offline": "No constant internet required. Learn anytime, anywhere."
@@ -65,7 +67,7 @@
     "greeting": "Ready to Learn?",
     "subtitle": "No constant internet required. Learn anytime, anywhere.",
     "profile": "Profile",
-    "learnSigns": "Learn Traffic Signs",
+    "learnSigns": "Traffic Signs",
     "learnSignsDesc": "Study traffic signs",
     "learnRules": "Rules & Regulations",
     "learnRulesDesc": "Road rules and safety",
@@ -84,6 +86,13 @@
     "examQuestions": "40 Questions",
     "examDuration": "40 Minutes",
     "learningPaths": "Learning Paths",
+    "levels": {
+      "start": "New Driver",
+      "begun": "On the Road",
+      "learner": "Learner",
+      "proficient": "Proficient",
+      "expert": "Master Driver"
+    },
     "statLabels": {
       "questions": "Questions",
       "accuracy": "Accuracy",
@@ -113,8 +122,14 @@
       "title": "Continue Learning",
       "lessonLabel": "Lesson: {lesson}",
       "progressLabel": "Progress: {value}%",
-      "cta": "Continue"
+      "cta": "Continue",
+      "journeyComplete": "Journey complete!",
+      "journeyCompleteDesc": "All lessons done. Take the mock exam!",
+      "continueLesson": "Next: {min} min"
     },
+      "journeyComplete": "Journey complete!",
+      "journeyCompleteDesc": "All lessons done. Take the mock exam!",
+      "continueLesson": "Next: {min} min",
     "continueTest": {
       "title": "Continue Test",
       "practiceLabel": "Resume practice quiz",
@@ -1440,6 +1455,7 @@
     "strictModeDesc": "No back navigation and answers are locked"
   },
   "practice": {
+    "tryAgain": "Practice Again",
     "byMode": "By Mode",
     "byCategory": "By Category",
     "byModeHelper": "Practice by purpose",
@@ -1479,6 +1495,12 @@
     "progressCount": "{current} / {total}"
   },
   "results": {
+    "practiceTitle": "Practice Result",
+    "encouragement": "Great job! Keep it up.",
+    "tryAgainHint": "Almost there — review and try again!",
+    "categoryBreakdown": "Category Breakdown",
+    "certificateShared": "Certificate verified and ready to share!",
+    "certificate": "View Readiness Certificate",
     "title": "Simulation Results",
     "score": "Your Score",
     "passed": "Simulation Passed",
@@ -2372,6 +2394,9 @@
     }
   },
   "ads": {
+    "revealTitle": "Reveal the answer",
+    "revealBody": "Watch a short ad to reveal the correct answer and its explanation.",
+    "revealCta": "Reveal answer",
     "rewardedRetry": "Watch ad for instant retry",
     "unlockExamTitle": "Unlock another exam",
     "unlockExamBody": "Watch a short ad to start a new full exam.",
@@ -2480,6 +2505,69 @@
       "turn_off_engine_if_idle_seconds": "Idle Engine Off (sec)",
       "drifting_speed_range_kmh": "Drifting Speed (km/h)",
       "stop_sign_hold_seconds": "Stop Sign (sec)"
+    }
+  }
+  ,
+  "journey": {
+    "title": "Learning Journey",
+    "errorLoading": "Could not load your learning journey",
+    "reset": "Reset progress",
+    "resetConfirm": "This will erase all completed lessons and quiz scores. Continue?",
+    "heroTitle": "Your Road to Driving Mastery",
+    "heroSubtitle": "{lessons} of {total} lessons completed",
+    "heroModules": "{count} modules in total",
+    "continueTitle": "Continue Learning",
+    "continueSubtitle": "{min} min read",
+    "lessonCount": "{done}/{total} lessons",
+    "quizPassed": "Quiz passed",
+    "quizPending": "Quiz",
+    "unitLabel": "Module {id}",
+    "lessonsHeader": "Lessons",
+    "openHandbook": "Open handbook reference",
+    "quizTitle": "Module Quiz",
+    "quizPassedDesc": "Best score: {score}%",
+    "quizReadyDesc": "{count} questions ready. Pass with 70% or more to complete this module.",
+    "quizLockedDesc": "Finish all lessons first to unlock the quiz.",
+    "lessonLabel": "Lesson {id}",
+    "completed": "Completed",
+    "completeLesson": "Complete Lesson",
+    "nextLesson": "Next: {title}",
+    "lessonCompleteMsg": "Lesson completed!",
+    "quizProgress": "Question {current} of {total}",
+    "quizPassLabel": "Pass: 70%",
+    "quizScore": "{correct}/{total} correct",
+    "quizResultPass": "Excellent!",
+    "quizResultFail": "Not quite yet",
+    "quizResultPassDesc": "You passed this module's comprehension check.",
+    "quizResultFailDesc": "You scored below {threshold}%. Review the lessons and try again.",
+    "quizNext": "Next",
+    "quizFinish": "Finish",
+    "quizExplanation": "Explanation",
+    "quizDone": "Done",
+    "quizTryAgain": "Try Again",
+    "quizSecondChance": "Watch ad for a second chance",
+    "quizBackToModule": "Back to module",
+    "allComplete": "Journey complete!",
+    "allCompleteDesc": "You mastered every lesson. Ready for the mock exam?",
+    "stage1": {
+      "title": "Start Here",
+      "subtitle": "Licenses, violations and traffic points"
+    },
+    "stage2": {
+      "title": "Road Behavior",
+      "subtitle": "How to behave with other road users"
+    },
+    "stage3": {
+      "title": "Traffic & Crossings",
+      "subtitle": "Rules, lanes, intersections and priority"
+    },
+    "stage4": {
+      "title": "Speed & Control",
+      "subtitle": "Speed limits, safety distance and eco-driving"
+    },
+    "stage5": {
+      "title": "Advanced Driving",
+      "subtitle": "Overtaking, stopping, lights and vehicle care"
     }
   }
 }

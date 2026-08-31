@@ -9,7 +9,6 @@ import '../screens/settings_screen.dart';
 import '../screens/signs_screen.dart';
 import '../utils/back_guard.dart';
 import '../utils/navigation_utils.dart';
-import 'bottom_nav.dart';
 
 class TabShellScope extends InheritedNotifier<ValueNotifier<int>> {
   const TabShellScope({
@@ -107,7 +106,6 @@ class _HomeShellState extends ConsumerState<HomeShell> {
               await _handleBack();
             },
             child: Scaffold(
-              extendBody: true,
               body: IndexedStack(
                 index: index,
                 children: [
@@ -133,43 +131,11 @@ class _HomeShellState extends ConsumerState<HomeShell> {
                   ),
                 ],
               ),
-              bottomNavigationBar: (index == 2 || index == 3)
-                  ? null
-                  : BottomNav(
-                      currentIndex: _navIndexForShell(index),
-                      onTap: (next) => _index.value = _shellIndexForNav(next),
-                    ),
             ),
           );
         },
       ),
     );
-  }
-
-  int _navIndexForShell(int shellIndex) {
-    switch (shellIndex) {
-      case 0:
-        return 0;
-      case 1:
-        return 1;
-      case 4:
-        return 2;
-      default:
-        return 0;
-    }
-  }
-
-  int _shellIndexForNav(int navIndex) {
-    switch (navIndex) {
-      case 0:
-        return 0;
-      case 1:
-        return 1;
-      case 2:
-        return 4;
-      default:
-        return 0;
-    }
   }
 }
 

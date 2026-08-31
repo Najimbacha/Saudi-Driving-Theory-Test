@@ -5,10 +5,10 @@ import 'package:go_router/go_router.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 import '../../../core/theme/modern_theme.dart';
-import '../../../widgets/surface_card.dart';
 import '../../../state/learning_state.dart';
 import '../../../utils/app_feedback.dart';
 import '../../../utils/app_fonts.dart';
+import '../../../widgets/stagger_in.dart';
 import '../../providers/category_provider.dart';
 
 class CategoriesScreen extends ConsumerStatefulWidget {
@@ -25,91 +25,54 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
     final learning = ref.watch(learningProvider);
     final scheme = Theme.of(context).colorScheme;
     final isDark = Theme.of(context).brightness == Brightness.dark;
-
-    // Optimize: Read pre-calculated counts instead of looping in build
     final questionCounts = ref.watch(categoryQuestionCountsProvider);
     final hasQuestionData = questionCounts.isNotEmpty;
 
-    final visible = categories;
-
     return Scaffold(
-      backgroundColor:
-          isDark ? const Color(0xFF0F172A) : const Color(0xFFF8FAFC),
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            expandedHeight: 120,
-            floating: false,
-            pinned: true,
-            stretch: true,
-            backgroundColor:
-                isDark ? const Color(0xFF0F172A) : const Color(0xFFF8FAFC),
-            elevation: 0,
-            centerTitle: true,
-            leading: IconButton(
-              icon:
-                  Icon(PhosphorIconsRegular.caretLeft, color: scheme.onSurface),
-              onPressed: () => context.pop(),
-            ),
-            flexibleSpace: FlexibleSpaceBar(
-              centerTitle: true,
-              title: Text(
-                'categories.title'.tr(),
-                style: AppFonts.outfit(
-                  context,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                  color: scheme.onSurface,
-                ),
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        centerTitle: true,
+        title: Text(
+          'categories.title'.tr(),
+          style: AppFonts.outfit(context,
+              fontWeight: FontWeight.w800, fontSize: 20),
+        ),
+        leading: IconButton(
+          icon: Icon(PhosphorIconsRegular.caretLeft, color: scheme.onSurface),
+          onPressed: () => context.pop(),
+        ),
+      ),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: isDark ? ModernTheme.darkGradient : ModernTheme.lightGradient,
+        ),
+        child: SafeArea(
+          child: ListView(
+            padding: const EdgeInsets.fromLTRB(20, 8, 20, 32),
+            children: [
+              const StaggerIn(
+                order: 0,
+                child: _HeaderCard(),
               ),
-              background: Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: isDark
-                        ? [
-                            const Color(0xFF1E293B).withValues(alpha: 0.5),
-                            Colors.transparent
-                          ]
-                        : [
-                            const Color(0xFFE2E8F0).withValues(alpha: 0.5),
-                            Colors.transparent
-                          ],
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                  ),
-                ),
-              ),
-            ),
-          ),
-          SliverPadding(
-            padding: const EdgeInsets.fromLTRB(20, 8, 20, 100),
-            sliver: SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  final trafficIndex = visible.isEmpty ? 0 : 1;
-                  if (index == trafficIndex) {
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 16),
-                      child: _TrafficViolationCard(
-                        title: 'home.violationPoints'.tr(),
-                        subtitle: 'home.violationPointsDesc'.tr(),
-                        onTap: () => context.push('/violation-points'),
-                      ),
-                    );
-                  }
+              const SizedBox(height: 20),
 
-                  final categoryIndex =
-                      index < trafficIndex ? index : index - 1;
-                  final category = visible[categoryIndex];
-                  final stat = learning.categoryStats[category.id];
-                  final accuracy = stat?.accuracy;
-                  final total = hasQuestionData
-                      ? (questionCounts[category.id] ?? 0)
-                      : category.totalQuestions;
+              // Category cards
+              ...categories.asMap().entries.map((entry) {
+                final index = entry.key;
+                final category = entry.value;
+                final stat = learning.categoryStats[category.id];
+                final accuracy = stat?.accuracy;
+                final total = hasQuestionData
+                    ? (questionCounts[category.id] ?? 0)
+                    : category.totalQuestions;
 
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 16),
-                    child: _CategoryPremiumCard(
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 12),
+                  child: StaggerIn(
+                    order: index + 1,
+                    child: _CategoryCard(
                       title: category.titleKey.tr(),
                       subtitle: category.subtitleKey.tr(),
                       gradient: _gradientFor(category.id),
@@ -121,13 +84,27 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
                         context.push('/practice?category=${category.id}');
                       },
                     ),
-                  );
-                },
-                childCount: visible.length + 1,
+                  ),
+                );
+              }),
+
+              const SizedBox(height: 12),
+
+              // Traffic violations highlight card
+              StaggerIn(
+                order: categories.length + 1,
+                child: _ViolationCard(
+                  title: 'home.violationPoints'.tr(),
+                  subtitle: 'home.violationPointsDesc'.tr(),
+                  onTap: () {
+                    AppFeedback.tap(context);
+                    context.push('/violation-points');
+                  },
+                ),
               ),
-            ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
@@ -186,8 +163,77 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
   }
 }
 
-class _CategoryPremiumCard extends StatelessWidget {
-  const _CategoryPremiumCard({
+class _HeaderCard extends StatelessWidget {
+  const _HeaderCard();
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+
+    return Container(
+      padding: const EdgeInsets.all(22),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [scheme.primary, scheme.secondary],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: [
+          BoxShadow(
+            color: scheme.primary.withValues(alpha: 0.3),
+            blurRadius: 16,
+            offset: const Offset(0, 8),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 52,
+            height: 52,
+            decoration: BoxDecoration(
+              color: Colors.white.withValues(alpha: 0.18),
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: const Icon(
+              PhosphorIconsFill.books,
+              color: Colors.white,
+              size: 26,
+            ),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'categories.title'.tr(),
+                  style: AppFonts.outfit(context,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w900,
+                      color: Colors.white),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  'practice.byCategoryHelper'.tr(),
+                  style: AppFonts.outfit(context,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500,
+                      height: 1.4,
+                      color: Colors.white.withValues(alpha: 0.85)),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _CategoryCard extends StatelessWidget {
+  const _CategoryCard({
     required this.title,
     required this.subtitle,
     required this.gradient,
@@ -208,129 +254,143 @@ class _CategoryPremiumCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    return AppSurfaceCard(
+    return InkWell(
       onTap: onTap,
-      padding: const EdgeInsets.all(16),
-      child: Row(
-        children: [
-          Container(
-            width: 56,
-            height: 56,
-            decoration: BoxDecoration(
-              gradient: gradient,
-              borderRadius: BorderRadius.circular(16),
-              boxShadow: [
-                BoxShadow(
-                  color: gradient.colors.first.withValues(alpha: 0.3),
-                  blurRadius: 12,
-                  offset: const Offset(0, 4),
-                ),
-              ],
-            ),
-            child: Icon(icon, color: Colors.white, size: 28),
+      borderRadius: BorderRadius.circular(20),
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: isDark
+              ? const Color(0xFF1E293B).withValues(alpha: 0.85)
+              : Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: isDark
+                ? Colors.white.withValues(alpha: 0.08)
+                : scheme.outline.withValues(alpha: 0.1),
+            width: 1,
           ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        title,
-                        style: AppFonts.outfit(
-                          context,
-                          fontSize: 17,
-                          fontWeight: FontWeight.w700,
-                          color: scheme.onSurface,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                    if (accuracy != null)
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 2),
-                        decoration: BoxDecoration(
-                          color: _accuracyColor(accuracy!, scheme)
-                              .withValues(alpha: 0.1),
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(
-                            color: _accuracyColor(accuracy!, scheme)
-                                .withValues(alpha: 0.2),
-                          ),
-                        ),
-                        child: Text(
-                          '$accuracy%',
-                          style: AppFonts.outfit(
-                            context,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 11,
-                            color: _accuracyColor(accuracy!, scheme),
-                          ),
-                        ),
-                      ),
-                  ],
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  subtitle,
-                  style: AppFonts.outfit(
-                    context,
-                    color: scheme.onSurface.withValues(alpha: 0.6),
-                    fontSize: 13,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: isDark ? 0.18 : 0.05),
+              blurRadius: 12,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 50,
+              height: 50,
+              decoration: BoxDecoration(
+                gradient: gradient,
+                borderRadius: BorderRadius.circular(15),
+                boxShadow: [
+                  BoxShadow(
+                    color: gradient.colors.first.withValues(alpha: 0.35),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
                   ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 8),
-                Row(
-                  children: [
-                    Icon(
-                      PhosphorIconsRegular.question,
-                      size: 14,
-                      color: scheme.onSurface.withValues(alpha: 0.45),
-                    ),
-                    const SizedBox(width: 4),
-                    Text(
-                      'categories.totalQuestions'.tr(
-                        namedArgs: {'value': total.toString()},
-                      ),
-                      style: AppFonts.outfit(
-                        context,
-                        color: scheme.onSurface.withValues(alpha: 0.45),
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    const Spacer(),
-                    Icon(
-                      PhosphorIconsRegular.caretRight,
-                      size: 14,
-                      color: scheme.onSurface.withValues(alpha: 0.3),
-                    ),
-                  ],
-                ),
-              ],
+                ],
+              ),
+              child: Icon(icon, color: Colors.white, size: 24),
             ),
-          ),
-        ],
+            const SizedBox(width: 14),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          title,
+                          style: AppFonts.outfit(context,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w800,
+                              color: scheme.onSurface),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      if (accuracy != null) ...[
+                        const SizedBox(width: 8),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 3),
+                          decoration: BoxDecoration(
+                            color:
+                                _accuracyColor(accuracy!, scheme)
+                                    .withValues(alpha: 0.12),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Text(
+                            '$accuracy%',
+                            style: AppFonts.outfit(context,
+                                fontSize: 11,
+                                fontWeight: FontWeight.w800,
+                                color: _accuracyColor(accuracy!, scheme)),
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+                  const SizedBox(height: 3),
+                  Text(
+                    subtitle,
+                    style: AppFonts.outfit(context,
+                        fontSize: 12.5,
+                        color: scheme.onSurface.withValues(alpha: 0.55)),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      Icon(
+                        PhosphorIconsFill.question,
+                        size: 13,
+                        color: scheme.primary.withValues(alpha: 0.8),
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        'categories.totalQuestions'.tr(
+                          namedArgs: {'value': total.toString()},
+                        ),
+                        style: AppFonts.outfit(context,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                            color: scheme.primary.withValues(alpha: 0.8)),
+                      ),
+                      const Spacer(),
+                      Icon(
+                        Icons.arrow_forward_ios_rounded,
+                        size: 13,
+                        color: scheme.onSurface.withValues(alpha: 0.25),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 
   Color _accuracyColor(int accuracy, ColorScheme scheme) {
-    if (accuracy >= 80) return ModernTheme.tertiary;
-    if (accuracy >= 60) return Colors.orangeAccent;
+    if (accuracy >= 80) return ModernTheme.emerald;
+    if (accuracy >= 60) return ModernTheme.amber;
     return scheme.error;
   }
 }
 
-class _TrafficViolationCard extends StatelessWidget {
-  const _TrafficViolationCard({
+class _ViolationCard extends StatelessWidget {
+  const _ViolationCard({
     required this.title,
     required this.subtitle,
     required this.onTap,
@@ -345,71 +405,82 @@ class _TrafficViolationCard extends StatelessWidget {
     final scheme = Theme.of(context).colorScheme;
     const gradient = ModernTheme.accentGradient;
 
-    return AppSurfaceCard(
-      onTap: () {
-        AppFeedback.tap(context);
-        onTap();
-      },
-      padding: const EdgeInsets.all(16),
-      child: Row(
-        children: [
-          Container(
-            width: 56,
-            height: 56,
-            decoration: BoxDecoration(
-              gradient: gradient,
-              borderRadius: BorderRadius.circular(16),
-              boxShadow: [
-                BoxShadow(
-                  color: gradient.colors.first.withValues(alpha: 0.3),
-                  blurRadius: 12,
-                  offset: const Offset(0, 4),
-                ),
-              ],
-            ),
-            child: const Icon(
-              PhosphorIconsFill.warningDiamond,
-              color: Colors.white,
-              size: 28,
-            ),
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(20),
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              gradient.colors.first.withValues(alpha: 0.12),
+              gradient.colors.last.withValues(alpha: 0.06),
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
           ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: AppFonts.outfit(
-                    context,
-                    fontSize: 17,
-                    fontWeight: FontWeight.w700,
-                    color: scheme.onSurface,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: gradient.colors.first.withValues(alpha: 0.3),
+            width: 1.2,
+          ),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 50,
+              height: 50,
+              decoration: BoxDecoration(
+                gradient: gradient,
+                borderRadius: BorderRadius.circular(15),
+                boxShadow: [
+                  BoxShadow(
+                    color: gradient.colors.first.withValues(alpha: 0.35),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
                   ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  subtitle,
-                  style: AppFonts.outfit(
-                    context,
-                    color: scheme.onSurface.withValues(alpha: 0.6),
-                    fontSize: 13,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ],
+                ],
+              ),
+              child: const Icon(
+                PhosphorIconsFill.warningDiamond,
+                color: Colors.white,
+                size: 24,
+              ),
             ),
-          ),
-          const SizedBox(width: 8),
-          Icon(
-            PhosphorIconsRegular.caretRight,
-            size: 14,
-            color: scheme.onSurface.withValues(alpha: 0.3),
-          ),
-        ],
+            const SizedBox(width: 14),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: AppFonts.outfit(context,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w800,
+                        color: scheme.onSurface),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 3),
+                  Text(
+                    subtitle,
+                    style: AppFonts.outfit(context,
+                        fontSize: 12.5,
+                        color: scheme.onSurface.withValues(alpha: 0.55)),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 8),
+            Icon(
+              Icons.arrow_forward_ios_rounded,
+              size: 13,
+              color: scheme.onSurface.withValues(alpha: 0.25),
+            ),
+          ],
+        ),
       ),
     );
   }

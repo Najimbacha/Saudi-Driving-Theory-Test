@@ -6,6 +6,7 @@ import '../core/theme/modern_theme.dart';
 import '../data/models/exam_result_model.dart';
 import '../utils/app_feedback.dart';
 import '../utils/app_fonts.dart';
+import '../utils/app_toast.dart';
 
 class ExamCertificateDialog extends StatelessWidget {
   const ExamCertificateDialog({super.key, required this.result});
@@ -204,18 +205,10 @@ class ExamCertificateDialog extends StatelessWidget {
                     onPressed: () {
                       AppFeedback.confirm(context);
                       Navigator.pop(context);
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(
-                            'Certificate verified and ready to share! 🎉',
-                            style: AppFonts.outfit(context),
-                          ),
-                          backgroundColor: ModernTheme.emerald,
-                          behavior: SnackBarBehavior.floating,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
+                      showAppToast(
+                        context,
+                        'results.certificateShared'.tr(),
+                        success: true,
                       );
                     },
                     icon: const Icon(PhosphorIconsFill.shareNetwork, size: 18),

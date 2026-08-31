@@ -1,7 +1,7 @@
 name: saudi_driving_theory_flutter
 description: Offline Saudi Driving Theory Test app (Flutter migration)
 publish_to: "none"
-version: 1.1.0+9
+version: 1.1.0+10
 
 environment:
   sdk: ">=3.4.0 <4.0.0"

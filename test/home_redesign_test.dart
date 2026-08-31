@@ -187,10 +187,14 @@ void main() {
 
       expect(tester.takeException(), isNull);
 
-      final learningSection =
-          find.byKey(const Key('home_section_learning_paths'));
-      final quickStartSection =
-          find.byKey(const Key('home_section_quick_start'));
+      final learningSection = find.byKey(
+        const Key('home_section_learning_paths'),
+        skipOffstage: false,
+      );
+      final quickStartSection = find.byKey(
+        const Key('home_section_quick_start'),
+        skipOffstage: false,
+      );
 
       expect(learningSection, findsOneWidget);
       expect(quickStartSection, findsOneWidget);
@@ -223,7 +227,7 @@ void main() {
     await _tapAndExpectPath(
       tester,
       router,
-      find.text('Learn Traffic Signs'),
+      find.text('Traffic Signs'),
       'signs',
     );
     await _tapAndExpectPath(

@@ -1,5 +1,7 @@
 {
   "app": {
+    "nameShort": "ड्राइविंग टेस्ट",
+    "taglineAbr": "थ्योरी सरल",
     "name": "सऊदी ड्राइविंग थ्योरी टेस्ट",
     "tagline": "ड्राइविंग थ्योरी आत्मविश्वास से सीखें",
     "offline": "लगातार इंटरनेट की आवश्यकता नहीं। कभी भी, कहीं भी सीखें।"
@@ -65,7 +67,7 @@
     "greeting": "सीखने के लिए तैयार?",
     "subtitle": "लगातार इंटरनेट की आवश्यकता नहीं। कभी भी, कहीं भी सीखें।",
     "profile": "प्रोफाइल",
-    "learnSigns": "ट्रैफिक संकेत सीखें",
+    "learnSigns": "ट्रैफिक संकेत",
     "learnSignsDesc": "ट्रैफिक संकेत पढ़ें",
     "learnRules": "नियम और विनियम",
     "learnRulesDesc": "सड़क नियम और सुरक्षा",
@@ -84,6 +86,13 @@
     "examQuestions": "40 प्रश्न",
     "examDuration": "40 मिनट",
     "learningPaths": "सीखने के पथ",
+    "levels": {
+      "start": "नया ड्राइवर",
+      "begun": "सड़क पर",
+      "learner": "शिक्षार्थी",
+      "proficient": "कुशल",
+      "expert": "मास्टर ड्राइवर"
+    },
     "statLabels": {
       "questions": "प्रश्न",
       "accuracy": "सटीकता",
@@ -113,8 +122,14 @@
       "title": "सीखना जारी रखें",
       "lessonLabel": "पाठ: {lesson}",
       "progressLabel": "प्रगति: {value}%",
-      "cta": "जारी रखें"
+      "cta": "जारी रखें",
+      "journeyComplete": "यात्रा पूर्ण!",
+      "journeyCompleteDesc": "सभी पाठ पूरे। मॉक परीक्षा दें!",
+      "continueLesson": "अगला: {min} मिनट"
     },
+      "journeyComplete": "यात्रा पूर्ण!",
+      "journeyCompleteDesc": "सभी पाठ पूरे। मॉक परीक्षा दें!",
+      "continueLesson": "अगला: {min} मिनट",
     "continueTest": {
       "title": "टेस्ट जारी रखें",
       "practiceLabel": "अभ्यास जारी रखें",
@@ -1418,6 +1433,7 @@
     "strictModeDesc": "पीछे नहीं जा सकते और जवाब लॉक हो जाते हैं"
   },
   "practice": {
+    "tryAgain": "फिर से अभ्यास करें",
     "byMode": "मोड के अनुसार",
     "byCategory": "श्रेणी के अनुसार",
     "byModeHelper": "उद्देश्य के अनुसार अभ्यास करें",
@@ -1457,6 +1473,12 @@
     "progressCount": "{current} / {total}"
   },
   "results": {
+    "practiceTitle": "अभ्यास परिणाम",
+    "encouragement": "बहुत बढ़िया! ऐसे ही जारी रखें।",
+    "tryAgainHint": "लगभग पहुंच गए — समीक्षा करें और फिर प्रयास करें!",
+    "categoryBreakdown": "श्रेणी विवरण",
+    "certificateShared": "प्रमाणपत्र सत्यापित हुआ और साझा करने के लिए तैयार!",
+    "certificate": "तैयारी प्रमाणपत्र देखें",
     "title": "सिमुलेशन परिणाम",
     "score": "आपका स्कोर",
     "passed": "सिमुलेशन में सफल",
@@ -2295,6 +2317,9 @@
     }
   },
   "ads": {
+    "revealTitle": "उत्तर दिखाएं",
+    "revealBody": "सही उत्तर और उसकी व्याख्या दिखाने के लिए एक छोटा विज्ञापन देखें।",
+    "revealCta": "उत्तर दिखाएं",
     "rewardedRetry": "तुरंत दोबारा प्रयास के लिए विज्ञापन देखें",
     "unlockExamTitle": "एक और परीक्षा खोलें",
     "unlockExamBody": "नई पूर्ण परीक्षा शुरू करने के लिए एक छोटा विज्ञापन देखें।",
@@ -2475,6 +2500,69 @@
       "turn_off_engine_if_idle_seconds": "इंजन बंद (सेकंड)",
       "drifting_speed_range_kmh": "ड्रिफ्टिंग गति",
       "stop_sign_hold_seconds": "स्टॉप साइन (सेकंड)"
+    }
+  }
+  ,
+  "journey": {
+    "title": "सीखने की यात्रा",
+    "errorLoading": "आपकी सीखने की यात्रा लोड नहीं हो सकी",
+    "reset": "प्रगति रीसेट करें",
+    "resetConfirm": "इससे पूर्ण किए गए पाठ और क्विज़ स्कोर मिट जाएंगे। क्या आप जारी रखना चाहते हैं?",
+    "heroTitle": "ड्राइविंग में महारत की ओर आपका रास्ता",
+    "heroSubtitle": "{total} में से {lessons} पाठ पूर्ण",
+    "heroModules": "कुल {count} मॉड्यूल",
+    "continueTitle": "सीखना जारी रखें",
+    "continueSubtitle": "{min} मिनट पढ़ें",
+    "lessonCount": "{done}/{total} पाठ",
+    "quizPassed": "क्विज़ पास",
+    "quizPending": "क्विज़",
+    "unitLabel": "मॉड्यूल {id}",
+    "lessonsHeader": "पाठ",
+    "openHandbook": "हैंडबुक संदर्भ खोलें",
+    "quizTitle": "मॉड्यूल क्विज़",
+    "quizPassedDesc": "सर्वश्रेष्ठ स्कोर: {score}%",
+    "quizReadyDesc": "{count} प्रश्न तैयार हैं। इस मॉड्यूल को पूरा करने के लिए 70% या अधिक पास करें।",
+    "quizLockedDesc": "क्विज़ खोलने के लिए पहले सभी पाठ पूरे करें।",
+    "lessonLabel": "पाठ {id}",
+    "completed": "पूर्ण",
+    "completeLesson": "पाठ पूर्ण करें",
+    "nextLesson": "अगला: {title}",
+    "lessonCompleteMsg": "पाठ पूर्ण हुआ!",
+    "quizProgress": "प्रश्न {current} / {total}",
+    "quizPassLabel": "पास: 70%",
+    "quizScore": "{correct}/{total} सही",
+    "quizResultPass": "उत्कृष्ट!",
+    "quizResultFail": "अभी नहीं",
+    "quizResultPassDesc": "आपने इस मॉड्यूल की समझ जांच पास की।",
+    "quizResultFailDesc": "आपका स्कोर {threshold}% से कम है। पाठ दोबारा देखें और प्रयास करें।",
+    "quizNext": "अगला",
+    "quizFinish": "समाप्त",
+    "quizExplanation": "व्याख्या",
+    "quizDone": "हो गया",
+    "quizTryAgain": "फिर से प्रयास करें",
+    "quizSecondChance": "दूसरा मौका पाने के लिए विज्ञापन देखें",
+    "quizBackToModule": "मॉड्यूल पर वापस",
+    "allComplete": "यात्रा पूर्ण!",
+    "allCompleteDesc": "आपने हर पाठ में महारत हासिल कर ली। मॉक परीक्षा के लिए तैयार?",
+    "stage1": {
+      "title": "यहीं से शुरू करें",
+      "subtitle": "लाइसेंस, उल्लंघन और ट्रैफिक पॉइंट"
+    },
+    "stage2": {
+      "title": "सड़क व्यवहार",
+      "subtitle": "अन्य सड़क उपयोगकर्ताओं के साथ कैसे व्यवहार करें"
+    },
+    "stage3": {
+      "title": "ट्रैफिक और क्रॉसिंग",
+      "subtitle": "नियम, लेन, चौराहे और प्राथमिकता"
+    },
+    "stage4": {
+      "title": "गति और नियंत्रण",
+      "subtitle": "गति सीमा, सुरक्षित दूरी और इको-ड्राइविंग"
+    },
+    "stage5": {
+      "title": "उन्नत ड्राइविंग",
+      "subtitle": "ओवरटेकिंग, रुकना, लाइट और वाहन देखभाल"
     }
   }
 }

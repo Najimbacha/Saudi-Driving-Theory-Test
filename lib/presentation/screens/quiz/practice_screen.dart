@@ -1,12 +1,13 @@
-import 'package:easy_localization/easy_localization.dart';
+﻿import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 import '../../../core/theme/modern_theme.dart';
+import '../../../widgets/banner_ad_widget.dart';
 import '../../../widgets/glass_container.dart';
+import '../../../widgets/standard_question_view.dart';
 import '../../../widgets/home_shell.dart';
 import '../../../data/models/exam_result_model.dart';
 import '../../../data/models/category_model.dart';
@@ -17,6 +18,7 @@ import '../../../state/data_state.dart';
 import '../../../state/app_state.dart';
 import '../../../utils/app_feedback.dart';
 import '../../../utils/app_fonts.dart';
+import '../../../utils/app_toast.dart';
 import '../../../utils/navigation_utils.dart';
 import '../../providers/category_provider.dart';
 
@@ -117,12 +119,7 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
             WidgetsBinding.instance.addPostFrameCallback((_) {
               if (!context.mounted) return;
               if (filtered.isEmpty) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('categories.empty'.tr()),
-                    backgroundColor: ModernTheme.secondary,
-                  ),
-                );
+                showAppToast(context, 'categories.empty'.tr(), error: true);
               }
             });
             if (filtered.isNotEmpty) {
@@ -138,12 +135,7 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
               onStart: (categoryId) {
                 final nextFiltered = _filterByCategory(questions, categoryId);
                 if (nextFiltered.isEmpty) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('categories.empty'.tr()),
-                      backgroundColor: ModernTheme.secondary,
-                    ),
-                  );
+                  showAppToast(context, 'categories.empty'.tr(), error: true);
                   return;
                 }
                 quizController.start(nextFiltered);
@@ -159,12 +151,7 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
             onStart: (categoryId) {
               final filtered = _filterByCategory(questions, categoryId);
               if (filtered.isEmpty) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('categories.empty'.tr()),
-                    backgroundColor: ModernTheme.secondary,
-                  ),
-                );
+                showAppToast(context, 'categories.empty'.tr(), error: true);
                 return;
               }
               quizController.start(filtered);
@@ -202,14 +189,6 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
         final isDark = Theme.of(context).brightness == Brightness.dark;
         final primaryTextColor = scheme.onSurface;
         final secondaryTextColor = scheme.onSurface.withValues(alpha: 0.7);
-        final defaultFill = isDark
-            ? Colors.white.withValues(alpha: 0.06)
-            : scheme.onSurface.withValues(alpha: 0.04);
-        final subtleFill = isDark
-            ? Colors.white.withValues(alpha: 0.04)
-            : scheme.onSurface.withValues(alpha: 0.03);
-        final defaultBorder =
-            isDark ? Colors.white10 : scheme.onSurface.withValues(alpha: 0.12);
         Future<void> handleBack({required bool fromPopScope}) async {
           if (isActiveQuiz) {
             final shouldExit = await _confirmExitPractice(
@@ -312,150 +291,23 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                          // Question Text
+                          // Question + options (shared standard component)
                           AnimatedSwitcher(
                             duration: const Duration(milliseconds: 300),
-                            child: Text(
-                              questionText,
+                            child: StandardQuestionView(
                               key: ValueKey(current.id),
-                              style: AppFonts.outfit(context,
-                                fontSize: 22, // Larger text
-                                fontWeight: FontWeight.w600,
-                                color: primaryTextColor,
-                                height: 1.3,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 16),
-
-                          // Sign Image
-                          if (signPath != null)
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 16),
-                              child: GlassContainer(
-                                padding: const EdgeInsets.all(20),
-                                color: isDark
-                                    ? Colors.white.withValues(alpha: 0.05)
-                                    : scheme.onSurface.withValues(alpha: 0.04),
-                                child: SvgPicture.asset(
-                                  'assets/$signPath',
-                                  height: 140,
-                                  fit: BoxFit.contain,
-                                ),
-                              ),
-                            ),
-
-                          // Options
-                          AnimatedSwitcher(
-                            duration: const Duration(milliseconds: 300),
-                            child: Column(
-                              key: ValueKey('${current.id}-options'),
-                              children: List.generate(options.length, (idx) {
-                                final optionText = options[idx];
-                                final wasSelected = selected == idx;
-                                Color borderColor = defaultBorder;
-                                Color? fillColor;
-                                List<BoxShadow> shadow = const [];
-
-                                if (quiz.showAnswer) {
-                                  if (idx == current.correctIndex) {
-                                    fillColor = ModernTheme.tertiary
-                                        .withValues(alpha: 0.18);
-                                    borderColor = ModernTheme.tertiary;
-                                    shadow = [
-                                      BoxShadow(
-                                        color: ModernTheme.tertiary
-                                            .withValues(alpha: 0.2),
-                                        blurRadius: 8,
-                                        offset: const Offset(0, 4),
-                                      )
-                                    ];
-                                  } else if (wasSelected) {
-                                    fillColor =
-                                        scheme.error.withValues(alpha: 0.18);
-                                    borderColor = scheme.error;
-                                    shadow = [
-                                      BoxShadow(
-                                        color: scheme.error
-                                            .withValues(alpha: 0.2),
-                                        blurRadius: 8,
-                                        offset: const Offset(0, 4),
-                                      )
-                                    ];
-                                  } else {
-                                    fillColor = subtleFill;
-                                    borderColor = defaultBorder;
-                                  }
-                                } else {
-                                  fillColor = defaultFill;
-                                  borderColor = defaultBorder;
-                                }
-
-                                return Padding(
-                                  padding: const EdgeInsets.only(bottom: 12),
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      if (quiz.showAnswer) return;
+                              questionText: questionText,
+                              optionTexts: options,
+                              selectedIndex: selected,
+                              correctIndex: current.correctIndex,
+                              revealed: quiz.showAnswer,
+                              signPath: signPath,
+                              onSelect: quiz.showAnswer
+                                  ? null
+                                  : (idx) {
                                       AppFeedback.tap(context);
                                       quizController.selectAnswer(idx);
                                     },
-                                    child: AnimatedContainer(
-                                      duration:
-                                          const Duration(milliseconds: 200),
-                                      decoration: BoxDecoration(
-                                        color: fillColor,
-                                        borderRadius: BorderRadius.circular(16),
-                                        border: Border.all(
-                                          color: borderColor,
-                                          width: (borderColor !=
-                                                  Colors.transparent)
-                                              ? 2
-                                              : 1,
-                                        ),
-                                        boxShadow: shadow,
-                                      ),
-                                      padding: const EdgeInsets.all(16),
-                                      child: Row(
-                                        children: [
-                                          _OptionBadge(
-                                            label:
-                                                String.fromCharCode(65 + idx),
-                                            active: wasSelected,
-                                            success: quiz.showAnswer &&
-                                                idx == current.correctIndex,
-                                            error: quiz.showAnswer &&
-                                                wasSelected &&
-                                                idx != current.correctIndex,
-                                            isDark: isDark,
-                                            scheme: scheme,
-                                          ),
-                                          const SizedBox(width: 16),
-                                          Expanded(
-                                            child: Text(
-                                              optionText,
-                                              style: AppFonts.outfit(context,
-                                                fontSize: 16,
-                                                color: scheme.onSurface
-                                                    .withValues(alpha: 0.9),
-                                              ),
-                                            ),
-                                          ),
-                                          if (quiz.showAnswer &&
-                                              idx == current.correctIndex)
-                                            const Icon(
-                                                Icons.check_circle_rounded,
-                                                color: ModernTheme.tertiary),
-                                          if (quiz.showAnswer &&
-                                              wasSelected &&
-                                              idx != current.correctIndex)
-                                            Icon(Icons.cancel_rounded,
-                                                color: scheme.error),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              }),
                             ),
                           ),
 
@@ -481,11 +333,11 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
                                         ? 'quiz.correct'.tr()
                                         : 'quiz.incorrect'.tr(),
                                     style: AppFonts.outfit(context,
-                                      fontWeight: FontWeight.bold,
+                                      fontWeight: FontWeight.w800,
                                       color: isCorrect
                                           ? ModernTheme.tertiary
                                           : scheme.error,
-                                      fontSize: 18,
+                                      fontSize: 15,
                                     ),
                                   ),
                                   const SizedBox(height: 8),
@@ -506,81 +358,68 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
                     ),
 
                     // Actions
-                    GlassContainer(
-                      borderRadius:
-                          const BorderRadius.vertical(top: Radius.circular(24)),
-                      color: isDark
-                          ? Colors.black.withValues(alpha: 0.2)
-                          : Colors.white.withValues(alpha: 0.8),
-                      blur: 10,
-                      padding: const EdgeInsets.all(20),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 8, 20, 16),
                       child: Row(
                         children: [
-                          Expanded(
-                            child: OutlinedButton(
-                              style: OutlinedButton.styleFrom(
-                                side: BorderSide(
-                                    color: scheme.onSurface
-                                        .withValues(alpha: 0.24)),
-                                foregroundColor: primaryTextColor,
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 16),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(16)),
+                          // Small secondary: Cancel (outlined)
+                          OutlinedButton.icon(
+                            style: OutlinedButton.styleFrom(
+                              side: BorderSide(
+                                color: scheme.onSurface.withValues(alpha: 0.25),
+                                width: 1,
                               ),
-                              onPressed: () async {
-                                if (quiz.questions.isNotEmpty &&
-                                    !quiz.isCompleted) {
-                                  final shouldExit = await _confirmExitPractice(
-                                    context,
-                                    isDark: isDark,
-                                    scheme: scheme,
-                                    primaryTextColor: primaryTextColor,
-                                    secondaryTextColor: secondaryTextColor,
-                                  );
-                                  if (!shouldExit || !context.mounted) return;
-                                  quizController.reset();
-                                }
-                                final shell = TabShellScope.maybeOf(context);
-                                if (shell != null) {
-                                  shell.value = 0;
-                                } else {
-                                  Navigator.of(context).pop();
-                                }
-                              },
-                              child: Text('common.cancel'.tr(),
-                                  style: AppFonts.outfit(context,)),
+                              foregroundColor:
+                                  scheme.onSurface.withValues(alpha: 0.7),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 14, vertical: 12),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(14),
+                              ),
+                              textStyle: AppFonts.outfit(context,
+                                  fontSize: 13, fontWeight: FontWeight.w600),
                             ),
+                            onPressed: () async {
+                              if (quiz.questions.isNotEmpty &&
+                                  !quiz.isCompleted) {
+                                final shouldExit = await _confirmExitPractice(
+                                  context,
+                                  isDark: isDark,
+                                  scheme: scheme,
+                                  primaryTextColor: primaryTextColor,
+                                  secondaryTextColor: secondaryTextColor,
+                                );
+                                if (!shouldExit || !context.mounted) return;
+                                quizController.reset();
+                              }
+                              final shell = TabShellScope.maybeOf(context);
+                              if (shell != null) {
+                                shell.value = 0;
+                              } else {
+                                Navigator.of(context).pop();
+                              }
+                            },
+                            icon: const Icon(Icons.close_rounded, size: 15),
+                            label: Text('common.cancel'.tr()),
                           ),
-                          const SizedBox(width: 16),
+                          const SizedBox(width: 10),
+
+                          // Large primary: Next / Submit (filled)
                           Expanded(
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
+                            child: FilledButton.icon(
+                              style: FilledButton.styleFrom(
                                 backgroundColor: ModernTheme.primary,
                                 foregroundColor: Colors.white,
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 16),
+                                disabledBackgroundColor:
+                                    ModernTheme.primary.withValues(alpha: 0.4),
+                                disabledForegroundColor: Colors.white70,
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 14, horizontal: 12),
                                 shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(16)),
-                                elevation: 8,
-                                shadowColor:
-                                    ModernTheme.primary.withValues(alpha: 0.5),
-                              ).copyWith(
-                                backgroundColor:
-                                    WidgetStateProperty.resolveWith((states) {
-                                  if (states.contains(WidgetState.disabled)) {
-                                    return ModernTheme.primary
-                                        .withValues(alpha: 0.45);
-                                  }
-                                  return ModernTheme.primary;
-                                }),
-                                foregroundColor:
-                                    WidgetStateProperty.resolveWith((states) {
-                                  if (states.contains(WidgetState.disabled)) {
-                                    return Colors.white60;
-                                  }
-                                  return Colors.white;
-                                }),
+                                  borderRadius: BorderRadius.circular(14),
+                                ),
+                                textStyle: AppFonts.outfit(context,
+                                    fontSize: 15, fontWeight: FontWeight.w800),
                               ),
                               onPressed: canPressNext
                                   ? () {
@@ -592,17 +431,24 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
                                       }
                                     }
                                   : null,
-                              child: Text(
+                              iconAlignment: IconAlignment.end,
+                              icon: const Icon(
+                                  Icons.arrow_forward_rounded, size: 18),
+                              label: Text(
                                 quiz.currentIndex + 1 == quiz.questions.length
                                     ? 'quiz.submit'.tr()
                                     : 'common.next'.tr(),
-                                style: AppFonts.outfit(context,
-                                    fontWeight: FontWeight.bold, fontSize: 16),
                               ),
                             ),
                           ),
                         ],
                       ),
+                    ),
+
+                    // Banner ad — subtle, respects the settings toggle.
+                    const Padding(
+                      padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
+                      child: BannerAdWidget(),
                     ),
                   ],
                 ),
@@ -691,6 +537,11 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
         .read(appSettingsProvider.notifier)
         .updateStats(correct: correct, total: total);
     ref.read(examHistoryProvider.notifier).addResult(result);
+
+    // Navigate to the results screen.
+    if (context.mounted) {
+      context.push('/results', extra: result);
+    }
   }
 
   static Map<String, int> _categoryScores(QuizState quiz) {
@@ -1140,63 +991,6 @@ class _StatPill extends StatelessWidget {
   }
 }
 
-class _OptionBadge extends StatelessWidget {
-  const _OptionBadge({
-    required this.label,
-    required this.active,
-    required this.success,
-    required this.error,
-    required this.isDark,
-    required this.scheme,
-  });
-
-  final String label;
-  final bool active;
-  final bool success;
-  final bool error;
-  final bool isDark;
-  final ColorScheme scheme;
-
-  @override
-  Widget build(BuildContext context) {
-    Color bg = isDark ? Colors.white10 : Colors.black.withValues(alpha: 0.06);
-    Color border = isDark ? Colors.white24 : Colors.black12;
-
-    if (active) {
-      bg = ModernTheme.secondary;
-      border = ModernTheme.secondary;
-    }
-    if (success) {
-      bg = ModernTheme.tertiary;
-      border = ModernTheme.tertiary;
-    }
-    if (error) {
-      bg = scheme.error;
-      border = scheme.error;
-    }
-
-    final text = bg.computeLuminance() > 0.5 ? Colors.black : Colors.white;
-
-    return Container(
-      width: 32,
-      height: 32,
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        color: bg,
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: border),
-      ),
-      child: Text(
-        label,
-        style: AppFonts.outfit(
-          context,
-          color: text,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    );
-  }
-}
 
 Map<String, int> _buildCounts(
   List<Question> questions,

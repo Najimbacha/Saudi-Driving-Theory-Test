@@ -35,7 +35,7 @@ class HomeHeroGoalCard extends StatelessWidget {
               colors: [
                 Color(0xFF4338CA),
                 Color(0xFF6366F1),
-                Color(0xFF7C3AED),
+                Color(0xFF8B5CF6),
               ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
@@ -43,15 +43,45 @@ class HomeHeroGoalCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(28),
             boxShadow: [
               BoxShadow(
-                color: ModernTheme.primary.withValues(alpha: 0.35),
+                color: ModernTheme.primary.withValues(alpha: 0.4),
                 blurRadius: 24,
                 offset: const Offset(0, 10),
+              ),
+              BoxShadow(
+                color: ModernTheme.secondary.withValues(alpha: 0.2),
+                blurRadius: 40,
+                offset: const Offset(0, 4),
               ),
             ],
           ),
           child: Stack(
             clipBehavior: Clip.none,
             children: [
+              // Decorative orbs
+              Positioned(
+                right: -20,
+                top: -20,
+                child: Container(
+                  width: 130,
+                  height: 130,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white.withValues(alpha: 0.08),
+                  ),
+                ),
+              ),
+              Positioned(
+                right: 30,
+                bottom: -55,
+                child: Container(
+                  width: 110,
+                  height: 110,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white.withValues(alpha: 0.06),
+                  ),
+                ),
+              ),
               Positioned(
                 right: -15,
                 top: -15,
@@ -60,13 +90,13 @@ class HomeHeroGoalCard extends StatelessWidget {
                   height: 110,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Colors.white.withValues(alpha: 0.08),
+                    color: Colors.white.withValues(alpha: 0.05),
                   ),
                   child: Center(
                     child: Icon(
                       PhosphorIconsFill.timer,
                       size: 64,
-                      color: Colors.white.withValues(alpha: 0.18),
+                      color: Colors.white.withValues(alpha: 0.15),
                     ),
                   ),
                 ),
@@ -121,15 +151,15 @@ class HomeHeroGoalCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 14),
+                  const SizedBox(height: 16),
                   Text(
                     title ?? 'home.examSimTitle'.tr(),
                     style: AppFonts.outfit(
                       context,
                       color: Colors.white,
-                      fontSize: 24,
-                      fontWeight: FontWeight.w800,
-                      height: 1.2,
+                      fontSize: 25,
+                      fontWeight: FontWeight.w900,
+                      height: 1.15,
                     ),
                   ),
                   const SizedBox(height: 6),
@@ -142,20 +172,20 @@ class HomeHeroGoalCard extends StatelessWidget {
                       height: 1.35,
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 22),
                   Row(
                     children: [
                       Container(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 12),
+                            horizontal: 22, vertical: 13),
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(16),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.15),
-                              blurRadius: 10,
-                              offset: const Offset(0, 4),
+                              color: Colors.black.withValues(alpha: 0.18),
+                              blurRadius: 12,
+                              offset: const Offset(0, 5),
                             ),
                           ],
                         ),
@@ -167,7 +197,7 @@ class HomeHeroGoalCard extends StatelessWidget {
                               style: AppFonts.outfit(
                                 context,
                                 color: const Color(0xFF4338CA),
-                                fontWeight: FontWeight.w800,
+                                fontWeight: FontWeight.w900,
                                 fontSize: 14,
                               ),
                             ),

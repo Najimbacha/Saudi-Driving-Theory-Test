@@ -1,5 +1,7 @@
 {
   "app": {
+    "nameShort": "ڈرائیونگ ٹیسٹ",
+    "taglineAbr": "تھیوری آسان",
     "name": "سعودی ڈرائیونگ تھیوری ٹیسٹ",
     "tagline": "اعتماد کے ساتھ ڈرائیونگ تھیوری سیکھیں",
     "offline": "مستقل انٹرنیٹ کی ضرورت نہیں۔ کبھی بھی، کہیں بھی سیکھیں۔"
@@ -65,7 +67,7 @@
     "greeting": "سیکھنے کے لیے تیار ہیں؟",
     "subtitle": "مستقل انٹرنیٹ کی ضرورت نہیں۔ کبھی بھی، کہیں بھی سیکھیں۔",
     "profile": "پروفائل",
-    "learnSigns": "ٹریفک نشانیاں سیکھیں",
+    "learnSigns": "ٹریفک نشانیاں",
     "learnSignsDesc": "ٹریفک نشانیوں کے معنی سیکھیں",
     "learnRules": "قواعد و ضوابط",
     "learnRulesDesc": "سڑک کے قواعد اور حفاظت",
@@ -84,6 +86,13 @@
     "examQuestions": "40 سوالات",
     "examDuration": "40 منٹ",
     "learningPaths": "سیکھنے کے راستے",
+    "levels": {
+      "start": "نیا ڈرائیور",
+      "begun": "سڑک پر",
+      "learner": "سیکھنے والا",
+      "proficient": "ماہر",
+      "expert": "ماسٹر ڈرائیور"
+    },
     "statLabels": {
       "questions": "سوالات",
       "accuracy": "درستگی",
@@ -113,8 +122,14 @@
       "title": "سیکھنا جاری رکھیں",
       "lessonLabel": "سبق: {lesson}",
       "progressLabel": "پیش رفت: {value}٪",
-      "cta": "جاری رکھیں"
+      "cta": "جاری رکھیں",
+      "journeyComplete": "سفر مکمل!",
+      "journeyCompleteDesc": "تمام اسباق مکمل ہو گئے۔ مذاق امتحان دیں!",
+      "continueLesson": "اگلا: {min} منٹ"
     },
+      "journeyComplete": "سفر مکمل!",
+      "journeyCompleteDesc": "تمام اسباق مکمل ہو گئے۔ مذاق امتحان دیں!",
+      "continueLesson": "اگلا: {min} منٹ",
     "continueTest": {
       "title": "ٹیسٹ جاری رکھیں",
       "practiceLabel": "پریکٹس کو جاری رکھیں",
@@ -1421,6 +1436,7 @@
     "strictModeDesc": "پیچھے جانا بند ہے اور جواب لاک ہو جاتے ہیں"
   },
   "practice": {
+    "tryAgain": "دوبارہ مشق کریں",
     "byMode": "موڈ کے مطابق",
     "byCategory": "زمرے کے مطابق",
     "byModeHelper": "مقصد کے مطابق مشق کریں",
@@ -1460,6 +1476,12 @@
     "progressCount": "{current} / {total}"
   },
   "results": {
+    "practiceTitle": "مشق کا نتیجہ",
+    "encouragement": "بہت خوب! جاری رکھیں۔",
+    "tryAgainHint": "تقریباً پہنچ گئے — دوبارہ دیکھیں اور کوشش کریں!",
+    "categoryBreakdown": "کیٹیگری بریک ڈاؤن",
+    "certificateShared": "سرٹیفکیٹ کی تصدیق ہو گئی اور شیئر کرنے کے لیے تیار ہے!",
+    "certificate": "تیاری کا سرٹیفکیٹ دیکھیں",
     "title": "سمیولیشن کے نتائج",
     "score": "آپ کا اسکور",
     "passed": "سمیولیشن میں کامیاب",
@@ -2349,6 +2371,9 @@
     }
   },
   "ads": {
+    "revealTitle": "جواب ظاہر کریں",
+    "revealBody": "صحیح جواب اور اس کی وضاحت ظاہر کرنے کے لیے ایک مختصر اشتہار دیکھیں۔",
+    "revealCta": "جواب ظاہر کریں",
     "rewardedRetry": "فوری دوبارہ کوشش کے لیے اشتہار دیکھیں",
     "unlockExamTitle": "ایک اور امتحان کھولیں",
     "unlockExamBody": "نیا مکمل امتحان شروع کرنے کے لیے مختصر اشتہار دیکھیں۔",
@@ -2483,6 +2508,69 @@
       "turn_off_engine_if_idle_seconds": "انجن بند (سیکنڈ)",
       "drifting_speed_range_kmh": "ڈرفٹنگ سپیڈ",
       "stop_sign_hold_seconds": "اسٹاپ سائن (سیکنڈ)"
+    }
+  }
+  ,
+  "journey": {
+    "title": "سیکھنے کا سفر",
+    "errorLoading": "آپ کے سیکھنے کے سفر کو لوڈ نہیں کیا جا سکا",
+    "reset": "پیشرفت ری سیٹ کریں",
+    "resetConfirm": "اس سے مکمل شدہ اسباق اور کوئز اسکور مٹ جائیں گے۔ کیا آپ جاری رکھنا چاہتے ہیں؟",
+    "heroTitle": "ڈرائیونگ کی مہارت کا راستہ",
+    "heroSubtitle": "{total} میں سے {lessons} اسباق مکمل",
+    "heroModules": "کل {count} ماڈیولز",
+    "continueTitle": "سیکھنا جاری رکھیں",
+    "continueSubtitle": "{min} منٹ پڑھیں",
+    "lessonCount": "{done}/{total} اسباق",
+    "quizPassed": "کوئز پاس",
+    "quizPending": "کوئز",
+    "unitLabel": "ماڈیول {id}",
+    "lessonsHeader": "اسباق",
+    "openHandbook": "ہینڈ بک ریفرنس کھولیں",
+    "quizTitle": "ماڈیول کوئز",
+    "quizPassedDesc": "بہترین اسکور: {score}%",
+    "quizReadyDesc": "{count} سوالات تیار ہیں۔ اس ماڈیول کو مکمل کرنے کے لیے 70% یا اس سے زیادہ حاصل کریں۔",
+    "quizLockedDesc": "کوئز کھولنے کے لیے پہلے تمام اسباق مکمل کریں۔",
+    "lessonLabel": "سبق {id}",
+    "completed": "مکمل",
+    "completeLesson": "سبق مکمل کریں",
+    "nextLesson": "اگلا: {title}",
+    "lessonCompleteMsg": "سبق مکمل ہو گیا!",
+    "quizProgress": "سوال {current} از {total}",
+    "quizPassLabel": "پاس: 70%",
+    "quizScore": "{correct}/{total} درست",
+    "quizResultPass": "شاباش!",
+    "quizResultFail": "ابھی نہیں",
+    "quizResultPassDesc": "آپ نے اس ماڈیول کی فہم چیک پاس کر لی۔",
+    "quizResultFailDesc": "آپ کا اسکور {threshold}% سے کم ہے۔ اسباق دوبارہ دیکھیں اور کوشش کریں۔",
+    "quizNext": "اگلا",
+    "quizFinish": "ختم",
+    "quizExplanation": "وضاحت",
+    "quizDone": "ہو گیا",
+    "quizTryAgain": "دوبارہ کوشش کریں",
+    "quizSecondChance": "دوسرے موقع کے لیے اشتہار دیکھیں",
+    "quizBackToModule": "ماڈیول پر واپس جائیں",
+    "allComplete": "سفر مکمل!",
+    "allCompleteDesc": "آپ نے تمام اسباق میں مہارت حاصل کر لی۔ کیا آپ مذاق امتحان کے لیے تیار ہیں؟",
+    "stage1": {
+      "title": "یہاں سے شروع کریں",
+      "subtitle": "لائسنس، خلاف ورزیاں اور ٹریفک پوائنٹس"
+    },
+    "stage2": {
+      "title": "روڈ بیہیویر",
+      "subtitle": "سڑک استعمال کرنے والوں کے ساتھ کیسے پیش آئیں"
+    },
+    "stage3": {
+      "title": "ٹریفک اور کراسنگز",
+      "subtitle": "قواعد، لین، چوراہے اور ترجیح"
+    },
+    "stage4": {
+      "title": "رفتار اور کنٹرول",
+      "subtitle": "رفتار کی حدود، محفوظ فاصلہ اور ایکو ڈرائیونگ"
+    },
+    "stage5": {
+      "title": "ایڈوانسڈ ڈرائیونگ",
+      "subtitle": "اوور ٹیکنگ، رکنے، لائٹس اور گاڑی کی دیکھ بھال"
     }
   }
 }

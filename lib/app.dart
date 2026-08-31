@@ -29,19 +29,35 @@ class AppRoot extends ConsumerWidget {
     final lightTextTheme = AppFonts.textTheme(context, baseLight.textTheme);
     final darkTextTheme = AppFonts.textTheme(context, baseDark.textTheme);
 
-    return MaterialApp.router(
-      title: _appTitle(context),
-      debugShowCheckedModeBanner: false,
-      routerConfig: router,
-      theme: baseLight.copyWith(textTheme: lightTextTheme),
-      darkTheme: baseDark.copyWith(textTheme: darkTextTheme),
-      themeMode: settings.themeMode,
-      // ROOT FIX: Use context.locale directly - single source of truth
-      // EasyLocalization's InheritedWidget updates this automatically
-      // when context.setLocale() is called in settings
-      locale: context.locale,
-      supportedLocales: context.supportedLocales,
-      localizationsDelegates: context.localizationDelegates,
+    return Builder(
+      builder: (context) {
+        // Cap the device font scale so the UI layout stays proportioned
+        // while still honoring modest accessibility increases.
+        final media = MediaQuery.of(context);
+        final textScaler = media.textScaler.clamp(
+          minScaleFactor: 1.0,
+          maxScaleFactor: 1.4,
+        );
+
+        return MediaQuery(
+          data: media.copyWith(textScaler: textScaler),
+          child: MaterialApp.router(
+            title: _appTitle(context),
+            debugShowCheckedModeBanner: false,
+            routerConfig: router,
+            theme: baseLight.copyWith(textTheme: lightTextTheme),
+            darkTheme: baseDark.copyWith(textTheme: darkTextTheme),
+            themeMode: settings.themeMode,
+            // ROOT FIX: Use context.locale directly - single source of truth
+            // EasyLocalization's InheritedWidget updates this automatically
+            // when context.setLocale() is called in settings
+            locale: context.locale,
+            supportedLocales: context.supportedLocales,
+            localizationsDelegates: context.localizationDelegates,
+          ),
+        );
+      },
     );
   }
 }
+

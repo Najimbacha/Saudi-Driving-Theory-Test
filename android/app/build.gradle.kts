@@ -15,7 +15,7 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    namespace = "com.example.flutter_only_repo"
+    namespace = "com.saudi.drivingtheory"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 

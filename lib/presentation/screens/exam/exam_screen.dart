@@ -2,7 +2,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
@@ -10,6 +9,7 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 import '../../../core/theme/modern_theme.dart';
 import '../../../widgets/glass_container.dart';
 import '../../../widgets/home_shell.dart';
+import '../../../widgets/standard_question_view.dart';
 import '../../../data/models/exam_result_model.dart';
 import '../../../models/question.dart';
 import '../../../presentation/providers/exam_history_provider.dart';
@@ -321,168 +321,23 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            // Question Card
-                            Container(
-                              key: ValueKey('question-card-${current.id}'),
-                              decoration: BoxDecoration(
-                                color: isDark
-                                    ? Colors.white.withValues(alpha: 0.03)
-                                    : scheme.surface,
-                                borderRadius: BorderRadius.circular(24),
-                                border: Border.all(
-                                  color:
-                                      scheme.onSurface.withValues(alpha: 0.08),
-                                ),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withValues(alpha: 0.02),
-                                    blurRadius: 20,
-                                    offset: const Offset(0, 10),
-                                  ),
-                                ],
-                              ),
-                              padding: const EdgeInsets.all(24),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  AnimatedSwitcher(
-                                    duration: const Duration(milliseconds: 300),
-                                    child: Text(
-                                      questionText,
-                                      key: ValueKey(current.id),
-                                      style: AppFonts.outfit(
-                                        context,
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w600,
-                                        color: scheme.onSurface,
-                                        height: 1.4,
-                                      ),
-                                    ),
-                                  ),
-                                  if (signPath != null) ...[
-                                    const SizedBox(height: 20),
-                                    Center(
-                                      child: Container(
-                                        padding: const EdgeInsets.all(16),
-                                        decoration: BoxDecoration(
-                                          color: scheme.onSurface
-                                              .withValues(alpha: 0.03),
-                                          borderRadius:
-                                              BorderRadius.circular(16),
-                                        ),
-                                        child: SvgPicture.asset(
-                                          'assets/$signPath',
-                                          height: 120,
-                                          fit: BoxFit.contain,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ],
-                              ),
-                            ),
-                            const SizedBox(height: 24),
-
-                            // Options
+                            // Question + options (shared standard component)
                             AnimatedSwitcher(
                               duration: const Duration(milliseconds: 300),
-                              child: Column(
-                                key: ValueKey('${current.id}-options'),
-                                children: List.generate(options.length, (idx) {
-                                  final optionText = options[idx];
-                                  final isSelected = selected == idx;
-
-                                  return Padding(
-                                    padding: const EdgeInsets.only(bottom: 12),
-                                    child: InkWell(
-                                      onTap: () {
+                              child: StandardQuestionView(
+                                key: ValueKey(current.id),
+                                questionText: questionText,
+                                optionTexts: options,
+                                selectedIndex: selected,
+                                correctIndex: current.correctIndex,
+                                revealed: exam.isCompleted,
+                                signPath: signPath,
+                                onSelect: exam.isCompleted
+                                    ? null
+                                    : (idx) {
                                         AppFeedback.tap(context);
                                         controller.selectAnswer(idx);
                                       },
-                                      borderRadius: BorderRadius.circular(20),
-                                      child: AnimatedContainer(
-                                        duration:
-                                            const Duration(milliseconds: 200),
-                                        decoration: BoxDecoration(
-                                          color: isSelected
-                                              ? scheme.primary
-                                                  .withValues(alpha: 0.08)
-                                              : (isDark
-                                                  ? Colors.white
-                                                      .withValues(alpha: 0.02)
-                                                  : scheme.surface),
-                                          borderRadius:
-                                              BorderRadius.circular(20),
-                                          border: Border.all(
-                                            color: isSelected
-                                                ? scheme.primary
-                                                : scheme.onSurface
-                                                    .withValues(alpha: 0.1),
-                                            width: isSelected ? 2 : 1.5,
-                                          ),
-                                        ),
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 20, vertical: 16),
-                                        child: Row(
-                                          children: [
-                                            AnimatedContainer(
-                                              duration: const Duration(
-                                                  milliseconds: 200),
-                                              width: 32,
-                                              height: 32,
-                                              decoration: BoxDecoration(
-                                                color: isSelected
-                                                    ? scheme.primary
-                                                    : scheme.onSurface
-                                                        .withValues(
-                                                            alpha: 0.05),
-                                                shape: BoxShape.circle,
-                                              ),
-                                              alignment: Alignment.center,
-                                              child: Text(
-                                                String.fromCharCode(65 + idx),
-                                                style: AppFonts.outfit(
-                                                  context,
-                                                  color: isSelected
-                                                      ? Colors.white
-                                                      : scheme.onSurface
-                                                          .withValues(
-                                                              alpha: 0.6),
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 14,
-                                                ),
-                                              ),
-                                            ),
-                                            const SizedBox(width: 16),
-                                            Expanded(
-                                              child: Text(
-                                                optionText,
-                                                style: AppFonts.outfit(
-                                                  context,
-                                                  fontSize: 16,
-                                                  color: scheme.onSurface
-                                                      .withValues(
-                                                          alpha: isSelected
-                                                              ? 1.0
-                                                              : 0.8),
-                                                  fontWeight: isSelected
-                                                      ? FontWeight.w600
-                                                      : FontWeight.w400,
-                                                ),
-                                              ),
-                                            ),
-                                            if (isSelected)
-                                              Icon(
-                                                Icons.check_circle_rounded,
-                                                color: scheme.primary,
-                                                size: 22,
-                                              ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  );
-                                }),
                               ),
                             ),
                           ],
@@ -506,45 +361,53 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               if (!exam.strictMode) ...[
-                                Expanded(
-                                  flex: 1,
-                                  child: OutlinedButton(
-                                    style: OutlinedButton.styleFrom(
-                                      side: BorderSide(
-                                          color: scheme.onSurface
-                                              .withValues(alpha: 0.1)),
-                                      foregroundColor: scheme.onSurface
-                                          .withValues(alpha: 0.7),
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 16),
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(16)),
-                                    ),
-                                    onPressed: exam.currentIndex == 0
-                                        ? null
-                                        : controller.previous,
-                                    child: const Icon(
-                                        Icons.arrow_back_ios_new_rounded,
-                                        size: 20),
-                                  ),
-                                ),
-                                const SizedBox(width: 12),
-                              ],
-                              Expanded(
-                                flex: 3,
-                                child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: ModernTheme.primary,
-                                    foregroundColor: Colors.white,
+                                OutlinedButton.icon(
+                                  style: OutlinedButton.styleFrom(
+                                    side: BorderSide(
+                                        color: scheme.onSurface
+                                            .withValues(alpha: 0.25),
+                                        width: 1),
+                                    foregroundColor: scheme.onSurface
+                                        .withValues(alpha: 0.7),
                                     padding: const EdgeInsets.symmetric(
-                                        vertical: 16),
+                                        vertical: 12, horizontal: 14),
                                     shape: RoundedRectangleBorder(
                                         borderRadius:
-                                            BorderRadius.circular(16)),
-                                    elevation: 0,
+                                            BorderRadius.circular(14)),
+                                    textStyle: AppFonts.outfit(context,
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                  onPressed: exam.currentIndex == 0
+                                      ? null
+                                      : controller.previous,
+                                  icon: const Icon(
+                                      Icons.arrow_back_ios_new_rounded,
+                                      size: 16),
+                                  label: Text('common.previous'.tr()),
+                                ),
+                                const SizedBox(width: 10),
+                              ],
+                              Expanded(
+                                child: FilledButton.icon(
+                                  style: FilledButton.styleFrom(
+                                    backgroundColor: ModernTheme.primary,
+                                    foregroundColor: Colors.white,
+                                    disabledBackgroundColor:
+                                        ModernTheme.primary
+                                            .withValues(alpha: 0.4),
+                                    disabledForegroundColor: Colors.white70,
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 14, horizontal: 12),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(14)),
+                                    textStyle: AppFonts.outfit(context,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w800),
                                   ),
                                   onPressed: canProceed
                                       ? () {
@@ -557,14 +420,14 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
                                           }
                                         }
                                       : null,
-                                  child: Text(
+                                  iconAlignment: IconAlignment.end,
+                                  icon: const Icon(
+                                      Icons.arrow_forward_rounded, size: 18),
+                                  label: Text(
                                     exam.currentIndex + 1 ==
                                             exam.questions.length
                                         ? 'exam.submit'.tr()
                                         : 'common.next'.tr(),
-                                    style: AppFonts.outfit(context,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16),
                                   ),
                                 ),
                               ),

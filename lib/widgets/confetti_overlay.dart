@@ -44,6 +44,7 @@ class ConfettiOverlayState extends State<ConfettiOverlay>
   late AnimationController _controller;
   final List<ConfettiParticle> _particles = [];
   final Random _random = Random();
+  double _width = 400;
 
   static const List<Color> _confettiColors = [
     Color(0xFF10B981), // Emerald
@@ -80,7 +81,7 @@ class ConfettiOverlayState extends State<ConfettiOverlay>
     for (int i = 0; i < 70; i++) {
       _particles.add(
         ConfettiParticle(
-          x: _random.nextDouble() * 400,
+          x: _random.nextDouble() * _width,
           y: -20 - _random.nextDouble() * 100,
           vx: (_random.nextDouble() - 0.5) * 6,
           vy: 3 + _random.nextDouble() * 6,
@@ -107,21 +108,26 @@ class ConfettiOverlayState extends State<ConfettiOverlay>
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        widget.child,
-        if (_controller.isAnimating)
-          Positioned.fill(
-            child: IgnorePointer(
-              child: CustomPaint(
-                painter: _ConfettiPainter(
-                  particles: _particles,
-                  opacity: 1.0 - _controller.value * 0.8,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        _width = constraints.maxWidth > 0 ? constraints.maxWidth : 400;
+        return Stack(
+          children: [
+            widget.child,
+            if (_controller.isAnimating)
+              Positioned.fill(
+                child: IgnorePointer(
+                  child: CustomPaint(
+                    painter: _ConfettiPainter(
+                      particles: _particles,
+                      opacity: 1.0 - _controller.value * 0.8,
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ),
-      ],
+          ],
+        );
+      },
     );
   }
 }
