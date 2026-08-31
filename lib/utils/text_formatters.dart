@@ -30,3 +30,9 @@ String formatQuestionOf(BuildContext context, int current, int total) {
     'total': totalText,
   });
 }
+
+String formatDuration(int seconds) {
+  final minutes = (seconds ~/ 60).toString().padLeft(2, '0');
+  final remainingSeconds = (seconds % 60).toString().padLeft(2, '0');
+  return '$minutes:$remainingSeconds';
+}

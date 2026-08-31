@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../core/theme/modern_theme.dart';
 import '../utils/app_fonts.dart';
@@ -8,13 +9,18 @@ import '../widgets/glass_container.dart';
 class AboutScreen extends StatelessWidget {
   const AboutScreen({super.key});
 
-  static const String _developerName = 'Engr. Najim Bacha';
-  static const String _email = 'najimbacha1@gmail.com';
-  static const String _contact = '0537798312';
-  static const String _instagram = '@najimbacha';
-  static const String _linkedin =
-      'https://www.linkedin.com/in/najimbacha/?locale=ar_AE';
-  static const String _xHandle = '@najimbacha';
+  static final Uri _moiUrl = Uri.parse('https://www.moi.gov.sa');
+  static final Uri _absherUrl = Uri.parse('https://www.absher.sa');
+
+  static Future<void> _openLink(BuildContext context, Uri url) async {
+    final ok = await launchUrl(url, mode: LaunchMode.externalApplication);
+    if (!context.mounted) return;
+    if (!ok) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('common.error'.tr())),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,32 +83,11 @@ class AboutScreen extends StatelessWidget {
                         height: 1.5,
                       ),
                     ),
-                    const SizedBox(height: 10),
-                    Text(
-                      'about.goal'.tr(),
-                      style: AppFonts.outfit(
-                        context,
-                        color: scheme.onSurface.withValues(alpha: 0.9),
-                        fontWeight: FontWeight.w600,
-                        fontSize: 14,
-                        height: 1.5,
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    Text(
-                      'about.support'.tr(),
-                      style: AppFonts.outfit(
-                        context,
-                        color: scheme.onSurface.withValues(alpha: 0.85),
-                        fontSize: 13,
-                        height: 1.5,
-                      ),
-                    ),
                   ],
                 ),
               ),
               const SizedBox(height: 20),
-              _SectionTitle(title: 'about.developerTitle'.tr()),
+              _SectionTitle(title: 'about.referencesTitle'.tr()),
               const SizedBox(height: 10),
               GlassContainer(
                 padding: const EdgeInsets.all(18),
@@ -116,25 +101,20 @@ class AboutScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _InfoRow(
-                      label: 'about.developerLabel'.tr(),
-                      value: _developerName,
+                    _LinkRow(
+                      text: 'about.source1'.tr(),
+                      url: _moiUrl,
                     ),
-                    const SizedBox(height: 12),
-                    _InfoRow(
-                      label: 'about.emailLabel'.tr(),
-                      value: _email,
-                    ),
-                    const SizedBox(height: 12),
-                    _InfoRow(
-                      label: 'about.contactLabel'.tr(),
-                      value: _contact,
+                    const SizedBox(height: 10),
+                    _LinkRow(
+                      text: 'about.source2'.tr(),
+                      url: _absherUrl,
                     ),
                   ],
                 ),
               ),
               const SizedBox(height: 20),
-              _SectionTitle(title: 'about.socialTitle'.tr()),
+              _SectionTitle(title: 'about.featuresTitle'.tr()),
               const SizedBox(height: 10),
               GlassContainer(
                 padding: const EdgeInsets.all(18),
@@ -148,21 +128,38 @@ class AboutScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _InfoRow(
-                      label: 'about.instagramLabel'.tr(),
-                      value: _instagram,
-                    ),
-                    const SizedBox(height: 12),
-                    _InfoRow(
-                      label: 'about.linkedinLabel'.tr(),
-                      value: _linkedin,
-                    ),
-                    const SizedBox(height: 12),
-                    _InfoRow(
-                      label: 'about.xLabel'.tr(),
-                      value: _xHandle,
-                    ),
+                    _BulletRow(text: 'about.feature1'.tr()),
+                    const SizedBox(height: 10),
+                    _BulletRow(text: 'about.feature2'.tr()),
+                    const SizedBox(height: 10),
+                    _BulletRow(text: 'about.feature3'.tr()),
+                    const SizedBox(height: 10),
+                    _BulletRow(text: 'about.feature4'.tr()),
+                    const SizedBox(height: 10),
+                    _BulletRow(text: 'about.feature5'.tr()),
                   ],
+                ),
+              ),
+              const SizedBox(height: 20),
+              _SectionTitle(title: 'about.disclaimerTitle'.tr()),
+              const SizedBox(height: 10),
+              GlassContainer(
+                padding: const EdgeInsets.all(18),
+                blur: isDark ? 10 : 6,
+                color: isDark
+                    ? Colors.white.withValues(alpha: 0.05)
+                    : Colors.white.withValues(alpha: 0.9),
+                border: Border.all(
+                  color: scheme.onSurface.withValues(alpha: 0.08),
+                ),
+                child: Text(
+                  'about.disclaimerBody'.tr(),
+                  style: AppFonts.outfit(
+                    context,
+                    color: scheme.onSurface.withValues(alpha: 0.9),
+                    fontSize: 13,
+                    height: 1.5,
+                  ),
                 ),
               ),
             ],
@@ -192,37 +189,79 @@ class _SectionTitle extends StatelessWidget {
   }
 }
 
-class _InfoRow extends StatelessWidget {
-  const _InfoRow({required this.label, required this.value});
+class _BulletRow extends StatelessWidget {
+  const _BulletRow({required this.text});
 
-  final String label;
-  final String value;
+  final String text;
 
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
-    return Column(
+    final textStyle = AppFonts.outfit(
+      context,
+      color: scheme.onSurface.withValues(alpha: 0.9),
+      fontSize: 13,
+      height: 1.5,
+    );
+    return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label,
-          style: AppFonts.outfit(
-            context,
-            fontSize: 12,
-            color: scheme.onSurface.withValues(alpha: 0.6),
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        const SizedBox(height: 6),
-        SelectableText(
-          value,
-          style: AppFonts.outfit(
-            context,
-            fontWeight: FontWeight.w600,
-            color: scheme.onSurface,
-          ),
-        ),
+        Text('•', style: textStyle),
+        const SizedBox(width: 8),
+        Expanded(child: Text(text, style: textStyle)),
       ],
+    );
+  }
+}
+
+class _LinkRow extends StatelessWidget {
+  const _LinkRow({required this.text, required this.url});
+
+  final String text;
+  final Uri url;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    return InkWell(
+      onTap: () => AboutScreen._openLink(context, url),
+      borderRadius: BorderRadius.circular(14),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        decoration: BoxDecoration(
+          color: scheme.onSurface.withValues(alpha: 0.04),
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: scheme.onSurface.withValues(alpha: 0.08)),
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(
+              Icons.public,
+              size: 16,
+              color: scheme.onSurface.withValues(alpha: 0.7),
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                text,
+                style: AppFonts.outfit(
+                  context,
+                  color: scheme.onSurface.withValues(alpha: 0.9),
+                  fontSize: 13,
+                  height: 1.4,
+                ),
+              ),
+            ),
+            const SizedBox(width: 6),
+            Icon(
+              Icons.open_in_new_rounded,
+              size: 14,
+              color: scheme.onSurface.withValues(alpha: 0.6),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

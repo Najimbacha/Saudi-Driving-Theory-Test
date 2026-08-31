@@ -16,31 +16,44 @@ class BannerAdWidget extends ConsumerStatefulWidget {
 
 class _BannerAdWidgetState extends ConsumerState<BannerAdWidget> {
   BannerAd? _banner;
+  bool _isAdLoaded = false;
   bool _loading = false;
   bool? _previousAdsEnabled;
 
   void _disposeBanner() {
     _banner?.dispose();
     _banner = null;
+    _isAdLoaded = false;
   }
 
   void _loadBanner() {
     if (_loading || _banner != null) return;
     _loading = true;
-    final banner = AdService.instance.createBanner();
+    final banner = AdService.instance.createBanner(
+      onLoaded: () {
+        if (mounted) {
+          setState(() {
+            _isAdLoaded = true;
+            _loading = false;
+          });
+        }
+      },
+      onFailed: () {
+        if (mounted) {
+          setState(() {
+            _banner = null;
+            _isAdLoaded = false;
+            _loading = false;
+          });
+        }
+      },
+    );
     if (banner == null) {
       _loading = false;
       return;
     }
+    _banner = banner;
     banner.load();
-    if (mounted) {
-      setState(() {
-        _banner = banner;
-        _loading = false;
-      });
-    } else {
-      _loading = false;
-    }
   }
 
   @override
@@ -93,7 +106,8 @@ class _BannerAdWidgetState extends ConsumerState<BannerAdWidget> {
 
       if (!adsEnabled) return const SizedBox.shrink();
     }
-    if (_banner == null) return const SizedBox.shrink();
+    // Only show when the ad has actually loaded content.
+    if (_banner == null || !_isAdLoaded) return const SizedBox.shrink();
     return SizedBox(
       width: _banner!.size.width.toDouble(),
       height: _banner!.size.height.toDouble(),

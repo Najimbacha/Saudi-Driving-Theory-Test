@@ -108,7 +108,8 @@ class SettingsScreen extends ConsumerWidget {
                     foregroundColor: scheme.onSurface.withValues(alpha: 0.45),
                     padding:
                         const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    textStyle: AppFonts.outfit(context,
+                    textStyle: AppFonts.outfit(
+                      context,
                       fontSize: 12,
                       fontWeight: FontWeight.w500,
                     ),
@@ -123,7 +124,8 @@ class SettingsScreen extends ConsumerWidget {
                     foregroundColor: scheme.onSurface.withValues(alpha: 0.45),
                     padding:
                         const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    textStyle: AppFonts.outfit(context,
+                    textStyle: AppFonts.outfit(
+                      context,
                       fontSize: 12,
                       fontWeight: FontWeight.w500,
                     ),
@@ -138,7 +140,8 @@ class SettingsScreen extends ConsumerWidget {
                     foregroundColor: scheme.onSurface.withValues(alpha: 0.45),
                     padding:
                         const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    textStyle: AppFonts.outfit(context,
+                    textStyle: AppFonts.outfit(
+                      context,
                       fontSize: 12,
                       fontWeight: FontWeight.w500,
                     ),
@@ -150,7 +153,8 @@ class SettingsScreen extends ConsumerWidget {
               Center(
                 child: Text(
                   'settings.versionLabel'.tr(namedArgs: {'version': '1.0.0'}),
-                  style: AppFonts.outfit(context,
+                  style: AppFonts.outfit(
+                    context,
                     color: scheme.onSurface.withValues(alpha: 0.25),
                     fontSize: 12,
                   ),
@@ -175,7 +179,8 @@ class _SectionHeader extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 12, left: 4),
       child: Text(
         title.toUpperCase(),
-        style: AppFonts.outfit(context,
+        style: AppFonts.outfit(
+          context,
           color: scheme.onSurface.withValues(alpha: 0.5),
           fontSize: 12,
           fontWeight: FontWeight.bold,
@@ -236,7 +241,8 @@ class _SettingsGlassTile extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: AppFonts.outfit(context,
+                    style: AppFonts.outfit(
+                      context,
                       color: scheme.onSurface,
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
@@ -245,7 +251,8 @@ class _SettingsGlassTile extends StatelessWidget {
                   const SizedBox(height: 4),
                   Text(
                     subtitle,
-                    style: AppFonts.outfit(context,
+                    style: AppFonts.outfit(
+                      context,
                       color: scheme.onSurface.withValues(alpha: 0.6),
                       fontSize: 13,
                     ),
@@ -271,11 +278,23 @@ class _LanguageGlassSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     const codes = ['en', 'ar', 'ur', 'hi', 'bn'];
-    return GlassContainer(
-      borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
-      color: const Color(0xFF0F172A).withValues(alpha: 0.95),
-      padding: const EdgeInsets.all(24),
+
+    return Container(
+      decoration: BoxDecoration(
+        color: isDark
+            ? const Color(0xFF0F172A).withValues(alpha: 0.96)
+            : Colors.white.withValues(alpha: 0.96),
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
+        border: Border.all(
+          color: isDark
+              ? Colors.white.withValues(alpha: 0.1)
+              : scheme.outline.withValues(alpha: 0.12),
+        ),
+      ),
+      padding: const EdgeInsets.fromLTRB(24, 16, 24, 32),
       child: SafeArea(
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
@@ -283,54 +302,81 @@ class _LanguageGlassSheet extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Container(
-                  width: 40,
-                  height: 4,
-                  decoration: BoxDecoration(
-                      color: Colors.white24,
-                      borderRadius: BorderRadius.circular(2))),
-              const SizedBox(height: 24),
-              Text('settings.language'.tr(),
-                  style: AppFonts.outfit(context,
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold)),
-              const SizedBox(height: 24),
-              ...codes.map((code) => Padding(
-                    padding: const EdgeInsets.only(bottom: 12),
-                    child: InkWell(
-                      onTap: () async {
-                        AppFeedback.confirm(context);
-                        await context.setLocale(Locale(code));
-                        if (context.mounted) Navigator.pop(context, code);
-                      },
-                      child: GlassContainer(
-                        color: current == code
-                            ? ModernTheme.secondary.withValues(alpha: 0.2)
-                            : Colors.white.withValues(alpha: 0.05),
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: scheme.onSurface.withValues(alpha: 0.2),
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+              const SizedBox(height: 20),
+              Text(
+                'settings.language'.tr(),
+                style: AppFonts.outfit(
+                  context,
+                  color: scheme.onSurface,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+              const SizedBox(height: 20),
+              ...codes.map((code) {
+                final isSelected = current == code;
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 10),
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(18),
+                    onTap: () async {
+                      AppFeedback.confirm(context);
+                      await context.setLocale(Locale(code));
+                      if (context.mounted) Navigator.pop(context, code);
+                    },
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 200),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 18, vertical: 14),
+                      decoration: BoxDecoration(
+                        color: isSelected
+                            ? ModernTheme.primary.withValues(alpha: 0.12)
+                            : (isDark
+                                ? Colors.white.withValues(alpha: 0.04)
+                                : scheme.surface),
+                        borderRadius: BorderRadius.circular(18),
                         border: Border.all(
-                            color: current == code
-                                ? ModernTheme.secondary
-                                : Colors.white10),
-                        padding: const EdgeInsets.all(16),
-                        child: Row(
-                          children: [
-                            Text(
-                              'settings.languages.$code'.tr(),
-                              style: AppFonts.outfit(context,
-                                  color: Colors.white,
-                                  fontWeight: current == code
-                                      ? FontWeight.bold
-                                      : FontWeight.normal),
-                            ),
-                            const Spacer(),
-                            if (current == code)
-                              const Icon(PhosphorIconsRegular.checkCircle,
-                                  color: ModernTheme.secondary),
-                          ],
+                          color: isSelected
+                              ? ModernTheme.primary
+                              : scheme.outline.withValues(alpha: 0.1),
+                          width: isSelected ? 1.5 : 1,
                         ),
                       ),
+                      child: Row(
+                        children: [
+                          Text(
+                            'settings.languages.$code'.tr(),
+                            style: AppFonts.outfit(
+                              context,
+                              color: isSelected
+                                  ? ModernTheme.primary
+                                  : scheme.onSurface,
+                              fontWeight: isSelected
+                                  ? FontWeight.w800
+                                  : FontWeight.w500,
+                              fontSize: 15,
+                            ),
+                          ),
+                          const Spacer(),
+                          if (isSelected)
+                            const Icon(
+                              PhosphorIconsFill.checkCircle,
+                              color: ModernTheme.primary,
+                              size: 20,
+                            ),
+                        ],
+                      ),
                     ),
-                  )),
+                  ),
+                );
+              }),
             ],
           ),
         ),
@@ -345,11 +391,23 @@ class _ThemeGlassSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     const modes = [ThemeMode.light, ThemeMode.dark, ThemeMode.system];
-    return GlassContainer(
-      borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
-      color: const Color(0xFF0F172A).withValues(alpha: 0.95),
-      padding: const EdgeInsets.all(24),
+
+    return Container(
+      decoration: BoxDecoration(
+        color: isDark
+            ? const Color(0xFF0F172A).withValues(alpha: 0.96)
+            : Colors.white.withValues(alpha: 0.96),
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
+        border: Border.all(
+          color: isDark
+              ? Colors.white.withValues(alpha: 0.1)
+              : scheme.outline.withValues(alpha: 0.12),
+        ),
+      ),
+      padding: const EdgeInsets.fromLTRB(24, 16, 24, 32),
       child: SafeArea(
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
@@ -357,53 +415,80 @@ class _ThemeGlassSheet extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Container(
-                  width: 40,
-                  height: 4,
-                  decoration: BoxDecoration(
-                      color: Colors.white24,
-                      borderRadius: BorderRadius.circular(2))),
-              const SizedBox(height: 24),
-              Text('settings.theme'.tr(),
-                  style: AppFonts.outfit(context,
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold)),
-              const SizedBox(height: 24),
-              ...modes.map((mode) => Padding(
-                    padding: const EdgeInsets.only(bottom: 12),
-                    child: InkWell(
-                      onTap: () {
-                        AppFeedback.tap(context);
-                        Navigator.pop(context, mode);
-                      },
-                      child: GlassContainer(
-                        color: current == mode
-                            ? ModernTheme.primary.withValues(alpha: 0.2)
-                            : Colors.white.withValues(alpha: 0.05),
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: scheme.onSurface.withValues(alpha: 0.2),
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+              const SizedBox(height: 20),
+              Text(
+                'settings.theme'.tr(),
+                style: AppFonts.outfit(
+                  context,
+                  color: scheme.onSurface,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+              const SizedBox(height: 20),
+              ...modes.map((mode) {
+                final isSelected = current == mode;
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 10),
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(18),
+                    onTap: () {
+                      AppFeedback.tap(context);
+                      Navigator.pop(context, mode);
+                    },
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 200),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 18, vertical: 14),
+                      decoration: BoxDecoration(
+                        color: isSelected
+                            ? ModernTheme.primary.withValues(alpha: 0.12)
+                            : (isDark
+                                ? Colors.white.withValues(alpha: 0.04)
+                                : scheme.surface),
+                        borderRadius: BorderRadius.circular(18),
                         border: Border.all(
-                            color: current == mode
-                                ? ModernTheme.primary
-                                : Colors.white10),
-                        padding: const EdgeInsets.all(16),
-                        child: Row(
-                          children: [
-                            Text(
-                              _getThemeName(context, mode),
-                              style: AppFonts.outfit(context,
-                                  color: Colors.white,
-                                  fontWeight: current == mode
-                                      ? FontWeight.bold
-                                      : FontWeight.normal),
-                            ),
-                            const Spacer(),
-                            if (current == mode)
-                              const Icon(PhosphorIconsRegular.checkCircle,
-                                  color: ModernTheme.primary),
-                          ],
+                          color: isSelected
+                              ? ModernTheme.primary
+                              : scheme.outline.withValues(alpha: 0.1),
+                          width: isSelected ? 1.5 : 1,
                         ),
                       ),
+                      child: Row(
+                        children: [
+                          Text(
+                            _getThemeName(context, mode),
+                            style: AppFonts.outfit(
+                              context,
+                              color: isSelected
+                                  ? ModernTheme.primary
+                                  : scheme.onSurface,
+                              fontWeight: isSelected
+                                  ? FontWeight.w800
+                                  : FontWeight.w500,
+                              fontSize: 15,
+                            ),
+                          ),
+                          const Spacer(),
+                          if (isSelected)
+                            const Icon(
+                              PhosphorIconsFill.checkCircle,
+                              color: ModernTheme.primary,
+                              size: 20,
+                            ),
+                        ],
+                      ),
                     ),
-                  )),
+                  ),
+                );
+              }),
             ],
           ),
         ),
@@ -422,5 +507,3 @@ class _ThemeGlassSheet extends StatelessWidget {
     }
   }
 }
-
-

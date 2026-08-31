@@ -5,7 +5,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
-import '../../../core/constants/app_colors.dart';
 import '../../../core/theme/modern_theme.dart';
 import '../../../widgets/glass_container.dart';
 import '../../../widgets/home_shell.dart';
@@ -74,7 +73,6 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
                 const SizedBox(height: 24),
                 ElevatedButton.icon(
                   onPressed: () {
-                    // ROOT FIX: Retry by invalidating the provider
                     ref.invalidate(questionsProvider);
                   },
                   icon: const Icon(Icons.refresh),
@@ -110,7 +108,6 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
           _handledCompletion = false;
         }
         if (quiz.questions.isEmpty) {
-          // ... (Logic for category selection remains mostly same, just styled)
           if (categoryParam != null && !_initialCategoryHandled) {
             _initialCategoryHandled = true;
             final filtered = _filterByCategory(questions, categoryParam);
@@ -123,7 +120,7 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text('categories.empty'.tr()),
-                    backgroundColor: AppColors.secondary,
+                    backgroundColor: ModernTheme.secondary,
                   ),
                 );
               }
@@ -144,7 +141,7 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text('categories.empty'.tr()),
-                      backgroundColor: AppColors.secondary,
+                      backgroundColor: ModernTheme.secondary,
                     ),
                   );
                   return;
@@ -165,7 +162,7 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text('categories.empty'.tr()),
-                    backgroundColor: AppColors.secondary,
+                    backgroundColor: ModernTheme.secondary,
                   ),
                 );
                 return;
@@ -362,12 +359,12 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
 
                                 if (quiz.showAnswer) {
                                   if (idx == current.correctIndex) {
-                                    fillColor = AppColors.success
+                                    fillColor = ModernTheme.tertiary
                                         .withValues(alpha: 0.18);
-                                    borderColor = AppColors.success;
+                                    borderColor = ModernTheme.tertiary;
                                     shadow = [
                                       BoxShadow(
-                                        color: AppColors.success
+                                        color: ModernTheme.tertiary
                                             .withValues(alpha: 0.2),
                                         blurRadius: 8,
                                         offset: const Offset(0, 4),
@@ -375,11 +372,11 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
                                     ];
                                   } else if (wasSelected) {
                                     fillColor =
-                                        AppColors.error.withValues(alpha: 0.18);
-                                    borderColor = AppColors.error;
+                                        scheme.error.withValues(alpha: 0.18);
+                                    borderColor = scheme.error;
                                     shadow = [
                                       BoxShadow(
-                                        color: AppColors.error
+                                        color: scheme.error
                                             .withValues(alpha: 0.2),
                                         blurRadius: 8,
                                         offset: const Offset(0, 4),
@@ -430,6 +427,7 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
                                                 wasSelected &&
                                                 idx != current.correctIndex,
                                             isDark: isDark,
+                                            scheme: scheme,
                                           ),
                                           const SizedBox(width: 16),
                                           Expanded(
@@ -446,12 +444,12 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
                                               idx == current.correctIndex)
                                             const Icon(
                                                 Icons.check_circle_rounded,
-                                                color: AppColors.success),
+                                                color: ModernTheme.tertiary),
                                           if (quiz.showAnswer &&
                                               wasSelected &&
                                               idx != current.correctIndex)
-                                            const Icon(Icons.cancel_rounded,
-                                                color: AppColors.error),
+                                            Icon(Icons.cancel_rounded,
+                                                color: scheme.error),
                                         ],
                                       ),
                                     ),
@@ -466,13 +464,13 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
                             const SizedBox(height: 16),
                             GlassContainer(
                               color: (isCorrect
-                                      ? AppColors.success
-                                      : AppColors.error)
+                                      ? ModernTheme.tertiary
+                                      : scheme.error)
                                   .withValues(alpha: 0.1),
                               border: Border.all(
                                   color: (isCorrect
-                                          ? AppColors.success
-                                          : AppColors.error)
+                                          ? ModernTheme.tertiary
+                                          : scheme.error)
                                       .withValues(alpha: 0.3)),
                               padding: const EdgeInsets.all(16),
                               child: Column(
@@ -485,8 +483,8 @@ class _PracticeFlowScreenState extends ConsumerState<PracticeFlowScreen> {
                                     style: AppFonts.outfit(context,
                                       fontWeight: FontWeight.bold,
                                       color: isCorrect
-                                          ? AppColors.success
-                                          : AppColors.error,
+                                          ? ModernTheme.tertiary
+                                          : scheme.error,
                                       fontSize: 18,
                                     ),
                                   ),
@@ -968,44 +966,22 @@ class _PracticeSelectorState extends State<_PracticeSelector> {
                     width: double.infinity,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.transparent,
+                        backgroundColor: ModernTheme.primary,
                         foregroundColor: Colors.white,
-                        padding: EdgeInsets.zero,
+                        padding: const EdgeInsets.symmetric(vertical: 18),
                         shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20)),
-                        elevation: 8,
-                        shadowColor:
-                            ModernTheme.secondary.withValues(alpha: 0.35),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        elevation: 4,
+                        shadowColor: ModernTheme.primary.withValues(alpha: 0.35),
                       ),
                       onPressed: () => widget.onStart(_selectedId),
-                      child: Ink(
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [
-                              ModernTheme.secondary.withValues(alpha: 0.95),
-                              ModernTheme.secondary.withValues(alpha: 0.8),
-                            ],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                          ),
-                          borderRadius: BorderRadius.circular(20),
-                          boxShadow: [
-                            BoxShadow(
-                              color:
-                                  ModernTheme.secondary.withValues(alpha: 0.25),
-                              blurRadius: 12,
-                              offset: const Offset(0, 6),
-                            ),
-                          ],
-                        ),
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(vertical: 22),
-                          alignment: Alignment.center,
-                          child: Text(
-                            'quiz.start'.tr(),
-                            style: AppFonts.outfit(context,
-                                fontSize: 18, fontWeight: FontWeight.bold),
-                          ),
+                      child: Text(
+                        'quiz.start'.tr(),
+                        style: AppFonts.outfit(
+                          context,
+                          fontSize: 17,
+                          fontWeight: FontWeight.w800,
                         ),
                       ),
                     ),
@@ -1040,87 +1016,93 @@ class _CategoryGlassTile extends StatelessWidget {
     final scheme = Theme.of(context).colorScheme;
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final iconColor = selected
-        ? ModernTheme.secondary
-        : scheme.onSurface.withValues(alpha: isDark ? 0.55 : 0.65);
-    return GestureDetector(
-      onTap: () {
-        AppFeedback.tap(context);
-        onTap();
-      },
-      child: AnimatedScale(
-        scale: selected ? 1.02 : 1,
-        duration: const Duration(milliseconds: 140),
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 160),
-          width: width,
-          height: 120,
-          decoration: BoxDecoration(
-            color: selected
-                ? (isDark
-                    ? Colors.white.withValues(alpha: 0.14)
-                    : scheme.onSurface.withValues(alpha: 0.06))
-                : (isDark
-                    ? Colors.white.withValues(alpha: 0.08)
-                    : scheme.onSurface.withValues(alpha: 0.04)),
-            borderRadius: BorderRadius.circular(18),
-            border: Border.all(
+        ? ModernTheme.primary
+        : scheme.onSurface.withValues(alpha: isDark ? 0.65 : 0.7);
+
+    return Semantics(
+      button: true,
+      selected: selected,
+      label: label,
+      child: GestureDetector(
+        onTap: () {
+          AppFeedback.tap(context);
+          onTap();
+        },
+        child: AnimatedScale(
+          scale: selected ? 1.02 : 1,
+          duration: const Duration(milliseconds: 140),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 160),
+            width: width,
+            height: 110,
+            decoration: BoxDecoration(
               color: selected
-                  ? ModernTheme.secondary.withValues(alpha: 0.45)
-                  : scheme.onSurface.withValues(alpha: 0.12),
-              width: 1,
-            ),
-            boxShadow: selected
-                ? [
-                    BoxShadow(
-                      color: ModernTheme.secondary.withValues(alpha: 0.25),
-                      blurRadius: 14,
-                      offset: const Offset(0, 6),
-                    )
-                  ]
-                : [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.15),
-                      blurRadius: 8,
-                      offset: const Offset(0, 4),
-                    )
-                  ],
-          ),
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-          child: Stack(
-            children: [
-              Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(icon, size: 45, color: iconColor),
-                    const SizedBox(height: 4),
-                    Text(
-                      label,
-                      style: AppFonts.outfit(context,
-                        color: scheme.onSurface,
-                        fontWeight:
-                            selected ? FontWeight.w600 : FontWeight.w500,
-                        letterSpacing: 0.3,
-                        fontSize: 13,
-                      ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ),
+                  ? ModernTheme.primary.withValues(alpha: 0.12)
+                  : (isDark
+                      ? const Color(0xFF1E293B).withValues(alpha: 0.6)
+                      : Colors.white.withValues(alpha: 0.95)),
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(
+                color: selected
+                    ? ModernTheme.primary
+                    : (isDark
+                        ? Colors.white.withValues(alpha: 0.08)
+                        : scheme.outline.withValues(alpha: 0.1)),
+                width: selected ? 2 : 1,
               ),
-              if (selected)
-                const Positioned(
-                  top: 6,
-                  right: 6,
-                  child: Icon(
-                    PhosphorIconsRegular.checkCircle,
-                    color: ModernTheme.secondary,
-                    size: 18,
+              boxShadow: selected
+                  ? [
+                      BoxShadow(
+                        color: ModernTheme.primary.withValues(alpha: 0.2),
+                        blurRadius: 12,
+                        offset: const Offset(0, 4),
+                      )
+                    ]
+                  : [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: isDark ? 0.12 : 0.03),
+                        blurRadius: 6,
+                        offset: const Offset(0, 2),
+                      )
+                    ],
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+            child: Stack(
+              children: [
+                Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(icon, size: 36, color: iconColor),
+                      const SizedBox(height: 6),
+                      Text(
+                        label,
+                        style: AppFonts.outfit(
+                          context,
+                          color: selected ? ModernTheme.primary : scheme.onSurface,
+                          fontWeight:
+                              selected ? FontWeight.w700 : FontWeight.w600,
+                          fontSize: 13,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
                   ),
                 ),
-            ],
+                if (selected)
+                  const Positioned(
+                    top: 4,
+                    right: 4,
+                    child: Icon(
+                      PhosphorIconsFill.checkCircle,
+                      color: ModernTheme.primary,
+                      size: 18,
+                    ),
+                  ),
+              ],
+            ),
           ),
         ),
       ),
@@ -1165,6 +1147,7 @@ class _OptionBadge extends StatelessWidget {
     required this.success,
     required this.error,
     required this.isDark,
+    required this.scheme,
   });
 
   final String label;
@@ -1172,6 +1155,7 @@ class _OptionBadge extends StatelessWidget {
   final bool success;
   final bool error;
   final bool isDark;
+  final ColorScheme scheme;
 
   @override
   Widget build(BuildContext context) {
@@ -1183,12 +1167,12 @@ class _OptionBadge extends StatelessWidget {
       border = ModernTheme.secondary;
     }
     if (success) {
-      bg = AppColors.success;
-      border = AppColors.success;
+      bg = ModernTheme.tertiary;
+      border = ModernTheme.tertiary;
     }
     if (error) {
-      bg = AppColors.error;
-      border = AppColors.error;
+      bg = scheme.error;
+      border = scheme.error;
     }
 
     final text = bg.computeLuminance() > 0.5 ? Colors.black : Colors.white;
@@ -1204,7 +1188,8 @@ class _OptionBadge extends StatelessWidget {
       ),
       child: Text(
         label,
-        style: AppFonts.outfit(context,
+        style: AppFonts.outfit(
+          context,
           color: text,
           fontWeight: FontWeight.bold,
         ),

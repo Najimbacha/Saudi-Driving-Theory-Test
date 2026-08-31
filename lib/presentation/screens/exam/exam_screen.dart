@@ -5,8 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 
-import '../../../core/constants/app_colors.dart';
 import '../../../core/theme/modern_theme.dart';
 import '../../../widgets/glass_container.dart';
 import '../../../widgets/home_shell.dart';
@@ -89,7 +89,7 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
                   icon: const Icon(Icons.refresh),
                   label: Text('common.retry'.tr()),
                 ),
-                          const SizedBox(height: 12),
+                const SizedBox(height: 12),
                 ExpansionTile(
                   title: Text(
                     'common.technicalDetails'.tr(),
@@ -123,8 +123,12 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
             if (!_handledCompletion) {
               _handledCompletion = true;
               WidgetsBinding.instance.addPostFrameCallback((_) {
+                if (!context.mounted) return;
                 _finishExam(context, ref, ref.read(examProvider));
-                controller.reset();
+                // Defer reset so GoRouter push completes before state clears
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  controller.reset();
+                });
               });
             }
             return const SizedBox.shrink();
@@ -170,6 +174,7 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
           }
           context.go('/home');
         }
+
         Future<void> handleBack() async {
           if (!examStarted) {
             await handleAppBack(context);
@@ -203,37 +208,20 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
               iconTheme: IconThemeData(color: scheme.onSurface),
               leading: IconButton(
                 onPressed: handleBack,
-                icon: const Icon(Icons.arrow_back),
+                icon: const Icon(Icons.close_rounded), // Formal close icon
               ),
               title: Text(
                 'exam.title'.tr(),
                 style: AppFonts.outfit(context,
-                    fontWeight: FontWeight.bold, color: scheme.onSurface),
+                    fontWeight: FontWeight.w700,
+                    fontSize: 18,
+                    color: scheme.onSurface),
               ),
               centerTitle: true,
               actions: [
                 Center(
-                  child: Container(
-                    margin: const EdgeInsetsDirectional.only(end: 8),
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                    decoration: BoxDecoration(
-                      color: scheme.onSurface.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(14),
-                    ),
-                    child: Text(
-                      '${exam.currentIndex + 1}/${exam.questions.length}',
-                      style: AppFonts.outfit(context,
-                        color: scheme.onSurface.withValues(alpha: 0.8),
-                        fontWeight: FontWeight.w600,
-                        fontSize: 12,
-                      ),
-                    ),
-                  ),
-                ),
-                Center(
                   child: Padding(
-                    padding: const EdgeInsetsDirectional.only(end: 8),
+                    padding: const EdgeInsetsDirectional.only(end: 16),
                     child: Consumer(
                       builder: (context, ref, _) {
                         final timeLeftSeconds = ref.watch(
@@ -261,20 +249,63 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
                   children: [
                     // Progress Header
                     Padding(
-                      padding:
-                          const EdgeInsetsDirectional.fromSTEB(20, 0, 20, 8),
-                      child: Column(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 8),
+                      child: Row(
                         children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: LinearProgressIndicator(
-                              value: (exam.currentIndex + 1) /
-                                  exam.questions.length,
-                              backgroundColor: isDark
-                                  ? Colors.white10
-                                  : scheme.onSurface.withValues(alpha: 0.1),
-                              color: ModernTheme.primary,
-                              minHeight: 6,
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      '${'exam.questions'.tr()} ${exam.currentIndex + 1}/${exam.questions.length}',
+                                      style: AppFonts.outfit(
+                                        context,
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w600,
+                                        color: scheme.onSurface
+                                            .withValues(alpha: 0.5),
+                                      ),
+                                    ),
+                                    if (exam.strictMode)
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8, vertical: 2),
+                                        decoration: BoxDecoration(
+                                          color: scheme.error
+                                              .withValues(alpha: 0.1),
+                                          borderRadius:
+                                              BorderRadius.circular(4),
+                                        ),
+                                        child: Text(
+                                          'STRICT',
+                                          style: AppFonts.outfit(
+                                            context,
+                                            fontSize: 10,
+                                            fontWeight: FontWeight.bold,
+                                            color: scheme.error,
+                                          ),
+                                        ),
+                                      ),
+                                  ],
+                                ),
+                                const SizedBox(height: 8),
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: LinearProgressIndicator(
+                                    value: (exam.currentIndex + 1) /
+                                        exam.questions.length,
+                                    backgroundColor: scheme.onSurface
+                                        .withValues(alpha: 0.05),
+                                    color: scheme.primary,
+                                    minHeight: 6,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ],
@@ -290,37 +321,67 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            // Question Text
-                            AnimatedSwitcher(
-                              duration: const Duration(milliseconds: 300),
-                              child: Text(
-                                questionText,
-                                key: ValueKey(current.id),
-                                style: AppFonts.outfit(context,
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.w600,
-                                  color: scheme.onSurface,
-                                  height: 1.3,
-                                ),
-                            ),
-                          ),
-                            const SizedBox(height: 16),
-
-                          if (signPath != null)
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 16),
-                              child: GlassContainer(
-                                padding: const EdgeInsets.all(20),
+                            // Question Card
+                            Container(
+                              key: ValueKey('question-card-${current.id}'),
+                              decoration: BoxDecoration(
                                 color: isDark
-                                    ? Colors.white.withValues(alpha: 0.05)
-                                    : scheme.onSurface.withValues(alpha: 0.04),
-                                child: SvgPicture.asset(
-                                  'assets/$signPath',
-                                  height: 140,
-                                  fit: BoxFit.contain,
+                                    ? Colors.white.withValues(alpha: 0.03)
+                                    : scheme.surface,
+                                borderRadius: BorderRadius.circular(24),
+                                border: Border.all(
+                                  color:
+                                      scheme.onSurface.withValues(alpha: 0.08),
                                 ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withValues(alpha: 0.02),
+                                    blurRadius: 20,
+                                    offset: const Offset(0, 10),
+                                  ),
+                                ],
+                              ),
+                              padding: const EdgeInsets.all(24),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  AnimatedSwitcher(
+                                    duration: const Duration(milliseconds: 300),
+                                    child: Text(
+                                      questionText,
+                                      key: ValueKey(current.id),
+                                      style: AppFonts.outfit(
+                                        context,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w600,
+                                        color: scheme.onSurface,
+                                        height: 1.4,
+                                      ),
+                                    ),
+                                  ),
+                                  if (signPath != null) ...[
+                                    const SizedBox(height: 20),
+                                    Center(
+                                      child: Container(
+                                        padding: const EdgeInsets.all(16),
+                                        decoration: BoxDecoration(
+                                          color: scheme.onSurface
+                                              .withValues(alpha: 0.03),
+                                          borderRadius:
+                                              BorderRadius.circular(16),
+                                        ),
+                                        child: SvgPicture.asset(
+                                          'assets/$signPath',
+                                          height: 120,
+                                          fit: BoxFit.contain,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ],
                               ),
                             ),
+                            const SizedBox(height: 24),
 
                             // Options
                             AnimatedSwitcher(
@@ -333,69 +394,88 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
 
                                   return Padding(
                                     padding: const EdgeInsets.only(bottom: 12),
-                                    child: GestureDetector(
+                                    child: InkWell(
                                       onTap: () {
                                         AppFeedback.tap(context);
                                         controller.selectAnswer(idx);
                                       },
+                                      borderRadius: BorderRadius.circular(20),
                                       child: AnimatedContainer(
                                         duration:
                                             const Duration(milliseconds: 200),
                                         decoration: BoxDecoration(
                                           color: isSelected
-                                              ? ModernTheme.secondary
-                                                  .withValues(alpha: 0.2)
+                                              ? scheme.primary
+                                                  .withValues(alpha: 0.08)
                                               : (isDark
                                                   ? Colors.white
-                                                      .withValues(alpha: 0.05)
-                                                  : scheme.onSurface
-                                                      .withValues(alpha: 0.04)),
+                                                      .withValues(alpha: 0.02)
+                                                  : scheme.surface),
                                           borderRadius:
-                                              BorderRadius.circular(16),
+                                              BorderRadius.circular(20),
                                           border: Border.all(
                                             color: isSelected
-                                                ? ModernTheme.secondary
+                                                ? scheme.primary
                                                 : scheme.onSurface
-                                                    .withValues(alpha: 0.12),
-                                            width: isSelected ? 2 : 1,
+                                                    .withValues(alpha: 0.1),
+                                            width: isSelected ? 2 : 1.5,
                                           ),
-                                          boxShadow: isSelected
-                                              ? [
-                                                  BoxShadow(
-                                                    color: ModernTheme.secondary
-                                                        .withValues(alpha: 0.2),
-                                                    blurRadius: 8,
-                                                    offset: const Offset(0, 4),
-                                                  )
-                                                ]
-                                              : [],
                                         ),
-                                        padding: const EdgeInsets.all(16),
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 20, vertical: 16),
                                         child: Row(
                                           children: [
-                                            _OptionBadge(
-                                              label: String.fromCharCode(
-                                                  65 + idx),
-                                              selected: isSelected,
+                                            AnimatedContainer(
+                                              duration: const Duration(
+                                                  milliseconds: 200),
+                                              width: 32,
+                                              height: 32,
+                                              decoration: BoxDecoration(
+                                                color: isSelected
+                                                    ? scheme.primary
+                                                    : scheme.onSurface
+                                                        .withValues(
+                                                            alpha: 0.05),
+                                                shape: BoxShape.circle,
+                                              ),
+                                              alignment: Alignment.center,
+                                              child: Text(
+                                                String.fromCharCode(65 + idx),
+                                                style: AppFonts.outfit(
+                                                  context,
+                                                  color: isSelected
+                                                      ? Colors.white
+                                                      : scheme.onSurface
+                                                          .withValues(
+                                                              alpha: 0.6),
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 14,
+                                                ),
+                                              ),
                                             ),
                                             const SizedBox(width: 16),
                                             Expanded(
                                               child: Text(
                                                 optionText,
-                                                style: AppFonts.outfit(context,
+                                                style: AppFonts.outfit(
+                                                  context,
                                                   fontSize: 16,
                                                   color: scheme.onSurface
-                                                      .withValues(alpha: 0.9),
+                                                      .withValues(
+                                                          alpha: isSelected
+                                                              ? 1.0
+                                                              : 0.8),
                                                   fontWeight: isSelected
                                                       ? FontWeight.w600
-                                                      : FontWeight.normal,
+                                                      : FontWeight.w400,
                                                 ),
                                               ),
                                             ),
                                             if (isSelected)
-                                              const SizedBox(
-                                                width: 20,
-                                                height: 20,
+                                              Icon(
+                                                Icons.check_circle_rounded,
+                                                color: scheme.primary,
+                                                size: 22,
                                               ),
                                           ],
                                         ),
@@ -410,43 +490,51 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
                       ),
                     ),
 
-                    // Actions
-                    GlassContainer(
-                      borderRadius:
-                          const BorderRadius.vertical(top: Radius.circular(24)),
-                      color: isDark
-                          ? Colors.black.withValues(alpha: 0.2)
-                          : Colors.white.withValues(alpha: 0.85),
-                      blur: 10,
-                      padding: const EdgeInsets.fromLTRB(20, 20, 20,
-                          32), // More padding at bottom for safe area
+                    // Actions Bar
+                    Container(
+                      decoration: BoxDecoration(
+                        color:
+                            isDark ? const Color(0xFF0F172A) : scheme.surface,
+                        border: Border(
+                          top: BorderSide(
+                              color: scheme.onSurface.withValues(alpha: 0.08)),
+                        ),
+                      ),
+                      padding: EdgeInsets.fromLTRB(20, 16, 20,
+                          16 + MediaQuery.paddingOf(context).bottom),
                       child: Column(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
                           Row(
                             children: [
-                              Expanded(
-                                child: OutlinedButton(
-                                  style: OutlinedButton.styleFrom(
-                                    side: BorderSide(
-                                        color: scheme.onSurface
-                                            .withValues(alpha: 0.24)),
-                                    foregroundColor: scheme.onSurface,
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 16),
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(16)),
+                              if (!exam.strictMode) ...[
+                                Expanded(
+                                  flex: 1,
+                                  child: OutlinedButton(
+                                    style: OutlinedButton.styleFrom(
+                                      side: BorderSide(
+                                          color: scheme.onSurface
+                                              .withValues(alpha: 0.1)),
+                                      foregroundColor: scheme.onSurface
+                                          .withValues(alpha: 0.7),
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 16),
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(16)),
+                                    ),
+                                    onPressed: exam.currentIndex == 0
+                                        ? null
+                                        : controller.previous,
+                                    child: const Icon(
+                                        Icons.arrow_back_ios_new_rounded,
+                                        size: 20),
                                   ),
-                                  onPressed:
-                                      exam.strictMode || exam.currentIndex == 0
-                                          ? null
-                                          : controller.previous,
-                                  child: Text('common.previous'.tr(),
-                                      style: AppFonts.outfit(context,)),
                                 ),
-                              ),
-                              const SizedBox(width: 16),
+                                const SizedBox(width: 12),
+                              ],
                               Expanded(
+                                flex: 3,
                                 child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: ModernTheme.primary,
@@ -456,9 +544,7 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
                                     shape: RoundedRectangleBorder(
                                         borderRadius:
                                             BorderRadius.circular(16)),
-                                    elevation: 8,
-                                    shadowColor: ModernTheme.primary
-                                        .withValues(alpha: 0.5),
+                                    elevation: 0,
                                   ),
                                   onPressed: canProceed
                                       ? () {
@@ -486,17 +572,21 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
                           ),
                           if (!exam.strictMode || exam.isCompleted) ...[
                             const SizedBox(height: 12),
-                            TextButton(
+                            TextButton.icon(
                               onPressed: () => _showQuestionGrid(
                                 context,
                                 ref.read(examProvider),
                                 controller,
                               ),
-                              child: Text(
+                              icon:
+                                  const Icon(Icons.grid_view_rounded, size: 18),
+                              label: Text(
                                 'exam.reviewAnswers'.tr(),
                                 style: AppFonts.outfit(context,
-                                    color: scheme.onSurface
-                                        .withValues(alpha: 0.7)),
+                                    color:
+                                        scheme.onSurface.withValues(alpha: 0.5),
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w600),
                               ),
                             ),
                           ],
@@ -546,6 +636,7 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
         .read(appSettingsProvider.notifier)
         .updateStats(correct: correct, total: total);
     ref.read(examHistoryProvider.notifier).addResult(result);
+    if (!context.mounted) return;
     context.push('/results', extra: result);
   }
 
@@ -611,8 +702,8 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
                       border = ModernTheme.secondary;
                       text = scheme.onSurface;
                     } else if (flagged) {
-                      color = AppColors.warning.withValues(alpha: 0.2);
-                      text = AppColors.warning;
+                      color = Colors.orangeAccent.withValues(alpha: 0.2);
+                      text = Colors.orangeAccent;
                     } else if (answered) {
                       color = ModernTheme.secondary.withValues(alpha: 0.2);
                       text = ModernTheme.secondary;
@@ -632,7 +723,8 @@ class _ExamFlowScreenState extends ConsumerState<ExamFlowScreen> {
                         ),
                         child: Text(
                           '${index + 1}',
-                          style: AppFonts.outfit(context,
+                          style: AppFonts.outfit(
+                            context,
                             color: text,
                             fontWeight: FontWeight.bold,
                           ),
@@ -665,19 +757,16 @@ int _minSignQuota(int count) {
 
 List<Question> _buildExamQuestions(
     List<Question> questions, int count, int minSigns) {
-  final signPool = questions
-      .where((q) => q.signId != null && q.signId!.isNotEmpty)
-      .toList();
-  final otherPool = questions
-      .where((q) => q.signId == null || q.signId!.isEmpty)
-      .toList();
+  final signPool =
+      questions.where((q) => q.signId != null && q.signId!.isNotEmpty).toList();
+  final otherPool =
+      questions.where((q) => q.signId == null || q.signId!.isEmpty).toList();
 
   signPool.shuffle();
   otherPool.shuffle();
 
   final selected = <Question>[];
-  final signPickCount =
-      signPool.length < minSigns ? signPool.length : minSigns;
+  final signPickCount = signPool.length < minSigns ? signPool.length : minSigns;
   selected.addAll(signPool.take(signPickCount));
 
   if (signPool.length < minSigns && kDebugMode) {
@@ -701,9 +790,7 @@ List<Question> _buildExamQuestions(
 
   if (remaining > 0) {
     final used = selected.map((q) => q.id).toSet();
-    final fallback = questions
-        .where((q) => !used.contains(q.id))
-        .toList()
+    final fallback = questions.where((q) => !used.contains(q.id)).toList()
       ..shuffle();
     selected.addAll(fallback.take(remaining));
   }
@@ -807,9 +894,25 @@ class _ExamIntroState extends State<_ExamIntro> {
           child: ListView(
             padding: const EdgeInsets.all(20),
             children: [
-              GlassContainer(
-                gradient: ModernTheme.secondaryGradient,
+              Container(
                 padding: const EdgeInsets.all(24),
+                decoration: BoxDecoration(
+                  color: isDark
+                      ? Colors.white.withValues(alpha: 0.06)
+                      : scheme.surface,
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(
+                    color: scheme.onSurface.withValues(alpha: 0.1),
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color:
+                          Colors.black.withValues(alpha: isDark ? 0.2 : 0.04),
+                      blurRadius: 12,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -817,13 +920,16 @@ class _ExamIntroState extends State<_ExamIntro> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 12, vertical: 6),
                       decoration: BoxDecoration(
-                        color: Colors.white24,
+                        color: ModernTheme.primary.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                          color: ModernTheme.primary.withValues(alpha: 0.25),
+                        ),
                       ),
                       child: Text(
                         'exam.title'.tr(),
                         style: AppFonts.outfit(context,
-                            color: Colors.white,
+                            color: ModernTheme.primary,
                             fontWeight: FontWeight.bold,
                             fontSize: 12),
                       ),
@@ -831,19 +937,22 @@ class _ExamIntroState extends State<_ExamIntro> {
                     const SizedBox(height: 16),
                     Text(
                       'exam.readyTitle'.tr(),
-                      style: AppFonts.outfit(context,
-                        fontSize: 28,
+                      style: AppFonts.outfit(
+                        context,
+                        fontSize: 26,
                         fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        height: 1.1,
+                        color: scheme.onSurface,
+                        height: 1.15,
                       ),
                     ),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 8),
                     Text(
                       'exam.description'.tr(),
-                      style: AppFonts.outfit(context,
-                        fontSize: 16,
-                        color: Colors.white70,
+                      style: AppFonts.outfit(
+                        context,
+                        fontSize: 15,
+                        color: scheme.onSurface.withValues(alpha: 0.6),
+                        height: 1.4,
                       ),
                     ),
                   ],
@@ -852,7 +961,8 @@ class _ExamIntroState extends State<_ExamIntro> {
               const SizedBox(height: 32),
               Text(
                 'exam.selectMode'.tr(),
-                style: AppFonts.outfit(context,
+                style: AppFonts.outfit(
+                  context,
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                   color: scheme.onSurface,
@@ -915,34 +1025,55 @@ class _ExamIntroState extends State<_ExamIntro> {
   }
 
   Future<bool> _showRewardedUnlock(BuildContext context) async {
+    // Hoisted so cleanup is accessible after showDialog returns.
+    VoidCallback? notifierListener;
     final result = await showDialog<bool>(
       context: context,
       builder: (dialogContext) {
         bool loading = false;
         String? errorMessage;
         bool didTriggerLoad = false;
+        // Listen to the reactive notifier so the dialog auto-updates
+        // when the rewarded ad loads in the background.
         return StatefulBuilder(
           builder: (context, setState) {
             final scheme = Theme.of(context).colorScheme;
             final isDark = Theme.of(context).brightness == Brightness.dark;
             if (!didTriggerLoad) {
               didTriggerLoad = true;
-              WidgetsBinding.instance.addPostFrameCallback((_) async {
+              // Set up listener for background ad readiness.
+              notifierListener = () {
                 if (!context.mounted) return;
-                setState(() {
-                  loading = true;
-                  errorMessage = null;
+                if (AdService.instance.isRewardedReady) {
+                  setState(() {
+                    loading = false;
+                    errorMessage = null;
+                  });
+                }
+              };
+              AdService.instance.rewardedReadyNotifier
+                  .addListener(notifierListener!);
+              // If the ad is already preloaded, skip loading entirely.
+              if (AdService.instance.isRewardedReady) {
+                // Ad is already ready — no loading needed.
+              } else {
+                WidgetsBinding.instance.addPostFrameCallback((_) async {
+                  if (!context.mounted) return;
+                  setState(() {
+                    loading = true;
+                    errorMessage = null;
+                  });
+                  await AdService.instance.init();
+                  final loaded = await AdService.instance.ensureRewardedReady();
+                  if (!context.mounted) return;
+                  setState(() {
+                    loading = false;
+                    if (!loaded) {
+                      errorMessage = 'ads.unavailable'.tr();
+                    }
+                  });
                 });
-                await AdService.instance.init();
-                final loaded = await AdService.instance.loadRewarded();
-                if (!context.mounted) return;
-                setState(() {
-                  loading = false;
-                  if (!loaded) {
-                    errorMessage = 'ads.unavailable'.tr();
-                  }
-                });
-              });
+              }
             }
             return Dialog(
               backgroundColor: Colors.transparent,
@@ -998,7 +1129,8 @@ class _ExamIntroState extends State<_ExamIntro> {
                         Expanded(
                           child: Text(
                             'ads.unlockExamTitle'.tr(),
-                            style: AppFonts.outfit(context,
+                            style: AppFonts.outfit(
+                              context,
                               fontWeight: FontWeight.w700,
                               fontSize: 18,
                               color: scheme.onSurface,
@@ -1010,7 +1142,8 @@ class _ExamIntroState extends State<_ExamIntro> {
                     const SizedBox(height: 10),
                     Text(
                       'ads.unlockExamBody'.tr(),
-                      style: AppFonts.outfit(context,
+                      style: AppFonts.outfit(
+                        context,
                         color: scheme.onSurface.withValues(alpha: 0.7),
                         height: 1.4,
                       ),
@@ -1019,7 +1152,8 @@ class _ExamIntroState extends State<_ExamIntro> {
                       const SizedBox(height: 8),
                       Text(
                         errorMessage!,
-                        style: AppFonts.outfit(context,
+                        style: AppFonts.outfit(
+                          context,
                           color: scheme.error,
                           fontSize: 12,
                         ),
@@ -1033,8 +1167,7 @@ class _ExamIntroState extends State<_ExamIntro> {
                             style: OutlinedButton.styleFrom(
                               foregroundColor: scheme.onSurface,
                               side: BorderSide(
-                                color:
-                                    scheme.onSurface.withValues(alpha: 0.2),
+                                color: scheme.onSurface.withValues(alpha: 0.2),
                               ),
                               padding: const EdgeInsets.symmetric(vertical: 14),
                               shape: RoundedRectangleBorder(
@@ -1046,7 +1179,9 @@ class _ExamIntroState extends State<_ExamIntro> {
                                 : () => Navigator.of(context).pop(false),
                             child: Text(
                               'ads.notNow'.tr(),
-                              style: AppFonts.outfit(context,),
+                              style: AppFonts.outfit(
+                                context,
+                              ),
                             ),
                           ),
                         ),
@@ -1072,12 +1207,11 @@ class _ExamIntroState extends State<_ExamIntro> {
                                     await AdService.instance.init();
                                     if (!AdService.instance.isRewardedReady) {
                                       final loaded = await AdService.instance
-                                          .loadRewarded();
+                                          .ensureRewardedReady();
                                       if (!loaded && context.mounted) {
                                         setState(() {
                                           loading = false;
-                                          errorMessage =
-                                              'ads.unavailable'.tr();
+                                          errorMessage = 'ads.unavailable'.tr();
                                         });
                                         return;
                                       }
@@ -1090,14 +1224,20 @@ class _ExamIntroState extends State<_ExamIntro> {
                                           return;
                                         }
                                         rewardedHandled = true;
+                                        // Clean up listener before popping.
+                                        if (notifierListener != null) {
+                                          AdService
+                                              .instance.rewardedReadyNotifier
+                                              .removeListener(
+                                                  notifierListener!);
+                                        }
                                         Navigator.of(context).pop(true);
                                       },
                                     );
                                     if (!success && context.mounted) {
                                       setState(() {
                                         loading = false;
-                                        errorMessage =
-                                            'ads.unavailable'.tr();
+                                        errorMessage = 'ads.unavailable'.tr();
                                       });
                                     }
                                   },
@@ -1127,6 +1267,11 @@ class _ExamIntroState extends State<_ExamIntro> {
         );
       },
     );
+    // Clean up the notifier listener when dialog closes.
+    if (notifierListener != null) {
+      AdService.instance.rewardedReadyNotifier
+          .removeListener(notifierListener!);
+    }
     return result ?? false;
   }
 
@@ -1159,84 +1304,117 @@ class _ModeGlassCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    return GestureDetector(
-      onTap: () {
-        AppFeedback.tap(context);
-        onTap();
-      },
-      child: GlassContainer(
-        color: isRecommended
-            ? color.withValues(alpha: 0.15)
-            : (isDark
-                ? Colors.white.withValues(alpha: 0.05)
-                : scheme.onSurface.withValues(alpha: 0.04)),
-        border: Border.all(
-          color: isRecommended
-              ? color.withValues(alpha: 0.5)
-              : scheme.onSurface.withValues(alpha: 0.1),
-        ),
-        padding: const EdgeInsets.all(20),
-        child: Row(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: color.withValues(alpha: 0.2),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Icon(icon, color: color),
+    return Semantics(
+      button: true,
+      label: title,
+      child: GestureDetector(
+        onTap: () {
+          AppFeedback.tap(context);
+          onTap();
+        },
+        child: Container(
+          padding: const EdgeInsets.all(18),
+          decoration: BoxDecoration(
+            color: isDark
+                ? const Color(0xFF1E293B).withValues(alpha: 0.6)
+                : Colors.white.withValues(alpha: 0.95),
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(
+              color: isRecommended
+                  ? ModernTheme.primary.withValues(alpha: 0.5)
+                  : (isDark
+                      ? Colors.white.withValues(alpha: 0.08)
+                      : scheme.outline.withValues(alpha: 0.12)),
+              width: isRecommended ? 1.5 : 1,
             ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Text(
-                        title,
-                        style: AppFonts.outfit(context,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: scheme.onSurface,
-                        ),
-                      ),
-                      if (isRecommended) ...[
-                        const SizedBox(width: 8),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 8, vertical: 2),
-                          decoration: BoxDecoration(
-                            color: color,
-                            borderRadius: BorderRadius.circular(4),
-                          ),
+            boxShadow: [
+              BoxShadow(
+                color: isRecommended
+                    ? ModernTheme.primary.withValues(alpha: 0.12)
+                    : Colors.black.withValues(alpha: isDark ? 0.15 : 0.03),
+                blurRadius: 10,
+                offset: const Offset(0, 3),
+              ),
+            ],
+          ),
+          child: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: color.withValues(alpha: 0.14),
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Icon(icon, color: color, size: 24),
+              ),
+              const SizedBox(width: 14),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Flexible(
                           child: Text(
-                            'exam.bestBadge'.tr(),
-                            style: AppFonts.outfit(context,
-                                color: Colors.white,
-                                fontSize: 10,
-                                fontWeight: FontWeight.bold),
+                            title,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: AppFonts.outfit(
+                              context,
+                              fontSize: 17,
+                              fontWeight: FontWeight.w700,
+                              color: scheme.onSurface,
+                            ),
                           ),
                         ),
-                      ]
-                    ],
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    'exam.modeSummary'.tr(namedArgs: {
-                      'questions': questions,
-                      'minutes': minutes,
-                    }),
-                    style: AppFonts.outfit(context,
+                        if (isRecommended) ...[
+                          const SizedBox(width: 8),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 3),
+                            decoration: BoxDecoration(
+                              color: ModernTheme.primary.withValues(alpha: 0.14),
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(
+                                color: ModernTheme.primary.withValues(alpha: 0.3),
+                              ),
+                            ),
+                            child: Text(
+                              'exam.bestBadge'.tr(),
+                              style: AppFonts.outfit(
+                                context,
+                                color: ModernTheme.primary,
+                                fontSize: 10.5,
+                                fontWeight: FontWeight.w800,
+                              ),
+                            ),
+                          ),
+                        ]
+                      ],
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      'exam.modeSummary'.tr(namedArgs: {
+                        'questions': questions,
+                        'minutes': minutes,
+                      }),
+                      style: AppFonts.outfit(
+                        context,
                         color: scheme.onSurface.withValues(alpha: 0.6),
-                        fontSize: 13),
-                  ),
-                ],
+                        fontSize: 13,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            Icon(Icons.arrow_forward_ios_rounded,
-                color: scheme.onSurface.withValues(alpha: 0.3), size: 16),
-          ],
+              Icon(
+                Icons.chevron_right_rounded,
+                color: scheme.onSurface.withValues(alpha: 0.4),
+                size: 24,
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -1254,36 +1432,36 @@ class _TimerBanner extends StatelessWidget {
     final seconds = (timeLeftSeconds % 60).toString().padLeft(2, '0');
     final totalSeconds = timeLeftSeconds;
 
-    Color bg = ModernTheme.secondary.withValues(alpha: 0.2);
-    Color text = ModernTheme.secondary;
+    Color bg = ModernTheme.primary.withValues(alpha: 0.15);
+    Color text = ModernTheme.primary;
 
     if (totalSeconds <= 60) {
-      bg = AppColors.error.withValues(alpha: 0.2);
-      text = AppColors.error;
+      bg = ModernTheme.coral.withValues(alpha: 0.18);
+      text = ModernTheme.coral;
     } else if (totalSeconds <= 300) {
-      bg = AppColors.warning.withValues(alpha: 0.2);
-      text = AppColors.warning;
+      bg = ModernTheme.amber.withValues(alpha: 0.18);
+      text = ModernTheme.amber;
     }
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
         color: bg,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: text.withValues(alpha: 0.3)),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: text.withValues(alpha: 0.35), width: 1),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(Icons.timer_outlined, color: text, size: 16),
+          Icon(PhosphorIconsFill.timer, color: text, size: 16),
           const SizedBox(width: 6),
           Text(
             '$minutes:$seconds',
             style: GoogleFonts.robotoMono(
-              // Monospace for timer
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w700,
               color: text,
-              fontSize: 14,
+              fontSize: 13.5,
+              letterSpacing: 0.5,
             ),
           ),
         ],
@@ -1291,31 +1469,3 @@ class _TimerBanner extends StatelessWidget {
     );
   }
 }
-
-class _OptionBadge extends StatelessWidget {
-  const _OptionBadge({required this.label, required this.selected});
-
-  final String label;
-  final bool selected;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 32,
-      height: 32,
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        color: selected ? ModernTheme.secondary : Colors.white10,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Text(
-        label,
-        style: AppFonts.outfit(context,
-          color: Colors.white,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    );
-  }
-}
-

@@ -5,9 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../core/constants/app_colors.dart';
+import '../../../core/theme/modern_theme.dart';
 import '../../../state/app_state.dart';
 import '../../../utils/app_feedback.dart';
+import '../../../utils/app_fonts.dart';
 import '../../../utils/navigation_utils.dart';
 
 class OnboardingIntroScreen extends ConsumerStatefulWidget {
@@ -266,32 +267,40 @@ class _OnboardingFooter extends StatelessWidget {
               (index) => AnimatedContainer(
                 duration: const Duration(milliseconds: 250),
                 margin: const EdgeInsets.symmetric(horizontal: 4),
-                width: currentIndex == index ? 20 : 8,
+                width: currentIndex == index ? 24 : 8,
                 height: 8,
                 decoration: BoxDecoration(
                   color: currentIndex == index
-                      ? AppColors.primary
-                      : scheme.onSurface.withValues(alpha: 0.3),
+                      ? ModernTheme.primary
+                      : scheme.onSurface.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 20),
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary,
+                backgroundColor: ModernTheme.primary,
                 foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(vertical: 16),
+                padding: const EdgeInsets.symmetric(vertical: 18),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(14),
+                  borderRadius: BorderRadius.circular(20),
                 ),
-                elevation: 8,
+                elevation: 4,
+                shadowColor: ModernTheme.primary.withValues(alpha: 0.35),
               ),
               onPressed: onNext,
-              child: Text(nextLabel),
+              child: Text(
+                nextLabel,
+                style: AppFonts.outfit(
+                  context,
+                  fontSize: 16.5,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
             ),
           ),
         ],
@@ -315,29 +324,35 @@ class _IllustrationCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
     final cardColor = isDark
-        ? scheme.surface.withValues(alpha: 0.3)
-        : scheme.surface.withValues(alpha: 0.95);
+        ? const Color(0xFF1E293B).withValues(alpha: 0.7)
+        : Colors.white;
 
     return AnimatedBuilder(
       animation: pulse,
       builder: (context, _) {
         final value = 0.5 + 0.5 * sin(pulse.value * pi);
         return Container(
-          width: 240,
-          height: 240,
+          width: 250,
+          height: 250,
           decoration: BoxDecoration(
             color: cardColor,
-            borderRadius: BorderRadius.circular(28),
+            borderRadius: BorderRadius.circular(32),
+            border: Border.all(
+              color: isDark
+                  ? Colors.white.withValues(alpha: 0.1)
+                  : scheme.outline.withValues(alpha: 0.12),
+              width: 1.5,
+            ),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.15),
-                blurRadius: 24,
-                offset: const Offset(0, 12),
+                color: ModernTheme.primary.withValues(alpha: isDark ? 0.15 : 0.08),
+                blurRadius: 28,
+                offset: const Offset(0, 10),
               ),
             ],
           ),
           child: Center(
-            child: _IllustrationContent(type: type, value: value),
+            child: _IllustrationContent(type: type, value: value, scheme: scheme),
           ),
         );
       },
@@ -349,16 +364,17 @@ class _IllustrationContent extends StatelessWidget {
   const _IllustrationContent({
     required this.type,
     required this.value,
+    required this.scheme,
   });
 
   final _OnboardingArtType type;
   final double value;
+  final ColorScheme scheme;
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-    const primary = AppColors.primary;
-    const secondary = AppColors.secondary;
+    const primary = ModernTheme.primary;
+    const secondary = ModernTheme.secondary;
 
     switch (type) {
       case _OnboardingArtType.practice:
@@ -427,7 +443,7 @@ class _IllustrationContent extends StatelessWidget {
             Positioned(
               bottom: 64,
               child:
-                  _PulseDot(size: 18, color: AppColors.tertiary, value: value),
+                  _PulseDot(size: 18, color: ModernTheme.tertiary, value: value),
             ),
           ],
         );

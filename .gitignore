@@ -30,3 +30,7 @@ ios/Flutter/ephemeral/
 
 # macOS/Linux
 *.log
+
+# Private Android signing files
+android/key.properties
+android/app/upload-keystore.jks

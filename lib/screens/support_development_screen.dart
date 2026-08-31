@@ -9,10 +9,8 @@ import '../widgets/glass_container.dart';
 class SupportDevelopmentScreen extends StatelessWidget {
   const SupportDevelopmentScreen({super.key});
 
-  static const String _bankName = 'Al Rajhi Bank';
   static const String _accountNumber = '640000010006083141383';
   static const String _iban = 'SA23 8000 0640 6080 1314 1383';
-  static const String _beneficiaryFallback = 'Beneficiary: (add later)';
 
   void _copyToClipboard(BuildContext context, String value) {
     Clipboard.setData(ClipboardData(text: value));
@@ -113,7 +111,7 @@ class SupportDevelopmentScreen extends StatelessWidget {
                   children: [
                     _InfoRow(
                       label: 'support.bankLabel'.tr(),
-                      value: _bankName,
+                      value: 'support.bankName'.tr(),
                     ),
                     const SizedBox(height: 14),
                     _InfoRow(
@@ -129,7 +127,7 @@ class SupportDevelopmentScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 14),
                     Text(
-                      _beneficiaryFallback,
+                      'support.beneficiaryFallback'.tr(),
                       style: AppFonts.outfit(
                         context,
                         fontSize: 12,

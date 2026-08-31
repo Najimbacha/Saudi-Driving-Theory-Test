@@ -1,0 +1,2381 @@
+{
+  "app_data": {
+    "version": "2.0.0",
+    "language": "en",
+    "title": "Saudi Arabia Theoretical Driving Handbook",
+    "issued_by": "General Traffic Department",
+    "introduction": "This handbook is prepared to help trainees obtain a driver's license in the Kingdom of Saudi Arabia. Driving a vehicle is an important privilege and responsibility. It aims to help you drive safely and prepare for both the practical and theoretical driving test. Information marked in blue in the original book is for personal use and will not be included in the knowledge section of the driver's license test.",
+
+    "units": [
+      {
+        "unit_id": 1,
+        "title": "Introduction, Traffic Violations, and Traffic Points",
+        "topics": [
+          {
+            "topic_id": "1.1",
+            "title": "Driving License",
+            "subtopics": [
+              {
+                "subtopic_id": "1.1.1",
+                "title": "Private Driving License – Requirements",
+                "requirements": [
+                  "Minimum age: 18 years old",
+                  "Exception: temporary permit for max 1 year can be issued from age 17",
+                  "Complete the required training in driving schools",
+                  "Pass the theoretical test and the practical driving test",
+                  "Pay the prescribed fees",
+                  "Pay outstanding traffic fines from previous violations"
+                ],
+                "validity": {
+                  "max_years": 10,
+                  "max_passengers_including_driver": 9,
+                  "vehicle_types": "All kinds of small private vehicles",
+                  "max_vehicle_weight_kg": 3500
+                },
+                "license_information_fields": [
+                  "Full name of the license holder",
+                  "National ID number / Resident ID",
+                  "Date of Birth",
+                  "File numbers",
+                  "Type of license",
+                  "Blood type",
+                  "Date of issuance",
+                  "Expiry date",
+                  "Nationality"
+                ]
+              },
+              {
+                "subtopic_id": "1.1.2",
+                "title": "Public Driving License",
+                "requirements": [
+                  "Minimum age: 20 years old",
+                  "Valid for a maximum period of 5 years"
+                ],
+                "categories": [
+                  {
+                    "category_number": 1,
+                    "name": "Taxi Driver License",
+                    "description": "Allows its holder to drive public taxis with a load capacity of no more than 8 people"
+                  },
+                  {
+                    "category_number": 2,
+                    "name": "Transport License",
+                    "subtypes": [
+                      {
+                        "name": "Light transport license",
+                        "description": "Allows driving small public transport vehicles with total weight not more than 3500 kg"
+                      },
+                      {
+                        "name": "Heavy transport license",
+                        "description": "Allows driving large public or private transport vehicles with total weight more than 3500 kg"
+                      }
+                    ]
+                  },
+                  {
+                    "category_number": 3,
+                    "name": "Bus License",
+                    "subtypes": [
+                      {
+                        "name": "Minibus or private bus license",
+                        "description": "Allows driving buses that can carry at least 15 passengers"
+                      },
+                      {
+                        "name": "Large or public bus license",
+                        "description": "Allows driving buses that can carry more than 15 passengers"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "subtopic_id": "1.1.3",
+                "title": "Public Works Vehicle Driving License",
+                "requirements": [
+                  "Minimum age: 20 years old",
+                  "Valid for a maximum period of 5 years",
+                  "Applicant must not have been convicted of crimes of assault of people, honour, or money unless rehabilitated",
+                  "Applicant must not have been convicted of using, manufacturing, smuggling, distributing, or possessing drugs unless rehabilitated",
+                  "Regular residency for non-Saudis",
+                  "No diseases or impairments that prevent driving",
+                  "Completion of training hours in driving schools and passing the driving test",
+                  "Paying the prescribed fees",
+                  "Paying outstanding traffic fines"
+                ]
+              },
+              {
+                "subtopic_id": "1.1.4",
+                "title": "Motorcycle Driving License",
+                "requirements": [
+                  "Valid for all types of motorbikes",
+                  "Minimum age: 18 years old",
+                  "Valid for a maximum of 10 years"
+                ]
+              }
+            ]
+          },
+
+          {
+            "topic_id": "1.2",
+            "title": "Speed and Its Consequences",
+            "subtopics": [
+              {
+                "subtopic_id": "1.2.1",
+                "title": "Road Users",
+                "types": [
+                  "Pedestrians",
+                  "Motorcyclists and cyclists",
+                  "Various types of vehicles",
+                  "Light trucks",
+                  "Heavy trucks",
+                  "Buses",
+                  "Public works vehicles"
+                ],
+                "key_facts": [
+                  "Pedestrians move at a speed not exceeding 4–5 km/h",
+                  "Vehicles can move up to 100 km/h",
+                  "Human emergency high-speed perception starts from 20–30 km/h",
+                  "Humans are not created to move at high speed, which is why they need technical assistance from the speedometer",
+                  "Vehicles can move loads from 1500 kg to 3500 kg at high speeds, making collisions very dangerous"
+                ]
+              },
+              {
+                "subtopic_id": "1.2.2",
+                "title": "Basic Driving Principles",
+                "principles": [
+                  "The driving speed must always be adapted to the surrounding conditions",
+                  "The driving speed must be chosen such that it is possible to stop in time to avoid a collision with an obstacle and evade other sources of danger"
+                ]
+              },
+              {
+                "subtopic_id": "1.2.3",
+                "title": "Stopping Distance",
+                "definition": "The distance the vehicle travels from the moment the driver becomes aware of a dangerous situation until the vehicle comes to a complete stop.",
+                "formula": "Stopping Distance = Reaction Distance + Braking Distance",
+                "reaction_distance": {
+                  "definition": "The distance traveled by the vehicle from the moment the driver realizes a dangerous situation until applying the brakes.",
+                  "formula": "Speed / 3 × 10  (assuming reaction time = 1 second)",
+                  "note": "During this time your car is in motion without decelerating"
+                },
+                "braking_distance": {
+                  "definition": "The distance the vehicle travels from the moment the driver applies the brakes until the vehicle comes to a complete stop.",
+                  "formula": "(Speed/10) × (Speed/10)  (assuming hard braking on a dry road)",
+                  "note": "Distance may be shorter with emergency braking; longer on slippery roads"
+                },
+                "stopping_distance_table": [
+                  { "speed_kmh": 30, "reaction_distance_m": 9, "braking_distance_m": 9, "stopping_distance_m": 18 },
+                  { "speed_kmh": 50, "reaction_distance_m": 15, "braking_distance_m": 25, "stopping_distance_m": 40 },
+                  { "speed_kmh": 60, "reaction_distance_m": 18, "braking_distance_m": 36, "stopping_distance_m": 54 },
+                  { "speed_kmh": 80, "reaction_distance_m": 24, "braking_distance_m": 64, "stopping_distance_m": 88 },
+                  { "speed_kmh": 100, "reaction_distance_m": 30, "braking_distance_m": 100, "stopping_distance_m": 130 },
+                  { "speed_kmh": 120, "reaction_distance_m": 36, "braking_distance_m": 144, "stopping_distance_m": 180 }
+                ],
+                "reaction_distance_increases_when": [
+                  "At high speeds",
+                  "If you are distracted or tired",
+                  "If the driver is under the influence of drugs or medications that cause drowsiness",
+                  "If the driver is under the influence of alcohol"
+                ],
+                "braking_distance_increases_when": [
+                  "At high speeds",
+                  "When the vehicle load is heavy",
+                  "Poor road conditions (sand, snow, wet surface)",
+                  "Bad tires",
+                  "Malfunctioning or insufficient brakes"
+                ],
+                "how_to_reduce_stopping_distance": [
+                  "Reduce speed",
+                  "Increased attention – be prepared to brake; place your foot on the brake pedal without pressing it"
+                ]
+              },
+              {
+                "subtopic_id": "1.2.4",
+                "title": "Speed Impact Real-World Example",
+                "example": {
+                  "scenario_1": "Traveling at 50 km/h – a truck comes out of an intersection in front of you, you brake hard and stop in time.",
+                  "scenario_2": "Traveling at 60 km/h (only 10 km/h faster) – the same truck comes out, you brake hard but cannot stop in time. The truck will be hit at 40 km/h.",
+                  "consequence": "If you or a passenger were not wearing seat belts, the physical force would be equivalent to jumping from a third-floor window and hitting the ground after falling 6.5 meters – all because you were driving only 10 km/h faster."
+                }
+              }
+            ]
+          },
+
+          {
+            "topic_id": "1.3",
+            "title": "Traffic Accidents",
+            "subtopics": [
+              {
+                "subtopic_id": "1.3.1",
+                "title": "Statistical Recording",
+                "rules": [
+                  "Recorded as INJURY: death occurs more than one month after the accident",
+                  "Recorded as DEATH: immediate death at accident OR death within one month from the date of occurrence"
+                ]
+              },
+              {
+                "subtopic_id": "1.3.2",
+                "title": "Reasons for High Accident Rate in Saudi Arabia",
+                "reasons": [
+                  "Speeding",
+                  "Failure to comply with traffic laws",
+                  "Using a mobile phone while driving",
+                  "Not wearing a seat belt while driving",
+                  "Failure to take the appropriate course and sudden change of course",
+                  "Vehicle and road condition"
+                ]
+              },
+              {
+                "subtopic_id": "1.3.3",
+                "title": "Types of Traffic Accidents",
+                "types": [
+                  {
+                    "type": "Minor Traffic Accident",
+                    "criteria": [
+                      "Damage to private or public property not exceeding 5,000 SAR",
+                      "Personal injury that does not need to be taken to the hospital"
+                    ]
+                  },
+                  {
+                    "type": "Major Traffic Accident",
+                    "criteria": [
+                      "Traffic accidents that result in deaths",
+                      "Serious injuries requiring transfer to hospital and/or operation",
+                      "Accidents that lead to significant losses in private or public funds"
+                    ]
+                  }
+                ]
+              },
+              {
+                "subtopic_id": "1.3.4",
+                "title": "Legal Liability",
+                "applies_when": "Accident results from negligence, recklessness, or violation of traffic laws",
+                "error_rate_percentages": ["100%", "75%", "50%", "25%"],
+                "definitions": {
+                  "neglect": "Failure to exercise a certain degree of vigilance under circumstances where the law requires the protection of others or their interests",
+                  "recklessness": "An act committed by the driver indicating default or mismanagement of consequences, showing willful or intentional neglect of law and human life (e.g. driving too fast on a crowded street causing death or injury)",
+                  "failure_to_observe_regulations": "Failure to comply with the laws in a way that leads to accidents resulting in injuries, deaths, or property damage"
+                }
+              },
+              {
+                "subtopic_id": "1.3.5",
+                "title": "What Every Driver Must Do in a Traffic Accident",
+                "injury_accident": {
+                  "actions": [
+                    "Call traffic: 911 or 993",
+                    "Call the Red Crescent: 997"
+                  ]
+                },
+                "damage_accident": {
+                  "actions": [
+                    "Contact Najm",
+                    "Download the Najm application",
+                    "Take photographs of the accident from all angles",
+                    "Park the vehicle away from crowds if possible",
+                    "Determine the location of the accident, enter the data, and confirm the phone number"
+                  ]
+                },
+                "report_must_include": [
+                  "A statement of the circumstances and location of the accident",
+                  "Type of accident",
+                  "Type of vehicles involved in the accident"
+                ]
+              },
+              {
+                "subtopic_id": "1.3.6",
+                "title": "Consequences of Ignoring Accident Laws",
+                "penalties": [
+                  "Fine up to 2,000 SAR and/or imprisonment up to 3 months",
+                  "Leaving the scene without reason = considered a fugitive from justice"
+                ],
+                "when_vehicles_may_be_moved": [
+                  "The vehicle obstructs traffic or poses a threat to public safety",
+                  "The accident was simple and clear, and both parties agreed on how it happened"
+                ],
+                "accidents_with_death_or_serious_injury": {
+                  "driver_stopped_for": "Up to 72 hours",
+                  "extension": "May be extended by the competent court",
+                  "release": "Must be released immediately if a fine is paid or required insurance policy is presented"
+                },
+                "accidents_caused_by_alcohol_or_drifting": "Driver is handed over to the public prosecutor of the competent court to file a lawsuit",
+                "force_majeure": "The penalty may be waived if the accident was caused by force majeure; the driver must explain the circumstances during investigation"
+              }
+            ]
+          },
+
+          {
+            "topic_id": "1.4",
+            "title": "Traffic Department – Tasks and Importance",
+            "identification": "Traffic employees can be identified by their uniform or official badge",
+            "authority": "They represent the state and have the right to enforce the law; their instructions must be followed in all cases",
+            "responsibilities": [
+              "Monitoring the roads and checking driver's licenses",
+              "Implementation of traffic controls",
+              "Prosecuting criminal offenses",
+              "Taking corrective action for traffic violations",
+              "Adjusting speed and taking distance measurements"
+            ],
+            "key_rule": "Traffic officers can issue orders that conflict with normal traffic regulations. These instructions must be adhered to. Example: if the light is green but the traffic officer tells you to stop, you must stop."
+          },
+
+          {
+            "topic_id": "1.5",
+            "title": "Violations and Penalties",
+            "violation_procedure": {
+              "driver_must_remain_inside_vehicle": "Until the traffic policeman arrives and completes the violation registration procedures",
+              "violation_copies": "Written in 3 copies: one delivered to the violating driver, two sent to the competent authorities",
+              "fine_paper_requirements": "Must be filled out and the offending driver must sign it",
+              "if_driver_refuses_to_sign": "This must be written in the violation",
+              "if_driver_not_present": "The vehicle number plate must be documented and all details added to the violation sheet",
+              "penalty_per_offense": "The offending driver will be penalized for each separate offense, even if listed on a single sheet",
+              "payment_methods": ["Banking phone", "Automated teller machines (ATM)"],
+              "inquiry_method": "Violations can be inquired about through the Absher website",
+              "automatic_monitoring": "Automatically registered violations do not require the above procedure"
+            },
+            "violation_form_contains": {
+              "driver_info": "Driver information",
+              "vehicle_info": "Vehicle information",
+              "offense_category": "Category of the offense",
+              "date_time_place": "Date, time, and place of the violation",
+              "payment_period": "The period given to pay the fine"
+            },
+            "paying_the_fine": {
+              "procedure": "The violating driver may pay the minimum fine at the nearest specialized center within 30 days from the date of the violation",
+              "receipt": "An official receipt is issued upon payment",
+              "if_not_paid_within_30_days": "The competent authority shall obligate the offending driver to pay the maximum fine"
+            },
+            "violation_tables": [
+              {
+                "table_id": 1,
+                "fine_range_sar": "100–150",
+                "violations": [
+                  "Driving in markets where it is not permitted to drive",
+                  "Leaving the vehicle unlocked and running after leaving it",
+                  "Lack of valid vehicle insurance",
+                  "Pedestrians crossing roads other than designated places",
+                  "Pedestrians not bound by their own signals",
+                  "Parking the vehicle in places not designated for parking",
+                  "Not giving priority to pedestrians while crossing their designated lanes"
+                ]
+              },
+              {
+                "table_id": 2,
+                "fine_range_sar": "150–300",
+                "violations": [
+                  "Not using the turn signal when turning right or left, overtaking, or changing lanes",
+                  "Reversing on the highway for a distance of more than 20 meters",
+                  "Motorist or bike rider getting attached to another vehicle or pulling/carrying things that endanger road users",
+                  "Violation of rules for using convergence lights",
+                  "Not carrying a driver's license while driving",
+                  "Misuse of the vehicle alarm",
+                  "Failure to submit the vehicle for periodic technical inspection",
+                  "Violation of traffic regulations on the road",
+                  "Not wearing a seat belt",
+                  "Placing barriers inside or outside the vehicle that obstruct the driver's vision",
+                  "Failure to leave sufficient distance between vehicle and the vehicle in front",
+                  "Moving the vehicle at high speed so that tires make a loud sound",
+                  "Gathering at the scene of an accident",
+                  "Overtaking a group of vehicles in front of traffic lights or security control points using the road shoulder or turning lane",
+                  "Lack of regulatory requirements for a trailer"
+                ]
+              },
+              {
+                "table_id": 3,
+                "fine_range_sar": "300–500",
+                "violations": [
+                  "Failure to take necessary precautions when stopping in emergency on public roads",
+                  "Throwing objects outside the vehicle",
+                  "Slowing down in a way that impedes movement",
+                  "Preoccupation with other than the road while driving",
+                  "Applying the brakes suddenly and unnecessarily",
+                  "Non-compliance with traffic regulations at road intersections",
+                  "Failure to comply with the limits of the specified lanes on the road",
+                  "Making noise by using devices from inside the vehicle or behavior contrary to public morals while driving",
+                  "Driving with an expired driver's license",
+                  "Failure to use child safety seats",
+                  "Leaving the vehicle on a sloping road without taking necessary precautions",
+                  "Leaving children under the age of 10 in the vehicle without an accompanying adult"
+                ]
+              },
+              {
+                "table_id": 4,
+                "fine_range_sar": "500–900",
+                "violations": [
+                  "Chasing emergency vehicles while using their sirens",
+                  "Driving on the road with vehicles designated for acquisition",
+                  "Not stopping completely at the stop sign",
+                  "Failure to stop completely at the 'give priority' sign when vehicles are passing on the priority road",
+                  "Not giving priority to the vehicle coming from the right at an equal intersection with no priority signals",
+                  "Not giving priority to vehicles on the highway in the absence of a priority signal",
+                  "Not abiding by the hand signals of the traffic police officer and not giving his signals priority over traffic lights",
+                  "Not giving priority to vehicles inside the roundabout over vehicles outside it in the absence of traffic lights or a traffic officer",
+                  "Driving inside tunnels without turning on lights",
+                  "Exceeding cargo dimensions for light transport vehicles beyond the permissible limit",
+                  "Unnecessarily using emergency vehicle alarms",
+                  "Not giving priority at junctions or intersections to the driver of the vehicle ahead of others in the absence of regulatory plates",
+                  "When reversing direction, not giving way to vehicles coming from other directions",
+                  "When part of the road is closed, not giving preference to those whose road is open",
+                  "When wishing to change lanes, not giving preference to a vehicle traveling straight when both vehicles are running parallel",
+                  "Not giving way to vehicles from a highway when intersecting with a secondary road or dirt road",
+                  "Not giving priority to public transportation (trains, buses) on their designated tracks",
+                  "Transporting passengers in places not designated for them in the vehicle",
+                  "Using any portable device while the vehicle is in motion",
+                  "Parking in parking spaces designated for people with special needs",
+                  "Placing writing, drawing, sticker, or any statement on the vehicle's body without competent authority approval",
+                  "Driving a vehicle that pollutes the environment on public roads",
+                  "Shading the vehicle's windows without complying with regulations",
+                  "Using the vehicle for a purpose other than that for which it was licensed",
+                  "Not covering and fixing the carriage"
+                ]
+              },
+              {
+                "table_id": 5,
+                "fine_range_sar": "1,000–2,000",
+                "violations": [
+                  "Entry of trucks, heavy equipment and the like into or out of cities at times that are not permitted",
+                  "Driving a vehicle with a driver's license that does not match the vehicle's size and type of use",
+                  "Standing on railway tracks",
+                  "Carrying more passengers than the number specified in the driving license",
+                  "Refusal to present the driver's or vehicle's documents to authorized persons",
+                  "Driving a vehicle with unclear or damaged license plates",
+                  "The vehicle is running without a front panel",
+                  "Failure to complete the procedures for modifying the area of use of the vehicle",
+                  "Not taking out the vehicle intended for export within the specified period",
+                  "Not wearing a helmet while riding a motorcycle",
+                  "Driving a vehicle before obtaining a driver's license or when the license is withdrawn",
+                  "Leaving objects on public roads that endanger public safety",
+                  "Not giving way to official or emergency procession vehicles",
+                  "Driving on the shoulders of the road, on sidewalks, or on paths where driving is prohibited",
+                  "Disembarking or riding while vehicles are in motion",
+                  "Pedestrian crossing of highways",
+                  "Overtaking in areas where overtaking is prohibited, such as curves and hills",
+                  "Lack of side lighting, reflectors, or screens for trucks and trailers",
+                  "Not using necessary lights when walking at night or in conditions where visibility is not clear",
+                  "Failure to install the panel in its designated place",
+                  "Gathering at drifting sites",
+                  "Exceeding cargo dimensions for heavy transport vehicles beyond the permissible limit",
+                  "Making modifications or additions to the vehicle's body or structure that change its features or basic equipment without following legal procedures",
+                  "Driving a vehicle without necessary equipment such as brakes, lights, and the like",
+                  "Use of plates not issued by the competent department"
+                ]
+              },
+              {
+                "table_id": 6,
+                "fine_range_sar": "3,000–6,000",
+                "violations": [
+                  "Crossing a red traffic light at speed",
+                  "Overtaking school transport buses when they stop for loading or unloading",
+                  "Tampering with road signs, reflectors, or signs regulating traffic",
+                  "Failure to stop at security control centers or checkpoints, or not stopping for the security patrol when there is a directive or sign requiring a stop",
+                  "Using unauthorized devices in the vehicle or placing slogans or posters contrary to public morals",
+                  "Driving the vehicle in the opposite direction of traffic",
+                  "Dribbling quickly between vehicles on public roads",
+                  "Carrying out a vehicle race on public roads or marching in processions without obtaining a permit beforehand",
+                  "Failure of trucks and heavy equipment to drive in the right lane on multi-lane roads",
+                  "Animal owners not keeping animals away from approved road precincts",
+                  "Installing equipment in the vehicle such as those for official vehicles and emergency vehicles",
+                  "Driving public works vehicles on the roads without taking necessary measures to avoid their damage, including not placing reflective strips on both sides of the rear of the vehicle",
+                  "Driving the vehicle without a back plate or without plates",
+                  "Blurring of vehicle plates"
+                ]
+              },
+              {
+                "table_id": 7,
+                "fine_range_sar": "5,000–10,000",
+                "violations": [
+                  "Driving a vehicle under the influence of intoxicants, narcotics, or drugs",
+                  "Carrying out road works before coordinating with the concerned department",
+                  "Animal owners allowing animals to cross from places other than those designated for them, or without coordination with the competent authorities",
+                  "Use of plates that do not belong to the vehicle",
+                  "Blurring the chassis number of the vehicle or attempting to destroy it"
+                ]
+              },
+              {
+                "table_id": 8,
+                "title": "Speed Violation Fines",
+                "legal_reference": "Traffic Law issued by Royal Decree No. (M/115) dated 05/12/1439",
+                "speed_limit_up_to_120_kmh": [
+                  { "exceeding_by": "More than 10 km/h to 20 km/h", "fine_range_sar": "150–300" },
+                  { "exceeding_by": "More than 20 km/h to 30 km/h", "fine_range_sar": "300–500" },
+                  { "exceeding_by": "More than 30 km/h to 40 km/h", "fine_range_sar": "800–1,000" },
+                  { "exceeding_by": "More than 40 km/h to 50 km/h", "fine_range_sar": "1,200–1,500" },
+                  { "exceeding_by": "More than 50 km/h", "fine_range_sar": "1,500–2,000" }
+                ],
+                "speed_limit_140_kmh": [
+                  { "exceeding_by": "More than 5 km/h to 10 km/h", "fine_range_sar": "300–500" },
+                  { "exceeding_by": "More than 10 km/h to 20 km/h", "fine_range_sar": "800–1,000" },
+                  { "exceeding_by": "More than 20 km/h to 30 km/h", "fine_range_sar": "1,200–1,500" },
+                  { "exceeding_by": "More than 30 km/h", "fine_range_sar": "1,500–2,000" }
+                ]
+              }
+            ],
+            "drifting_penalties": [
+              {
+                "offense": "First time",
+                "penalty": "Vehicle impounded for 15 days + fine of 20,000 SAR + authorities must consider imprisoning the driver"
+              },
+              {
+                "offense": "Second time",
+                "penalty": "Vehicle impounded for one month + fine of 40,000 SAR + authorities must consider imprisoning the driver"
+              },
+              {
+                "offense": "Third time",
+                "penalty": "Confiscation of the vehicle + fine of 60,000 SAR"
+              }
+            ],
+            "drifting_notes": "Rented or stolen vehicles will not be confiscated, but a fine must be paid in the value of the rented or stolen vehicle"
+          },
+
+          {
+            "topic_id": "1.6",
+            "title": "Traffic Violations Points System",
+            "max_points_before_license_withdrawal": 24,
+            "points_table": [
+              { "no": 1,  "violation": "Driving under the influence of alcohol and drugs", "points": 24 },
+              { "no": 2,  "violation": "Drifting", "points": 24 },
+              { "no": 3,  "violation": "Not stopping while the red light is on", "points": 12 },
+              { "no": 4,  "violation": "Driving against the direction of travel", "points": 12 },
+              { "no": 5,  "violation": "Fast and reckless driving between vehicles on public roads", "points": 8 },
+              { "no": 6,  "violation": "Not complying with the signals of a traffic police officer", "points": 8 },
+              { "no": 7,  "violation": "Driving vehicles without brakes or lights", "points": 8 },
+              { "no": 8,  "violation": "Not completely stopping at the STOP sign", "points": 6 },
+              { "no": 9,  "violation": "Not respecting priority rules", "points": 6 },
+              { "no": 10, "violation": "Exceeding the speed limit by more than 25 km/h", "points": 6 },
+              { "no": 11, "violation": "Allowing no priority to vehicles in a roundabout", "points": 6 },
+              { "no": 12, "violation": "Overtaking vehicles in prohibited places", "points": 6 },
+              { "no": 13, "violation": "Stopping on railways", "points": 6 },
+              { "no": 14, "violation": "Exceeding the speed limit by not more than 25 km/h", "points": 4 },
+              { "no": 15, "violation": "Driving on lanes not intended for driving", "points": 4 },
+              { "no": 16, "violation": "Overtaking school buses when they stop to let students in and out", "points": 4 },
+              { "no": 17, "violation": "Uncovering or untying transported loads", "points": 4 },
+              { "no": 18, "violation": "Making additional amendments to the vehicle's body without following legal procedures", "points": 4 },
+              { "no": 19, "violation": "Not wearing seat belts", "points": 2 },
+              { "no": 20, "violation": "Using mobile phones without a hands-free device", "points": 2 },
+              { "no": 21, "violation": "Not wearing a helmet when riding a motorbike", "points": 2 }
+            ],
+            "license_withdrawal_schedule": [
+              { "offense_in_one_hijri_year": "First time", "withdrawal_period": "3 months" },
+              { "offense_in_one_hijri_year": "Second time", "withdrawal_period": "6 months" },
+              { "offense_in_one_hijri_year": "Third time", "withdrawal_period": "One Hijri year" },
+              { "offense_in_one_hijri_year": "Fourth time", "withdrawal_period": "Permanent revocation" }
+            ],
+            "driving_during_withdrawal": "If caught driving during the revocation period, the driver is treated as not holding a license and referred to the competent court to double the penalty. Driver may be directed to attend a 15-day rehabilitation program at a driving school.",
+            "after_permanent_revocation": "A new license can be applied for one year after the date of the license revocation, provided the driver has completed a one-month rehabilitation program at a driving school and passed the theory and practical tests.",
+            "applies_to_all_categories": true
+          },
+
+          {
+            "topic_id": "1.7",
+            "title": "Road Parts",
+            "road_definitions": [
+              {
+                "term": "Highway",
+                "definition": "A road that is accessed and exited through entrances and exits and does not directly serve real estate"
+              },
+              {
+                "term": "Service road",
+                "definition": "Directly serves the neighboring properties"
+              },
+              {
+                "term": "Residential area",
+                "definition": "A geographic area located within the city designated within the road network"
+              },
+              {
+                "term": "Open town",
+                "definition": "The road network outside the cities and towns"
+              },
+              {
+                "term": "Traffic island",
+                "definition": "A small and elevated area that works to divide movement in two different directions"
+              },
+              {
+                "term": "Merge lane",
+                "definition": "A lane change that allows traffic to be incorporated into a regular road or motorway"
+              },
+              {
+                "term": "Intersection",
+                "definition": "Any intersection, crossing, or branching of roads on one or more levels, including the area formed as a result"
+              },
+              {
+                "term": "Bicycle lane",
+                "definition": "Marked with a mandatory traffic light for cyclists"
+              },
+              {
+                "term": "Horse track",
+                "definition": "Marked by a mandatory traffic light for horseback riders"
+              },
+              {
+                "term": "Sidewalk / pedestrian lane",
+                "definition": "Part of the road intended for pedestrian use and not for vehicles"
+              },
+              {
+                "term": "Pedestrian crossing",
+                "definition": "A specific part of the road that pedestrians are entitled to cross; may be marked with white markings and/or traffic lights"
+              }
+            ],
+            "intersection_types": [
+              "Regulated by light signals",
+              "Regulated by road signs",
+              "Regulated by a traffic officer (hand signals)",
+              "Uncontrolled – without any marks, governed by priority law"
+            ],
+            "pedestrian_crossing_signal_rules": {
+              "continuous_green": "Pedestrians are allowed to cross the road but need to monitor traffic",
+              "blinking_green": "Signal will soon turn red; pedestrians already crossing must speed up; pedestrians approaching must wait and not enter the lane",
+              "red_or_orange": "Pedestrians are not allowed to cross"
+            },
+            "driver_behavior_at_pedestrian_crossings": {
+              "without_traffic_lights": [
+                "Drivers must slow down as fast as possible",
+                "Must stop in front of the pedestrian crossing if pedestrians want to cross",
+                "The safety of pedestrians must not be endangered while they are in transit"
+              ],
+              "with_traffic_lights": [
+                "Do not obstruct pedestrians who have already started crossing",
+                "If making a turn at an intersection, pay attention to pedestrians and stop if necessary"
+              ]
+            },
+            "traffic_signs_at_pedestrian_crossings": {
+              "blue_circular_white_lines": "Mandatory sign indicating the sidewalk or pedestrian path",
+              "triangular_red_frame_black_lines": "Warning sign indicating a children's crossing",
+              "important_note": "Never confuse these two signs"
+            }
+          },
+
+          {
+            "topic_id": "1.8",
+            "title": "Traffic Routing Elements",
+            "purpose": "Securing, routing, and managing traffic",
+            "types": [
+              "Road signs",
+              "Columns",
+              "Traffic lights"
+            ],
+            "prohibited_actions": [
+              "Destruction of traffic routing elements",
+              "Alteration of traffic routing elements",
+              "Removing or changing their locations",
+              "Placing posters or advertisements on poles, lights, road signs, or other traffic directing devices"
+            ],
+            "key_road_markings": [
+              "Connected / double connected lines – crossing is prohibited",
+              "Broken lines – may be crossed",
+              "Pedestrian lanes",
+              "Arrows pointing at directions"
+            ]
+          },
+
+          {
+            "topic_id": "1.9",
+            "title": "Traffic Signs",
+            "overview": {
+              "placement": "Traffic signs are placed mainly on the right side of the road",
+              "reflectivity": "Reflective to ensure good visibility at night and during the day",
+              "obligation": "All road users must respect and abide by them"
+            },
+            "categories": [
+              {
+                "category": "Warning Signs",
+                "shape": "Triangle with vertex at the top",
+                "colors": "White background, black icons, red frame",
+                "purpose": "Alert and warn drivers of existing or potential danger on the road, street, or adjacent areas. Must be placed far enough in front of the danger so the driver can respond in time.",
+                "sign_groups": [
+                  {
+                    "group": "Intersections",
+                    "examples": ["Intersection ahead", "T-junction", "Y-junction", "Crossroads"]
+                  },
+                  {
+                    "group": "Turns",
+                    "examples": ["Sharp turn right", "Sharp turn left", "Winding road", "Double curve"]
+                  },
+                  {
+                    "group": "Congestion",
+                    "examples": ["Road narrows", "Road narrows from right", "Road narrows from left", "Bottleneck"]
+                  },
+                  {
+                    "group": "Pitfalls / Hazards",
+                    "examples": ["Uneven road", "Bumpy road", "Slippery road"]
+                  },
+                  {
+                    "group": "Light Signals",
+                    "examples": ["Traffic light ahead"]
+                  },
+                  {
+                    "group": "Slopes and Hills",
+                    "examples": ["Steep descent", "Steep ascent"]
+                  },
+                  {
+                    "group": "Road Conditions",
+                    "examples": ["Loose gravel", "Flood area", "Cross winds", "Low flying aircraft", "Road works"]
+                  },
+                  {
+                    "group": "Pedestrian Crossing",
+                    "examples": ["Pedestrian crossing ahead", "School children crossing"]
+                  },
+                  {
+                    "group": "Animal Crossing",
+                    "examples": ["Cattle crossing", "Wild animal crossing"]
+                  },
+                  {
+                    "group": "Additional Warning Signs",
+                    "examples": ["Railway crossing with gates", "Railway crossing without gates", "Level crossing ahead"]
+                  }
+                ],
+                "key_examples": [
+                  "Narrow road (bottleneck symbol): driver must slow down; may need to stop if oncoming vehicles are present",
+                  "Low level: driver must slow down and may use a lower gear to take advantage of engine braking"
+                ]
+              },
+              {
+                "category": "Regulatory (Directive) Signs",
+                "shape": "Circular",
+                "colors": {
+                  "white_with_red_frame": "Prohibition / restriction",
+                  "blue": "Mandatory obligation"
+                },
+                "subtypes": [
+                  {
+                    "type": "Right-of-Way Signals",
+                    "signs": [
+                      {
+                        "name": "STOP sign",
+                        "shape": "Octagonal (8 corners)",
+                        "note": "Easy to identify from front and back"
+                      },
+                      {
+                        "name": "Give Priority sign",
+                        "shape": "Inverted triangle (pointed downward)",
+                        "note": "Easy to identify from front and back"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "Signs Indicating Regulated Driving Directions",
+                    "description": "Indicate required or permitted direction of travel"
+                  },
+                  {
+                    "type": "Speed Limit Signs",
+                    "description": "Circular with white background, red frame, and black numbers indicating the maximum speed"
+                  },
+                  {
+                    "type": "Minimum Speed Signs",
+                    "description": "Blue circle with white number indicating the minimum required speed; end of minimum speed sign ends the restriction"
+                  },
+                  {
+                    "type": "Restriction Signs – Prohibitions on Entry",
+                    "sign_groups": [
+                      "Entry prohibited to all road users",
+                      "Entry prohibited to a specific type of road user (e.g. trucks, motorcycles)"
+                    ]
+                  },
+                  {
+                    "type": "Truck Restriction Signs",
+                    "description": "Indicate weight limits or specific prohibitions for trucks"
+                  },
+                  {
+                    "type": "End of All or Some Limits",
+                    "description": "Indicates end of a specific or all speed/other restrictions"
+                  },
+                  {
+                    "type": "No Entry Signs",
+                    "description": "Prohibits entry into a road or area"
+                  },
+                  {
+                    "type": "No Overtaking Signs",
+                    "description": "Prohibits overtaking in a specific section of road"
+                  },
+                  {
+                    "type": "Parking and Stopping Signs",
+                    "description": "Indicates where parking is permitted or prohibited",
+                    "examples": [
+                      "No parking sign",
+                      "No parking and waiting sign",
+                      "Permitted parking sign"
+                    ]
+                  },
+                  {
+                    "type": "Additional Prohibition Signs",
+                    "description": "Various other prohibitions on specific actions"
+                  }
+                ]
+              },
+              {
+                "category": "Guide Signs",
+                "shape": "Rectangular or square, various sizes",
+                "purpose": "Indicate important traffic conditions, provide information about routes, distances, directions, services, and places of interest",
+                "color_coding": [
+                  {
+                    "background": "Blue",
+                    "text": "White",
+                    "location": "Outside city limits or residential neighborhoods",
+                    "refers_to": "Cities and villages"
+                  },
+                  {
+                    "background": "Green",
+                    "text": "White",
+                    "location": "Within city limits in residential areas",
+                    "refers_to": "Streets and neighborhoods within cities"
+                  },
+                  {
+                    "background": "White",
+                    "text": "Black",
+                    "location": "General",
+                    "refers_to": "Important facilities such as airports or city centers"
+                  },
+                  {
+                    "background": "Brown",
+                    "text": "White",
+                    "location": "General",
+                    "refers_to": "Farms, entertainment complexes, museums, and religious / geographic / historical places"
+                  }
+                ],
+                "sign_groups": [
+                  {
+                    "group": "Signs outside city borders",
+                    "examples": ["No through road", "End of highway", "Highway start"]
+                  },
+                  {
+                    "group": "Signs to cities and villages",
+                    "examples": ["Direction signs", "Distance signs"]
+                  },
+                  {
+                    "group": "Guidance signs to streets and neighborhoods",
+                    "examples": ["Street name boards", "Neighborhood direction signs"]
+                  },
+                  {
+                    "group": "Guidance signs to important facilities",
+                    "examples": ["Airport", "Hospital", "City center", "Police station"]
+                  },
+                  {
+                    "group": "Guidance signs to farms, recreational complexes, and museums",
+                    "examples": ["Tourist attractions", "Recreational parks", "Museums", "Religious sites"]
+                  }
+                ]
+              },
+              {
+                "category": "Temporary Work Area Signs",
+                "shapes": "Same shapes as the three main categories (circle, triangle, square, rectangle)",
+                "colors": "Yellow with red frame",
+                "purpose": "Same purpose as warning, regulatory, and guiding signs but temporarily placed on the road",
+                "sign_groups": [
+                  "Temporary warning signs for road works",
+                  "Temporary regulatory signs (e.g. reduced speed limit in work zone)",
+                  "Temporary guide signs for alternative routes"
+                ],
+                "note": "Usually used to refer to the conduct of road works or alternative roads"
+              }
+            ]
+          }
+        ]
+      },
+
+      {
+        "unit_id": 2,
+        "title": "Behavior",
+        "topics": [
+          {
+            "topic_id": "2.1",
+            "title": "Cooperative Behavior",
+            "correct_rules_of_conduct": [
+              {
+                "rule": "Drive safely",
+                "detail": "The vehicle may only be driven if the driver is in good physical and mental condition, able to drive safely without endangering others, and holds a valid driver's license"
+              },
+              {
+                "rule": "Drive with respect",
+                "detail": "All road users must pay attention to and respect the rights of all other road users"
+              },
+              {
+                "rule": "Drive with caution",
+                "detail": "All drivers should drive very carefully on public roads"
+              },
+              {
+                "rule": "Drive legally",
+                "detail": "You must adhere to all laws, rules, and traffic lights"
+              },
+              {
+                "rule": "Comply with Traffic Department orders",
+                "detail": "Always follow the instructions provided by the Traffic Department, even if they conflict with other instructions, unless they may endanger the safety of the driver or road users"
+              }
+            ],
+            "general_compliance_rule": "All drivers must comply with all traffic regulations at all times. Drivers must also comply with orders of the Traffic Department even if these conflict with other laws. Drivers must use sound judgment and not jeopardize their own safety or the safety of other road users."
+          },
+
+          {
+            "topic_id": "2.2",
+            "title": "Other Road Users – Pedestrians",
+            "examples_of_other_road_users": [
+              "Pedestrians",
+              "Animals",
+              "Various types of vehicles"
+            ],
+            "pedestrian_rules_while_walking": [
+              "Use the sidewalk",
+              "Walk in the opposite direction of traffic if you do not obstruct traffic or endanger your safety"
+            ],
+            "pedestrian_rules_when_crossing": [
+              "Watch for pedestrian lights or traffic lights",
+              "Always make sure you don't obstruct traffic",
+              "Assess the speed of oncoming vehicles",
+              "Walk quickly without stopping unnecessarily"
+            ],
+            "pedestrian_crossing_with_traffic_lights": {
+              "continuous_green": "Pedestrians are allowed to cross but must also pay attention to traffic",
+              "blinking_green": "Those already in the street must evacuate immediately and move quickly; pedestrians approaching should not enter",
+              "red": "Pedestrians are not allowed to cross"
+            },
+            "pedestrian_crossing_without_traffic_lights": "Sometimes indicated by adjacent white lines; pedestrians have the right of way but must monitor traffic carefully, especially in areas where drivers are allowed to drive fast",
+            "driver_behavior_near_pedestrians": [
+              "Do not endanger the safety of pedestrians on sidewalks or on the side of the road",
+              "Check both sides of the road for pedestrians when approaching crossings",
+              "Slow down and be prepared to stop",
+              "Do not obstruct pedestrians who have already started crossing the street",
+              "If making a turn at an intersection, pay attention to pedestrians and stop if necessary"
+            ],
+            "important_fact": "A car weighs 25 times the weight of a pedestrian. Always be careful and watch the traffic."
+          },
+
+          {
+            "topic_id": "2.3",
+            "title": "Guided Groups of People and Animals",
+            "rules_for_groups_and_herds": [
+              "Groups of people or herds of animals must wear reflective belts or vests when traveling on public roads",
+              "Herds must be guarded",
+              "Large flocks should be divided into small groups to facilitate crossing the road",
+              "Herds of animals near the road must be monitored",
+              "Herds of off-road animals must be securely tied up and out of the way"
+            ]
+          },
+
+          {
+            "topic_id": "2.4",
+            "title": "Emergency Vehicles",
+            "priority": "Emergency vehicles have the highest priority on emergency lanes in road traffic",
+            "legal_status": "Emergency vehicle drivers are not bound by any regulations or prohibitions during an emergency, but must not endanger their own safety and that of others",
+            "how_to_identify": [
+              "Visual warning signals: red and blue lights",
+              "Sound warning signals"
+            ],
+            "driver_obligations": [
+              "Evacuate the lane for emergency vehicles as soon as possible",
+              "It is prohibited to drive directly behind emergency vehicles",
+              "Maintain a distance of at least 50 meters behind emergency vehicles",
+              "Drivers must stay on the right side of the road when approaching an emergency vehicle",
+              "You must not leave the parking lot before an emergency vehicle passes",
+              "Intersections must be evacuated quickly to avoid obstructing approaching emergency vehicles"
+            ]
+          },
+
+          {
+            "topic_id": "2.5",
+            "title": "School Buses",
+            "identification": "School buses must bear markings indicating they are intended for school transportation",
+            "boarding_and_alighting_rules": [
+              "School buses must stop at specific stations to enable students to get in and out",
+              "Doors must not be opened until the bus has stopped completely",
+              "Must be entered from the right side (from the sidewalk)",
+              "The school bus driver should only drive after making sure that students are safe"
+            ],
+            "other_driver_rules": [
+              "Other vehicles must stop when a school bus stops to load or unload students",
+              "Overtaking school buses when stopped to load or drop off students is prohibited"
+            ]
+          },
+
+          {
+            "topic_id": "2.6",
+            "title": "Official Processions",
+            "rules": [
+              "Road users should give way to official processions as soon as they announce their approach using audio and light warning devices",
+              "Stand on the right side of the road per instructions from the competent department",
+              "Do not leave until the procession has passed or per instructions issued to them",
+              "Official processions must not be interrupted or their movement obstructed by other road users"
+            ]
+          },
+
+          {
+            "topic_id": "2.7",
+            "title": "Assessing Road Users",
+            "key_factors": [
+              "Age – Special attention should be given to children and the elderly",
+              "Attention – Are people paying attention to traffic or distracted? It is important to assess potential intentions of other road users quickly to avoid accidents"
+            ],
+            "tip": "If you are not sure about a situation, always try to make eye contact with others",
+            "vulnerable_road_users": {
+              "children": {
+                "characteristics": [
+                  "Not paying attention or not paying attention to traffic",
+                  "Easy to be distracted",
+                  "Acting automatically most of the time",
+                  "Not knowing the traffic rules and/or not complying with them",
+                  "Not properly assessing risks",
+                  "Young age – cannot accommodate traffic cases"
+                ]
+              },
+              "elderly_and_people_with_special_needs": {
+                "characteristics": [
+                  "Confusion and high sensitivity",
+                  "Often limited movement",
+                  "Hearing problems and/or vision problems or other problems"
+                ]
+              }
+            }
+          },
+
+          {
+            "topic_id": "2.8",
+            "title": "Driver's Obligations",
+            "ability_to_drive": {
+              "must_not_drive_when": [
+                "Injured and cannot use arms or legs properly",
+                "Sick",
+                "Very tired",
+                "Distracted (e.g. using a mobile phone)",
+                "In a state of irritability",
+                "Under the influence of alcohol, drugs, or medication (always read the medication leaflet carefully)"
+              ],
+              "alcohol_drugs_points_penalty": 24,
+              "reminder": "Avoid distractions such as operating devices inside the vehicle, using a mobile phone, eating, and drinking while driving"
+            },
+            "before_driving": [
+              "Ensure all necessary equipment is available",
+              "Ensure the vehicle is in good condition and safe to drive so that it does not obstruct or endanger other road users",
+              "Clean windows, lights, and mirrors",
+              "Ensure there is no damage to windows, lights, mirrors, and tires",
+              "Check the condition of lights, controls, and brakes",
+              "Ensure correct sitting posture, adjust mirrors, and fasten seat belt (driver and all passengers)"
+            ],
+            "while_driving": [
+              "Follow all traffic rules",
+              "Drive on the paved area of the road and stay in the appropriate lane",
+              "Stay within the speed limit",
+              "Let other drivers know what you are going to do (e.g. signal before turning left or right)"
+            ],
+            "prohibited_while_driving": [
+              "Using visual or acoustic warning signals except in emergencies",
+              "Using warning signs with multiple tones or beeps",
+              "Turning off the engine while driving",
+              "Making noise when using the vehicle",
+              "Attaching covers or blinds to the vehicle",
+              "Placing inscriptions, drawings, or advertisements on the vehicle",
+              "Obstructing the movement of other vehicles or road users",
+              "Allowing the vehicle to roll onto a slope while the engine is turned off",
+              "Carrying people outside the passenger space",
+              "Washing or repairing the vehicle on public roads",
+              "Spitting or throwing garbage out of the vehicle while driving",
+              "Using the vehicle in processions or rallies without permission"
+            ],
+            "breakdown_procedure": "If vehicle breaks down while driving, clear the road immediately and drive to a side street where traffic is not obstructed. During the day: place a clear warning sign within the stopping distance. During the night: secure the vehicle with red lights.",
+            "after_stopping": [
+              "Turn off the vehicle",
+              "Remove the keys",
+              "Close the vehicle",
+              "Ensure no one is endangered when vehicle doors are opened",
+              "Stand on the side of the sidewalk"
+            ],
+            "important": "Ensure the vehicle is not left unlocked, the engine is not running, and the key is not left inside"
+          },
+
+          {
+            "topic_id": "2.9",
+            "title": "Passenger Transport",
+            "general_rules": [
+              "Passenger transport is only allowed in vehicles intended for the carriage of passengers",
+              "Forbidden to transport passengers by truck or heavy machinery",
+              "Prohibited to carry passengers in the trunk of the vehicle or any external part"
+            ],
+            "seat_belt_rules": {
+              "general": "The driver and all other passengers must use a seat belt while driving on the roads",
+              "driver_responsibility": "The driver must alert passengers to put on the seat belt",
+              "exceptions": [
+                "Persons who cannot wear a seat belt for health reasons (medical evidence and permission from official authorities required)",
+                "People who are unable to wear a seat belt because of their size"
+              ]
+            },
+            "transporting_children": {
+              "age_12_and_under": "A support belt should be placed so the seat belt is under the shoulder",
+              "age_10_and_under": "Must not be placed in the front seat",
+              "exception": "If the rear seats are not available, the child can be placed in the front using a child-friendly seat"
+            },
+            "entry_and_exit": "Passengers must exit and enter from the right side (from the sidewalk area) when the vehicle is parked on a public road"
+          }
+        ]
+      },
+
+      {
+        "unit_id": 3,
+        "title": "Traffic",
+        "topics": [
+          {
+            "topic_id": "3.1",
+            "title": "General Driving System",
+            "general_rules": [
+              "Vehicles must always be driven on the paved part of the road",
+              "The driver must obey all normal traffic lights unless directed by a traffic officer",
+              "The driver must not exceed the specified speed limit",
+              "The driver must allow other vehicles to pass safely"
+            ],
+            "lane_rules": {
+              "two_lanes_broken_line": {
+                "description": "Road divided into two opposite lanes by a broken line",
+                "rule": "Drive on the right lane; do not cross to the other lane unless overtaking"
+              },
+              "two_lanes_double_continuous_line": {
+                "description": "Road divided into two opposite lanes by a double continuous line",
+                "rule": "Prohibited to cross this line to the other lane"
+              },
+              "multiple_lanes_same_direction": {
+                "rule": "Vehicles can go side by side; however, slower vehicles must use the far-right lane unless preparing to turn left or make a U-turn"
+              }
+            },
+            "drive_far_right_when": [
+              "Turning right",
+              "Other vehicles are about to overtake you",
+              "Your vehicle speed is less than the speed limit",
+              "Vision is poor",
+              "Vehicles are coming from the opposite direction"
+            ],
+            "drive_left_only_when": [
+              "Necessary to prevent accidents and not to impede or endanger other road users",
+              "Driver wishes to overtake other vehicles (only if overtaking is permitted and safe)",
+              "Part of the right-hand side is blocked off (e.g. by a construction site) and there is a signal from the traffic department, security forces, or road workers"
+            ],
+            "driving_on_narrow_roads": "When approaching jams, stay on the far-right side to maintain sufficient side distance for vehicles coming from the other direction. If necessary, stop until other vehicles from the opposite direction pass. Do not use the horn except when absolutely necessary.",
+            "note": "Before changing lanes, the driver must ensure this does not endanger him or others and must clearly show his intent and alert others"
+          },
+
+          {
+            "topic_id": "3.2",
+            "title": "Changing Lanes",
+            "when_necessary": [
+              "Obstacle avoidance",
+              "Choose the correct lane before turning",
+              "Overtaking other vehicles",
+              "If the driver wants to stop on the left side of the road (and only if allowed)"
+            ],
+            "procedure": {
+              "mnemonic": "MSSSM",
+              "steps": [
+                "Mirrors – Check interior and exterior side mirrors first",
+                "Signal – Give a signal (blink) to indicate intention",
+                "Shoulder – Check the blind spot by looking over the shoulder",
+                "Speed – Adjust speed appropriately",
+                "Move – Change lanes with smooth steering motions"
+              ]
+            },
+            "blind_spot_warning": "If you rely only on side mirrors, you risk hitting a vehicle in your blind spot. You can only see those vehicles if you look over your shoulder.",
+            "change_to_left": {
+              "steps": [
+                "Check traffic on the opposite side",
+                "Check mirrors",
+                "Signal left",
+                "Check left shoulder (blind spot)",
+                "Adjust speed",
+                "Move with smooth steering"
+              ]
+            },
+            "change_to_right": {
+              "steps": [
+                "Check traffic on the opposite side",
+                "Check interior mirror",
+                "Check right exterior mirror",
+                "Signal right",
+                "Check right shoulder (blind spot)",
+                "Adjust speed",
+                "Move with smooth steering"
+              ]
+            },
+            "important": "The faster you drive, the more safely you have to steer the vehicle"
+          },
+
+          {
+            "topic_id": "3.3",
+            "title": "Choosing the Correct Path / Lane",
+            "considerations": [
+              "Ensure the turn is not blocked by traffic lights or other signals preventing the turn",
+              "Change lane or turn must be indicated by turn signals in a timely manner",
+              "Other road users must not be put at risk",
+              "Stick to road signs indicating driving directions"
+            ],
+            "without_road_signs": {
+              "turn_right": "From the far-right side of the road",
+              "turn_left_two_way_road": "Move to the middle of the road; if there is a dividing line, remain to the right of the dividing line",
+              "turn_left_one_way_road": "From the left side of the road",
+              "u_turn_two_way_road": "Move to the middle of the road; if there is a dividing line, remain to the right of the dividing line",
+              "u_turn_one_way_or_island": "From the left side of the road (to the right of the island)"
+            },
+            "with_road_signs": {
+              "turn_right": "From the lane with an arrow pointing to the right",
+              "turn_left": "From the lane with an arrow pointing to the left",
+              "u_turn": "From the lane with a U-turn arrow"
+            },
+            "planning_ahead_at_multi_lane_intersections": {
+              "description": "When approaching an intersection with multiple lanes for each driving direction, the correct lane depends on your direction after turning.",
+              "examples": [
+                {
+                  "scenario": "Want to turn left, then right at next intersection",
+                  "action": "Take the first (outermost/rightmost) of the three available left-turn lanes"
+                },
+                {
+                  "scenario": "Want to turn left, then go straight at next intersection",
+                  "action": "Take the second (middle) of the three available left-turn lanes"
+                },
+                {
+                  "scenario": "Want to turn left, then turn left again at next intersection",
+                  "action": "Take the third (innermost/leftmost) of the three available left-turn lanes"
+                }
+              ]
+            },
+            "roundabout_lane_planning": {
+              "table": [
+                {
+                  "exit": "Exit 1 – Turn Right",
+                  "approaching": "Lane 1",
+                  "at_roundabout": "Lane 1",
+                  "departing": "Lane 1"
+                },
+                {
+                  "exit": "Exit 2 – Go Straight",
+                  "approaching": "Lane 2 (if available)",
+                  "at_roundabout": "Lane 2 (if available)",
+                  "departing": "Lane 2 (if available)"
+                },
+                {
+                  "exit": "Exit 3 – Turn Left",
+                  "approaching": "Lane 3 (if available)",
+                  "at_roundabout": "Lane 3 (if available)",
+                  "departing": "Lane 3 (if available)"
+                },
+                {
+                  "exit": "Exit 4 – Full Rotation (U-turn)",
+                  "approaching": "Lane 3 (if available)",
+                  "at_roundabout": "Lane 3 (if available)",
+                  "departing": "Lane 3 (if available)"
+                }
+              ],
+              "signaling_at_roundabout": [
+                "Exit 1 (Turn Right): Signal right approaching and departing",
+                "Exit 2 (Go Straight): No signal approaching; signal right when exiting",
+                "Exit 3 (Turn Left): Signal left approaching; signal right when exiting",
+                "Exit 4 (Full rotation): Signal left approaching; signal right when exiting"
+              ]
+            }
+          },
+
+          {
+            "topic_id": "3.4",
+            "title": "Turning and Reversing",
+            "turning_rules": [
+              "Each turn must be signaled early enough by the turn signal",
+              "Slow down early; do not apply the brakes sharply unless absolutely necessary",
+              "Maintain a sufficient distance from the vehicle or object in front"
+            ],
+            "right_turn": "Must be done through a narrow bend; stay on the far-right side of the road",
+            "left_turn": "Must be done through a wide curve; turn to the right side of the other road",
+            "reversing": {
+              "rules": [
+                "Reversing must be clearly indicated",
+                "Not permitted on public roads except in cases of necessity",
+                "Maximum reverse distance: 20 meters",
+                "Reverse driving is prohibited on highways",
+                "Before backing up, ensure the road is clear of vehicles and that reversing will not endanger other road users"
+              ]
+            }
+          }
+        ]
+      },
+
+      {
+        "unit_id": 4,
+        "title": "Crossings",
+        "overview": "Crossings are places where other roads, railways, or road users intersect. Other road users may cross from the left or right, creating dangerous situations. To avoid accidents, crossings are specially marked and secured.",
+        "topics": [
+          {
+            "topic_id": "4.1",
+            "title": "Intersections Regulated by Traffic Lights",
+            "traffic_light_sequence_and_meaning": {
+              "red": {
+                "meaning": "Stop",
+                "rules": [
+                  "Vehicles must stop at the stop line or must not go beyond the level of the traffic light pole",
+                  "If there is no stop line, stop where you can see the traffic lights",
+                  "Must not pass the pedestrian crossing after stopping at a red light",
+                  "The driver may turn right unless prohibited by a traffic light; ensure the turn can be done safely"
+                ]
+              },
+              "green": {
+                "meaning": "Driving permission",
+                "rules": [
+                  "Start driving within a reasonable time",
+                  "If traffic slows or stops and the driver cannot cross the intersection, must not enter the intersection area despite the green light"
+                ]
+              },
+              "yellow_orange": {
+                "meaning": "Attention / Stop",
+                "rules": [
+                  "If possible to stop without endangering oneself or other road users, the driver must stop",
+                  "Must not cross the stop line"
+                ]
+              }
+            },
+            "intermittent_lights": {
+              "intermittent_red": {
+                "meaning": "Same as a stop sign",
+                "rules": [
+                  "Stop at the stop line or at the level of the traffic light pole",
+                  "If at a pedestrian crossing or railroad junction, must not cross until pedestrians or railway vehicles have cleared"
+                ]
+              },
+              "intermittent_yellow_orange": {
+                "meaning": "Same as a right-of-way signal",
+                "rules": ["Allows the driver to continue driving with great care and caution"]
+              }
+            },
+            "turning_right_on_red": {
+              "procedure": [
+                "Drive on the far-right side of the road",
+                "Signal to the right",
+                "Stop the vehicle completely for 2–3 seconds",
+                "Move slowly at less than 15 km/h"
+              ],
+              "not_allowed_when": [
+                "There is a certain lane (other lane) designated for turning right",
+                "There is a signal prohibiting turning when a red light is present"
+              ],
+              "camera_note": "A photo taken by the automatic monitoring camera does not necessarily mean a penalty. Every picture is manually checked by staff before imposing a penalty."
+            }
+          },
+
+          {
+            "topic_id": "4.2",
+            "title": "Intersections Organized by Traffic Officer (Hand Signals)",
+            "rule": "When arriving at an intersection organized by a traffic officer, you must comply with the traffic officer's signs and instructions. The traffic officer has the highest priority and their instructions must be respected above all other signals including traffic lights."
+          },
+
+          {
+            "topic_id": "4.3",
+            "title": "STOP and Give Way Signs",
+            "stop_sign": {
+              "description": "Octagonal red sign",
+              "action": "Stop the vehicle completely",
+              "duration": "Stop for 3 seconds to keep an eye on traffic or other road users from all directions"
+            },
+            "give_way_sign": {
+              "description": "Inverted triangular sign",
+              "action": "Give way to other drivers",
+              "detail": "If any vehicle is approaching the intersection, slow down and stop if necessary to allow it to pass. The driver must give way to other traffic on the road, giving priority to road users approaching from the right or left."
+            },
+            "warning_sign_alerts": {
+              "stop_sign_alert": "Warning sign placed before the stop sign location",
+              "give_way_sign_alert": "Warning sign placed before the give way sign location"
+            }
+          },
+
+          {
+            "topic_id": "4.4",
+            "title": "Right-of-Way / Priority Rules",
+            "applies_at": "Intersections not controlled by a traffic light or by a traffic officer",
+            "priority_order": [
+              {
+                "priority": 1,
+                "rule": "Emergency vehicles",
+                "detail": "Emergency vehicles always have the highest priority while performing their duties. The driver must clear the way as soon as possible."
+              },
+              {
+                "priority": 2,
+                "rule": "Vehicle closest to the intersection (not arriving simultaneously)",
+                "detail": "If two vehicles approach an intersection but not at the same time, the vehicle closest to the intersection (that enters first) has priority. The driver of the advancing vehicle must monitor traffic and assess the situation."
+              },
+              {
+                "priority": 3,
+                "rule": "Right before left (arriving simultaneously on equal roads)",
+                "detail": "If two vehicles arrive at an equal intersection at the same time, the vehicle on the right side has the right-of-way. The most important thing is which direction the vehicles are approaching from, not where they are heading."
+              }
+            ],
+            "driving_straight_priority": {
+              "rule_1": "Vehicles driving in a straight line have priority over vehicles changing lanes",
+              "rule_2": "For vehicles traveling parallel, a driver going straight has priority over a driver wishing to change direction",
+              "rule_3": "A driver going straight ahead has the right of way to overtake drivers who are changing direction"
+            },
+            "closed_road_priority": {
+              "rule": "If two drivers meet on a partially closed two-way road, priority is given to the driver whose road ahead is open on the right side",
+              "additional": "When a section of a two-way road is closed, the driver must comply with the instructions of the traffic department, security forces, or road workers. Both drivers must reduce speed and stop if necessary to avoid an accident."
+            },
+            "mountain_road": {
+              "rule": "A driver heading down the ramp must get as close as possible to the right edge. Must allow ascending vehicles to pass without difficulty; stop completely if necessary.",
+              "exception": "If there is an emergency parking area on the side of the ascending driver, the ascending driver must wait."
+            },
+            "highway_entering": {
+              "rule": "The driver on the highway has the right of way over the driver coming from a secondary road",
+              "procedure": "When entering from a secondary road, ensure the road is clear and give way to vehicles on the highway. Highway drivers should give the entering driver an opportunity to merge (cooperative behavior)."
+            },
+            "highway_exiting": {
+              "rule": "Traffic priority is given to vehicles leaving the highway to the service road. If possible, the driver on the service road must open the way for the exiting vehicle."
+            },
+            "roundabout": {
+              "rule": "Drivers approaching a roundabout must give way to vehicles already traveling inside the roundabout"
+            },
+            "u_turn_at_intersection": {
+              "rule": "Only allowed if there is no traffic signal or traffic light preventing this",
+              "priority": "Priority is given to vehicles coming from any other direction; the vehicle entering the intersection first is the first to be allowed to pass"
+            },
+            "u_turn_types": {
+              "closed_back_rotation": "Give way to all vehicles approaching the turn; move to lane one when road is clear. Do not use parking lanes or sidewalks for U-turns.",
+              "open_back_rotation": "Give way to all vehicles approaching the curve; move to the second lane when road is clear to allow vehicles from the junction to enter.",
+              "protected_reverse_rotation": "A U-turn where the driver is protected by a dedicated signal or designated area"
+            },
+            "general_conduct_at_intersections": [
+              "Approach intersections cautiously and reduce speed to allow stopping before reaching the crossing if other road users have priority",
+              "If you cannot cross an intersection, stop before reaching the crossing even with right-of-way or a green light",
+              "If there is danger of getting stuck at the intersection, avoid entering the intersection from the start",
+              "In unclear situations: make eye contact with other road users; refrain from using right of way if it helps avoid an accident"
+            ],
+            "importance": "Priority rules play a vital role in ensuring safety on the roads of Saudi Arabia. Compliance contributes to ensuring the safety of traffic and reducing accidents and their tragic consequences."
+          },
+
+          {
+            "topic_id": "4.5",
+            "title": "Pedestrian Crossings",
+            "rules": [
+              "Passenger cars and bicycles are given priority over other slow-moving vehicles",
+              "Drivers must slow down and stop for pedestrians at crossings"
+            ]
+          },
+
+          {
+            "topic_id": "4.6",
+            "title": "Railway Crossings",
+            "priority": "Railway vehicles have priority over all other vehicles",
+            "driver_obligation": "Drivers must immediately evacuate the railway tracks when a railway vehicle approaches",
+            "securing_methods": [
+              "Barriers",
+              "Guards – drivers must abide by the location of the barriers or guard",
+              "Traffic lights – Red or yellow indicates a train is approaching; vehicle drivers must not cross the railway line",
+              "Bell signals – Audible warning of an approaching train; vehicle drivers must not cross the railway line"
+            ],
+            "crossing_only_when": "The sign indicates that it is safe and the driver must make sure there is no train approaching",
+            "if_traffic_stops": "If traffic stops or slows down and stopping at the railway lane would be dangerous, the driver must not enter the railway crossing",
+            "when_to_stop_before_railway": [
+              "When the train approaches",
+              "When there is a red or yellow light signal",
+              "When the gates are moving or are closed",
+              "When a guard signals to stop",
+              "If traffic and crosswalks do not allow crossing"
+            ],
+            "prohibited": [
+              "Stopping on rails",
+              "Parking of vehicles on the railways",
+              "Driving along the rails"
+            ],
+            "crossing_procedure": "Wait until the gates are fully opened and the red light is off before entering the railway crossing"
+          }
+        ]
+      },
+
+      {
+        "unit_id": 5,
+        "title": "Driving Speed",
+        "topics": [
+          {
+            "topic_id": "5.1",
+            "title": "General Speed Limits",
+            "small_vehicles": {
+              "rule": "Must not exceed the speed specified for the road if no other speed limiter sign is present",
+              "types": ["Sub-roads – according to the speed specified for the road", "Highways – according to the speed specified for the road"]
+            },
+            "large_vehicles": {
+              "within_city_roads": "Maximum 50 km/h",
+              "outside_city_limits": "Depending on the speed specified for the road"
+            },
+            "speed_limit_signs": {
+              "speed_limit_start": "Traffic lights can indicate different speed limits",
+              "speed_limit_end": "A traffic sign indicating the end of the speed limit",
+              "minimum_speed_start": "Blue sign indicating the driver must not drive slower than the minimum speed",
+              "minimum_speed_end": "Sign indicating the end of the minimum speed requirement",
+              "note": "If there is no other speed limiter, you must stick to the speed limiter shown. Speed limit signs show the limit – do not feel compelled to drive at that speed."
+            },
+            "emergency_vehicles": "Can exceed the speed limit, but must not endanger the safety of others",
+            "when_to_reduce_speed_below_minimum": [
+              "At night",
+              "When strong sunlight appears",
+              "During fog",
+              "During rain",
+              "During sandstorms",
+              "According to road conditions"
+            ]
+          },
+
+          {
+            "topic_id": "5.2",
+            "title": "Criteria for Choosing Driving Speed",
+            "driver_must": [
+              "Always adjust speed according to general conditions and road conditions, regardless of the maximum permissible speed",
+              "Ensure safety of himself, passengers, and other road users at all times",
+              "Adapt vehicle speed to be able to stop in time in the event of a stop sign or barrier"
+            ],
+            "reduce_speed_when_approaching": [
+              "Intersections or any kind of crossings",
+              "Before curves",
+              "When crossing bridges",
+              "When crossing railway crossings",
+              "When driving through tunnels",
+              "When the level of vision is low",
+              "On slippery roads (water, sand, snow)"
+            ],
+            "additional_situations_requiring_reduced_speed": [
+              "If the road is not a highway",
+              "In winding places of the road",
+              "During busy traffic",
+              "When approaching bumps",
+              "When approaching or passing a group of pedestrians",
+              "When approaching or passing animals, especially when animals show signs of anxiety and tension"
+            ],
+            "prohibited": "Racing vehicles on public roads inside or outside city limits",
+            "rule": "Each case must be evaluated individually. If unsure, drive a little slower.",
+            "key_factors_to_consider": [
+              "Traffic movement",
+              "Possibility of obstacles on the road or other road users",
+              "Road conditions",
+              "The condition of your vehicle"
+            ]
+          },
+
+          {
+            "topic_id": "5.3",
+            "title": "Drifting",
+            "definition": "A form of racing in which vehicles are driven at extremely high speeds of about 160 to 260 km/h on wide highways while the vehicle sways left and right. Drivers often drive close to traffic, barriers, and onlookers watching from the sides of the road without any protection.",
+            "legal_status": "Illegal – a traffic violation",
+            "danger": "Many horrific traffic accidents occur as a result of drifting",
+            "penalties": [
+              { "offense": "First time", "penalty": "Vehicle impounded 15 days + 20,000 SAR fine + possible imprisonment" },
+              { "offense": "Second time", "penalty": "Vehicle impounded 1 month + 40,000 SAR fine + must consider imprisonment" },
+              { "offense": "Third time", "penalty": "Confiscation of vehicle + 60,000 SAR fine" }
+            ]
+          },
+
+          {
+            "topic_id": "5.4",
+            "title": "Obstructing Traffic and Sudden Braking",
+            "prohibited": [
+              "Obstructing the movement of other vehicles by driving very slowly without a convincing reason",
+              "Suddenly slowing down or braking hard unless necessary for safety reasons"
+            ],
+            "how_to_indicate_slowing_down": [
+              "Brake lights at the rear of the vehicle",
+              "Hand signs"
+            ]
+          },
+
+          {
+            "topic_id": "5.5",
+            "title": "Safety Distance",
+            "definition": "Drivers behind other vehicles must maintain sufficient distance to avoid an accident if the vehicle in front suddenly slows or stops",
+            "minimum_following_distance": "2 seconds (two-second rule)",
+            "two_second_rule_steps": [
+              "Step 1: Look for a reference point such as a traffic light, tree, mast, sign, or shadow on the road",
+              "Step 2: Start counting when the back of the vehicle in front reaches that reference point",
+              "Step 3: Count until the front of your vehicle reaches the reference point. Must count at least 2 seconds; otherwise the distance is not safe."
+            ],
+            "increase_distance_when": [
+              "Bad road conditions (e.g. wet or sandy road)",
+              "Driving behind motorcycles on a one-lane road",
+              "Driving a heavily loaded vehicle",
+              "Changing weather conditions (storms, dust, rain)"
+            ],
+            "benefits_of_larger_distance": "By applying a forward-looking driving style, you have more time to respond to situations and emerging dangers. Less pressure on the gas pedal; greater percentage of safety and security."
+          },
+
+          {
+            "topic_id": "5.6",
+            "title": "Economic / Eco-Friendly Driving",
+            "key_principle": "Forward-looking driving style – take your foot off the gas pedal and let the car decelerate without pressing the brake pedal (e.g. when approaching a red traffic light). This saves fuel and reduces brake wear.",
+            "start_stop_function": {
+              "with_function": "Stop the car to save fuel; the feature turns off the engine when stopped and restarts automatically when foot is taken off the brake",
+              "without_function": "Switch off engine if idle time is longer than 20 seconds"
+            },
+            "fuel_saving_tips": [
+              "Speed: Drive between 70–90 km/h; avoid speeds exceeding 100 km/h when saving fuel",
+              "Acceleration: Avoid strong acceleration",
+              "Constant speed: Use cruise control as much as possible",
+              "Excess weight: Shed unnecessary weight from the vehicle",
+              "Tire pressure: Check regularly",
+              "Rear window heating: Uses about 0.7 liters of fuel per 100 km; use only when the rear window is foggy; ensure it has not been started by mistake",
+              "Air conditioner: Never set too low; use the recirculation air button; always close windows when air conditioner is on",
+              "Windows: Close windows when driving at 60 km/h due to air resistance",
+              "Short distances: Avoid driving short distances; use bike, public transportation, or walk",
+              "Correct fuel: Use the correct fuel for the vehicle",
+              "Avoid rush hours and traffic jams when possible",
+              "Go straight away after starting the car"
+            ],
+            "eco_friendly_behaviors": [
+              "Wash the car at a special washing station that recycles water",
+              "Maintain the car regularly; use a container to collect old oil and dispose of it correctly – do not let it contaminate the floor",
+              "Car sharing: As many people as possible in one car",
+              "Install a purifier in the car if possible",
+              "Buy a fuel-efficient car"
+            ]
+          }
+        ]
+      },
+
+      {
+        "unit_id": 6,
+        "title": "Overtaking and General Behavior",
+        "topics": [
+          {
+            "topic_id": "6.1",
+            "title": "Driving Near Stationary Vehicles and Objects",
+            "what_counts_as_stationary_objects": [
+              "Parked vehicles",
+              "Groups of people",
+              "Herds of animals"
+            ],
+            "when_not_to_pass": [
+              "If other road users are obstructed or endangered",
+              "In the event of causing damage to fixed objects",
+              "When people exit or enter railway vehicles on one side of the road"
+            ],
+            "procedure_when_obstacle_in_path": {
+              "look": "What is this? What happened?",
+              "evaluate": "Is there movement coming? Is there enough space for passage?",
+              "decide": "Decide to either pass or stop",
+              "act": "Act according to your decision: Move or stop"
+            },
+            "passing_procedure": {
+              "mnemonic": "MSSSM",
+              "steps": [
+                "Mirrors: Check interior and left side mirrors to see vehicles behind you",
+                "Signal: Give a left signal",
+                "Shoulder: Check the blind spot on the left side of your vehicle",
+                "Speed: Adapt the speed (speed up if obstacle can be crossed quickly; slow down if narrow)",
+                "Move: Move to the left side and make sure there is enough lateral distance to pass the obstacle. Drive smoothly."
+              ]
+            },
+            "near_parked_vehicles": {
+              "lateral_distance": "Be sure to move away from the side of parked vehicles (at 50 km/h, you need about 1 meter – approximately the space needed to open a vehicle door)",
+              "on_two_way_roads": "May need to slow down or stop when traffic is coming from the other direction",
+              "watch_for": "Vehicles that are about to move",
+              "rule": "The required lateral distance depends on driving speed – the faster you are, the greater the distance needed from parked vehicles"
+            },
+            "right_of_way_note": "The driver whose road is open on the right side has the right of way"
+          },
+
+          {
+            "topic_id": "6.2",
+            "title": "Overtaking Moving Vehicles",
+            "normal_side": "Left side of the road",
+            "overtake_on_right_when": [
+              "The driver in front intends to turn left",
+              "The road is divided into more than two lanes heading in the same direction"
+            ],
+            "rules_for_vehicle_being_overtaken": [
+              "Must not increase its speed",
+              "Must drive on the far-right side of the road",
+              "Must indicate to the other driver that overtaking is permitted",
+              "Must reduce speed if overtaken by a group of vehicles"
+            ]
+          },
+
+          {
+            "topic_id": "6.3",
+            "title": "Overtaking Prohibitions",
+            "prohibited_locations": [
+              "At intersections",
+              "At railway lanes",
+              "At pedestrian crossings",
+              "On bridges",
+              "On curved roads and dangerous curves",
+              "On slippery roads",
+              "At the end of highways",
+              "When driving in the opposite direction to other vehicles",
+              "When visibility on roads is insufficient or weak",
+              "When there is a 'No overtaking' traffic sign",
+              "When there are solid lines between tracks"
+            ],
+            "prohibited_situations": [
+              "When you cannot drive significantly faster than the vehicle in front of you",
+              "If the speed limit would be exceeded while overtaking",
+              "If a vehicle in front of you begins to overtake another vehicle ahead of it",
+              "If a vehicle behind you begins to overtake your vehicle"
+            ],
+            "warning": "There are many things that must be taken into account when overtaking. Do not try to overtake another vehicle if you are in doubt."
+          },
+
+          {
+            "topic_id": "6.4",
+            "title": "Requirements for Safe Overtaking",
+            "before_overtaking_checklist": [
+              "1. Check your speed: need an appropriate speed difference compared to the vehicle ahead (good difference: at least 20 km/h but not exceeding the speed limit)",
+              "2. Check the space next to the vehicle you want to overtake: maintain a safe lateral distance; ensure the vehicle in front is not starting to overtake another vehicle",
+              "3. Check the mirrors and look over your shoulder to make sure no one is overtaking you",
+              "4. Check the road ahead: no obstructing oncoming traffic, no curves, crossings, or obstacles",
+              "5. Ensure there is space on the right side of the road to return to it after overtaking"
+            ],
+            "overtaking_procedure": {
+              "see": "Speed? Way ahead? Space to return to right lane?",
+              "assess": "Is overtaking allowed? Is it safe?",
+              "decide": "Overtake (start MSSSM) or stay behind within a safe distance",
+              "mirrors": "Check left and side mirrors for vehicles behind you",
+              "signal": "Signal left",
+              "shoulder": "Check blind spot on left side",
+              "speed": "Accelerate (exceed the vehicle ahead's speed as quickly as possible without exceeding the speed limit)",
+              "move": "Move to the left side; ensure enough lateral space for the vehicle being overtaken; drive smoothly",
+              "return": "Turn right when you can see the overtaken vehicle in the interior mirror; steer smoothly"
+            },
+            "warning_signals_before_overtaking": [
+              "Use the horn",
+              "Use flashing front lights"
+            ]
+          },
+
+          {
+            "topic_id": "6.5",
+            "title": "Stopping the Vehicle",
+            "definitions": {
+              "pause": "Stopping the vehicle and continuing to park for a short and limited period",
+              "parking": "Stop the vehicle and leave it parked"
+            },
+            "parking_rules": [
+              "Vehicles must be parked on the side of the road or on the side of the sidewalk parallel to it",
+              "In another way if there is a sign indicating this",
+              "Parallel to the side of the road or sidewalk unless a sign indicates otherwise"
+            ],
+            "parking_signs": {
+              "yellow_area_on_road": "Parking is prohibited; prohibition ends at the first turn after the sign",
+              "waiting_allowed_no_parking": "Waiting is allowed, parking is not allowed",
+              "no_standing_or_waiting": "No standing or waiting at all",
+              "white_lines": "No restrictions on stopping vehicles"
+            },
+            "parking_restrictions": {
+              "prohibited_at": [
+                "Pedestrian crossings",
+                "On the sidewalk",
+                "Within 1.5 meters of a children's school crossing",
+                "Within 20 meters of tunnels (on either side)",
+                "Within 20 meters of bridges",
+                "On bridges",
+                "At any turn",
+                "On top of the road (crest of a hill)",
+                "At crossroads / intersections",
+                "On the sidewalk",
+                "At garages / driveways",
+                "Within 15 meters of a traffic light",
+                "Within 15 meters of a bend",
+                "Within 7 meters of a fire hydrant",
+                "In front of entrances or exits",
+                "In places designated for a specific category of vehicle (e.g. disabled parking)",
+                "In the opposite direction of traffic",
+                "In the middle of the road"
+              ]
+            },
+            "broken_down_vehicle": {
+              "general": "Park off the road if possible",
+              "during_day": "Place clear warning signs within the stopping distance",
+              "at_night": "Place red lights on the vehicle to avoid collisions with other vehicles",
+              "highway_note": "On public roads outside the city, if parked vehicles pose a danger to public safety, additional precautions must be taken"
+            },
+            "trucks_triple_deflectors": "Truck drivers must place one or more triple deflectors (each side 30 cm long) on the road behind the truck and on the left side if parked at night out of town on public roads"
+          },
+
+          {
+            "topic_id": "6.6",
+            "title": "Using Vehicle Headlights",
+            "headlight_types": {
+              "front": [
+                {
+                  "name": "Position lights (parking lights)",
+                  "color": "White",
+                  "function": "Indicates vehicle position"
+                },
+                {
+                  "name": "Low beams (intersection lights)",
+                  "color": "White",
+                  "function": "Standard driving lights"
+                },
+                {
+                  "name": "High beams",
+                  "color": "White",
+                  "function": "Long-range illumination"
+                },
+                {
+                  "name": "Front fog lights",
+                  "color": "White/Yellow",
+                  "function": "Visibility in fog, snow, or heavy rain (only on some vehicles)"
+                }
+              ],
+              "rear": [
+                {
+                  "name": "Rear lights (taillights)",
+                  "color": "Red",
+                  "function": "Indicate presence of vehicle from behind"
+                },
+                {
+                  "name": "Fog tail lamp",
+                  "color": "Red",
+                  "function": "Enhanced rear visibility in fog"
+                },
+                {
+                  "name": "Brake lights (stop lights)",
+                  "color": "Bright red",
+                  "function": "Appear every time the brake pedal is depressed"
+                },
+                {
+                  "name": "Reverse lights",
+                  "color": "White",
+                  "function": "Appear only when the transmission is in reverse ('R') position"
+                },
+                {
+                  "name": "Number plate lights",
+                  "color": "White",
+                  "function": "Illuminate the number plate"
+                }
+              ]
+            },
+            "signal_lights": {
+              "turn_signals": {
+                "color": "Yellow (3 yellow colors)",
+                "function": "Indicate direction of turn; appear when blinker is activated"
+              },
+              "hazard_warning_lights": {
+                "count": 6,
+                "function": "All turn signals flash simultaneously to indicate hazard"
+              }
+            },
+            "usage_rules": {
+              "at_night": "Drivers must use vehicle headlights while driving at night regardless of whether the road is equipped with general lighting",
+              "during_day": "Must use headlights during thick fog or sandstorms obscuring vision"
+            },
+            "low_beams_required_when": [
+              "When driving on highways",
+              "In cases where high beams are prohibited and position lights do not provide sufficient visibility",
+              "When position lights are not sufficient for other road users to see the vehicle in time",
+              "When fog is present and the vehicle is not equipped with fog lights"
+            ],
+            "high_beams_prohibited": [
+              "Within city limits (always use regular/low beam lights inside cities)",
+              "When there are oncoming vehicles on the opposite side (turn off at sufficient distance)",
+              "When driving less than 50 meters behind other vehicles",
+              "In all cases that may cause great inconvenience to other road users",
+              "In all cases that may cause great inconvenience to users of a waterway or railway parallel to the road"
+            ],
+            "fog_lights_rules": {
+              "front_fog_lights": "Must be used in fog, snowfall, or heavy rain",
+              "rear_fog_lights": "Use only when there is fog, snow, or heavy rain; ensure not too bright; use only when no vehicles are driving directly behind you",
+              "rear_lights_when": [
+                "On roads without general lighting at night",
+                "On roads without general lighting during the day when there is fog, heavy rain, or sandstorm"
+              ]
+            },
+            "other_light_rules": {
+              "flashing_lights": "Prohibited to use without permission from the Traffic Department",
+              "red_reflective_lights": "Prohibited to use from the center of the vehicle to the front of the vehicle",
+              "white_lights_from_rear": "Use of white lights from the center of the vehicle to the rear is prohibited, except number plate lights and reverse lights"
+            }
+          },
+
+          {
+            "topic_id": "6.7",
+            "title": "Dashboard Warning Lights",
+            "lights": [
+              {
+                "color": "Red",
+                "meaning": "STOP IMMEDIATELY! Have a look at your vehicle manual."
+              },
+              {
+                "color": "Yellow",
+                "meaning": "Something is not right. Inspect the vehicle as soon as possible and do not ignore it for too long."
+              },
+              {
+                "color": "Green",
+                "meaning": "All is fine."
+              }
+            ],
+            "fuel_indicator": {
+              "rule": "Must fill the fuel tank when the indicator is at a quarter of the tank",
+              "reason": "Running out of fuel on the road puts your life and the lives of others at risk"
+            }
+          },
+
+          {
+            "topic_id": "6.8",
+            "title": "Clear View / Demisting",
+            "controls": [
+              {
+                "control": "Fan direction adjustment lever (left)",
+                "function": "Adjusts the direction of the fan/air flow"
+              },
+              {
+                "control": "Air circulation button (central)",
+                "function": "Circulates air inside the vehicle (e.g. when driving in tunnels)"
+              },
+              {
+                "control": "Fan intensity adjustment switch (central)",
+                "function": "Adjusts the strength of the fan"
+              },
+              {
+                "control": "Rear window heating button (central)",
+                "function": "Heats the rear window to clear fog/condensation"
+              },
+              {
+                "control": "Temperature adjustment lever (right)",
+                "function": "Adjusts the temperature of the air flow"
+              },
+              {
+                "control": "Air conditioner button (central)",
+                "function": "Purifies the air and extracts water vapor"
+              }
+            ],
+            "demisting_tip": "To clear fog from the front window, turn all switches clockwise to the far right"
+          }
+        ]
+      }
+    ],
+
+    "emergency_numbers": {
+      "traffic_police": ["911", "993"],
+      "red_crescent_ambulance": "997",
+      "accident_damage_report_app": "Najm"
+    },
+
+    "key_numbers_summary": {
+      "min_age_private_license": 18,
+      "min_age_public_license": 20,
+      "min_age_motorcycle_license": 18,
+      "private_license_validity_years": 10,
+      "public_license_validity_years": 5,
+      "max_passengers_private_car_including_driver": 9,
+      "max_weight_private_car_kg": 3500,
+      "points_to_withdraw_license": 24,
+      "min_emergency_vehicle_distance_m": 50,
+      "max_reversing_distance_m": 20,
+      "min_following_distance_seconds": 2,
+      "right_turn_on_red_max_speed_kmh": 15,
+      "right_turn_on_red_stop_duration_seconds": "2–3",
+      "children_front_seat_prohibited_under_age": 10,
+      "children_support_belt_required_under_age": 12,
+      "minor_accident_max_damage_sar": 5000,
+      "driver_held_max_hours_after_fatal_accident": 72,
+      "parking_from_traffic_light_min_m": 15,
+      "parking_from_bend_min_m": 15,
+      "parking_from_fire_hydrant_min_m": 7,
+      "parking_from_tunnel_or_bridge_min_m": 20,
+      "pedestrian_crossing_school_min_m": 1.5,
+      "min_speed_saving_fuel_kmh": 70,
+      "max_speed_saving_fuel_kmh": 90,
+      "turn_off_engine_if_idle_seconds": 20,
+      "drifting_speed_range_kmh": "160–260",
+      "stop_sign_hold_seconds": 3
+    },
+
+    "quiz_bank": [
+      {
+        "id": "q1", "unit": 1, "topic": "Driving License",
+        "question": "What is the minimum age to obtain a private driving license in Saudi Arabia?",
+        "options": ["16", "17", "18", "20"],
+        "correct_answer": "18",
+        "explanation": "You must be at least 18 years old. A temporary permit can be issued from age 17 for a maximum of one year."
+      },
+      {
+        "id": "q2", "unit": 1, "topic": "Driving License",
+        "question": "How long is a private driving license valid for?",
+        "options": ["5 years", "7 years", "10 years", "15 years"],
+        "correct_answer": "10 years",
+        "explanation": "A private driver's license is valid for a maximum of 10 years."
+      },
+      {
+        "id": "q3", "unit": 1, "topic": "Driving License",
+        "question": "What is the maximum number of passengers (including driver) allowed with a private license?",
+        "options": ["6", "8", "9", "10"],
+        "correct_answer": "9",
+        "explanation": "A private license allows carrying a maximum of 9 passengers including the driver."
+      },
+      {
+        "id": "q4", "unit": 1, "topic": "Driving License",
+        "question": "What is the minimum age for a public driving license?",
+        "options": ["18", "20", "21", "25"],
+        "correct_answer": "20",
+        "explanation": "You must be at least 20 years old to obtain a public driving license."
+      },
+      {
+        "id": "q5", "unit": 1, "topic": "Speed",
+        "question": "What is the stopping distance at 50 km/h on a dry road?",
+        "options": ["18m", "30m", "40m", "54m"],
+        "correct_answer": "40m",
+        "explanation": "At 50 km/h: reaction distance is 15m + braking distance is 25m = stopping distance of 40m."
+      },
+      {
+        "id": "q6", "unit": 1, "topic": "Speed",
+        "question": "What is the stopping distance at 100 km/h on a dry road?",
+        "options": ["88m", "100m", "130m", "180m"],
+        "correct_answer": "130m",
+        "explanation": "At 100 km/h: reaction distance 30m + braking distance 100m = 130m stopping distance."
+      },
+      {
+        "id": "q7", "unit": 1, "topic": "Speed",
+        "question": "What is the reaction time assumed in the standard stopping distance formula?",
+        "options": ["0.5 seconds", "1 second", "2 seconds", "3 seconds"],
+        "correct_answer": "1 second",
+        "explanation": "Standard reaction time is assumed to be 1 second in stopping distance calculations."
+      },
+      {
+        "id": "q8", "unit": 1, "topic": "Speed",
+        "question": "When does the reaction distance become longer?",
+        "options": ["At low speeds", "When roads are dry", "When distracted or tired", "When windows are clean"],
+        "correct_answer": "When distracted or tired",
+        "explanation": "Reaction distance increases at high speeds, if you are distracted or tired, or under the influence of alcohol or drugs."
+      },
+      {
+        "id": "q9", "unit": 1, "topic": "Accidents",
+        "question": "What number do you call for the Red Crescent in an accident with injuries?",
+        "options": ["911", "993", "997", "999"],
+        "correct_answer": "997",
+        "explanation": "Call the Red Crescent at 997 for accidents with injuries."
+      },
+      {
+        "id": "q10", "unit": 1, "topic": "Accidents",
+        "question": "What is the maximum damage amount for an accident to be classified as 'minor'?",
+        "options": ["2,000 SAR", "3,000 SAR", "5,000 SAR", "10,000 SAR"],
+        "correct_answer": "5,000 SAR",
+        "explanation": "A minor accident involves property damage not exceeding 5,000 SAR and injuries not requiring hospitalization."
+      },
+      {
+        "id": "q11", "unit": 1, "topic": "Violations",
+        "question": "How many points result in the withdrawal of a driver's license?",
+        "options": ["12", "16", "20", "24"],
+        "correct_answer": "24",
+        "explanation": "The driver's license is withdrawn when the total number of points reaches 24."
+      },
+      {
+        "id": "q12", "unit": 1, "topic": "Violations",
+        "question": "How many points are assigned for driving under the influence of alcohol or drugs?",
+        "options": ["8", "12", "16", "24"],
+        "correct_answer": "24",
+        "explanation": "Driving under the influence carries the maximum penalty of 24 points – enough to withdraw the license immediately."
+      },
+      {
+        "id": "q13", "unit": 1, "topic": "Violations",
+        "question": "How many points are assigned for running a red light?",
+        "options": ["6", "8", "12", "24"],
+        "correct_answer": "12",
+        "explanation": "Not stopping while a red light is on carries 12 points."
+      },
+      {
+        "id": "q14", "unit": 1, "topic": "Violations",
+        "question": "How many points for not wearing a seat belt?",
+        "options": ["1", "2", "4", "6"],
+        "correct_answer": "2",
+        "explanation": "Not wearing a seat belt carries 2 points."
+      },
+      {
+        "id": "q15", "unit": 1, "topic": "Violations",
+        "question": "What is the fine for drifting on the FIRST offense?",
+        "options": ["5,000 SAR", "10,000 SAR", "20,000 SAR", "40,000 SAR"],
+        "correct_answer": "20,000 SAR",
+        "explanation": "The first drifting offense: vehicle impounded 15 days + 20,000 SAR fine + possible imprisonment."
+      },
+      {
+        "id": "q16", "unit": 1, "topic": "Violations",
+        "question": "What happens on the THIRD drifting offense?",
+        "options": ["30-day impound + 40,000 SAR fine", "Vehicle confiscated + 60,000 SAR fine", "Vehicle confiscated + 40,000 SAR fine", "Permanent license revocation"],
+        "correct_answer": "Vehicle confiscated + 60,000 SAR fine",
+        "explanation": "Third drifting offense results in confiscation of the vehicle and a 60,000 SAR fine."
+      },
+      {
+        "id": "q17", "unit": 1, "topic": "Violations",
+        "question": "How many days does the driver have to pay the minimum fine before the maximum is imposed?",
+        "options": ["7 days", "14 days", "30 days", "60 days"],
+        "correct_answer": "30 days",
+        "explanation": "The violating driver may pay the minimum fine within a maximum period of 30 days from the date of the violation."
+      },
+      {
+        "id": "q18", "unit": 1, "topic": "Violations",
+        "question": "How long is the license withdrawn for the FIRST time the point limit is reached in one Hijri year?",
+        "options": ["1 month", "3 months", "6 months", "1 year"],
+        "correct_answer": "3 months",
+        "explanation": "For the first time in one Hijri year, the driver's license is withdrawn for 3 months."
+      },
+      {
+        "id": "q19", "unit": 1, "topic": "Traffic Signs",
+        "question": "What shape are warning signs?",
+        "options": ["Circle", "Rectangle", "Triangle with vertex at top", "Octagon"],
+        "correct_answer": "Triangle with vertex at top",
+        "explanation": "Warning signs are triangular with vertex at the top, white background, black icons, and red frame."
+      },
+      {
+        "id": "q20", "unit": 1, "topic": "Traffic Signs",
+        "question": "What does a blue circular regulatory sign indicate?",
+        "options": ["Prohibition", "Mandatory obligation", "Warning", "Guidance"],
+        "correct_answer": "Mandatory obligation",
+        "explanation": "Blue circular signs indicate a mandatory obligation (e.g. minimum speed, compulsory direction)."
+      },
+      {
+        "id": "q21", "unit": 1, "topic": "Traffic Signs",
+        "question": "What color are temporary work area signs?",
+        "options": ["Red and white", "Orange", "Yellow with red frame", "Blue with white frame"],
+        "correct_answer": "Yellow with red frame",
+        "explanation": "Temporary work area signs are yellow with a red frame."
+      },
+      {
+        "id": "q22", "unit": 1, "topic": "Traffic Signs",
+        "question": "What color background indicates a guide sign to cities and villages outside city limits?",
+        "options": ["Green", "Blue", "Brown", "White"],
+        "correct_answer": "Blue",
+        "explanation": "Blue background with white letters indicates guide signs outside city limits, referring to cities and villages."
+      },
+      {
+        "id": "q23", "unit": 2, "topic": "Emergency Vehicles",
+        "question": "What is the minimum distance to maintain behind an emergency vehicle?",
+        "options": ["20 meters", "30 meters", "50 meters", "100 meters"],
+        "correct_answer": "50 meters",
+        "explanation": "It is prohibited to drive directly behind emergency vehicles. A distance of at least 50 meters must be maintained."
+      },
+      {
+        "id": "q24", "unit": 2, "topic": "School Buses",
+        "question": "What must all other vehicles do when a school bus stops to let students in or out?",
+        "options": ["Slow to 30 km/h", "Stop completely; overtaking is prohibited", "Flash hazard lights and continue", "Use horn and proceed"],
+        "correct_answer": "Stop completely; overtaking is prohibited",
+        "explanation": "All vehicles must stop and overtaking a stopped school bus is prohibited."
+      },
+      {
+        "id": "q25", "unit": 2, "topic": "Children Transport",
+        "question": "At what age may children NOT sit in the front seat?",
+        "options": ["Under 8", "Under 10", "Under 12", "Under 14"],
+        "correct_answer": "Under 10",
+        "explanation": "Children under 10 must not be in the front seat unless the rear seats are unavailable (with child-friendly seat)."
+      },
+      {
+        "id": "q26", "unit": 2, "topic": "Seat Belt",
+        "question": "Who must wear a seat belt?",
+        "options": ["Only the driver", "Driver and front passenger only", "Driver and all passengers", "Only passengers above 12"],
+        "correct_answer": "Driver and all passengers",
+        "explanation": "The driver and all other passengers must use a seat belt while driving on the roads."
+      },
+      {
+        "id": "q27", "unit": 3, "topic": "Changing Lanes",
+        "question": "What does the abbreviation MSSSM stand for when changing lanes?",
+        "options": [
+          "Mirror, Sign, Speed, Steer, Move",
+          "Mirror, Signal, Shoulder, Speed, Move",
+          "Mirror, Signal, Stop, Steer, Move",
+          "Move, Signal, Shoulder, Speed, Mirror"
+        ],
+        "correct_answer": "Mirror, Signal, Shoulder, Speed, Move",
+        "explanation": "MSSSM: Mirrors → Signal → Shoulder (blind spot check) → Speed → Move. This applies to changing lanes and overtaking."
+      },
+      {
+        "id": "q28", "unit": 3, "topic": "Reversing",
+        "question": "What is the maximum permitted reversing distance on a public road?",
+        "options": ["10 meters", "15 meters", "20 meters", "30 meters"],
+        "correct_answer": "20 meters",
+        "explanation": "Not permissible to drive backwards for more than 20 meters. Prohibited entirely on highways."
+      },
+      {
+        "id": "q29", "unit": 4, "topic": "Traffic Lights",
+        "question": "What should you do when the traffic light turns yellow/orange?",
+        "options": [
+          "Accelerate to cross the intersection quickly",
+          "Stop if possible without endangering yourself or others",
+          "Continue driving normally",
+          "Flash hazard lights"
+        ],
+        "correct_answer": "Stop if possible without endangering yourself or others",
+        "explanation": "When the light turns yellow/orange, stop if it is possible to do so safely; do not cross the stop line."
+      },
+      {
+        "id": "q30", "unit": 4, "topic": "Traffic Lights",
+        "question": "What is the required speed when turning right on a red light?",
+        "options": ["Less than 10 km/h", "Less than 15 km/h", "Less than 20 km/h", "Less than 25 km/h"],
+        "correct_answer": "Less than 15 km/h",
+        "explanation": "When turning right at a red light, your speed must be less than 15 km/h and you must stop completely for 2–3 seconds first."
+      },
+      {
+        "id": "q31", "unit": 4, "topic": "Right of Way",
+        "question": "At an uncontrolled equal intersection, two cars arrive at the same time. Which has priority?",
+        "options": [
+          "The larger vehicle",
+          "The vehicle on the left",
+          "The vehicle on the right",
+          "The vehicle going straight"
+        ],
+        "correct_answer": "The vehicle on the right",
+        "explanation": "The right-before-left rule: if two vehicles arrive at an equal intersection simultaneously, the vehicle on the right has right-of-way."
+      },
+      {
+        "id": "q32", "unit": 4, "topic": "Right of Way",
+        "question": "Who has priority between a vehicle on the highway and one entering from a secondary road?",
+        "options": [
+          "The vehicle on the secondary road",
+          "The vehicle on the highway",
+          "The vehicle that arrived first",
+          "The larger vehicle"
+        ],
+        "correct_answer": "The vehicle on the highway",
+        "explanation": "The driver on the highway always has the right of way over the driver coming from a secondary road."
+      },
+      {
+        "id": "q33", "unit": 4, "topic": "Roundabout",
+        "question": "Who has priority at a roundabout?",
+        "options": [
+          "The vehicle approaching the roundabout",
+          "The vehicle already inside the roundabout",
+          "The vehicle on the right",
+          "The largest vehicle"
+        ],
+        "correct_answer": "The vehicle already inside the roundabout",
+        "explanation": "Drivers approaching a roundabout must give way to vehicles already traveling inside the roundabout."
+      },
+      {
+        "id": "q34", "unit": 4, "topic": "Railway Crossings",
+        "question": "What is prohibited at railway crossings?",
+        "options": [
+          "Waiting for gates to open",
+          "Stopping on rails",
+          "Slowing down near the crossing",
+          "Checking for approaching trains"
+        ],
+        "correct_answer": "Stopping on rails",
+        "explanation": "It is prohibited to stop on rails, park on railways, or drive along the rails."
+      },
+      {
+        "id": "q35", "unit": 5, "topic": "Speed Limits",
+        "question": "What is the maximum speed for large vehicles within city roads?",
+        "options": ["40 km/h", "50 km/h", "60 km/h", "80 km/h"],
+        "correct_answer": "50 km/h",
+        "explanation": "Drivers of large vehicles must not exceed 50 km/h on city roads within cities."
+      },
+      {
+        "id": "q36", "unit": 5, "topic": "Safety Distance",
+        "question": "What is the minimum following distance (two-second rule)?",
+        "options": ["1 second", "2 seconds", "3 seconds", "5 seconds"],
+        "correct_answer": "2 seconds",
+        "explanation": "The minimum distance to drive behind another vehicle is two seconds (the two-second rule)."
+      },
+      {
+        "id": "q37", "unit": 5, "topic": "Economic Driving",
+        "question": "What speed range is considered optimal for fuel saving?",
+        "options": ["50–60 km/h", "60–70 km/h", "70–90 km/h", "90–110 km/h"],
+        "correct_answer": "70–90 km/h",
+        "explanation": "Speed between 70 to 90 km/h saves fuel. Avoid driving at any speed exceeding 100 km/h when trying to save fuel."
+      },
+      {
+        "id": "q38", "unit": 6, "topic": "Overtaking",
+        "question": "On which side must you normally overtake another vehicle?",
+        "options": ["Right side", "Left side", "Either side", "Depends on road type"],
+        "correct_answer": "Left side",
+        "explanation": "Vehicles must normally be overtaken on the left side of the road."
+      },
+      {
+        "id": "q39", "unit": 6, "topic": "Overtaking",
+        "question": "Overtaking is prohibited on which of the following?",
+        "options": ["Straight roads at night", "Multi-lane highways", "Pedestrian crossings", "Wide roads outside cities"],
+        "correct_answer": "Pedestrian crossings",
+        "explanation": "Overtaking is prohibited at pedestrian crossings, intersections, railway lanes, bridges, curves, slippery roads, etc."
+      },
+      {
+        "id": "q40", "unit": 6, "topic": "Headlights",
+        "question": "When are high beams prohibited within city limits?",
+        "options": [
+          "Only at night",
+          "Always within city limits",
+          "Only during fog",
+          "Only on narrow roads"
+        ],
+        "correct_answer": "Always within city limits",
+        "explanation": "Within city limits, drivers must always use regular low beam lights. High beams are always prohibited in cities."
+      },
+      {
+        "id": "q41", "unit": 6, "topic": "Parking",
+        "question": "What is the minimum distance you must park from a fire hydrant?",
+        "options": ["3 meters", "5 meters", "7 meters", "10 meters"],
+        "correct_answer": "7 meters",
+        "explanation": "It is forbidden to stop the vehicle within 7 meters of a fire hydrant."
+      },
+      {
+        "id": "q42", "unit": 6, "topic": "Parking",
+        "question": "What is the minimum distance to park from a traffic light?",
+        "options": ["5 meters", "10 meters", "15 meters", "20 meters"],
+        "correct_answer": "15 meters",
+        "explanation": "It is forbidden to stop the vehicle at a distance of less than 15 meters from a traffic light."
+      },
+      {
+        "id": "q43", "unit": 6, "topic": "Parking",
+        "question": "What is the minimum distance to park from a tunnel or bridge?",
+        "options": ["10 meters", "15 meters", "20 meters", "25 meters"],
+        "correct_answer": "20 meters",
+        "explanation": "It is prohibited to park within 20 meters of tunnels or bridges, or on bridges themselves."
+      },
+      {
+        "id": "q44", "unit": 6, "topic": "Dashboard Lights",
+        "question": "What does a RED dashboard warning light mean?",
+        "options": [
+          "Check the vehicle soon",
+          "All is fine",
+          "Stop immediately and consult vehicle manual",
+          "Service is due"
+        ],
+        "correct_answer": "Stop immediately and consult vehicle manual",
+        "explanation": "A red dashboard warning light means stop immediately and consult the vehicle manual."
+      },
+      {
+        "id": "q45", "unit": 6, "topic": "Dashboard Lights",
+        "question": "When should you fill the fuel tank according to the handbook?",
+        "options": [
+          "When the fuel indicator is at half",
+          "When the fuel indicator is at a quarter",
+          "When the low fuel warning light comes on",
+          "When the tank is completely empty"
+        ],
+        "correct_answer": "When the fuel indicator is at a quarter",
+        "explanation": "You must fill the fuel tank when the indicator is at a quarter of the tank to avoid running out on the road."
+      },
+      {
+        "id": "q46", "unit": 1, "topic": "Traffic Department",
+        "question": "A traffic officer tells you to stop at a green light. What should you do?",
+        "options": [
+          "Proceed because the light is green",
+          "Honk and proceed slowly",
+          "Stop and follow the officer's instructions",
+          "Flash headlights to warn the officer"
+        ],
+        "correct_answer": "Stop and follow the officer's instructions",
+        "explanation": "Traffic officer instructions take priority over all traffic regulations including traffic lights. Always follow the officer's instructions."
+      },
+      {
+        "id": "q47", "unit": 2, "topic": "Driver Obligations",
+        "question": "What must a driver do if their vehicle breaks down on the road?",
+        "options": [
+          "Leave the vehicle and wait on the sidewalk",
+          "Clear the road immediately; place warning signs (day) or red lights (night)",
+          "Call for help and stay in the vehicle",
+          "Leave the vehicle running with hazard lights on"
+        ],
+        "correct_answer": "Clear the road immediately; place warning signs (day) or red lights (night)",
+        "explanation": "If the vehicle breaks down, clear the road immediately and drive to a side street. During the day: place a clear warning sign. At night: secure the vehicle with red lights."
+      },
+      {
+        "id": "q48", "unit": 4, "topic": "Stop Sign",
+        "question": "How long must you stop at a STOP sign?",
+        "options": ["1 second", "2 seconds", "3 seconds", "5 seconds"],
+        "correct_answer": "3 seconds",
+        "explanation": "Stop completely for 3 seconds to keep an eye on traffic or other road users from all directions."
+      },
+      {
+        "id": "q49", "unit": 3, "topic": "Lane Rules",
+        "question": "What does a double continuous line between two lanes mean?",
+        "options": [
+          "You may cross to overtake",
+          "You may cross with caution",
+          "You are prohibited from crossing to the other lane",
+          "You must reduce speed"
+        ],
+        "correct_answer": "You are prohibited from crossing to the other lane",
+        "explanation": "A double continuous line means drivers are prohibited from crossing this line to the other lane."
+      },
+      {
+        "id": "q50", "unit": 5, "topic": "Drifting",
+        "question": "At what speed range is drifting typically performed?",
+        "options": ["80–100 km/h", "100–130 km/h", "130–160 km/h", "160–260 km/h"],
+        "correct_answer": "160–260 km/h",
+        "explanation": "Drifting is a form of racing in which vehicles are driven at extremely high speeds of about 160 to 260 km/h on wide highways."
+      }
+    ]
+  }
+}

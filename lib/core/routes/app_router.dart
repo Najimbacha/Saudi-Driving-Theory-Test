@@ -6,22 +6,23 @@ import '../../presentation/screens/categories/categories_screen.dart';
 import '../../presentation/screens/onboarding/onboarding_screen.dart';
 import '../../presentation/screens/splash/splash_screen.dart';
 import '../../data/models/exam_result_model.dart';
-import '../../screens/achievements_screen.dart';
 import '../../screens/about_screen.dart';
 import '../../screens/credits_screen.dart';
-import '../../screens/favorites_screen.dart';
-import '../../screens/flashcards_screen.dart';
+import '../../data/models/handbook_model.dart';
+import '../../screens/key_numbers_screen.dart';
+import '../../screens/handbook/handbook_topic_screen.dart';
+import '../../screens/handbook/handbook_subtopic_screen.dart';
 import '../../screens/learn_screen.dart';
-import '../../screens/license_guide_screen.dart';
 import '../../screens/not_found_screen.dart';
 import '../../presentation/screens/results/results_screen.dart';
 import '../../presentation/screens/results/review_screen.dart';
 import '../../presentation/screens/progress/exam_history_screen.dart';
-import '../../screens/privacy_screen.dart';
 import '../../screens/stats_screen.dart';
 import '../../screens/support_development_screen.dart';
+import '../../screens/priority_guide_screen.dart';
 import '../../screens/traffic_fines_screen.dart';
 import '../../screens/traffic_violation_points_screen.dart';
+import '../../screens/signs_flashcards_screen.dart';
 import '../../widgets/home_shell.dart';
 
 CustomTransitionPage<void> _fadeSlidePage({
@@ -83,11 +84,18 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: '/signs',
         pageBuilder: (context, state) => _fadeSlidePage(
             state: state, child: const HomeShell(initialIndex: 1)),
-      ),
-      GoRoute(
-        path: '/flashcards',
-        pageBuilder: (context, state) =>
-            _fadeSlidePage(state: state, child: const FlashcardsScreen()),
+        routes: [
+          GoRoute(
+            path: 'flashcards',
+            pageBuilder: (context, state) {
+              final category = state.extra as String? ?? 'all';
+              return _fadeSlidePage(
+                state: state,
+                child: SignsFlashcardsScreen(initialCategory: category),
+              );
+            },
+          ),
+        ],
       ),
       GoRoute(
         path: '/practice',
@@ -128,11 +136,6 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         },
       ),
       GoRoute(
-        path: '/favorites',
-        pageBuilder: (context, state) =>
-            _fadeSlidePage(state: state, child: const FavoritesScreen()),
-      ),
-      GoRoute(
         path: '/stats',
         pageBuilder: (context, state) =>
             _fadeSlidePage(state: state, child: const StatsScreen()),
@@ -148,9 +151,26 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             _fadeSlidePage(state: state, child: const LearnScreen()),
       ),
       GoRoute(
-        path: '/achievements',
-        pageBuilder: (context, state) =>
-            _fadeSlidePage(state: state, child: const AchievementsScreen()),
+        path: '/learn/unit',
+        pageBuilder: (context, state) {
+          final unit = state.extra as HandbookUnit?;
+          if (unit == null) {
+            return _fadeSlidePage(state: state, child: const NotFoundScreen());
+          }
+          return _fadeSlidePage(
+              state: state, child: HandbookTopicScreen(unit: unit));
+        },
+      ),
+      GoRoute(
+        path: '/learn/subtopic',
+        pageBuilder: (context, state) {
+          final topic = state.extra as HandbookTopic?;
+          if (topic == null) {
+            return _fadeSlidePage(state: state, child: const NotFoundScreen());
+          }
+          return _fadeSlidePage(
+              state: state, child: HandbookSubtopicScreen(topic: topic));
+        },
       ),
       GoRoute(
         path: '/settings',
@@ -183,14 +203,14 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             _fadeSlidePage(state: state, child: const TrafficFinesScreen()),
       ),
       GoRoute(
-        path: '/license-guide',
+        path: '/priority-guide',
         pageBuilder: (context, state) =>
-            _fadeSlidePage(state: state, child: const LicenseGuideScreen()),
+            _fadeSlidePage(state: state, child: const PriorityGuideScreen()),
       ),
       GoRoute(
-        path: '/privacy',
+        path: '/key-numbers',
         pageBuilder: (context, state) =>
-            _fadeSlidePage(state: state, child: const PrivacyScreen()),
+            _fadeSlidePage(state: state, child: const KeyNumbersScreen()),
       ),
     ],
     errorPageBuilder: (context, state) =>

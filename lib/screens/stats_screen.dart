@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../core/constants/app_colors.dart';
 import '../core/theme/modern_theme.dart';
 import '../presentation/providers/category_provider.dart';
 import '../presentation/providers/exam_history_provider.dart';
@@ -227,117 +226,115 @@ class _SummaryHero extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final accuracyColor = _accuracyColor(accuracy);
 
-    return GlassContainer(
-      padding: EdgeInsets.zero,
-      blur: isDark ? 12 : 8,
-      color: isDark
-          ? Colors.white.withValues(alpha: 0.05)
-          : Colors.white.withValues(alpha: 0.9),
-      border: Border.all(color: scheme.onSurface.withValues(alpha: 0.1)),
-      child: Stack(
+    return Container(
+      decoration: BoxDecoration(
+        color: isDark
+            ? const Color(0xFF1E293B).withValues(alpha: 0.6)
+            : Colors.white,
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(
+          color: isDark
+              ? Colors.white.withValues(alpha: 0.08)
+              : scheme.outline.withValues(alpha: 0.12),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: isDark ? 0.12 : 0.03),
+            blurRadius: 10,
+            offset: const Offset(0, 3),
+          ),
+        ],
+      ),
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Positioned(
-            right: -30,
-            top: -30,
-            child: Container(
-              width: 140,
-              height: 140,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                gradient: RadialGradient(
-                  colors: [
-                    ModernTheme.primary.withValues(alpha: 0.3),
-                    Colors.transparent
-                  ],
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'stats.title'.tr(),
+                style: AppFonts.outfit(
+                  context,
+                  fontWeight: FontWeight.w800,
+                  fontSize: 18,
+                  color: scheme.onSurface,
                 ),
               ),
-            ),
-          ),
-          Positioned(
-            left: -40,
-            bottom: -40,
-            child: Container(
-              width: 120,
-              height: 120,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                gradient: RadialGradient(
-                  colors: [
-                    ModernTheme.secondary.withValues(alpha: 0.25),
-                    Colors.transparent
-                  ],
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                decoration: BoxDecoration(
+                  color: accuracyColor.withValues(alpha: 0.14),
+                  borderRadius: BorderRadius.circular(12),
                 ),
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'stats.title'.tr(),
+                child: Text(
+                  accuracy >= 80
+                      ? 'EXCELLENT'
+                      : (accuracy >= 60 ? 'GOOD' : 'LEARNING'),
                   style: AppFonts.outfit(
                     context,
-                    fontWeight: FontWeight.w700,
-                    fontSize: 18,
-                    color: scheme.onSurface,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Text(
-                      '$accuracy%',
-                      style: AppFonts.outfit(
-                        context,
-                        fontWeight: FontWeight.w700,
-                        fontSize: 36,
-                        color: accuracyColor,
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 6),
-                      child: Text(
-                        'results.accuracy'.tr(),
-                        style: AppFonts.outfit(
-                          context,
-                          color: scheme.onSurface.withValues(alpha: 0.6),
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 12),
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: LinearProgressIndicator(
-                    value: accuracy / 100,
-                    backgroundColor:
-                        scheme.onSurface.withValues(alpha: 0.12),
+                    fontSize: 11,
+                    fontWeight: FontWeight.w800,
                     color: accuracyColor,
-                    minHeight: 8,
                   ),
                 ),
-                const SizedBox(height: 16),
-                Row(
-                  children: [
-                    _MiniStat(
-                        label: 'quiz.question'.tr(),
-                        value: totalAnswered.toString()),
-                    const SizedBox(width: 12),
-                    _MiniStat(
-                        label: 'stats.bestScore'.tr(),
-                        value: '$bestScore%'),
-                    const SizedBox(width: 12),
-                    _MiniStat(label: 'stats.streak'.tr(), value: streak),
-                  ],
+              ),
+            ],
+          ),
+          const SizedBox(height: 14),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.baseline,
+            textBaseline: TextBaseline.alphabetic,
+            children: [
+              Text(
+                '$accuracy%',
+                style: AppFonts.outfit(
+                  context,
+                  fontWeight: FontWeight.w900,
+                  fontSize: 38,
+                  color: accuracyColor,
                 ),
-              ],
+              ),
+              const SizedBox(width: 8),
+              Text(
+                'results.accuracy'.tr(),
+                style: AppFonts.outfit(
+                  context,
+                  color: scheme.onSurface.withValues(alpha: 0.6),
+                  fontWeight: FontWeight.w600,
+                  fontSize: 14,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: LinearProgressIndicator(
+              value: accuracy / 100,
+              backgroundColor: scheme.onSurface.withValues(alpha: 0.08),
+              color: accuracyColor,
+              minHeight: 8,
             ),
+          ),
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              _MiniStat(
+                label: 'quiz.question'.tr(),
+                value: totalAnswered.toString(),
+              ),
+              const SizedBox(width: 10),
+              _MiniStat(
+                label: 'stats.bestScore'.tr(),
+                value: '$bestScore%',
+              ),
+              const SizedBox(width: 10),
+              _MiniStat(
+                label: 'stats.streak'.tr(),
+                value: streak,
+              ),
+            ],
           ),
         ],
       ),
@@ -546,7 +543,7 @@ class _HistoryTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final statusColor = passed ? AppColors.success : AppColors.error;
+    final statusColor = passed ? ModernTheme.tertiary : scheme.error;
 
     return GlassContainer(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -603,10 +600,10 @@ class _HistoryTile extends StatelessWidget {
 
 Color _accuracyColor(int accuracy) {
   if (accuracy >= 80) {
-    return AppColors.success;
+    return ModernTheme.tertiary;
   }
   if (accuracy >= 50) {
     return ModernTheme.primary;
   }
-  return AppColors.warning;
+  return Colors.orangeAccent;
 }

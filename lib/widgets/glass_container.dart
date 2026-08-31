@@ -29,6 +29,34 @@ class GlassContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final content = Container(
+      padding: padding,
+      decoration: BoxDecoration(
+        borderRadius: borderRadius,
+        border: border ??
+            Border.all(color: Colors.white.withValues(alpha: 0.1), width: 1),
+        color: color ?? Colors.white.withValues(alpha: 0.05),
+        gradient: gradient,
+      ),
+      child: child,
+    );
+
+    final clippedContent = ClipRRect(
+      borderRadius: borderRadius,
+      child: content,
+    );
+
+    if (blur <= 0) {
+      return RepaintBoundary(
+        child: Container(
+          width: width,
+          height: height,
+          margin: margin,
+          child: clippedContent,
+        ),
+      );
+    }
+
     return RepaintBoundary(
       child: Container(
         width: width,
@@ -38,18 +66,7 @@ class GlassContainer extends StatelessWidget {
           borderRadius: borderRadius,
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: blur, sigmaY: blur),
-            child: Container(
-              padding: padding,
-              decoration: BoxDecoration(
-                borderRadius: borderRadius,
-                border: border ??
-                    Border.all(
-                        color: Colors.white.withValues(alpha: 0.1), width: 1),
-                color: color ?? Colors.white.withValues(alpha: 0.05),
-                gradient: gradient,
-              ),
-              child: child,
-            ),
+            child: content,
           ),
         ),
       ),

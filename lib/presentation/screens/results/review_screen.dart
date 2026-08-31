@@ -4,60 +4,221 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../core/constants/app_colors.dart';
+import '../../../core/theme/modern_theme.dart';
 import '../../../data/models/exam_result_model.dart';
 import '../../../models/question.dart';
 import '../../../utils/app_feedback.dart';
+import '../../../utils/app_fonts.dart';
 import '../../../state/data_state.dart';
 import '../../../utils/text_formatters.dart';
 
-class ReviewScreen extends ConsumerWidget {
+class ReviewScreen extends ConsumerStatefulWidget {
   const ReviewScreen({super.key, required this.result});
 
   final ExamResult result;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ReviewScreen> createState() => _ReviewScreenState();
+}
+
+class _ReviewScreenState extends ConsumerState<ReviewScreen> {
+  String _filter = 'all'; // 'all', 'correct', 'incorrect', 'skipped'
+
+  @override
+  Widget build(BuildContext context) {
     final questionsAsync = ref.watch(questionsProvider);
     final signsAsync = ref.watch(signsProvider);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final scheme = Theme.of(context).colorScheme;
+
     return Scaffold(
-      appBar: AppBar(title: Text('review.title'.tr())),
-      body: questionsAsync.when(
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (_, __) => Center(child: Text('common.error'.tr())),
-        data: (questions) {
-          final questionMap = {for (final q in questions) q.id: q};
-          final signMap = signsAsync.valueOrNull == null
-              ? <String, String>{}
-              : {for (final s in signsAsync.valueOrNull!) s.id: s.svgPath};
-          return ListView.separated(
-            padding: const EdgeInsets.all(16),
-            itemCount: result.questionAnswers.length + 1,
-            separatorBuilder: (_, __) => const SizedBox(height: 12),
-            itemBuilder: (context, index) {
-              if (index == 0) {
-                return _ReviewHeader(result: result);
-              }
-              final answer = result.questionAnswers[index - 1];
-              final question = questionMap[answer.questionId];
-              if (question == null) {
-                return Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Text('review.missingQuestion'.tr()),
-                  ),
-                );
-              }
-              return _ReviewCard(
-                index: index,
-                question: question,
-                answer: answer,
-                signPath:
-                    question.signId == null ? null : signMap[question.signId!],
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        title: Text(
+          'review.title'.tr(),
+          style: AppFonts.outfit(
+            context,
+            fontWeight: FontWeight.w800,
+            fontSize: 20,
+            color: scheme.onSurface,
+          ),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+          onPressed: () => context.pop(),
+          icon: const Icon(Icons.arrow_back_rounded),
+        ),
+      ),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient:
+              isDark ? ModernTheme.darkGradient : ModernTheme.lightGradient,
+        ),
+        child: SafeArea(
+          child: questionsAsync.when(
+            loading: () => const Center(child: CircularProgressIndicator()),
+            error: (_, __) => Center(child: Text('common.error'.tr())),
+            data: (questions) {
+              final questionMap = {for (final q in questions) q.id: q};
+              final signMap = signsAsync.valueOrNull == null
+                  ? <String, String>{}
+                  : {for (final s in signsAsync.valueOrNull!) s.id: s.svgPath};
+
+              final allAnswers = widget.result.questionAnswers;
+              final filteredAnswers = allAnswers.where((a) {
+                if (_filter == 'correct') return a.isCorrect;
+                if (_filter == 'incorrect') return !a.isCorrect && !a.isSkipped;
+                if (_filter == 'skipped') return a.isSkipped;
+                return true;
+              }).toList();
+
+              return ListView.separated(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                itemCount: filteredAnswers.length + 2,
+                separatorBuilder: (_, __) => const SizedBox(height: 14),
+                itemBuilder: (context, index) {
+                  if (index == 0) {
+                    return _ReviewHeader(result: widget.result);
+                  }
+                  if (index == 1) {
+                    return SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      physics: const BouncingScrollPhysics(),
+                      child: Row(
+                        children: [
+                          _ReviewFilterChip(
+                            label: '${'quiz.categories.all'.tr()} (${allAnswers.length})',
+                            selected: _filter == 'all',
+                            onTap: () => setState(() => _filter = 'all'),
+                          ),
+                          const SizedBox(width: 8),
+                          _ReviewFilterChip(
+                            label: '${'results.correct'.tr()} (${widget.result.correctAnswers})',
+                            selected: _filter == 'correct',
+                            color: ModernTheme.emerald,
+                            onTap: () => setState(() => _filter = 'correct'),
+                          ),
+                          const SizedBox(width: 8),
+                          _ReviewFilterChip(
+                            label: '${'results.incorrect'.tr()} (${widget.result.wrongAnswers})',
+                            selected: _filter == 'incorrect',
+                            color: ModernTheme.coral,
+                            onTap: () => setState(() => _filter = 'incorrect'),
+                          ),
+                          const SizedBox(width: 8),
+                          _ReviewFilterChip(
+                            label: '${'review.skipped'.tr()} (${widget.result.skippedAnswers})',
+                            selected: _filter == 'skipped',
+                            color: ModernTheme.amber,
+                            onTap: () => setState(() => _filter = 'skipped'),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+
+                  final answer = filteredAnswers[index - 2];
+                  final originalIndex = allAnswers.indexOf(answer) + 1;
+                  final question = questionMap[answer.questionId];
+                  if (question == null) {
+                    return Container(
+                      padding: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        color: isDark
+                            ? const Color(0xFF1E293B).withValues(alpha: 0.6)
+                            : Colors.white,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Text('review.missingQuestion'.tr()),
+                    );
+                  }
+                  return _ReviewCard(
+                    index: originalIndex,
+                    question: question,
+                    answer: answer,
+                    signPath: question.signId == null
+                        ? null
+                        : signMap[question.signId!],
+                  );
+                },
               );
             },
-          );
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _ReviewFilterChip extends StatelessWidget {
+  const _ReviewFilterChip({
+    required this.label,
+    required this.selected,
+    required this.onTap,
+    this.color,
+  });
+
+  final String label;
+  final bool selected;
+  final VoidCallback onTap;
+  final Color? color;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final activeColor = color ?? ModernTheme.primary;
+
+    return Semantics(
+      button: true,
+      selected: selected,
+      child: GestureDetector(
+        onTap: () {
+          AppFeedback.tap(context);
+          onTap();
         },
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 180),
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+          decoration: BoxDecoration(
+            color: selected
+                ? activeColor
+                : (isDark
+                    ? const Color(0xFF1E293B).withValues(alpha: 0.6)
+                    : Colors.white),
+            borderRadius: BorderRadius.circular(18),
+            border: Border.all(
+              color: selected
+                  ? activeColor
+                  : (isDark
+                      ? Colors.white.withValues(alpha: 0.08)
+                      : scheme.outline.withValues(alpha: 0.12)),
+              width: selected ? 1.5 : 1,
+            ),
+            boxShadow: [
+              if (selected)
+                BoxShadow(
+                  color: activeColor.withValues(alpha: 0.25),
+                  blurRadius: 8,
+                  offset: const Offset(0, 3),
+                ),
+            ],
+          ),
+          child: Text(
+            label,
+            style: AppFonts.outfit(
+              context,
+              color: selected
+                  ? Colors.white
+                  : scheme.onSurface.withValues(alpha: 0.8),
+              fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
+              fontSize: 12.5,
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -70,75 +231,150 @@ class _ReviewHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     final passed = result.passed;
-    final color = passed ? AppColors.success : AppColors.error;
+    final color = passed ? ModernTheme.emerald : ModernTheme.coral;
     final accuracy = result.scorePercentage.toStringAsFixed(0);
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Icon(passed ? Icons.check_circle : Icons.cancel, color: color),
-                const SizedBox(width: 8),
-                Text(
-                  passed ? 'results.passed'.tr() : 'results.failed'.tr(),
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleMedium
-                      ?.copyWith(color: color),
-                ),
-                const Spacer(),
-                Text('$accuracy%',
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleMedium
-                        ?.copyWith(color: color)),
-              ],
-            ),
-            const SizedBox(height: 8),
-            Text(
-              formatCorrectAnswers(
-                context,
-                result.correctAnswers,
-                result.totalQuestions,
-              ),
-              style: Theme.of(context).textTheme.bodySmall,
-            ),
-            const SizedBox(height: 12),
-            Row(
-              children: [
-                Expanded(
-                  child: OutlinedButton(
-                    onPressed: () {
-                      AppFeedback.tap(context);
-                      // Navigate back, which will go to results screen, then user can navigate from there
-                      if (context.canPop()) {
-                        context.pop();
-                      } else {
-                        context.pushReplacement('/home');
-                      }
-                    },
-                    child: Text('results.backHome'.tr()),
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      AppFeedback.tap(context);
-                      // Navigate to exam, replacing the review screen
-                      context.pushReplacement('/exam');
-                    },
-                    child: Text('exam.tryAgain'.tr()),
-                  ),
-                ),
-              ],
-            ),
-          ],
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    return Container(
+      decoration: BoxDecoration(
+        color: isDark
+            ? const Color(0xFF1E293B).withValues(alpha: 0.6)
+            : Colors.white,
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(
+          color: isDark
+              ? Colors.white.withValues(alpha: 0.08)
+              : scheme.outline.withValues(alpha: 0.12),
         ),
+        boxShadow: [
+          BoxShadow(
+            color: color.withValues(alpha: isDark ? 0.12 : 0.05),
+            blurRadius: 14,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: color.withValues(alpha: 0.14),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  passed ? Icons.check_circle_rounded : Icons.cancel_rounded,
+                  color: color,
+                  size: 24,
+                ),
+              ),
+              const SizedBox(width: 14),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      passed ? 'results.passed'.tr() : 'results.failed'.tr(),
+                      style: AppFonts.outfit(
+                        context,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w800,
+                        color: color,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      formatCorrectAnswers(context, result.correctAnswers,
+                          result.totalQuestions),
+                      style: AppFonts.outfit(
+                        context,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w500,
+                        color: scheme.onSurface.withValues(alpha: 0.55),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Text(
+                '$accuracy%',
+                style: AppFonts.outfit(
+                  context,
+                  fontSize: 28,
+                  fontWeight: FontWeight.w900,
+                  color: scheme.onSurface,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 18),
+          Row(
+            children: [
+              Expanded(
+                child: OutlinedButton(
+                  style: OutlinedButton.styleFrom(
+                    side: BorderSide(
+                      color: isDark
+                          ? Colors.white.withValues(alpha: 0.12)
+                          : scheme.outline.withValues(alpha: 0.15),
+                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 13),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                    foregroundColor:
+                        scheme.onSurface.withValues(alpha: 0.8),
+                  ),
+                  onPressed: () {
+                    AppFeedback.tap(context);
+                    context.pushReplacement('/home');
+                  },
+                  child: Text(
+                    'results.backHome'.tr(),
+                    style: AppFonts.outfit(
+                      context,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 13.5,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: ModernTheme.primary,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 13),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                    elevation: 3,
+                    shadowColor: ModernTheme.primary.withValues(alpha: 0.3),
+                  ),
+                  onPressed: () {
+                    AppFeedback.tap(context);
+                    context.pushReplacement('/exam');
+                  },
+                  child: Text(
+                    'exam.tryAgain'.tr(),
+                    style: AppFonts.outfit(
+                      context,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 13.5,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
@@ -159,6 +395,7 @@ class _ReviewCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     final locale = context.locale.languageCode;
     final questionText = _questionText(question, locale);
     final options = _options(question, locale);
@@ -167,121 +404,240 @@ class _ReviewCard extends StatelessWidget {
     final isSkipped = answer.isSkipped;
     final isCorrect = answer.isCorrect;
     final statusColor = isSkipped
-        ? AppColors.warning
-        : (isCorrect ? AppColors.success : AppColors.error);
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                  decoration: BoxDecoration(
-                    color: statusColor.withValues(alpha: 0.12),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Text(
-                    '#$index',
-                    style: Theme.of(context).textTheme.bodySmall,
+        ? Colors.orangeAccent
+        : (isCorrect ? ModernTheme.tertiary : scheme.error);
+
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    return Container(
+      decoration: BoxDecoration(
+        color: isDark
+            ? const Color(0xFF1E293B).withValues(alpha: 0.6)
+            : Colors.white,
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(
+          color: isDark
+              ? Colors.white.withValues(alpha: 0.08)
+              : scheme.outline.withValues(alpha: 0.12),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: isDark ? 0.12 : 0.02),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                decoration: BoxDecoration(
+                  color: scheme.onSurface.withValues(alpha: 0.06),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Text(
+                  '#$index',
+                  style: AppFonts.outfit(
+                    context,
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                    color: scheme.onSurface.withValues(alpha: 0.6),
                   ),
                 ),
-                const Spacer(),
-                Icon(
-                  isSkipped
-                      ? Icons.help_outline
-                      : (isCorrect ? Icons.check_circle : Icons.cancel),
-                  color: statusColor,
+              ),
+              const Spacer(),
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                decoration: BoxDecoration(
+                  color: statusColor.withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(10),
                 ),
-              ],
-            ),
-            const SizedBox(height: 10),
-            Text(
-              question.categoryKey.tr(),
-              style: Theme.of(context)
-                  .textTheme
-                  .bodySmall
-                  ?.copyWith(color: AppColors.primary),
-            ),
-            if (isSkipped) ...[
-              const SizedBox(height: 4),
-              Text(
-                'review.skipped'.tr(),
-                style: Theme.of(context)
-                    .textTheme
-                    .bodySmall
-                    ?.copyWith(color: AppColors.warning),
+                child: Row(
+                  children: [
+                    Icon(
+                      isSkipped
+                          ? Icons.help_outline_rounded
+                          : (isCorrect
+                              ? Icons.check_circle_rounded
+                              : Icons.cancel_rounded),
+                      color: statusColor,
+                      size: 14,
+                    ),
+                    const SizedBox(width: 6),
+                    Text(
+                      isSkipped
+                          ? 'review.skipped'.tr().toUpperCase()
+                          : (isCorrect
+                              ? 'results.correct'.tr().toUpperCase()
+                              : 'results.incorrect'.tr().toUpperCase()),
+                      style: AppFonts.outfit(
+                        context,
+                        fontSize: 11,
+                        fontWeight: FontWeight.w800,
+                        color: statusColor,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ],
-            const SizedBox(height: 6),
-            Text(questionText, style: Theme.of(context).textTheme.titleMedium),
-            const SizedBox(height: 12),
-            if (signPath != null)
-              Padding(
-                padding: const EdgeInsets.only(bottom: 12),
-                child: Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(12),
-                    child: SvgPicture.asset(
-                      'assets/$signPath',
-                      height: 140,
-                      fit: BoxFit.contain,
+          ),
+          const SizedBox(height: 14),
+          Text(
+            questionText,
+            style: AppFonts.outfit(
+              context,
+              fontSize: 17,
+              fontWeight: FontWeight.w700,
+              color: scheme.onSurface,
+              height: 1.4,
+            ),
+          ),
+          if (signPath != null) ...[
+            const SizedBox(height: 16),
+            Center(
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: isDark
+                      ? Colors.white.withValues(alpha: 0.04)
+                      : scheme.onSurface.withValues(alpha: 0.03),
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: SvgPicture.asset(
+                  'assets/$signPath',
+                  height: 120,
+                  fit: BoxFit.contain,
+                ),
+              ),
+            ),
+          ],
+          const SizedBox(height: 16),
+          ...List.generate(options.length, (idx) {
+            final optionText = options[idx];
+            final isSelected = idx == selected;
+            final isCorrectOption = idx == correct;
+
+            Color? border;
+            Color? fill;
+            Color iconColor;
+            IconData? icon;
+
+            if (isCorrectOption) {
+              border = ModernTheme.emerald;
+              fill = ModernTheme.emerald.withValues(alpha: 0.1);
+              iconColor = ModernTheme.emerald;
+              icon = Icons.check_circle_rounded;
+            } else if (isSelected && !isCorrectOption) {
+              border = ModernTheme.coral;
+              fill = ModernTheme.coral.withValues(alpha: 0.1);
+              iconColor = ModernTheme.coral;
+              icon = Icons.cancel_rounded;
+            } else {
+              border = isDark
+                  ? Colors.white.withValues(alpha: 0.06)
+                  : scheme.outline.withValues(alpha: 0.1);
+              fill = Colors.transparent;
+              iconColor = scheme.onSurface.withValues(alpha: 0.3);
+            }
+
+            return Container(
+              margin: const EdgeInsets.only(bottom: 8),
+              decoration: BoxDecoration(
+                color: fill,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: border,
+                  width: (isCorrectOption || isSelected) ? 1.5 : 1,
+                ),
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+              child: Row(
+                children: [
+                  Container(
+                    width: 28,
+                    height: 28,
+                    decoration: BoxDecoration(
+                      color: iconColor.withValues(alpha: 0.12),
+                      shape: BoxShape.circle,
+                    ),
+                    alignment: Alignment.center,
+                    child: Text(
+                      String.fromCharCode(65 + idx),
+                      style: AppFonts.outfit(
+                        context,
+                        color: iconColor,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12.5,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
+                      optionText,
+                      style: AppFonts.outfit(
+                        context,
+                        fontSize: 14,
+                        color: scheme.onSurface.withValues(
+                            alpha: (isSelected || isCorrectOption) ? 1.0 : 0.75),
+                        fontWeight: (isSelected || isCorrectOption)
+                            ? FontWeight.w700
+                            : FontWeight.w400,
+                      ),
+                    ),
+                  ),
+                  if (icon != null) Icon(icon, color: iconColor, size: 20),
+                ],
+              ),
+            );
+          }),
+          const SizedBox(height: 8),
+          Theme(
+            data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+            child: ExpansionTile(
+              tilePadding: EdgeInsets.zero,
+              title: Text(
+                'review.explanation'.tr(),
+                style: AppFonts.outfit(
+                  context,
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: ModernTheme.primary,
+                ),
+              ),
+              children: [
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(14),
+                  decoration: BoxDecoration(
+                    color: ModernTheme.primary.withValues(alpha: 0.08),
+                    borderRadius: BorderRadius.circular(14),
+                    border: Border.all(
+                      color: ModernTheme.primary.withValues(alpha: 0.18),
+                    ),
+                  ),
+                  child: Text(
+                    _explanation(question, locale),
+                    style: AppFonts.outfit(
+                      context,
+                      fontSize: 13.5,
+                      color: scheme.onSurface.withValues(alpha: 0.85),
+                      height: 1.5,
                     ),
                   ),
                 ),
-              ),
-            ...List.generate(options.length, (idx) {
-              final optionText = options[idx];
-              final isSelected = idx == selected;
-              final isCorrectOption = idx == correct;
-              Color? border;
-              Color? fill;
-              if (isCorrectOption) {
-                border = AppColors.success;
-                fill = AppColors.success.withValues(alpha: 0.12);
-              } else if (isSelected && !isCorrectOption) {
-                border = AppColors.error;
-                fill = AppColors.error.withValues(alpha: 0.12);
-              }
-              return Container(
-                margin: const EdgeInsets.only(bottom: 8),
-                decoration: BoxDecoration(
-                  color: fill ?? Theme.of(context).cardColor,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: border ?? Colors.transparent),
-                ),
-                child: ListTile(
-                  dense: true,
-                  leading: _OptionBadge(
-                    label: String.fromCharCode(65 + idx),
-                    success: isCorrectOption,
-                    error: isSelected && !isCorrectOption,
-                  ),
-                  title: Text(optionText),
-                  trailing: isCorrectOption
-                      ? const Icon(Icons.check, color: AppColors.success)
-                      : isSelected
-                          ? const Icon(Icons.close, color: AppColors.error)
-                          : null,
-                ),
-              );
-            }),
-            const SizedBox(height: 6),
-            ExpansionTile(
-              tilePadding: EdgeInsets.zero,
-              title: Text('review.explanation'.tr()),
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 8),
-                  child: Text(_explanation(question, locale)),
-                ),
               ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -357,50 +713,4 @@ String _explanation(Question question, String locale) {
   if (question.explanation != null) return question.explanation!;
   // Final fallback to translation key
   return question.explanationKey?.tr() ?? 'quiz.explanationFallback'.tr();
-}
-
-class _OptionBadge extends StatelessWidget {
-  const _OptionBadge({
-    required this.label,
-    required this.success,
-    required this.error,
-  });
-
-  final String label;
-  final bool success;
-  final bool error;
-
-  @override
-  Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-    Color borderColor = scheme.outline;
-    Color fillColor = Colors.transparent;
-    Color textColor = scheme.onSurface;
-    if (success) {
-      borderColor = AppColors.success;
-      fillColor = AppColors.success.withValues(alpha: 0.2);
-      textColor = AppColors.success;
-    } else if (error) {
-      borderColor = AppColors.error;
-      fillColor = AppColors.error.withValues(alpha: 0.18);
-      textColor = AppColors.error;
-    }
-    return Container(
-      width: 34,
-      height: 34,
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        color: fillColor,
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: borderColor),
-      ),
-      child: Text(
-        label,
-        style: Theme.of(context)
-            .textTheme
-            .bodyMedium
-            ?.copyWith(color: textColor, fontWeight: FontWeight.w600),
-      ),
-    );
-  }
 }

@@ -1,0 +1,340 @@
+lib\app.dart:18: if (!trExists('app.name')) return 'Saudi Driving Theory Test';
+lib\app.dart:19: return tr('app.name');
+lib\core\constants\app_strings.dart:2: static const String appName = 'Saudi Driving Theory Test';
+lib\core\constants\app_strings.dart:3: static const String tagline = 'Master driving theory with confidence';
+lib\core\routes\app_router.dart:65: initialLocation: '/splash',
+lib\core\routes\app_router.dart:68: path: '/splash',
+lib\core\routes\app_router.dart:73: path: '/onboarding',
+lib\core\routes\app_router.dart:78: path: '/home',
+lib\core\routes\app_router.dart:83: path: '/categories',
+lib\core\routes\app_router.dart:88: path: '/signs',
+lib\core\routes\app_router.dart:93: path: '/flashcards',
+lib\core\routes\app_router.dart:98: path: '/practice',
+lib\core\routes\app_router.dart:103: path: '/exam',
+lib\core\routes\app_router.dart:108: path: '/results',
+lib\core\routes\app_router.dart:124: path: '/review',
+lib\core\routes\app_router.dart:136: path: '/favorites',
+lib\core\routes\app_router.dart:141: path: '/stats',
+lib\core\routes\app_router.dart:146: path: '/history',
+lib\core\routes\app_router.dart:151: path: '/learn',
+lib\core\routes\app_router.dart:178: path: '/achievements',
+lib\core\routes\app_router.dart:183: path: '/settings',
+lib\core\routes\app_router.dart:188: path: '/credits',
+lib\core\routes\app_router.dart:193: path: '/about',
+lib\core\routes\app_router.dart:198: path: '/support-development',
+lib\core\routes\app_router.dart:203: path: '/violation-points',
+lib\core\routes\app_router.dart:208: path: '/traffic-fines',
+lib\core\routes\app_router.dart:213: path: '/priority-guide',
+lib\core\routes\app_router.dart:218: path: '/key-numbers',
+lib\core\routes\app_router.dart:223: path: '/license-guide',
+lib\core\routes\app_router.dart:228: path: '/privacy',
+lib\core\utils\helpers.dart:2: static String formatPercent(int value) => '$value%';
+lib\data\sign_attributions.dart:4: 'Museums_and_Entertainment_Centers_and_Farms_(Saudi_Aarbia_Road_Sign).svg',
+lib\data\sign_attributions.dart:5: 'No_Turn_Right_(Saudi_Aarbia_Road_Sign).svg',
+lib\data\sign_attributions.dart:6: 'Priority_to_Vehicles_Coming_from_the_Opposite_Side_(Saudi_Aarbia_Road_Sign).svg',
+lib\data\sign_attributions.dart:7: 'SA_road_sign_-_Animal_Crossing.svg',
+lib\data\sign_attributions.dart:8: 'SA_road_sign_-_Bend_to_left.svg',
+lib\data\sign_attributions.dart:9: 'SA_road_sign_-_Bend_to_right.svg',
+lib\data\sign_attributions.dart:10: 'SA_road_sign_-_Bend_to_right_(Temporary_sign).svg',
+lib\data\sign_attributions.dart:11: 'SA_road_sign_-_Bicycle_crossing.svg',
+lib\data\sign_attributions.dart:12: 'SA_road_sign_-_Camels_crossing.svg',
+lib\data\sign_attributions.dart:13: 'SA_road_sign_-_Crossroads.svg',
+lib\data\sign_attributions.dart:14: 'SA_road_sign_-_Crossroads_(Temporary_sign).svg',
+lib\data\sign_attributions.dart:15: 'SA_road_sign_-_Crosswind.svg',
+lib\data\sign_attributions.dart:16: 'SA_road_sign_-_Customs.svg',
+lib\data\sign_attributions.dart:17: 'SA_road_sign_-_Danger.svg',
+lib\data\sign_attributions.dart:18: 'SA_road_sign_-_Detour_arrow_(Temporary_sign).svg',
+lib\data\sign_attributions.dart:19: 'SA_road_sign_-_Dip.svg',
+lib\data\sign_attributions.dart:20: 'SA_road_sign_-_Directional_Sign_(Type_I).svg',
+lib\data\sign_attributions.dart:21: 'SA_road_sign_-_Directional_Sign_(Type_II).svg',
+lib\data\sign_attributions.dart:22: 'SA_road_sign_-_Drop_shoulder_road.svg',
+lib\data\sign_attributions.dart:23: 'SA_road_sign_-_East_sign_(Type_I).svg',
+lib\data\sign_attributions.dart:24: 'SA_road_sign_-_East_sign_(Type_II).svg',
+lib\data\sign_attributions.dart:25: 'SA_road_sign_-_Electric_current.svg',
+lib\data\sign_attributions.dart:26: 'SA_road_sign_-_End_minimum_speed_limit_(35).svg',
+lib\data\sign_attributions.dart:27: 'SA_road_sign_-_End_No_Overtaking_Vehicles.svg',
+lib\data\sign_attributions.dart:28: 'SA_road_sign_-_End_of_all_restrictions.svg',
+lib\data\sign_attributions.dart:29: 'SA_road_sign_-_End_of_dual_carriageway.svg',
+lib\data\sign_attributions.dart:30: 'SA_road_sign_-_End_of_No_Overtaking.svg',
+lib\data\sign_attributions.dart:31: 'SA_road_sign_-_End_of_Speed_Limit_(45).svg',
+lib\data\sign_attributions.dart:32: 'SA_road_sign_-_Equestrian_path.svg',
+lib\data\sign_attributions.dart:33: 'SA_road_sign_-_Fallen_rocks.svg',
+lib\data\sign_attributions.dart:34: 'SA_road_sign_-_Fire_Station.svg',
+lib\data\sign_attributions.dart:35: 'SA_road_sign_-_First_aid.svg',
+lib\data\sign_attributions.dart:36: 'SA_road_sign_-_Flagman_Ahead_(Temporary_sign).svg',
+lib\data\sign_attributions.dart:37: 'SA_road_sign_-_Give_way_to_oncoming_traffic.svg',
+lib\data\sign_attributions.dart:38: 'SA_road_sign_-_Go_straight.svg',
+lib\data\sign_attributions.dart:39: 'SA_road_sign_-_Go_straight_or_turn_left.svg',
+lib\data\sign_attributions.dart:40: 'SA_road_sign_-_Go_straight_or_turn_right.svg',
+lib\data\sign_attributions.dart:41: 'SA_road_sign_-_Height_restriction_ahead.svg',
+lib\data\sign_attributions.dart:42: 'SA_road_sign_-_Hotel.svg',
+lib\data\sign_attributions.dart:43: 'SA_road_sign_-_Intersection_left.svg',
+lib\data\sign_attributions.dart:44: 'SA_road_sign_-_Intersection_right.svg',
+lib\data\sign_attributions.dart:45: 'SA_road_sign_-_Keep_left.svg',
+lib\data\sign_attributions.dart:46: 'SA_road_sign_-_Keep_right.svg',
+lib\data\sign_attributions.dart:47: 'SA_road_sign_-_Low_flying_aircraft.svg',
+lib\data\sign_attributions.dart:48: 'SA_road_sign_-_Mandatory_right_or_left_turn.svg',
+lib\data\sign_attributions.dart:49: 'SA_road_sign_-_Mandatory_road_for_pedestrians.svg',
+lib\data\sign_attributions.dart:50: 'SA_road_sign_-_Mandatory_traffic_direction_in_the_roundabout.svg',
+lib\data\sign_attributions.dart:51: 'SA_road_sign_-_Maximum_axle_weight.svg',
+lib\data\sign_attributions.dart:52: 'SA_road_sign_-_Maximum_Height.svg',
+lib\data\sign_attributions.dart:53: 'SA_road_sign_-_Maximum_Speed_(120).svg',
+lib\data\sign_attributions.dart:54: 'SA_road_sign_-_Maximum_Speed_(125).svg',
+lib\data\sign_attributions.dart:55: 'SA_road_sign_-_Maximum_Speed_(45).svg',
+lib\data\sign_attributions.dart:56: 'SA_road_sign_-_Maximum_Weight.svg',
+lib\data\sign_attributions.dart:57: 'SA_road_sign_-_Maximum_Width.svg',
+lib\data\sign_attributions.dart:58: 'SA_road_sign_-_Mechanic.svg',
+lib\data\sign_attributions.dart:59: 'SA_road_sign_-_Minimum_speed_limit_(35).svg',
+lib\data\sign_attributions.dart:60: 'SA_road_sign_-_Narrow_Bridge.svg',
+lib\data\sign_attributions.dart:61: 'SA_road_sign_-_No_agricultural_vehicles.svg',
+lib\data\sign_attributions.dart:62: 'SA_road_sign_-_No_bicycles_allowed.svg',
+lib\data\sign_attributions.dart:63: 'SA_road_sign_-_No_buses_allowed.svg',
+lib\data\sign_attributions.dart:64: 'SA_road_sign_-_No_entry.svg',
+lib\data\sign_attributions.dart:65: 'SA_road_sign_-_No_entry_for_vehicles_except_motorcycles.svg',
+lib\data\sign_attributions.dart:66: 'SA_road_sign_-_No_freight_vehicles.svg',
+lib\data\sign_attributions.dart:67: 'SA_road_sign_-_No_handcarts.svg',
+lib\data\sign_attributions.dart:68: 'SA_road_sign_-_No_honking.svg',
+lib\data\sign_attributions.dart:69: 'SA_road_sign_-_No_Left_turn.svg',
+lib\data\sign_attributions.dart:70: 'SA_road_sign_-_No_motor_vehicles_allowed.svg',
+lib\data\sign_attributions.dart:71: 'SA_road_sign_-_No_motorcycles.svg',
+lib\data\sign_attributions.dart:72: 'SA_road_sign_-_No_parking.svg',
+lib\data\sign_attributions.dart:73: 'SA_road_sign_-_No_pedestrians.svg',
+lib\data\sign_attributions.dart:74: 'SA_road_sign_-_No_Right_turn.svg',
+lib\data\sign_attributions.dart:75: 'SA_road_sign_-_No_trailers_allowed.svg',
+lib\data\sign_attributions.dart:76: 'SA_road_sign_-_No_U_Turn.svg',
+lib\data\sign_attributions.dart:77: 'SA_road_sign_-_No_Vehicles_or_carts.svg',
+lib\data\sign_attributions.dart:78: 'SA_road_sign_-_No_vehicles_pulled_by_animals.svg',
+lib\data\sign_attributions.dart:79: 'SA_road_sign_-_North_sign_(Type_I).svg',
+lib\data\sign_attributions.dart:80: 'SA_road_sign_-_North_sign_(Type_II).svg',
+lib\data\sign_attributions.dart:81: 'SA_road_sign_-_One-Lane_Bridge.svg',
+lib\data\sign_attributions.dart:82: 'SA_road_sign_-_Open_water.svg',
+lib\data\sign_attributions.dart:83: 'SA_road_sign_-_Park.svg',
+lib\data\sign_attributions.dart:84: 'SA_road_sign_-_Pass_Left_Or_Right.svg',
+lib\data\sign_attributions.dart:85: 'SA_road_sign_-_Path_closed_(Temporary_sign).svg',
+lib\data\sign_attributions.dart:86: 'SA_road_sign_-_Pedestrian_crossing_ahead.svg',
+lib\data\sign_attributions.dart:87: 'SA_road_sign_-_Refreshments.svg',
+lib\data\sign_attributions.dart:88: 'SA_road_sign_-_Restaurant.svg',
+lib\data\sign_attributions.dart:89: 'SA_road_sign_-_Reverse_curve_left.svg',
+lib\data\sign_attributions.dart:90: 'SA_road_sign_-_Reverse_curve_right.svg',
+lib\data\sign_attributions.dart:91: 'SA_road_sign_-_Road_narrows_on_both_sides.svg',
+lib\data\sign_attributions.dart:92: 'SA_road_sign_-_Road_narrows_on_the_left.svg',
+lib\data\sign_attributions.dart:93: 'SA_road_sign_-_Road_narrows_on_the_right.svg',
+lib\data\sign_attributions.dart:94: 'SA_road_sign_-_Road_narrows_on_the_right_(Temporary_sign).svg',
+lib\data\sign_attributions.dart:95: 'SA_road_sign_-_Roundabout.svg',
+lib\data\sign_attributions.dart:96: 'SA_road_sign_-_Sand_dunes.svg',
+lib\data\sign_attributions.dart:97: 'SA_road_sign_-_Scattered_Pebbles.svg',
+lib\data\sign_attributions.dart:98: 'SA_road_sign_-_School_zone.svg',
+lib\data\sign_attributions.dart:99: 'SA_road_sign_-_Sharp_curves_first_to_the_left.svg',
+lib\data\sign_attributions.dart:100: 'SA_road_sign_-_Sharp_curves_first_to_the_right.svg',
+lib\data\sign_attributions.dart:101: 'SA_road_sign_-_Sharp_turn_left.svg',
+lib\data\sign_attributions.dart:102: 'SA_road_sign_-_Sharp_turn_right.svg',
+lib\data\sign_attributions.dart:103: 'SA_road_sign_-_Sharp_turn_right_(Temporary_sign).svg',
+lib\data\sign_attributions.dart:104: 'SA_road_sign_-_Slippery_Road.svg',
+lib\data\sign_attributions.dart:105: 'SA_road_sign_-_South_sign_(Type_I).svg',
+lib\data\sign_attributions.dart:106: 'SA_road_sign_-_South_sign_(Type_II).svg',
+lib\data\sign_attributions.dart:107: 'SA_road_sign_-_Speed_bump.svg',
+lib\data\sign_attributions.dart:108: 'SA_road_sign_-_Speed_bump_series.svg',
+lib\data\sign_attributions.dart:109: 'SA_road_sign_-_Start_of_dual_carriageway.svg',
+lib\data\sign_attributions.dart:110: 'SA_road_sign_-_Start_of_dual_carriageway_(Temporary_sign).svg',
+lib\data\sign_attributions.dart:111: 'SA_road_sign_-_Steep_ascent.svg',
+lib\data\sign_attributions.dart:112: 'SA_road_sign_-_Steep_descent.svg',
+lib\data\sign_attributions.dart:113: 'SA_road_sign_-_Steep_descent_(Temporary_sign).svg',
+lib\data\sign_attributions.dart:114: 'SA_road_sign_-_Stop_(Type_I).svg',
+lib\data\sign_attributions.dart:115: 'SA_road_sign_-_Stop_(Type_II).svg',
+lib\data\sign_attributions.dart:116: 'SA_road_sign_-_Stop_sign_ahead.svg',
+lib\data\sign_attributions.dart:117: 'SA_road_sign_-_Stop_sign_ahead_(Temporary_sign).svg',
+lib\data\sign_attributions.dart:118: 'SA_road_sign_-_Telephone.svg',
+lib\data\sign_attributions.dart:119: 'SA_road_sign_-_Traffic_merges_from_right.svg',
+lib\data\sign_attributions.dart:120: 'SA_road_sign_-_Traffic_merges_into_right.svg',
+lib\data\sign_attributions.dart:121: 'SA_road_sign_-_Traffic_signals_ahead_(Temporary_sign).svg',
+lib\data\sign_attributions.dart:122: 'SA_road_sign_-_Traffic_signals_ahead_(Type_I).svg',
+lib\data\sign_attributions.dart:123: 'SA_road_sign_-_Traffic_signals_ahead_(Type_II).svg',
+lib\data\sign_attributions.dart:124: 'SA_road_sign_-_Trucks_keep_right.svg',
+lib\data\sign_attributions.dart:125: 'SA_road_sign_-_Tunnel.svg',
+lib\data\sign_attributions.dart:126: 'SA_road_sign_-_Turn_left.svg',
+lib\data\sign_attributions.dart:127: 'SA_road_sign_-_Turn_on_lights.svg',
+lib\data\sign_attributions.dart:128: 'SA_road_sign_-_Turn_right.svg',
+lib\data\sign_attributions.dart:129: 'SA_road_sign_-_Two-way_road.svg',
+lib\data\sign_attributions.dart:130: 'SA_road_sign_-_Two-way_road_(Temporary_sign).svg',
+lib\data\sign_attributions.dart:131: 'SA_road_sign_-_Uneven_road.svg',
+lib\data\sign_attributions.dart:132: 'SA_road_sign_-_Water_crossing.svg',
+lib\data\sign_attributions.dart:133: 'SA_road_sign_-_West_sign_(Type_I).svg',
+lib\data\sign_attributions.dart:134: 'SA_road_sign_-_West_sign_(Type_II).svg',
+lib\data\sign_attributions.dart:135: 'SA_road_sign_-_Workers_in_road_ahead_(Temporary_sign).svg',
+lib\data\sign_attributions.dart:136: 'SA_road_sign_-_Yield.svg',
+lib\data\sign_attributions.dart:137: 'SA_road_sign_-_Yield_sign_ahead.svg',
+lib\data\sign_attributions.dart:138: 'Saudi_Arabia_-_Branch_Road_Blank.svg',
+lib\data\sign_attributions.dart:139: 'Saudi_Arabia_-_Branch_Road-2222.svg',
+lib\data\sign_attributions.dart:140: 'Saudi_Arabia_-_Branch_Road-5018.svg',
+lib\data\sign_attributions.dart:141: 'Saudi_Arabia_-_Road_Sign_-_Camping.svg',
+lib\data\sign_attributions.dart:142: 'Saudi_Arabia_-_Road_Sign_-_CBD.svg',
+lib\data\sign_attributions.dart:143: 'Saudi_Arabia_-_Road_Sign_-_Cyclists_only.svg',
+lib\data\sign_attributions.dart:144: 'Saudi_Arabia_-_Road_Sign_-_Dead_end.svg',
+lib\data\sign_attributions.dart:145: 'Saudi_Arabia_-_Road_Sign_-_Downtown.svg',
+lib\data\sign_attributions.dart:146: 'Saudi_Arabia_-_Road_Sign_-_End_Motor_way.svg',
+lib\data\sign_attributions.dart:147: 'Saudi_Arabia_-_Road_Sign_-_Filling_station.svg',
+lib\data\sign_attributions.dart:148: 'Saudi_Arabia_-_Road_Sign_-_Hospital.svg',
+lib\data\sign_attributions.dart:149: 'Saudi_Arabia_-_Road_Sign_-_Indicative.svg',
+lib\data\sign_attributions.dart:150: 'Saudi_Arabia_-_Road_Sign_-_Kaaba.svg',
+lib\data\sign_attributions.dart:151: 'Saudi_Arabia_-_Road_Sign_-_Left_Turn.svg',
+lib\data\sign_attributions.dart:152: 'Saudi_Arabia_-_Road_Sign_-_Maximum_vehicle_length.svg',
+lib\data\sign_attributions.dart:153: 'Saudi_Arabia_-_Road_Sign_-_Motor_way.svg',
+lib\data\sign_attributions.dart:154: 'Saudi_Arabia_-_Road_Sign_-_No_overtaking.svg',
+lib\data\sign_attributions.dart:155: 'Saudi_Arabia_-_Road_Sign_-_No_overtaking_by_heavy_goods_vehicles.svg',
+lib\data\sign_attributions.dart:156: 'Saudi_Arabia_-_Road_Sign_-_No_stopping.svg',
+lib\data\sign_attributions.dart:157: 'Saudi_Arabia_-_Road_Sign_-_Obstacles_ahead(Red).svg',
+lib\data\sign_attributions.dart:158: 'Saudi_Arabia_-_Road_Sign_-_Obstacles_ahead(Yellow).svg',
+lib\data\sign_attributions.dart:159: 'Saudi_Arabia_-_Road_Sign_-_Pedestrian_crossing.svg',
+lib\data\sign_attributions.dart:160: 'Saudi_Arabia_-_Road_Sign_-_Position.svg',
+lib\data\sign_attributions.dart:161: 'Saudi_Arabia_-_Road_Sign_-_Right_Turn.svg',
+lib\data\sign_attributions.dart:162: 'Saudi_Arabia_-_Road_Sign_-_Stop.svg',
+lib\data\sign_attributions.dart:163: 'Saudi_Arabia_-_Road_Sign_-_Stop_(Arabic).svg',
+lib\data\sign_attributions.dart:164: 'Saudi_Arabia_-_Road_Sign_-_Truck_limit_(45).svg',
+lib\data\sign_attributions.dart:165: 'Saudi_Arabia_-_Road_Sign_-_U-turn.svg',
+lib\data\sign_attributions.dart:166: 'Saudi_Arabia_-_Road_Sign_-_U-turn_left_straight_ahead.svg',
+lib\data\sign_attributions.dart:167: 'Street_Name_(Saudi_Aarbia_Road_Sign).svg',
+lib\data\models\handbook_model.dart:9: throw const FormatException('Missing app_data key in handbook JSON');
+lib\data\repositories\category_repository.dart:10: titleKey: 'categories.signs.title',
+lib\data\repositories\category_repository.dart:11: subtitleKey: 'categories.signs.subtitle',
+lib\data\repositories\category_repository.dart:13: colorHex: '#006C35',
+lib\data\repositories\category_repository.dart:18: titleKey: 'categories.rules.title',
+lib\data\repositories\category_repository.dart:19: subtitleKey: 'categories.rules.subtitle',
+lib\data\repositories\category_repository.dart:21: colorHex: '#2196F3',
+lib\data\repositories\category_repository.dart:26: titleKey: 'categories.safety.title',
+lib\data\repositories\category_repository.dart:27: subtitleKey: 'categories.safety.subtitle',
+lib\data\repositories\category_repository.dart:29: colorHex: '#4CAF50',
+lib\data\repositories\category_repository.dart:34: titleKey: 'categories.signals.title',
+lib\data\repositories\category_repository.dart:35: subtitleKey: 'categories.signals.subtitle',
+lib\data\repositories\category_repository.dart:37: colorHex: '#FDB913',
+lib\data\repositories\category_repository.dart:42: titleKey: 'categories.markings.title',
+lib\data\repositories\category_repository.dart:43: subtitleKey: 'categories.markings.subtitle',
+lib\data\repositories\category_repository.dart:45: colorHex: '#EF6C00',
+lib\data\repositories\category_repository.dart:50: titleKey: 'quiz.categories.violation_points',
+lib\data\repositories\category_repository.dart:51: subtitleKey: 'quiz.categories.violation_points_desc',
+lib\data\repositories\category_repository.dart:53: colorHex: '#C62828',
+lib\data\repositories\category_repository.dart:58: titleKey: 'quiz.categories.traffic_fines',
+lib\data\repositories\category_repository.dart:59: subtitleKey: 'quiz.categories.traffic_fines_desc',
+lib\data\repositories\category_repository.dart:61: colorHex: '#4527A0',
+lib\models\question.dart:66: 'quiz.categories.${json['category'] ?? json['categoryId'] ?? 'unknown'}';
+lib\models\question.dart:68: 'quiz.difficulty.${json['difficulty'] ?? 'easy'}';
+lib\presentation\providers\handbook_provider.dart:41: print('Failed to load handbook data: $e');
+lib\presentation\screens\categories\categories_screen.dart:97: onTap: () => context.push('/violation-points'),
+lib\presentation\screens\categories\categories_screen.dart:122: context.push('/practice?category=${category.id}');
+lib\presentation\screens\categories\categories_screen.dart:268: '$accuracy%',
+lib\presentation\screens\exam\exam_screen.dart:175: context.go('/home');
+lib\presentation\screens\exam\exam_screen.dart:326: key: ValueKey('question-card-${current.id}'),
+lib\presentation\screens\exam\exam_screen.dart:390: key: ValueKey('${current.id}-options'),
+lib\presentation\screens\exam\exam_screen.dart:640: context.push('/results', extra: result);
+lib\presentation\screens\exam\exam_screen.dart:725: '${index + 1}',
+lib\presentation\screens\exam\exam_screen.dart:774: 'Exam sign quota short: need=$minSigns, available=${signPool.length}',
+lib\presentation\screens\exam\exam_screen.dart:804: 'Exam mix: total=${selected.length}, signs=$signCount, min=$minSigns',
+lib\presentation\screens\exam\exam_screen.dart:1408: '$minutes:$seconds',
+lib\presentation\screens\home\home_screen.dart:60: DateFormat('EEEE, d MMM').format(DateTime.now()),
+lib\presentation\screens\home\home_screen.dart:112: onTapHandbook: () => context.push('/learn'),
+lib\presentation\screens\home\home_screen.dart:114: onTapStats: () => context.push('/stats'),
+lib\presentation\screens\home\home_screen.dart:115: onTapHistory: () => context.push('/history'),
+lib\presentation\screens\home\home_screen.dart:134: context.push('/exam');
+lib\presentation\screens\home\home_screen.dart:143: context.push('/signs');
+lib\presentation\screens\home\home_screen.dart:152: context.push('/settings');
+lib\presentation\screens\home\widgets\home_compact_stats_bar.dart:36: value: '$streak',
+lib\presentation\screens\home\widgets\home_compact_stats_bar.dart:48: value: '$accuracy%',
+lib\presentation\screens\onboarding\onboarding_screen.dart:30: titleKey: 'onboarding.practiceTitle',
+lib\presentation\screens\onboarding\onboarding_screen.dart:31: descriptionKey: 'onboarding.practiceDesc',
+lib\presentation\screens\onboarding\onboarding_screen.dart:35: titleKey: 'onboarding.examTitle',
+lib\presentation\screens\onboarding\onboarding_screen.dart:36: descriptionKey: 'onboarding.examDesc',
+lib\presentation\screens\onboarding\onboarding_screen.dart:40: titleKey: 'onboarding.offlineTitle',
+lib\presentation\screens\onboarding\onboarding_screen.dart:41: descriptionKey: 'onboarding.offlineDesc2',
+lib\presentation\screens\onboarding\onboarding_screen.dart:70: context.go('/home');
+lib\presentation\screens\onboarding\onboarding_screen.dart:79: context.go('/home');
+lib\presentation\screens\quiz\practice_screen.dart:355: key: ValueKey('${current.id}-options'),
+lib\presentation\screens\results\results_screen.dart:36: onPressed: () => context.pushReplacement('/home'),
+lib\presentation\screens\results\results_screen.dart:63: value: '${result.correctAnswers}',
+lib\presentation\screens\results\results_screen.dart:69: value: '${result.wrongAnswers}',
+lib\presentation\screens\results\results_screen.dart:75: value: '$accuracy%',
+lib\presentation\screens\results\results_screen.dart:101: context.pushReplacement('/exam');
+lib\presentation\screens\results\results_screen.dart:125: context.push('/review', extra: result);
+lib\presentation\screens\results\results_screen.dart:147: context.pushReplacement('/home');
+lib\presentation\screens\results\review_screen.dart:164: '$accuracy%',
+lib\presentation\screens\results\review_screen.dart:187: context.pushReplacement('/home');
+lib\presentation\screens\results\review_screen.dart:207: context.pushReplacement('/exam');
+lib\presentation\screens\results\review_screen.dart:271: '#$index',
+lib\presentation\screens\splash\splash_screen.dart:28: static const String _appNameFallback = 'Saudi Driving Theory Test';
+lib\presentation\screens\splash\splash_screen.dart:76: context.go(hasSeenOnboarding ? '/home' : '/onboarding');
+lib\presentation\screens\splash\splash_screen.dart:94: trExists('app.name') ? tr('app.name') : _appNameFallback;
+lib\presentation\screens\splash\splash_screen.dart:95: final tagline = trExists('app.tagline') ? tr('app.tagline') : '';
+lib\screens\credits_screen.dart:12: return '$kWikimediaFileBaseUrl$encodedName';
+lib\screens\credits_screen.dart:58: '$fileName\n${_wikiUrlForFile(fileName)}',
+lib\screens\learn_screen.dart:54: child: Text('Error loading handbook: $err',
+lib\screens\learn_screen.dart:331: 'route': '/key-numbers',
+lib\screens\learn_screen.dart:337: 'route': '/priority-guide',
+lib\screens\learn_screen.dart:343: 'route': '/violation-points',
+lib\screens\learn_screen.dart:349: 'route': '/traffic-fines',
+lib\screens\priority_guide_screen.dart:23: {'id': 'hierarchy', 'label': 'priority.cat.hierarchy'},
+lib\screens\priority_guide_screen.dart:24: {'id': 'intersections', 'label': 'priority.cat.intersections'},
+lib\screens\priority_guide_screen.dart:25: {'id': 'roads', 'label': 'priority.cat.roads'},
+lib\screens\priority_guide_screen.dart:26: {'id': 'conduct', 'label': 'priority.cat.conduct'},
+lib\screens\settings_screen.dart:106: onPressed: () => context.push('/support-development'),
+lib\screens\settings_screen.dart:121: onPressed: () => context.push('/about'),
+lib\screens\settings_screen.dart:136: onPressed: () => context.push('/credits'),
+lib\screens\signs_screen.dart:186: tag: 'sign_${sign.id}',
+lib\screens\signs_screen.dart:251: 'warning': 'Warning Signs',
+lib\screens\signs_screen.dart:252: 'regulatory': 'Regulatory (Directive) Signs',
+lib\screens\signs_screen.dart:253: 'mandatory': 'Regulatory (Directive) Signs',
+lib\screens\signs_screen.dart:254: 'guide': 'Guide Signs',
+lib\screens\signs_screen.dart:281: '${e.key.toString().replaceAll('_', ' ')}: ${e.value}')
+lib\screens\signs_screen.dart:308: tag: 'sign_${sign.id}',
+lib\screens\stats_screen.dart:162: onPressed: () => context.push('/history'),
+lib\screens\stats_screen.dart:204: 'stats.streakCount',
+lib\screens\stats_screen.dart:292: '$accuracy%',
+lib\screens\stats_screen.dart:334: value: '$bestScore%'),
+lib\screens\stats_screen.dart:520: '$accuracy%',
+lib\screens\support_development_screen.dart:12: static const String _bankName = 'Al Rajhi Bank';
+lib\screens\support_development_screen.dart:14: static const String _iban = 'SA23 8000 0640 6080 1314 1383';
+lib\screens\support_development_screen.dart:15: static const String _beneficiaryFallback = 'Beneficiary: (add later)';
+lib\screens\traffic_fines_screen.dart:233: '#$tableId',
+lib\screens\traffic_fines_screen.dart:247: '$fineRange SAR',
+lib\screens\traffic_fines_screen.dart:551: '${idx + 1}',
+lib\screens\traffic_violation_points_screen.dart:571: '${idx + 1}',
+lib\screens\handbook\handbook_subtopic_screen.dart:180: String route = '/violation-points';
+lib\screens\handbook\handbook_subtopic_screen.dart:181: if (isFines) route = '/traffic-fines';
+lib\screens\handbook\handbook_subtopic_screen.dart:182: if (isPriority) route = '/priority-guide';
+lib\screens\handbook\handbook_subtopic_screen.dart:294: String translationKey = 'learn.keys.$key';
+lib\screens\handbook\handbook_subtopic_screen.dart:302: ? '${word[0].toUpperCase()}${word.substring(1)}'
+lib\screens\handbook\handbook_subtopic_screen.dart:395: text: '$formattedKey: ',
+lib\screens\handbook\handbook_subtopic_screen.dart:534: return Text('$formattedKey: $value');
+lib\screens\handbook\handbook_topic_screen.dart:166: '${index + 1}',
+lib\services\ad_service.dart:14: static const String testBannerId = 'ca-app-pub-3940256099942544/6300978111';
+lib\services\ad_service.dart:16: 'ca-app-pub-3940256099942544/5224354917';
+lib\services\ad_service.dart:18: 'ca-app-pub-3940256099942544/1712485313';
+lib\services\ad_service.dart:19: static const String productionBannerId = 'ca-app-pub-9095390056353710/7128481632';
+lib\services\ad_service.dart:21: 'ca-app-pub-9095390056353710/1917367616';
+lib\services\ad_service.dart:23: 'ca-app-pub-9095390056353710/1917367616';
+lib\services\ad_service.dart:28: debugPrint('[AdService] initialize');
+lib\services\ad_service.dart:79: debugPrint('[AdService] rewarded retry scheduled in ${cappedDelay}s');
+lib\services\ad_service.dart:85: debugPrint('[AdService] rewarded expired, reloading');
+lib\services\ad_service.dart:97: debugPrint('[AdService] rewarded id missing');
+lib\services\ad_service.dart:105: debugPrint('[AdService] rewarded load start');
+lib\services\ad_service.dart:116: debugPrint('[AdService] rewarded load success');
+lib\services\ad_service.dart:125: debugPrint('[AdService] rewarded load failed: ${error.message}');
+lib\services\ad_service.dart:139: debugPrint('[AdService] rewarded expired before show, reloading');
+lib\services\ad_service.dart:145: debugPrint('[AdService] rewarded show aborted (load failed)');
+lib\services\ad_service.dart:151: debugPrint('[AdService] rewarded show skipped (no ad loaded)');
+lib\services\ad_service.dart:158: debugPrint('[AdService] rewarded shown');
+lib\services\ad_service.dart:161: debugPrint('[AdService] rewarded dismissed');
+lib\services\ad_service.dart:169: debugPrint('[AdService] rewarded failed to show');
+lib\services\ad_service.dart:176: debugPrint('[AdService] rewarded earned');
+lib\state\app_state.dart:230: throw UnimplementedError('sharedPrefsProvider must be overridden in main()');
+lib\state\learning_state.dart:153: const _storageKey = 'driving-app-learning-state';
+lib\state\learning_state.dart:324: if (stats.accuracy >= 80 && stats.total >= 20) return 'exam-ready';
+lib\state\test_session.dart:5: const _storageKey = 'last-test-session';
+lib\utils\back_guard.dart:8: debugPrint('Back: confirm exit exam');
+lib\utils\back_guard.dart:67: debugPrint('Back: confirm exit exam result=${result == true}');
+lib\utils\navigation_utils.dart:15: debugPrint('Back: $message');
+lib\utils\navigation_utils.dart:21: 'start ${context.widget.runtimeType} (fromPopScope=$fromPopScope)',
+lib\utils\navigation_utils.dart:26: log('popped nested navigator');
+lib\utils\navigation_utils.dart:31: log('popped current navigator');
+lib\utils\navigation_utils.dart:43: log('popped root navigator');
+lib\utils\navigation_utils.dart:52: log('switch tab to 0');
+lib\utils\navigation_utils.dart:58: log('exit app');
+lib\utils\text_formatters.dart:9: return '$currentText / $totalText';
+lib\utils\text_formatters.dart:37: return '$minutes:$remainingSeconds';

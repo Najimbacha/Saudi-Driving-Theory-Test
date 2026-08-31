@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class AppFeedback {
   static void tap(BuildContext context) {
@@ -11,6 +12,14 @@ class AppFeedback {
 
   static void selection(BuildContext context) {
     _noop();
+  }
+
+  static void lightHaptic() {
+    HapticFeedback.lightImpact();
+  }
+
+  static void heavyHaptic() {
+    HapticFeedback.heavyImpact();
   }
 
   static void _noop() {

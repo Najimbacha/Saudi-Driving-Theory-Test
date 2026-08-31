@@ -79,10 +79,15 @@ class AppSettingsState {
     required this.favorites,
     required this.stats,
     required this.adsEnabled,
+    required this.languageCode,
   });
 
   // ROOT FIX: Removed languageCode - EasyLocalization is single source of truth
   // Use context.locale.languageCode to read current language
+  // RE-ADDED languageCode: Although EasyLocalization is the source of truth for UI,
+  // we need this in Riverpod state for background providers (like handbookProvider)
+  // to know which localized data to load.
+  final String languageCode;
   final ThemeMode themeMode;
   final bool hasSeenOnboarding;
   final Favorites favorites;
@@ -90,6 +95,7 @@ class AppSettingsState {
   final bool adsEnabled;
 
   AppSettingsState copyWith({
+    String? languageCode,
     ThemeMode? themeMode,
     bool? hasSeenOnboarding,
     Favorites? favorites,
@@ -97,6 +103,7 @@ class AppSettingsState {
     bool? adsEnabled,
   }) {
     return AppSettingsState(
+      languageCode: languageCode ?? this.languageCode,
       themeMode: themeMode ?? this.themeMode,
       hasSeenOnboarding: hasSeenOnboarding ?? this.hasSeenOnboarding,
       favorites: favorites ?? this.favorites,
@@ -110,6 +117,7 @@ class AppSettingsNotifier extends StateNotifier<AppSettingsState> {
   AppSettingsNotifier(this._prefs)
       : super(
           AppSettingsState(
+            languageCode: _prefs.getString('languageCode') ?? 'en',
             themeMode: _parseTheme(_prefs.getString('theme')),
             hasSeenOnboarding: _prefs.getString('hasSeenOnboarding') == 'true',
             favorites: _loadFavorites(_prefs),
@@ -167,10 +175,10 @@ class AppSettingsNotifier extends StateNotifier<AppSettingsState> {
     }
   }
 
-  // ROOT FIX: Removed setLanguage() method
-  // EasyLocalization handles language changes via context.setLocale()
-  // and persists automatically with saveLocale: true
-  // No need to duplicate this in Riverpod state
+  void setLanguageCode(String code) {
+    _prefs.setString('languageCode', code);
+    state = state.copyWith(languageCode: code);
+  }
 
   void setThemeMode(ThemeMode mode) {
     final value = mode == ThemeMode.dark

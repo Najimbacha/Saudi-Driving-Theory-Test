@@ -35,6 +35,9 @@ void main() {
 
     controller.selectAnswer(controller.state.currentQuestion.correctIndex);
     expect(controller.state.correctCount, 1);
+    expect(controller.state.showAnswer, false);
+
+    controller.revealAnswer();
     expect(controller.state.showAnswer, true);
 
     controller.next();

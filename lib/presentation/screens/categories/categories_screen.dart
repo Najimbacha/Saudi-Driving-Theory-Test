@@ -4,9 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
-import '../../../core/constants/app_colors.dart';
 import '../../../core/theme/modern_theme.dart';
-import '../../../widgets/glass_container.dart';
+import '../../../widgets/surface_card.dart';
 import '../../../state/learning_state.dart';
 import '../../../utils/app_feedback.dart';
 import '../../../utils/app_fonts.dart';
@@ -34,76 +33,101 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
     final visible = categories;
 
     return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        title: Text('categories.title'.tr(),
-            style: AppFonts.outfit(context,
-                fontWeight: FontWeight.bold,
-                color: Theme.of(context).colorScheme.onSurface)),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        centerTitle: true,
-        iconTheme:
-            IconThemeData(color: Theme.of(context).colorScheme.onSurface),
-      ),
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: Theme.of(context).brightness == Brightness.dark
-              ? ModernTheme.darkGradient
-              : ModernTheme.lightGradient,
-        ),
-        child: SafeArea(
-          child: Column(
-            children: [
-              // List
-              Expanded(
-                child: ListView.builder(
-                  padding: const EdgeInsets.fromLTRB(20, 8, 20, 100),
-                  cacheExtent: 800,
-                  itemCount: visible.length + 1,
-                  itemBuilder: (context, index) {
-                    final trafficIndex = visible.isEmpty ? 0 : 1;
-                    if (index == trafficIndex) {
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 16),
-                        child: _TrafficViolationCard(
-                          title: 'home.violationPoints'.tr(),
-                          subtitle: 'home.violationPointsDesc'.tr(),
-                          onTap: () => context.push('/violation-points'),
-                        ),
-                      );
-                    }
-
-                    final categoryIndex =
-                        index < trafficIndex ? index : index - 1;
-                    final category = visible[categoryIndex];
-                    final stat = learning.categoryStats[category.id];
-                    final accuracy = stat?.accuracy;
-                    final total = hasQuestionData
-                        ? (questionCounts[category.id] ?? 0)
-                        : category.totalQuestions;
-
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 16),
-                      child: _CategoryGlassCard(
-                        title: category.titleKey.tr(),
-                        subtitle: category.subtitleKey.tr(),
-                        gradient: _gradientFor(category.id),
-                        icon: _iconFor(category.iconName),
-                        total: total,
-                        accuracy: accuracy,
-                        onTap: () {
-                          AppFeedback.tap(context);
-                          context.push('/practice?category=${category.id}');
-                        },
-                      ),
-                    );
-                  },
+      backgroundColor:
+          isDark ? const Color(0xFF0F172A) : const Color(0xFFF8FAFC),
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            expandedHeight: 120,
+            floating: false,
+            pinned: true,
+            stretch: true,
+            backgroundColor:
+                isDark ? const Color(0xFF0F172A) : const Color(0xFFF8FAFC),
+            elevation: 0,
+            centerTitle: true,
+            leading: IconButton(
+              icon:
+                  Icon(PhosphorIconsRegular.caretLeft, color: scheme.onSurface),
+              onPressed: () => context.pop(),
+            ),
+            flexibleSpace: FlexibleSpaceBar(
+              centerTitle: true,
+              title: Text(
+                'categories.title'.tr(),
+                style: AppFonts.outfit(
+                  context,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                  color: scheme.onSurface,
                 ),
               ),
-            ],
+              background: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: isDark
+                        ? [
+                            const Color(0xFF1E293B).withValues(alpha: 0.5),
+                            Colors.transparent
+                          ]
+                        : [
+                            const Color(0xFFE2E8F0).withValues(alpha: 0.5),
+                            Colors.transparent
+                          ],
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                  ),
+                ),
+              ),
+            ),
           ),
-        ),
+          SliverPadding(
+            padding: const EdgeInsets.fromLTRB(20, 8, 20, 100),
+            sliver: SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  final trafficIndex = visible.isEmpty ? 0 : 1;
+                  if (index == trafficIndex) {
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 16),
+                      child: _TrafficViolationCard(
+                        title: 'home.violationPoints'.tr(),
+                        subtitle: 'home.violationPointsDesc'.tr(),
+                        onTap: () => context.push('/violation-points'),
+                      ),
+                    );
+                  }
+
+                  final categoryIndex =
+                      index < trafficIndex ? index : index - 1;
+                  final category = visible[categoryIndex];
+                  final stat = learning.categoryStats[category.id];
+                  final accuracy = stat?.accuracy;
+                  final total = hasQuestionData
+                      ? (questionCounts[category.id] ?? 0)
+                      : category.totalQuestions;
+
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 16),
+                    child: _CategoryPremiumCard(
+                      title: category.titleKey.tr(),
+                      subtitle: category.subtitleKey.tr(),
+                      gradient: _gradientFor(category.id),
+                      icon: _iconFor(category.iconName),
+                      total: total,
+                      accuracy: accuracy,
+                      onTap: () {
+                        AppFeedback.tap(context);
+                        context.push('/practice?category=${category.id}');
+                      },
+                    ),
+                  );
+                },
+                childCount: visible.length + 1,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -111,31 +135,31 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
   static IconData _iconFor(String name) {
     switch (name) {
       case 'traffic':
-        return PhosphorIconsRegular.trafficSign;
+        return PhosphorIconsFill.trafficSign;
       case 'rules':
-        return PhosphorIconsRegular.gavel;
+        return PhosphorIconsFill.gavel;
       case 'safety':
-        return PhosphorIconsRegular.shieldCheck;
+        return PhosphorIconsFill.shieldCheck;
       case 'signals':
-        return PhosphorIconsRegular.trafficSignal;
+        return PhosphorIconsFill.trafficSignal;
       case 'markings':
-        return PhosphorIconsRegular.roadHorizon;
+        return PhosphorIconsFill.roadHorizon;
       case 'parking':
-        return PhosphorIconsRegular.carSimple;
+        return PhosphorIconsFill.carSimple;
       case 'emergency':
-        return PhosphorIconsRegular.warning;
+        return PhosphorIconsFill.warning;
       case 'pedestrians':
-        return PhosphorIconsRegular.personSimpleWalk;
+        return PhosphorIconsFill.personSimpleWalk;
       case 'highway':
-        return PhosphorIconsRegular.roadHorizon;
+        return PhosphorIconsFill.roadHorizon;
       case 'weather':
-        return PhosphorIconsRegular.sunDim;
+        return PhosphorIconsFill.sunDim;
       case 'maintenance':
-        return PhosphorIconsRegular.wrench;
+        return PhosphorIconsFill.wrench;
       case 'responsibilities':
-        return PhosphorIconsRegular.identificationBadge;
+        return PhosphorIconsFill.identificationBadge;
       default:
-        return PhosphorIconsRegular.gridFour;
+        return PhosphorIconsFill.gridFour;
     }
   }
 
@@ -162,8 +186,8 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
   }
 }
 
-class _CategoryGlassCard extends StatelessWidget {
-  const _CategoryGlassCard({
+class _CategoryPremiumCard extends StatelessWidget {
+  const _CategoryPremiumCard({
     required this.title,
     required this.subtitle,
     required this.gradient,
@@ -184,183 +208,124 @@ class _CategoryGlassCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    return GestureDetector(
+
+    return AppSurfaceCard(
       onTap: onTap,
-      child: GlassContainer(
-        padding: EdgeInsetsDirectional.zero,
-        borderRadius: BorderRadius.circular(22),
-        blur: isDark ? 10 : 6,
-        color: isDark
-            ? Colors.white.withValues(alpha: 0.04)
-            : Colors.white.withValues(alpha: 0.9),
-        border: Border.all(
-          color: scheme.onSurface.withValues(alpha: isDark ? 0.12 : 0.08),
-        ),
-        child: Stack(
-          children: [
-            Positioned(
-              left: 0,
-              top: 0,
-              bottom: 0,
-              child: Container(
-                width: 6,
-                decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.horizontal(
-                    left: Radius.circular(22),
-                  ),
-                  gradient: LinearGradient(
-                    colors: [
-                      gradient.colors.first.withValues(alpha: 0.9),
-                      gradient.colors.last.withValues(alpha: 0.4),
-                    ],
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                  ),
+      padding: const EdgeInsets.all(16),
+      child: Row(
+        children: [
+          Container(
+            width: 56,
+            height: 56,
+            decoration: BoxDecoration(
+              gradient: gradient,
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [
+                BoxShadow(
+                  color: gradient.colors.first.withValues(alpha: 0.3),
+                  blurRadius: 12,
+                  offset: const Offset(0, 4),
                 ),
-              ),
+              ],
             ),
-            Positioned(
-              right: -28,
-              top: -34,
-              child: Container(
-                width: 140,
-                height: 140,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  gradient: RadialGradient(
-                    colors: [
-                      gradient.colors.first
-                          .withValues(alpha: isDark ? 0.2 : 0.12),
-                      Colors.transparent
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsetsDirectional.fromSTEB(16, 14, 16, 14),
-              child: Row(
-                children: [
-                  Container(
-                    width: 52,
-                    height: 52,
-                    decoration: BoxDecoration(
-                      gradient: gradient,
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: Icon(icon, color: Colors.white, size: 26),
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                title,
-                                style: AppFonts.outfit(
-                                  context,
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.w700,
-                                  color: scheme.onSurface,
-                                ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                            if (accuracy != null)
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 8, vertical: 2),
-                                decoration: BoxDecoration(
-                                  color: _accuracyColor(accuracy!)
-                                      .withValues(alpha: 0.18),
-                                  borderRadius: BorderRadius.circular(10),
-                                  border: Border.all(
-                                    color: _accuracyColor(accuracy!)
-                                        .withValues(alpha: 0.45),
-                                  ),
-                                ),
-                                child: Text(
-                                  '$accuracy%',
-                                  style: AppFonts.outfit(
-                                    context,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 11,
-                                    color: _accuracyColor(accuracy!),
-                                  ),
-                                ),
-                              ),
-                          ],
+            child: Icon(icon, color: Colors.white, size: 28),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        title,
+                        style: AppFonts.outfit(
+                          context,
+                          fontSize: 17,
+                          fontWeight: FontWeight.w700,
+                          color: scheme.onSurface,
                         ),
-                        const SizedBox(height: 6),
-                        Text(
-                          subtitle,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    if (accuracy != null)
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: _accuracyColor(accuracy!, scheme)
+                              .withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(
+                            color: _accuracyColor(accuracy!, scheme)
+                                .withValues(alpha: 0.2),
+                          ),
+                        ),
+                        child: Text(
+                          '$accuracy%',
                           style: AppFonts.outfit(
                             context,
-                            color: scheme.onSurface.withValues(alpha: 0.7),
-                            fontSize: 13,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 11,
+                            color: _accuracyColor(accuracy!, scheme),
                           ),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
                         ),
-                        const SizedBox(height: 8),
-                        Row(
-                          children: [
-                            Icon(
-                              PhosphorIconsRegular.question,
-                              size: 14,
-                              color: scheme.onSurface.withValues(alpha: 0.6),
-                            ),
-                            const SizedBox(width: 4),
-                            Text(
-                              'categories.totalQuestions'.tr(
-                                namedArgs: {'value': total.toString()},
-                              ),
-                              style: AppFonts.outfit(
-                                context,
-                                color:
-                                    scheme.onSurface.withValues(alpha: 0.6),
-                                fontSize: 12,
-                              ),
-                            ),
-                            const Spacer(),
-                            Container(
-                              width: 28,
-                              height: 28,
-                              decoration: BoxDecoration(
-                                color:
-                                    scheme.onSurface.withValues(alpha: 0.08),
-                                shape: BoxShape.circle,
-                              ),
-                              child: Icon(
-                                PhosphorIconsRegular.caretRight,
-                                size: 14,
-                                color:
-                                    scheme.onSurface.withValues(alpha: 0.6),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+                      ),
+                  ],
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  subtitle,
+                  style: AppFonts.outfit(
+                    context,
+                    color: scheme.onSurface.withValues(alpha: 0.6),
+                    fontSize: 13,
                   ),
-                ],
-              ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    Icon(
+                      PhosphorIconsRegular.question,
+                      size: 14,
+                      color: scheme.onSurface.withValues(alpha: 0.45),
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      'categories.totalQuestions'.tr(
+                        namedArgs: {'value': total.toString()},
+                      ),
+                      style: AppFonts.outfit(
+                        context,
+                        color: scheme.onSurface.withValues(alpha: 0.45),
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    const Spacer(),
+                    Icon(
+                      PhosphorIconsRegular.caretRight,
+                      size: 14,
+                      color: scheme.onSurface.withValues(alpha: 0.3),
+                    ),
+                  ],
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 
-  Color _accuracyColor(int accuracy) {
-    if (accuracy >= 80) return AppColors.success;
-    if (accuracy >= 60) return AppColors.warning;
-    return AppColors.error;
+  Color _accuracyColor(int accuracy, ColorScheme scheme) {
+    if (accuracy >= 80) return ModernTheme.tertiary;
+    if (accuracy >= 60) return Colors.orangeAccent;
+    return scheme.error;
   }
 }
 
@@ -378,129 +343,73 @@ class _TrafficViolationCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final gradient = ModernTheme.accentGradient;
-    return GestureDetector(
+    const gradient = ModernTheme.accentGradient;
+
+    return AppSurfaceCard(
       onTap: () {
         AppFeedback.tap(context);
         onTap();
       },
-      child: GlassContainer(
-        padding: EdgeInsetsDirectional.zero,
-        borderRadius: BorderRadius.circular(22),
-        blur: isDark ? 10 : 6,
-        color: isDark
-            ? Colors.white.withValues(alpha: 0.04)
-            : Colors.white.withValues(alpha: 0.9),
-        border: Border.all(
-          color: scheme.onSurface.withValues(alpha: isDark ? 0.12 : 0.08),
-        ),
-        child: Stack(
-          children: [
-            Positioned(
-              left: 0,
-              top: 0,
-              bottom: 0,
-              child: Container(
-                width: 6,
-                decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.horizontal(
-                    left: Radius.circular(22),
-                  ),
-                  gradient: LinearGradient(
-                    colors: [
-                      gradient.colors.first.withValues(alpha: 0.9),
-                      gradient.colors.last.withValues(alpha: 0.4),
-                    ],
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                  ),
+      padding: const EdgeInsets.all(16),
+      child: Row(
+        children: [
+          Container(
+            width: 56,
+            height: 56,
+            decoration: BoxDecoration(
+              gradient: gradient,
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [
+                BoxShadow(
+                  color: gradient.colors.first.withValues(alpha: 0.3),
+                  blurRadius: 12,
+                  offset: const Offset(0, 4),
                 ),
-              ),
+              ],
             ),
-            Positioned(
-              right: -28,
-              top: -34,
-              child: Container(
-                width: 140,
-                height: 140,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  gradient: RadialGradient(
-                    colors: [
-                      gradient.colors.first
-                          .withValues(alpha: isDark ? 0.2 : 0.12),
-                      Colors.transparent
-                    ],
+            child: const Icon(
+              PhosphorIconsFill.warningDiamond,
+              color: Colors.white,
+              size: 28,
+            ),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: AppFonts.outfit(
+                    context,
+                    fontSize: 17,
+                    fontWeight: FontWeight.w700,
+                    color: scheme.onSurface,
                   ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
-              ),
+                const SizedBox(height: 4),
+                Text(
+                  subtitle,
+                  style: AppFonts.outfit(
+                    context,
+                    color: scheme.onSurface.withValues(alpha: 0.6),
+                    fontSize: 13,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
             ),
-            Padding(
-              padding: const EdgeInsetsDirectional.fromSTEB(16, 14, 16, 14),
-              child: Row(
-                children: [
-                  Container(
-                    width: 52,
-                    height: 52,
-                    decoration: BoxDecoration(
-                      gradient: gradient,
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: const Icon(
-                      PhosphorIconsRegular.warningDiamond,
-                      color: Colors.white,
-                      size: 26,
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          title,
-                          style: AppFonts.outfit(
-                            context,
-                            fontSize: 17,
-                            fontWeight: FontWeight.w700,
-                            color: scheme.onSurface,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        const SizedBox(height: 6),
-                        Text(
-                          subtitle,
-                          style: AppFonts.outfit(
-                            context,
-                            color: scheme.onSurface.withValues(alpha: 0.7),
-                            fontSize: 13,
-                          ),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    width: 28,
-                    height: 28,
-                    decoration: BoxDecoration(
-                      color: scheme.onSurface.withValues(alpha: 0.08),
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(
-                      PhosphorIconsRegular.caretRight,
-                      size: 14,
-                      color: scheme.onSurface.withValues(alpha: 0.6),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
+          ),
+          const SizedBox(width: 8),
+          Icon(
+            PhosphorIconsRegular.caretRight,
+            size: 14,
+            color: scheme.onSurface.withValues(alpha: 0.3),
+          ),
+        ],
       ),
     );
   }

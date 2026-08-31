@@ -45,6 +45,22 @@ class CategoryRepository {
         colorHex: '#EF6C00',
         totalQuestions: 70,
       ),
+      CategoryModel(
+        id: 'violation_points',
+        titleKey: 'quiz.categories.violation_points',
+        subtitleKey: 'quiz.categories.violation_points_desc',
+        iconName: 'emergency',
+        colorHex: '#C62828',
+        totalQuestions: 20,
+      ),
+      CategoryModel(
+        id: 'traffic_fines',
+        titleKey: 'quiz.categories.traffic_fines',
+        subtitleKey: 'quiz.categories.traffic_fines_desc',
+        iconName: 'rules',
+        colorHex: '#4527A0',
+        totalQuestions: 15,
+      ),
     ];
   }
 }

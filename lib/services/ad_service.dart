@@ -16,12 +16,16 @@ class AdService {
       'ca-app-pub-3940256099942544/5224354917';
   static const String testRewardedIdIos =
       'ca-app-pub-3940256099942544/1712485313';
-  static const String productionBannerId = 'ca-app-pub-9095390056353710/7128481632';
+  static const String productionBannerId =
+      'ca-app-pub-9095390056353710/7128481632';
   static const String productionRewardedIdAndroid =
       'ca-app-pub-9095390056353710/1917367616';
   static const String productionRewardedIdIos =
       'ca-app-pub-9095390056353710/1917367616';
   bool _initialized = false;
+
+  /// Reactive notifier — UI can listen for rewarded ad readiness changes.
+  final ValueNotifier<bool> rewardedReadyNotifier = ValueNotifier(false);
 
   Future<void> init() async {
     if (_initialized) return;
@@ -30,14 +34,27 @@ class AdService {
     _initialized = true;
   }
 
-  BannerAd? createBanner() {
+  BannerAd? createBanner({
+    VoidCallback? onLoaded,
+    VoidCallback? onFailed,
+  }) {
     if (!_initialized) return null;
     const bannerId = useTestAds ? testBannerId : productionBannerId;
     if (bannerId.isEmpty) return null;
     return BannerAd(
       size: AdSize.banner,
       adUnitId: bannerId,
-      listener: const BannerAdListener(),
+      listener: BannerAdListener(
+        onAdLoaded: (ad) {
+          debugPrint('[AdService] banner loaded');
+          onLoaded?.call();
+        },
+        onAdFailedToLoad: (ad, error) {
+          debugPrint('[AdService] banner failed: ${error.message}');
+          ad.dispose();
+          onFailed?.call();
+        },
+      ),
       request: const AdRequest(),
     );
   }
@@ -63,12 +80,14 @@ class AdService {
     _rewarded?.dispose();
     _rewarded = null;
     _rewardedLoadedAt = null;
+    rewardedReadyNotifier.value = false;
   }
 
   void _scheduleRewardedRetry() {
     if (_rewardedRetryTimer != null) return;
-    final delaySeconds = 4 * (1 << _rewardedRetryAttempt);
-    final cappedDelay = delaySeconds > 60 ? 60 : delaySeconds;
+    // Shorter initial delay (2s) with exponential backoff capped at 30s.
+    final delaySeconds = 2 * (1 << _rewardedRetryAttempt);
+    final cappedDelay = delaySeconds > 30 ? 30 : delaySeconds;
     if (_rewardedRetryAttempt < 5) {
       _rewardedRetryAttempt += 1;
     }
@@ -79,6 +98,7 @@ class AdService {
     debugPrint('[AdService] rewarded retry scheduled in ${cappedDelay}s');
   }
 
+  /// Preload a rewarded ad in the background. Returns true when ready.
   Future<bool> loadRewarded() async {
     if (!_initialized) return false;
     if (_rewarded != null && _isRewardedExpired) {
@@ -113,6 +133,7 @@ class AdService {
           _loadingRewarded = false;
           _rewardedLoadCompleter = null;
           _rewardedRetryAttempt = 0;
+          rewardedReadyNotifier.value = true;
           debugPrint('[AdService] rewarded load success');
           if (!completer.isCompleted) {
             completer.complete(true);
@@ -131,6 +152,23 @@ class AdService {
       ),
     );
     return completer.future;
+  }
+
+  /// Ensures a rewarded ad is ready. Waits up to [timeout] for it to load.
+  /// Unlike [loadRewarded], this will wait for any in-progress load AND
+  /// start a new load if needed, with a deadline so the user doesn't wait forever.
+  Future<bool> ensureRewardedReady({
+    Duration timeout = const Duration(seconds: 12),
+  }) async {
+    if (isRewardedReady) return true;
+    // Kick off a load (no-op if already in-flight).
+    final loadFuture = loadRewarded();
+    // Race the load against a timeout.
+    final result = await loadFuture.timeout(
+      timeout,
+      onTimeout: () => false,
+    );
+    return result;
   }
 
   Future<bool> showRewarded({required VoidCallback onReward}) async {
@@ -160,6 +198,7 @@ class AdService {
       onAdDismissedFullScreenContent: (_) {
         debugPrint('[AdService] rewarded dismissed');
         _disposeRewarded();
+        // Immediately preload next rewarded ad in background.
         loadRewarded();
         if (!completer.isCompleted) {
           completer.complete(rewardEarned);
